@@ -1,0 +1,29 @@
+version: "3.5"
+
+services:
+  app:
+    image: bref/php-83-fpm-dev:2
+    ports: [ '8000:8000' ]
+    user: nobody
+    volumes:
+      - .:/var/task:ro
+      - ./storage:/var/task/storage
+    environment:
+      HANDLER: public/index.php
+      DB_HOST: mysql
+      DB_USERNAME: user
+      DB_PASSWORD: password
+      DB_DATABASE: alchemy-app 
+      XDG_CONFIG_HOME: /tmp
+      MYSQL_ATTR_SSL_CA: ''
+  mysql:
+    image: mysql:8.1
+    command: --tls-version=''
+    ports: [ '3306:3306' ]
+    volumes:
+      - ./.dev-db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: alchemy-app 
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
