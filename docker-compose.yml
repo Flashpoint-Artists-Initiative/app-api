@@ -11,19 +11,19 @@ services:
     environment:
       HANDLER: public/index.php
       DB_HOST: mysql
-      DB_USERNAME: user
-      DB_PASSWORD: password
-      DB_DATABASE: alchemy-app 
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
       XDG_CONFIG_HOME: /tmp
       MYSQL_ATTR_SSL_CA: ''
   mysql:
     image: mysql:8.1
-    command: --tls-version=''
-    ports: [ '3306:3306' ]
+    command: --tls-version='TLSv1.2'
+    ports: [ '${DB_PORT}:3306' ]
     volumes:
       - ./.dev-db:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: alchemy-app 
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: ${DB_DATABASE} 
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
