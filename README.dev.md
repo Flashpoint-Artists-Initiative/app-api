@@ -29,6 +29,7 @@ $ composer install
 ## 7. Generate an encryption key
 
 $ cp .env.example .env
+
 $ php artisan key:generate
 
 ## 8. Install docker
