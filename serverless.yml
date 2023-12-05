@@ -16,6 +16,7 @@ package:
         - '!resources/assets/**'
         - '!storage/**'
         - '!tests/**'
+        - '!.dev-db/**'
 
 functions:
 
