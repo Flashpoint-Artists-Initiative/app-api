@@ -21,3 +21,5 @@ yarn-error.log
 *.code-workspace
 .envrc
 /.serverless
+*.swp
+*.swo
