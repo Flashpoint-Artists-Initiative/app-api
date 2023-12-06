@@ -185,4 +185,7 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'api_version' => env('API_VERSION', '1.0.0'),
+    'api_prefix' => env('API_PREFIX', 'v1'),
+
 ];
