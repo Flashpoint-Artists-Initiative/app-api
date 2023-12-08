@@ -8,6 +8,7 @@ services:
     volumes:
       - .:/var/task:ro
       - ./storage:/var/task/storage
+      - ./bootstrap/cache:/var/task/bootstrap/cache
     environment:
       HANDLER: public/index.php
       DB_HOST: mysql
