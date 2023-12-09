@@ -18,8 +18,8 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     public function update(User $user, array $input): void
     {
         Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
-
+            'legal_name' => ['required', 'string', 'max:255'],
+            'preferred_name' => ['string', 'max:255'],
             'email' => [
                 'required',
                 'string',
@@ -27,6 +27,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'max:255',
                 Rule::unique('users')->ignore($user->id),
             ],
+            'birthday' => ['date'],
         ])->validateWithBag('updateProfileInformation');
 
         if ($input['email'] !== $user->email &&
@@ -34,7 +35,9 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $this->updateVerifiedUser($user, $input);
         } else {
             $user->forceFill([
-                'name' => $input['name'],
+                'legal_name' => $input['legal_name'],
+                'preferred_name' => $input['preferred_name'] ?? null,
+                'birthday' => $input['birthday'] ?? null,
                 'email' => $input['email'],
             ])->save();
         }
@@ -48,7 +51,9 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     protected function updateVerifiedUser(User $user, array $input): void
     {
         $user->forceFill([
-            'name' => $input['name'],
+            'legal_name' => $input['legal_name'],
+            'preferred_name' => $input['preferred_name'] ?? null,
+            'birthday' => $input['birthday'] ?? null,
             'email' => $input['email'],
             'email_verified_at' => null,
         ])->save();
