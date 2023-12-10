@@ -37,3 +37,7 @@ Route::group(['prefix' => 'v1'], function() {
         ->middleware(['guest:'.config('fortify.guard')])
         ->name('token.refresh');
 });
+
+Route::fallback(function() {
+    return response()->json(['error' => 'Not Found'], 404);
+});
