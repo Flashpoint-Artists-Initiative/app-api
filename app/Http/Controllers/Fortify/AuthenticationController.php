@@ -44,7 +44,7 @@ class AuthenticationController extends Controller
         return $this->respondWithToken($token);
     }
 
-    public function authtest(Request $request)
+    public function me(Request $request)
     {
         return $request->user();
     }

@@ -157,4 +157,23 @@ return [
         // ]),
     ],
 
+    /**
+     * Override default routes to make things a bit more cohesive
+     */
+    'paths' => [
+        'login' => '/auth/login',
+        'logout' => '/auth/logout',
+        'password' => [
+            'email' => '/auth/forgot-password',
+            'update' => '/auth/reset-password',
+        ],
+        'register' => '/auth/register',
+        'verification' => [
+            'send' => '/auth/verification-email',
+            'verify' => '/auth/verify-email/{id}/{hash}',
+        ],
+        'user-profile-information' => [
+            'update' => '/user',
+        ],
+    ],
 ];

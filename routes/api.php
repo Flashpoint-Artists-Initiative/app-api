@@ -16,15 +16,15 @@ use Laravel\Fortify\RoutePath;
 */
 
 Route::group(['prefix' => 'v1'], function() {
-    Route::get("/authtest", [AuthenticationController::class, 'authtest'])
+    Route::get('/auth/me', [AuthenticationController::class, 'me'])
         ->middleware(['auth', 'verified'])
-        ->name('authtest');
+        ->name('auth.me');
 
     $verificationLimiter = config('fortify.limiters.verification', '6,1');
 
     // Override the email verification route from fortify so it doesn't require being logged in (Which wouldn't work with JWTs)
     // TODO: This might not be needed if the front-end is keeping the JWT in local storage
-    Route::get(RoutePath::for('verification.verify', '/email/verify/{id}/{hash}'), [AuthenticationController::class, 'verifyEmail'])
+    Route::get(RoutePath::for('verification.verify', '/auth/verify-email/{id}/{hash}'), [AuthenticationController::class, 'verifyEmail'])
         ->middleware(['signed', 'throttle:'.$verificationLimiter])
         ->name('verification.verify');
 
@@ -33,4 +33,7 @@ Route::group(['prefix' => 'v1'], function() {
         return response()->json("");
     });
 
+    Route::post(RoutePath::for('token.refresh', '/auth/refresh-token'), [AuthenticationController::class, 'refreshToken'])
+        ->middleware(['guest:'.config('fortify.guard')])
+        ->name('token.refresh');
 });
