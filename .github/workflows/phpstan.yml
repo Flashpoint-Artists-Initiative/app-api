@@ -14,6 +14,12 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v3
 
+      # Set up PHP environment.
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+
       # Install Composer dependencies with the specified options.
       - name: Install Composer dependencies
         uses: "ramsey/composer-install@v2"
