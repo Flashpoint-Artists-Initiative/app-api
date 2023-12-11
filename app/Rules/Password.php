@@ -50,7 +50,7 @@ class Password implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (!$this->passes($value)) {
+        if (! $this->passes($value)) {
             $fail($this->message());
         }
     }
@@ -140,7 +140,6 @@ class Password implements ValidationRule
     /**
      * Set the minimum length of the password.
      *
-     * @param  int  $length
      * @return $this
      */
     public function length(int $length)
@@ -189,7 +188,6 @@ class Password implements ValidationRule
     /**
      * Set the message that should be used when the rule fails.
      *
-     * @param  string  $message
      * @return $this
      */
     public function withMessage(string $message)

@@ -8,11 +8,11 @@ use App\Http\Controllers\Fortify\ConfirmablePasswordController;
 use App\Http\Controllers\Fortify\NewPasswordController;
 use App\Http\Controllers\Fortify\RegisteredUserController;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Fortify\Actions\CompletePasswordReset as FortifyCompletePasswordReset;;
+use Laravel\Fortify\Actions\CompletePasswordReset as FortifyCompletePasswordReset;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use Laravel\Fortify\Http\Controllers\ConfirmablePasswordController as FortifyConfirmablePasswordController;
 use Laravel\Fortify\Http\Controllers\NewPasswordController as FortifyNewPasswordController;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController as FortifyRegisteredUserController;
-use Laravel\Fortify\Http\Controllers\ConfirmablePasswordController as FortifyConfirmablePasswordController;
 
 class AppServiceProvider extends ServiceProvider
 {

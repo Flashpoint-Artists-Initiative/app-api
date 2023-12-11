@@ -15,7 +15,7 @@ use Laravel\Fortify\RoutePath;
 |
 */
 
-Route::group(['prefix' => 'v1'], function() {
+Route::group(['prefix' => 'v1'], function () {
     Route::get('/auth/me', [AuthenticationController::class, 'me'])
         ->middleware(['auth', 'verified'])
         ->name('auth.me');
@@ -29,8 +29,8 @@ Route::group(['prefix' => 'v1'], function() {
         ->name('verification.verify');
 
     // This route doesn't work without session storage, but we can't easily remove it from fortify, so make it do nothing
-    Route::get(RoutePath::for('password.confirmation', '/user/confirmed-password-status'), function(){
-        return response()->json("");
+    Route::get(RoutePath::for('password.confirmation', '/user/confirmed-password-status'), function () {
+        return response()->json('');
     });
 
     Route::post(RoutePath::for('token.refresh', '/auth/refresh-token'), [AuthenticationController::class, 'refreshToken'])
@@ -38,6 +38,6 @@ Route::group(['prefix' => 'v1'], function() {
         ->name('token.refresh');
 });
 
-Route::fallback(function() {
+Route::fallback(function () {
     return response()->json(['error' => 'Not Found'], 404);
 });

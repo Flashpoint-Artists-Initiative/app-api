@@ -21,20 +21,8 @@ class ConfirmablePasswordController
     }
 
     /**
-     * Show the confirm password view.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Laravel\Fortify\Contracts\ConfirmPasswordViewResponse
-     */
-    public function show(Request $request)
-    {
-        return app(ConfirmPasswordViewResponse::class);
-    }
-
-    /**
      * Confirm the user's password.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\Support\Responsable
      */
     public function store(Request $request)

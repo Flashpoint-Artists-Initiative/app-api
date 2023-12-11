@@ -8,17 +8,17 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Http\Requests\LoginRequest;
 use Laravel\Fortify\LoginRateLimiter;
-use Illuminate\Support\Str;
 
 class AuthenticationController extends Controller
 {
     /**
      * Create a new controller instance.
      *
-     * @param  \PHPOpenSourceSaver\JWTAuth\JWTGuard $guard
+     * @param  \PHPOpenSourceSaver\JWTAuth\JWTGuard  $guard
      * @return void
      */
     public function __construct(protected Guard $guard, protected LoginRateLimiter $limiter)
@@ -28,7 +28,6 @@ class AuthenticationController extends Controller
     /**
      * Attempt to authenticate a new session.
      *
-     * @param  \Laravel\Fortify\Http\Requests\LoginRequest  $request
      * @return mixed
      */
     public function store(LoginRequest $request)
@@ -36,7 +35,7 @@ class AuthenticationController extends Controller
         if (config('fortify.lowercase_usernames')) {
             $request->merge(['email' => Str::lower($request->email)]);
         }
-        
+
         if (! $token = $this->guard->attempt($request->only(['email', 'password']))) {
             return $this->throwFailedAuthenticationException($request);
         }
@@ -58,7 +57,7 @@ class AuthenticationController extends Controller
     {
         $this->guard->logout();
 
-        return response()->json(['message' => "Logged out"]);
+        return response()->json(['message' => 'Logged out']);
     }
 
     /**
@@ -71,7 +70,7 @@ class AuthenticationController extends Controller
     {
         $user = User::find($request->route('id'));
 
-        if (!$user) {
+        if (! $user) {
             throw ValidationException::withMessages(['user' => 'Unknown User']);
         }
 
@@ -112,7 +111,7 @@ class AuthenticationController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => $this->guard->factory()->getTTL() * 60
+            'expires_in' => $this->guard->factory()->getTTL() * 60,
         ]);
     }
 }
