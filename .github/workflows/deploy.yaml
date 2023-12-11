@@ -15,7 +15,7 @@ jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
-    environment: $ENVIRONMENT
+    environment: ${{ env.ENVIRONMENT }}
     steps:
       # Check out a copy of your repository.
       - name: Checkout code
@@ -24,7 +24,7 @@ jobs:
       # Use parameter expansion to make environment lowercase.
       - name: Downcase environment
         run: |
-          echo "ENVIRONMENT=${ENVIRONMENT,,}" >>${GITHUB_ENV}
+          echo "ENVIRONMENT_LC=${ENVIRONMENT,,}" >>${GITHUB_ENV}
 
       - name: Create JWT Tokens
         run: |
