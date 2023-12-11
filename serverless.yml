@@ -6,7 +6,15 @@ provider:
     region: us-east-1
     # Environment variables
     environment:
-        APP_ENV: production # Or use ${sls:stage} if you want the environment to match the stage
+        APP_ENV: ${sls:stage} # Or use ${sls:stage} if you want the environment to match the stage
+        JWT_PRIVATE_KEY: ${env:JWT_PRIVATE_KEY}
+        JWT_PUBLIC_KEY: ${env:JWT_PUBLIC_KEY}
+        JWT_SECRET: ${env:JWT_SECRET}
+        DB_USERNAME: ${env:DB_USERNAME}
+        DB_PASSWORD: ${env:DB_PASSWORD}
+        DB_HOST: ${env:DB_HOST}
+        DB_NAME: ${env:DB_NAME}
+        APP_KEY: ${env:APP_KEY}
 
 package:
     # Files and directories to exclude from deployment
@@ -17,6 +25,7 @@ package:
         - '!storage/**'
         - '!tests/**'
         - '!.dev-db/**'
+        - 'storage/certs/**'
 
 functions:
 
