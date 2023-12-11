@@ -14,6 +14,12 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v3
 
+      # Install Composer dependencies with the specified options.
+      - name: Install Composer dependencies
+        uses: "ramsey/composer-install@v2"
+        with:
+          composer-options: "--prefer-dist --optimize-autoloader"
+
       - name: PHPStan
         uses: docker://oskarstark/phpstan-ga
         with:
