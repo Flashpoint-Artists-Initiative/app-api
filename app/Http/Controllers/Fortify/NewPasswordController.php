@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Extended Fortify controller to allow for the JWT auth guard
  */

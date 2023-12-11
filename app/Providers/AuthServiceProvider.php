@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
@@ -30,7 +32,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         // TODO: Update this URL
         ResetPassword::createUrlUsing(function (User $user, string $token) {
-            return 'https://example.com/reset-password?token='.$token;
+            return 'https://example.com/reset-password?token=' . $token;
         });
 
         // TODO: Update this URL

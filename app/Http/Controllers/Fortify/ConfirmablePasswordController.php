@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Fortify;
 
 use App\Actions\Fortify\ConfirmPassword;
@@ -28,11 +30,13 @@ class ConfirmablePasswordController
     public function store(Request $request)
     {
         $confirmed = app(ConfirmPassword::class)(
-            $this->guard, $request->user(), $request->input('password')
+            $this->guard,
+            $request->user(),
+            $request->input('password')
         );
 
         return $confirmed
-                    ? app(PasswordConfirmedResponse::class)
-                    : app(FailedPasswordConfirmationResponse::class);
+            ? app(PasswordConfirmedResponse::class)
+            : app(FailedPasswordConfirmationResponse::class);
     }
 }
