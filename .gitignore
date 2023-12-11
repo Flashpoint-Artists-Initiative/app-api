@@ -24,3 +24,4 @@ yarn-error.log
 /.serverless
 *.swp
 *.swo
+phpstan.neon

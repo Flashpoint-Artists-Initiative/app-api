@@ -16,6 +16,11 @@ use Laravel\Fortify\Http\Controllers\RegisteredUserController as FortifyRegister
 
 class AppServiceProvider extends ServiceProvider
 {
+    /**
+     * All of the container bindings that should be registered.
+     * 
+     * @var mixed[]
+     */
     public $bindings = [
         AuthenticatedSessionController::class => AuthenticationController::class,
         FortifyNewPasswordController::class => NewPasswordController::class,

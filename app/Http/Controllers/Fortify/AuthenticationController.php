@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -36,24 +37,25 @@ class AuthenticationController extends Controller
             $request->merge(['email' => Str::lower($request->email)]);
         }
 
-        if (! $token = $this->guard->attempt($request->only(['email', 'password']))) {
-            return $this->throwFailedAuthenticationException($request);
+        if (!$token = $this->guard->attempt($request->only(['email', 'password']))) {
+            $this->throwFailedAuthenticationException($request);
         }
 
         return $this->respondWithToken($token);
     }
 
-    public function me(Request $request)
+    /**
+     * Get the currently logged in user
+     */
+    public function me(Request $request): ?User
     {
         return $request->user();
     }
 
     /**
      * Destroy an authenticated session.
-     *
-     * @param  \Illuminate\Http\Request  $request
      */
-    public function destroy()
+    public function destroy(): JsonResponse
     {
         $this->guard->logout();
 
@@ -64,17 +66,17 @@ class AuthenticationController extends Controller
      * Mark the authenticated user's email address as verified.
      *
      * @param  \Laravel\Fortify\Http\Requests\VerifyEmailRequest  $request
-     * @return \Laravel\Fortify\Contracts\VerifyEmailResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function verifyEmail(FormRequest $request)
     {
         $user = User::find($request->route('id'));
 
-        if (! $user) {
+        if (!$user) {
             throw ValidationException::withMessages(['user' => 'Unknown User']);
         }
 
-        if (! hash_equals(sha1($user->getEmailForVerification()), (string) $request->route('hash'))) {
+        if (!hash_equals(sha1($user->getEmailForVerification()), (string) $request->route('hash'))) {
             throw ValidationException::withMessages(['email' => 'Invalid verification link']);
         }
 
@@ -106,7 +108,7 @@ class AuthenticationController extends Controller
         ]);
     }
 
-    protected function respondWithToken($token)
+    protected function respondWithToken(string $token): JsonResponse
     {
         return response()->json([
             'access_token' => $token,

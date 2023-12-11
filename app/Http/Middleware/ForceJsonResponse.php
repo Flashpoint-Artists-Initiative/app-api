@@ -13,7 +13,7 @@ class ForceJsonResponse
     {
     }
 
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): JsonResponse
     {
         // First, set the header so any other middleware knows we're
         // dealing with a should-be JSON response.
@@ -23,7 +23,7 @@ class ForceJsonResponse
         $response = $next($request);
 
         // If the response is not strictly a JsonResponse, we make it
-        if (! $response instanceof JsonResponse) {
+        if (!$response instanceof JsonResponse) {
             $response = $this->factory->json(
                 $response->content(),
                 $response->status(),

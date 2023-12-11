@@ -57,6 +57,8 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.
+     * 
+     * @return mixed[]
      */
     public function getJWTCustomClaims(): array
     {
