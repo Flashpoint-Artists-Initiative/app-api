@@ -11,6 +11,7 @@ on:
 
 jobs:
   phplint:
+    name: Pint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
