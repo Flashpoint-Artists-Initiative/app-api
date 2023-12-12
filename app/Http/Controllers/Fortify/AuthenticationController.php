@@ -74,23 +74,19 @@ class AuthenticationController extends Controller
     {
         $user = User::find($request->route('id'));
 
-        if (! $user) {
-            throw ValidationException::withMessages(['user' => 'Unknown User']);
-        }
-
-        if (! hash_equals(sha1($user->getEmailForVerification()), (string) $request->route('hash'))) {
+        if (! $user || ! hash_equals(sha1($user->getEmailForVerification()), (string) $request->route('hash'))) {
             throw ValidationException::withMessages(['email' => 'Invalid verification link']);
         }
 
         if ($user->hasVerifiedEmail()) {
-            return response()->json(['message' => 'Email already verified']);
+            return response()->json(['message' => 'Email already verified'], 400);
         }
 
         if ($user->markEmailAsVerified()) {
             event(new Verified($user));
         }
 
-        return response()->json(['message' => 'Your email has been verified']);
+        return response()->json(['message' => 'Your email has been verified'], 204);
     }
 
     /**

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions\Fortify;
 
-use App\Rules\Password;
+use Illuminate\Validation\Rules\Password;
 
 trait PasswordValidationRules
 {
@@ -15,6 +15,6 @@ trait PasswordValidationRules
      */
     protected function passwordRules(): array
     {
-        return ['required', 'string', new Password, 'confirmed'];
+        return ['required', 'string', new Password(config('fortify.password_min_length')), 'confirmed'];
     }
 }

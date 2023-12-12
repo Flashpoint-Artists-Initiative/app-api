@@ -176,4 +176,6 @@ return [
             'update' => '/user',
         ],
     ],
+
+    'password_min_length' => 8,
 ];
