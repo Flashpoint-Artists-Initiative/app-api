@@ -70,7 +70,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     /**
      * Mutator for the birthday attribute
      */
-    public function setBirthdayAttribute(string $value): void
+    public function setBirthdayAttribute(?string $value): void
     {
         $this->attributes['birthday'] = Carbon::parse($value);
     }

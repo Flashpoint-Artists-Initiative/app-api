@@ -44,9 +44,13 @@ return [
         |
         | E.g. 'file://path/to/public/key'
         |
+        | The default file string is relative, which doesn't work with file://
+        | See https://bugs.php.net/bug.php?id=28820
+        | So we have to do weird substr stuff too
+        |
         */
 
-        'public' => env('JWT_PUBLIC_KEY'),
+        'public' => 'file://' . base_path(substr(env('JWT_PUBLIC_KEY'), 9)),
 
         /*
         |--------------------------------------------------------------------------
@@ -57,9 +61,11 @@ return [
         |
         | E.g. 'file://path/to/private/key'
         |
+        | Same issue as the public key above
+        |
         */
 
-        'private' => env('JWT_PRIVATE_KEY'),
+        'private' => 'file://' . base_path(substr(env('JWT_PRIVATE_KEY'), 9)),
 
         /*
         |--------------------------------------------------------------------------
