@@ -20,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
 {
     /**
      * All of the container bindings that should be registered.
-     * 
+     *
      * @var mixed[]
      */
     public $bindings = [

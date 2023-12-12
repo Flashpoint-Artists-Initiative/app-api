@@ -25,7 +25,7 @@ Route::group(['prefix' => 'v1'], function () {
     // Override the email verification route from fortify so it doesn't require being logged in (Which wouldn't work with JWTs)
     // TODO: This might not be needed if the front-end is keeping the JWT in local storage
     Route::get(RoutePath::for('verification.verify', '/auth/verify-email/{id}/{hash}'), [AuthenticationController::class, 'verifyEmail'])
-        ->middleware(['signed', 'throttle:'.$verificationLimiter])
+        ->middleware(['signed', 'throttle:' . $verificationLimiter])
         ->name('verification.verify');
 
     // This route doesn't work without session storage, but we can't easily remove it from fortify, so make it do nothing
@@ -34,7 +34,7 @@ Route::group(['prefix' => 'v1'], function () {
     });
 
     Route::post(RoutePath::for('token.refresh', '/auth/refresh-token'), [AuthenticationController::class, 'refreshToken'])
-        ->middleware(['guest:'.config('fortify.guard')])
+        ->middleware(['guest:' . config('fortify.guard')])
         ->name('token.refresh');
 });
 

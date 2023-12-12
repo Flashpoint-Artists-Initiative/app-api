@@ -87,7 +87,7 @@ return [
     |
     */
 
-    'prefix' => 'api/'.config('app.api_prefix'),
+    'prefix' => 'api/' . config('app.api_prefix'),
 
     'domain' => null,
 

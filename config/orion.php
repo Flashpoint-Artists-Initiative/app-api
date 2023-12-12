@@ -25,7 +25,7 @@ return [
             'version' => config('app.api_version'),
         ],
         'servers' => [
-            ['url' => env('APP_URL').'/api', 'description' => 'Default Environment'],
+            ['url' => env('APP_URL') . '/api', 'description' => 'Default Environment'],
         ],
         'tags' => [],
     ],

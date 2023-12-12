@@ -39,7 +39,7 @@ class AuthenticationController extends Controller
             $request->merge(['email' => Str::lower($request->email)]);
         }
 
-        if (!$token = $this->guard->attempt($request->only(['email', 'password']))) {
+        if (! $token = $this->guard->attempt($request->only(['email', 'password']))) {
             $this->throwFailedAuthenticationException($request);
         }
 
@@ -74,11 +74,11 @@ class AuthenticationController extends Controller
     {
         $user = User::find($request->route('id'));
 
-        if (!$user) {
+        if (! $user) {
             throw ValidationException::withMessages(['user' => 'Unknown User']);
         }
 
-        if (!hash_equals(sha1($user->getEmailForVerification()), (string) $request->route('hash'))) {
+        if (! hash_equals(sha1($user->getEmailForVerification()), (string) $request->route('hash'))) {
             throw ValidationException::withMessages(['email' => 'Invalid verification link']);
         }
 
