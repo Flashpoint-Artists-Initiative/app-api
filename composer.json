@@ -9,7 +9,6 @@
         "bref/bref": "^2.1",
         "bref/laravel-bridge": "^2.1",
         "guzzlehttp/guzzle": "^7.2",
-        "laravel/fortify": "^1.19",
         "laravel/framework": "^10.10",
         "laravel/tinker": "^2.8",
         "php-open-source-saver/jwt-auth": "^2.1",

@@ -15,6 +15,6 @@ trait PasswordValidationRules
      */
     protected function passwordRules(): array
     {
-        return ['required', 'string', new Password(config('fortify.password_min_length')), 'confirmed'];
+        return ['required', 'string', new Password(config('auth.password_min_length')), 'confirmed'];
     }
 }
