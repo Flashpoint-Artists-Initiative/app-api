@@ -7,13 +7,16 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Models\User;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -102,6 +105,37 @@ class AuthController extends Controller
 
         throw ValidationException::withMessages([
             'email' => [trans($status)],
+        ]);
+    }
+
+    public function resetPasswordAction(ResetPasswordRequest $request): JsonResponse
+    {
+        $status = Password::reset($request->validated(), function (User $user, string $password) {
+            $user->forceFill([
+                'password' => Hash::make($password),
+            ])->setRememberToken(Str::random(60));
+
+            $user->save();
+
+            event(new PasswordReset($user));
+        });
+
+        if ($status == Password::PASSWORD_RESET) {
+            return response()->json(['message' => __($status)]);
+        }
+
+        $errorField = 'password';
+
+        if ($status == Password::INVALID_USER) {
+            $errorField = 'email';
+        }
+
+        if ($status == Password::INVALID_TOKEN) {
+            $errorField = 'token';
+        }
+
+        throw ValidationException::withMessages([
+            $errorField => [trans($status)],
         ]);
     }
 

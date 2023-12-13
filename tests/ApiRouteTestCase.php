@@ -12,6 +12,8 @@ abstract class ApiRouteTestCase extends TestCase
 
     public string $routeName;
 
+    public array $routeParams = [];
+
     public string $endpoint;
 
     public function setUp(): void
@@ -19,7 +21,7 @@ abstract class ApiRouteTestCase extends TestCase
         parent::setUp();
 
         if (! empty($this->routeName)) {
-            $this->endpoint = route($this->routeName, [], false);
+            $this->endpoint = route($this->routeName, $this->routeParams, false);
         }
     }
 }

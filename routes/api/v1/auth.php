@@ -13,6 +13,7 @@ Route::controller(AuthController::class)->group(function () {
         Route::post('/login', 'loginAction')->name('login');
         Route::post('/register', 'registerAction')->name('register');
         Route::post('/forgot-password', 'forgotPasswordAction')->name('password.email');
+        Route::post('/reset-password', 'resetPasswordAction')->name('password.update');
     });
 
     Route::middleware(['auth'])->group(function () {

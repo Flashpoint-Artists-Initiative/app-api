@@ -3,6 +3,7 @@
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;
 
@@ -74,7 +75,12 @@ class ForgotPasswordTest extends ApiRouteTestCase
 
     public function test_forgot_password_call_without_matching_user_email_returns_an_error(): void
     {
-        $response = $this->postJson($this->endpoint, []);
+        User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => Hash::make('oldpassword'),
+        ]);
+
+        $response = $this->postJson($this->endpoint, ['email' => 'test@example.com']);
 
         $response->assertStatus(422)
             ->assertJson(fn (AssertableJson $json) => $json->hasAll(['message', 'errors.email']));
