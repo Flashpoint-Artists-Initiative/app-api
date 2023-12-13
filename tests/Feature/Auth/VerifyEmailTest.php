@@ -39,7 +39,7 @@ class VerifyEmailTest extends TestCase
         $user = User::find(1);
 
         /** @var \Illuminate\Mail\Transport\ArrayTransport */
-        $emailTransport = $this->app->make('mailer')->getSymfonyTransport();
+        $emailTransport = app('mailer')->getSymfonyTransport();
 
         $this->assertCount(0, $emailTransport->messages(), 'Start with 0 messages sent');
 

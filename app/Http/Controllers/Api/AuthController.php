@@ -14,6 +14,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -29,6 +30,9 @@ class AuthController extends Controller
     {
     }
 
+    /**
+     * Log a user in, returning a new JWT
+     */
     public function loginAction(LoginRequest $request): JsonResponse
     {
         if (config('auth.lowercase_usernames')) {
@@ -42,13 +46,16 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
+    /**
+     * Return the currently logged in User
+     */
     public function userAction(Request $request): ?User
     {
         return $request->user();
     }
 
     /**
-     * Destroy an authenticated session.
+     * Logout the authenticated token
      */
     public function logoutAction(): JsonResponse
     {
@@ -57,7 +64,10 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out']);
     }
 
-    public function registerAction(RegisterRequest $request)
+    /**
+     * Register a new User, returning a new JWT on success
+     */
+    public function registerAction(RegisterRequest $request): JsonResponse
     {
         if (config('auth.lowercase_usernames')) {
             $request->merge([
@@ -73,12 +83,32 @@ class AuthController extends Controller
     }
 
     /**
-     * Mark the authenticated user's email address as verified.
-     *
-     * @param  \Laravel\Fortify\Http\Requests\VerifyEmailRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * Send a password reset link to the submitted email
      */
-    public function verifyEmail(FormRequest $request)
+    public function forgotPasswordAction(Request $request): JsonResponse
+    {
+        $request->validate(['email' => 'required|email']);
+
+        // We will send the password reset link to this user. Once we have attempted
+        // to send the link, we will examine the response then see the message we
+        // need to show to the user. Finally, we'll send out a proper response.
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        if ($status == Password::RESET_LINK_SENT) {
+            return response()->json(['message' => __($status)], 200);
+        }
+
+        throw ValidationException::withMessages([
+            'email' => [trans($status)],
+        ]);
+    }
+
+    /**
+     * Mark the authenticated user's email address as verified.
+     */
+    public function verifyEmail(FormRequest $request): JsonResponse
     {
         $user = User::find($request->route('id'));
 
