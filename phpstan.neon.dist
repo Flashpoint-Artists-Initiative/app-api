@@ -22,3 +22,5 @@ parameters:
             enabled: false
         noSwitch:
             enabled: false
+        finalInAbstractClass:
+            enabled: false
