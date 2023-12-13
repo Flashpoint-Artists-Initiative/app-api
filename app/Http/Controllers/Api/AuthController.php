@@ -13,7 +13,7 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -108,6 +108,9 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Reset the user's password
+     */
     public function resetPasswordAction(ResetPasswordRequest $request): JsonResponse
     {
         $status = Password::reset($request->validated(), function (User $user, string $password) {
@@ -142,23 +145,25 @@ class AuthController extends Controller
     /**
      * Mark the authenticated user's email address as verified.
      */
-    public function verifyEmail(FormRequest $request): JsonResponse
+    public function verifyEmailAction(EmailVerificationRequest $request): JsonResponse
     {
-        $user = User::find($request->route('id'));
-
-        if (! $user || ! hash_equals(sha1($user->getEmailForVerification()), (string) $request->route('hash'))) {
-            throw ValidationException::withMessages(['email' => 'Invalid verification link']);
-        }
-
-        if ($user->hasVerifiedEmail()) {
+        if ($request->user()->hasVerifiedEmail()) {
             return response()->json(['message' => 'Email already verified'], 400);
         }
 
-        if ($user->markEmailAsVerified()) {
-            event(new Verified($user));
-        }
+        $request->fulfill();
 
-        return response()->json(['message' => 'Your email has been verified'], 204);
+        return response()->json(['message' => 'Your email has been verified'], 202);
+    }
+
+    /**
+     * Resend the email verification link to the user
+     */
+    public function resendVerificationEmailAction(Request $request): JsonResponse
+    {
+        $request->user()->sendEmailVerificationNotification();
+
+        return response()->json(['message' => 'Email verification link sent.'], 202);
     }
 
     /**

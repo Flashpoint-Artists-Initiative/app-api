@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
@@ -80,7 +82,7 @@ class ForgotPasswordTest extends ApiRouteTestCase
             'password' => Hash::make('oldpassword'),
         ]);
 
-        $response = $this->postJson($this->endpoint, ['email' => 'test@example.com']);
+        $response = $this->postJson($this->endpoint, ['email' => 'not-a-user@example.com']);
 
         $response->assertStatus(422)
             ->assertJson(fn (AssertableJson $json) => $json->hasAll(['message', 'errors.email']));

@@ -60,9 +60,9 @@ class VerifyEmailTest extends ApiRouteTestCase
 
         $relativeUrl = "{$parts['path']}?{$parts['query']}";
 
-        $response = $this->get($relativeUrl);
+        $response = $this->actingAs($user)->get($relativeUrl);
 
-        $response->assertStatus(204);
+        $response->assertStatus(202);
 
         //Update the user model
         $user->refresh();
@@ -86,7 +86,7 @@ class VerifyEmailTest extends ApiRouteTestCase
         $relativeUrl = "{$parts['path']}?{$parts['query']}";
 
         // First request
-        $this->get($relativeUrl);
+        $this->actingAs($user)->get($relativeUrl);
         //Second request
         $response = $this->get($relativeUrl);
 
@@ -95,18 +95,21 @@ class VerifyEmailTest extends ApiRouteTestCase
 
     public function test_invalid_email_verification_link_fails(): void
     {
+        $this->seed();
+        $user = User::first();
+
         $params = ['id' => 1, 'hash' => 'abcdef'];
         $relativeUrl = route('verification.verify', $params, false);
         $signedUrl = URL::temporarySignedRoute('verification.verify', 10, $params);
 
-        $response = $this->get($relativeUrl);
+        $response = $this->actingAs($user)->get($relativeUrl);
 
         // URL Signing fails
         $response->assertStatus(403);
 
-        $response = $this->get($signedUrl);
+        $response = $this->actingAs($user)->get($signedUrl);
 
         // Invalid URL fails
-        $response->assertStatus(422);
+        $response->assertStatus(403);
     }
 }
