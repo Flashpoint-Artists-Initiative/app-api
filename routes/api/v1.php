@@ -4,22 +4,9 @@ use App\Http\Controllers\Fortify\AuthenticationController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\RoutePath;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
+Route::prefix('auth')->group(base_path('routes/api/v1/auth.php'));
 
 Route::group(['prefix' => 'v1'], function () {
-    Route::get('/auth/me', [AuthenticationController::class, 'me'])
-        ->middleware(['auth', 'verified'])
-        ->name('auth.me');
-
     $verificationLimiter = config('fortify.limiters.verification', '6,1');
 
     // Override the email verification route from fortify so it doesn't require being logged in (Which wouldn't work with JWTs)

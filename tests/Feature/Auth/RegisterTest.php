@@ -7,7 +7,6 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
-use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 use Tests\TestCase;
 
 class RegisterTest extends TestCase
@@ -19,7 +18,7 @@ class RegisterTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->endpoint = action([RegisteredUserController::class, 'store'], [], false);
+        $this->endpoint = route('register', [], false);
     }
 
     public function test_registering_with_valid_data_returns_a_successful_response(): void

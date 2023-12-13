@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
-class MeTest extends TestCase
+class UserTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -21,14 +21,14 @@ class MeTest extends TestCase
         $this->endpoint = route('auth.me', false);
     }
 
-    public function test_auth_me_call_requires_being_logged_in(): void
+    public function test_auth_user_call_requires_being_logged_in(): void
     {
         $response = $this->get($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_auth_me_call_requires_verified_email(): void
+    public function test_auth_user_call_requires_verified_email(): void
     {
         $this->seed();
 
@@ -39,7 +39,7 @@ class MeTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_auth_me_call_returns_current_user(): void
+    public function test_auth_user_call_returns_current_user(): void
     {
         User::factory()->create([
             'legal_name' => 'Test User',

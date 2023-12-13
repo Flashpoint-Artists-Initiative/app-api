@@ -6,7 +6,6 @@ namespace Tests\Feature\Auth;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
-use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use Tests\TestCase;
 
 class LoginTest extends TestCase
@@ -20,7 +19,7 @@ class LoginTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->endpoint = action([AuthenticatedSessionController::class, 'store'], [], false);
+        $this->endpoint = route('login', [], false);
     }
 
     public function test_logging_in_returns_a_successful_response(): void
