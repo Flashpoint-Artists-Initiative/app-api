@@ -2,13 +2,14 @@ name: PHPStan
 
 on:
   push:
-    branches:
-      - main
   pull_request:
+  release:
+    types:
+      - published
 
 jobs:
   phpstan:
-    name: PHPStan
+    name: Run PHPStan Analysis
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"

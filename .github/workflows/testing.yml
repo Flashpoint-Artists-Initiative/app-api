@@ -47,3 +47,7 @@ jobs:
 
       - name: Execute tests
         run: vendor/bin/phpunit
+        env:
+          JWT_PRIVATE_KEY: ${{ vars.JWT_PRIVATE_KEY }}
+          JWT_PUBLIC_KEY: ${{ vars.JWT_PUBLIC_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}

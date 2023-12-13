@@ -2,16 +2,17 @@ name: PHP Lint
 
 on:
   push:
-    branches:
-      - main
   pull_request:
     branches-ignore:
       - 'dependabot/npm_and_yarn/*'
       - 'dependabot/composer/*'
+  release:
+    types:
+      - published
 
 jobs:
   phplint:
-    name: Pint
+    name: Run Pint Linter Analysis
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
