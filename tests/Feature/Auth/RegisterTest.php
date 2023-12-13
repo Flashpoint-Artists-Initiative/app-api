@@ -7,19 +7,13 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
-use Tests\TestCase;
+use Tests\ApiRouteTestCase;
 
-class RegisterTest extends TestCase
+class RegisterTest extends ApiRouteTestCase
 {
     use RefreshDatabase;
 
-    public string $endpoint;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->endpoint = route('register', [], false);
-    }
+    public string $routeName = 'register';
 
     public function test_registering_with_valid_data_returns_a_successful_response(): void
     {

@@ -8,26 +8,17 @@ use App\Models\User;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\URL;
-use Tests\TestCase;
+use Tests\ApiRouteTestCase;
 
-class VerifyEmailTest extends TestCase
+class VerifyEmailTest extends ApiRouteTestCase
 {
     use RefreshDatabase;
 
-    public string $sendEndpoint;
-
-    public string $verifyEndpoint;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->sendEndpoint = route('verification.send', [], false);
-        // $this->verifyEndpoint = route('verification.verify', [], false);
-    }
+    public string $routeName = 'verification.send';
 
     public function test_send_verification_email_endpoint_requires_being_logged_in(): void
     {
-        $response = $this->postJson($this->sendEndpoint);
+        $response = $this->postJson($this->endpoint);
 
         $response->assertStatus(401);
     }
@@ -43,7 +34,7 @@ class VerifyEmailTest extends TestCase
 
         $this->assertCount(0, $emailTransport->messages(), 'Start with 0 messages sent');
 
-        $response = $this->actingAs($user)->postJson($this->sendEndpoint);
+        $response = $this->actingAs($user)->postJson($this->endpoint);
 
         $response->assertStatus(202);
 

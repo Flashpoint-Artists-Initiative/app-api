@@ -6,21 +6,15 @@ namespace Tests\Feature\Auth;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
-use Tests\TestCase;
+use Tests\ApiRouteTestCase;
 
-class LoginTest extends TestCase
+class LoginTest extends ApiRouteTestCase
 {
     use RefreshDatabase;
 
     public bool $seed = true;
 
-    public string $endpoint;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->endpoint = route('login', [], false);
-    }
+    public string $routeName = 'login';
 
     public function test_logging_in_returns_a_successful_response(): void
     {

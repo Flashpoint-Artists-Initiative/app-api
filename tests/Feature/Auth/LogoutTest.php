@@ -6,21 +6,15 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Tests\ApiRouteTestCase;
 
-class LogoutTest extends TestCase
+class LogoutTest extends ApiRouteTestCase
 {
     use RefreshDatabase;
 
     public bool $seed = true;
 
-    public string $endpoint;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->endpoint = route('logout', [], false);
-    }
+    public string $routeName = 'logout';
 
     public function test_logging_out_invalidates_auth_token(): void
     {
