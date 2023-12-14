@@ -16,9 +16,10 @@ Route::controller(AuthController::class)->group(function () {
         Route::post('/reset-password', 'resetPasswordAction')->name('password.update');
     });
 
-    Route::middleware(['auth'])->group(function () {
+    Route::post('/logout', 'logoutAction')->middleware(['auth'])->name('logout');
+
+    Route::middleware(['auth', 'jwt.refresh'])->group(function () {
         Route::get('/user', 'userAction')->middleware(['verified'])->name('auth.user');
-        Route::post('/logout', 'logoutAction')->name('logout');
 
         Route::prefix('email')->group(function () {
             Route::get('/verify/{id}/{hash}', 'verifyEmailAction')->middleware(['signed'])->name('verification.verify');
