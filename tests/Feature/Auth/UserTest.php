@@ -29,7 +29,6 @@ class UserTest extends ApiRouteTestCase
         $user = User::find(1);
 
         $response = $this->actingAs($user)->get($this->endpoint);
-
         $response->assertStatus(403);
     }
 

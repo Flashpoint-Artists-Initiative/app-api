@@ -88,7 +88,7 @@ class VerifyEmailTest extends ApiRouteTestCase
         // First request
         $this->actingAs($user)->get($relativeUrl);
         //Second request
-        $response = $this->get($relativeUrl);
+        $response = $this->actingAs($user)->get($relativeUrl);
 
         $response->assertStatus(400);
     }
