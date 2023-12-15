@@ -6,7 +6,7 @@ provider:
     region: us-east-1
     # Environment variables
     environment:
-        APP_ENV: ${sls:stage} # Or use ${sls:stage} if you want the environment to match the stage
+        APP_ENV: ${sls:stage}
         JWT_PRIVATE_KEY: ${env:JWT_PRIVATE_KEY, ''}
         JWT_PUBLIC_KEY: ${env:JWT_PUBLIC_KEY, ''}
         JWT_SECRET: ${env:JWT_SECRET, ''}
@@ -15,6 +15,7 @@ provider:
         DB_HOST: ${env:DB_HOST, ''}
         DB_NAME: ${env:DB_NAME, ''}
         APP_KEY: ${env:APP_KEY, ''}
+        MYSQL_ATTR_SSL_CA: /opt/bref/ssl/cert.pem
 
 package:
     # Files and directories to exclude from deployment
