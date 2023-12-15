@@ -62,5 +62,5 @@ jobs:
           DB_USERNAME: ${{ secrets.PLANETSCALE_USERNAME }}
           DB_PASSWORD: ${{ secrets.PLANETSCALE_PASSWORD }}
           DB_HOST: ${{ vars.PLANETSCALE_HOST }}
-          DB_NAME: ${{ vars.DB_NAME }}
+          DB_DATABASE: ${{ vars.DB_DATABASE }}
           APP_KEY: ${{ secrets.APP_KEY }}
