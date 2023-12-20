@@ -21,6 +21,7 @@
     "require-dev": {
         "ergebnis/phpstan-rules": "^2.1",
         "fakerphp/faker": "^1.9.1",
+        "knuckleswtf/scribe": "^4.26",
         "larastan/larastan": "^2.0",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.18",

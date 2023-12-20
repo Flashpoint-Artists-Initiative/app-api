@@ -27,6 +27,7 @@ package:
         - '!storage/**'
         - '!tests/**'
         - '!.dev-db/**'
+        - '!.scribe/**'
         - 'storage/certs/**'
 
 functions:

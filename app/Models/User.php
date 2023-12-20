@@ -6,12 +6,16 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @property string $display_name
+ */
 class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     use HasFactory, HasRoles, Notifiable;
@@ -73,5 +77,14 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function setBirthdayAttribute(?string $value): void
     {
         $this->attributes['birthday'] = Carbon::parse($value);
+    }
+
+    public function displayName(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                return $attributes['display_name'] ?? $attributes['legal_name'];
+            }
+        );
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
@@ -20,7 +21,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Response;
+use Knuckles\Scribe\Attributes\ResponseFromApiResource;
+use Knuckles\Scribe\Attributes\Unauthenticated;
 
+#[Group('Authentication Management')]
 class AuthController extends Controller
 {
     /**
@@ -34,8 +40,17 @@ class AuthController extends Controller
     }
 
     /**
+     * Login
+     *
      * Log a user in, returning a new JWT
      */
+    #[Unauthenticated]
+    #[Response([
+        'access_token' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzU....',
+        'token_type' => 'bearer',
+        'expires_in' => 3600,
+    ], 200, 'Successful Login')]
+    #[Response(['error' => 'User already logged in'], 400, 'Already logged in')]
     public function loginAction(LoginRequest $request): JsonResponse
     {
         if (config('auth.lowercase_usernames')) {
@@ -50,14 +65,19 @@ class AuthController extends Controller
     }
 
     /**
+     * Get current user
+     *
      * Return the currently logged in User
      */
-    public function userAction(Request $request): ?User
+    #[ResponseFromApiResource(UserResource::class, User::class)]
+    public function userAction(Request $request): UserResource
     {
-        return $request->user();
+        return new UserResource($request->user());
     }
 
     /**
+     * Logout
+     *
      * Logout the authenticated token
      */
     public function logoutAction(): JsonResponse
@@ -68,8 +88,11 @@ class AuthController extends Controller
     }
 
     /**
+     * User Registration
+     *
      * Register a new User, returning a new JWT on success
      */
+    #[Unauthenticated]
     public function registerAction(RegisterRequest $request): JsonResponse
     {
         if (config('auth.lowercase_usernames')) {
@@ -86,8 +109,11 @@ class AuthController extends Controller
     }
 
     /**
+     * Forgot password
+     *
      * Send a password reset link to the submitted email
      */
+    #[Unauthenticated]
     public function forgotPasswordAction(Request $request): JsonResponse
     {
         $request->validate(['email' => 'required|email']);
@@ -109,8 +135,11 @@ class AuthController extends Controller
     }
 
     /**
-     * Reset the user's password
+     * Reset password
+     *
+     * Reset the user's password using the token sent to their email
      */
+    #[Unauthenticated]
     public function resetPasswordAction(ResetPasswordRequest $request): JsonResponse
     {
         $status = Password::reset($request->validated(), function (User $user, string $password) {
@@ -143,6 +172,8 @@ class AuthController extends Controller
     }
 
     /**
+     * Verify a user's email address
+     *
      * Mark the authenticated user's email address as verified.
      */
     public function verifyEmailAction(EmailVerificationRequest $request): JsonResponse
@@ -157,6 +188,8 @@ class AuthController extends Controller
     }
 
     /**
+     * Resend the email verification link
+     *
      * Resend the email verification link to the user
      */
     public function resendVerificationEmailAction(Request $request): JsonResponse
