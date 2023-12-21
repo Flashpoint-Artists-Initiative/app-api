@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Auth;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -41,11 +42,12 @@ class UserTest extends ApiRouteTestCase
         ]);
 
         $user = User::find(1);
-        $userJson = json_decode($user->toJson(), true);
+        $resource = new UserResource($user);
+        $userJson = json_decode($resource->toJson(), true);
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
         $response->assertStatus(200)
-            ->assertJson(fn (AssertableJson $json) => $json->whereAll($userJson));
+            ->assertJson(fn (AssertableJson $json) => $json->has('data', fn (AssertableJson $json) => $json->whereAll($userJson)));
     }
 }
