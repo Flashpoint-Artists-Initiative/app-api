@@ -64,3 +64,4 @@ jobs:
           DB_HOST: ${{ vars.PLANETSCALE_HOST }}
           DB_DATABASE: ${{ vars.DB_DATABASE }}
           APP_KEY: ${{ secrets.APP_KEY }}
+          APP_URL: ${{ vars.APP_URL }}
