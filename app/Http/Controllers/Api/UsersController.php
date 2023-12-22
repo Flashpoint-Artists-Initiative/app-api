@@ -16,4 +16,14 @@ class UsersController extends Controller
     protected $model = User::class;
 
     protected $resource = UserResource::class;
+
+    public function includes(): array
+    {
+        return ['roles'];
+    }
+
+    public function aggregates(): array
+    {
+        return ['roles'];
+    }
 }

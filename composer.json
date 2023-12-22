@@ -11,6 +11,7 @@
         "php": "^8.3",
         "bref/bref": "^2.1",
         "bref/laravel-bridge": "^2.1",
+        "dedoc/scramble": "^0.8.5",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/tinker": "^2.8",

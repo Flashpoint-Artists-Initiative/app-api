@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin \App\Models\User
+ * @mixin User
  */
 class UserResource extends JsonResource
 {
@@ -23,9 +24,11 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'legal_name' => $this->legal_name,
             'preferred_name' => $this->preferred_name,
+            /** @var string $display_name Calculated Fields */
             'display_name' => $this->display_name,
             'birthday' => $this->birthday,
             'email' => $this->email,
+            'roles' => $this->whenLoaded('roles'),
         ];
     }
 }

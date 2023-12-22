@@ -43,14 +43,9 @@ class AuthController extends Controller
      * Login
      *
      * Log a user in, returning a new JWT
+     *
+     * @unauthenticated
      */
-    #[Unauthenticated]
-    #[Response([
-        'access_token' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzU....',
-        'token_type' => 'bearer',
-        'expires_in' => 3600,
-    ], 200, 'Successful Login')]
-    #[Response(['error' => 'User already logged in'], 400, 'Already logged in')]
     public function loginAction(LoginRequest $request): JsonResponse
     {
         if (config('auth.lowercase_usernames')) {
@@ -61,7 +56,12 @@ class AuthController extends Controller
             $this->throwFailedAuthenticationException($request);
         }
 
-        return $this->respondWithToken($token);
+        // Returns a new JWT
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => $this->guard->factory()->getTTL() * 60,
+        ]);
     }
 
     /**
@@ -91,6 +91,8 @@ class AuthController extends Controller
      * User Registration
      *
      * Register a new User, returning a new JWT on success
+     *
+     * @unauthenticated
      */
     #[Unauthenticated]
     public function registerAction(RegisterRequest $request): JsonResponse
@@ -105,13 +107,20 @@ class AuthController extends Controller
 
         $token = $this->guard->login($user);
 
-        return $this->respondWithToken($token, 201);
+        // Returns a new JWT
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => $this->guard->factory()->getTTL() * 60,
+        ], 201);
     }
 
     /**
      * Forgot password
      *
      * Send a password reset link to the submitted email
+     *
+     * @unauthenticated
      */
     #[Unauthenticated]
     public function forgotPasswordAction(Request $request): JsonResponse
@@ -138,6 +147,8 @@ class AuthController extends Controller
      * Reset password
      *
      * Reset the user's password using the token sent to their email
+     *
+     * @unauthenticated
      */
     #[Unauthenticated]
     public function resetPasswordAction(ResetPasswordRequest $request): JsonResponse
@@ -214,14 +225,5 @@ class AuthController extends Controller
         throw ValidationException::withMessages([
             'email' => [trans('auth.failed')],
         ]);
-    }
-
-    protected function respondWithToken(string $token, int $status = 200): JsonResponse
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => $this->guard->factory()->getTTL() * 60,
-        ], $status);
     }
 }
