@@ -17,6 +17,7 @@ provider:
         APP_KEY: ${env:APP_KEY, ''}
         MYSQL_ATTR_SSL_CA: /opt/bref/ssl/cert.pem
         MAIL_MAILER: ses
+        APP_URL: ${env:APP_URL, 'localhost'}
 
 package:
     # Files and directories to exclude from deployment
