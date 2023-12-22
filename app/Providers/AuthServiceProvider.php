@@ -48,6 +48,6 @@ class AuthServiceProvider extends ServiceProvider
             );
         });
 
-        Gate::define('viewApiDocs', fn () => true);
+        Gate::define('viewApiDocs', fn (?User $user) => true);
     }
 }
