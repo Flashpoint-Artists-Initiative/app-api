@@ -83,7 +83,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return Attribute::make(
             get: function (mixed $value, array $attributes) {
-                return $attributes['display_name'] ?? $attributes['legal_name'];
+                return $attributes['preferred_name'] ?? $attributes['legal_name'];
             }
         );
     }
