@@ -12,12 +12,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::factory(10)->unverified()->create();
+        $env = app()->environment();
 
-        \App\Models\User::factory()->create([
-            'legal_name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password',
-        ]);
+        if ($env == 'local' || $env == 'testing') {
+            \App\Models\User::factory(10)->unverified()->create();
+
+            \App\Models\User::factory()->create([
+                'legal_name' => 'Test User',
+                'email' => 'test@example.com',
+                'password' => 'password',
+            ]);
+        }
     }
 }
