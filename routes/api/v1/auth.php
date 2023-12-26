@@ -18,7 +18,7 @@ Route::controller(AuthController::class)->group(function () {
 
     Route::post('/logout', 'logoutAction')->middleware(['auth'])->name('logout');
 
-    Route::middleware(['auth', 'jwt.refresh'])->group(function () {
+    Route::middleware(['auth', 'token.refresh'])->group(function () {
         Route::get('/user', 'userAction')->middleware(['verified'])->name('auth.user');
 
         Route::prefix('email')->group(function () {

@@ -303,4 +303,7 @@ return [
 
         'storage' => PHPOpenSourceSaver\JWTAuth\Providers\Storage\Illuminate::class,
     ],
+
+    // Set the auth token to be refreshed every successful response or not
+    'refresh_token' => env('JWT_REQUIRE_REFRESH', true),
 ];

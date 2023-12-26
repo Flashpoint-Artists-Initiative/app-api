@@ -9,6 +9,6 @@ use Orion\Facades\Orion;
 | Users Routes
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth'])->as('api.')->group(function () {
+Route::middleware(['auth', 'token.refresh'])->as('api.')->group(function () {
     Orion::resource('users', UsersController::class)->withoutBatch();
 });
