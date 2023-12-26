@@ -183,4 +183,29 @@ return [
 
         'store' => 'default',
     ],
+
+    /**
+     * The implementation of necessary roles and permissions
+     */
+    'implement' => [
+        // Implement new roles as key = Role Name, values = permission names
+        'roles' => [
+            'Admin' => [
+                'users.*',
+            ],
+            //Super Admin automatically has all permissions, no need to define them all
+            'Super Admin' => [],
+        ],
+        // All permissions that will be checked need to be defined here
+        'permissions' => [
+            'users.viewAny',
+            'users.view',
+            'users.create',
+            'users.update',
+            'users.delete',
+            'users.restore',
+            'users.forceDelete',
+            'users.*',
+        ],
+    ],
 ];

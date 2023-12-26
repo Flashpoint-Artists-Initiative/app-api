@@ -7,6 +7,7 @@ namespace App\Providers;
 // use Illuminate\Support\Facades\Gate;
 
 use App\Models\User;
+use App\Policies\UserPolicy;
 use Carbon\Carbon;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
@@ -23,7 +24,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        //
+        User::class => UserPolicy::class,
     ];
 
     /**
@@ -48,6 +49,10 @@ class AuthServiceProvider extends ServiceProvider
             );
         });
 
+        // Allow public access to the API docs in non-local environments
         Gate::define('viewApiDocs', fn (?User $user) => true);
+
+        // Allow super user to do anything
+        Gate::after(fn (User $user, $ability) => $user->hasRole('Super Admin'));
     }
 }
