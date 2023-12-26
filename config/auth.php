@@ -129,4 +129,5 @@ return [
 
     'lowercase_usernames' => true,
 
+    'password_min_length' => 8,
 ];

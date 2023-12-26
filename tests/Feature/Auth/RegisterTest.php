@@ -21,7 +21,6 @@ class RegisterTest extends ApiRouteTestCase
             'legal_name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'password',
-            'password_confirmation' => 'password',
         ]);
 
         $response->assertStatus(201);
@@ -37,35 +36,6 @@ class RegisterTest extends ApiRouteTestCase
             });
     }
 
-    public function test_registering_without_password_confirmation_returns_validation_errors(): void
-    {
-        $response = $this->postJson($this->endpoint, [
-            'legal_name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password',
-        ]);
-
-        $response->assertStatus(422)
-            ->assertJson(function (AssertableJson $json) {
-                return $json->hasAll(['message', 'errors.password']);
-            });
-    }
-
-    public function test_registering_with_mismatching_password_confirmation_returns_validation_errors(): void
-    {
-        $response = $this->postJson($this->endpoint, [
-            'legal_name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'wrong',
-        ]);
-
-        $response->assertStatus(422)
-            ->assertJson(function (AssertableJson $json) {
-                return $json->hasAll(['message', 'errors.password']);
-            });
-    }
-
     public function test_registering_with_existing_email_returns_validation_errors(): void
     {
         $this->seed();
@@ -74,7 +44,6 @@ class RegisterTest extends ApiRouteTestCase
             'legal_name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'password',
-            'password_confirmation' => 'wrong',
         ]);
 
         $response->assertStatus(422)
@@ -93,7 +62,6 @@ class RegisterTest extends ApiRouteTestCase
             'legal_name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'password',
-            'password_confirmation' => 'wrong',
         ]);
 
         $response->assertStatus(400);
