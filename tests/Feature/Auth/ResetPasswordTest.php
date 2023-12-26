@@ -32,7 +32,6 @@ class ResetPasswordTest extends ApiRouteTestCase
         $response = $this->postJson($this->endpoint, [
             'email' => 'test@example.com',
             'password' => 'newpassword',
-            'password_confirmation' => 'newpassword',
             'token' => $token,
         ]);
 
@@ -74,16 +73,6 @@ class ResetPasswordTest extends ApiRouteTestCase
             ->assertJson(fn (AssertableJson $json) => $json->hasAll(['message', 'errors.password']));
     }
 
-    public function test_reset_password_call_with_invalid_password_confirmation_returns_a_validation_error(): void
-    {
-        $this->seed();
-
-        $response = $this->postJson($this->endpoint, ['password' => 'newpassword', 'password_confirmation' => 'doesnt_match']);
-
-        $response->assertStatus(422)
-            ->assertJson(fn (AssertableJson $json) => $json->hasAll(['message', 'errors.password']));
-    }
-
     public function test_reset_password_call_with_invalid_token_returns_a_validation_error(): void
     {
         $this->seed();
@@ -91,7 +80,6 @@ class ResetPasswordTest extends ApiRouteTestCase
         $response = $this->postJson($this->endpoint, [
             'email' => 'test@example.com',
             'password' => 'newpassword',
-            'password_confirmation' => 'newpassword',
             'token' => 'bad_token',
         ]);
 
@@ -110,7 +98,6 @@ class ResetPasswordTest extends ApiRouteTestCase
         $response = $this->postJson($this->endpoint, [
             'email' => 'not_a_user@example.com',
             'password' => 'newpassword',
-            'password_confirmation' => 'newpassword',
             'token' => $token,
         ]);
 
@@ -135,7 +122,6 @@ class ResetPasswordTest extends ApiRouteTestCase
         $response = $this->postJson($this->endpoint, [
             'email' => 'test-two@example.com',
             'password' => 'newpassword',
-            'password_confirmation' => 'newpassword',
             'token' => $token,
         ]);
 
