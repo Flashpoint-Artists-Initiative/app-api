@@ -10,5 +10,5 @@ use Orion\Facades\Orion;
 |--------------------------------------------------------------------------
 */
 Route::middleware(['token.refresh'])->as('api.')->group(function () {
-    Orion::resource('events', EventsController::class);
+    Orion::resource('events', EventsController::class)->withSoftDeletes();
 });

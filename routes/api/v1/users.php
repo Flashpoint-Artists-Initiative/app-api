@@ -10,5 +10,5 @@ use Orion\Facades\Orion;
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'token.refresh'])->as('api.')->group(function () {
-    Orion::resource('users', UsersController::class)->withoutBatch();
+    Orion::resource('users', UsersController::class)->withoutBatch()->withSoftDeletes();
 });
