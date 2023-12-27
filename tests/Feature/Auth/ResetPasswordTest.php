@@ -78,7 +78,7 @@ class ResetPasswordTest extends ApiRouteTestCase
         $this->seed();
 
         $response = $this->postJson($this->endpoint, [
-            'email' => 'test@example.com',
+            'email' => 'regular@example.com',
             'password' => 'newpassword',
             'token' => 'bad_token',
         ]);

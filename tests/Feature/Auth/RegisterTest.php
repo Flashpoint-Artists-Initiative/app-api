@@ -42,7 +42,7 @@ class RegisterTest extends ApiRouteTestCase
 
         $response = $this->postJson($this->endpoint, [
             'legal_name' => 'Test User',
-            'email' => 'test@example.com',
+            'email' => 'regular@example.com',
             'password' => 'password',
         ]);
 

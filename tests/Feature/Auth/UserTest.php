@@ -27,7 +27,9 @@ class UserTest extends ApiRouteTestCase
     {
         $this->seed();
 
-        $user = User::find(1);
+        $user = User::where('email_verified_at', null)->first();
+
+        $this->assertFalse($user->hasVerifiedEmail());
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(403);
