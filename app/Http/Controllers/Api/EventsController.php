@@ -40,4 +40,17 @@ class EventsController extends Controller
 
         return $query;
     }
+
+    protected function buildShowFetchQuery(Request $request, array $requestedRelations): Builder
+    {
+        $query = parent::buildShowFetchQuery($request, $requestedRelations);
+
+        // Hide soft-deleted events for users without specific permission to view them
+        if (! auth()->user()?->can('events.viewDeleted')) {
+            // @phpstan-ignore-next-line
+            $query->withoutTrashed();
+        }
+
+        return $query;
+    }
 }
