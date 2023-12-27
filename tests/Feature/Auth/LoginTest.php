@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Auth;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;
 
 class LoginTest extends ApiRouteTestCase
 {
-    use RefreshDatabase;
-
     public bool $seed = true;
 
     public string $routeName = 'login';

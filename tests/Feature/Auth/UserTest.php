@@ -6,14 +6,11 @@ namespace Tests\Feature\Auth;
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;
 
 class UserTest extends ApiRouteTestCase
 {
-    use RefreshDatabase;
-
     public string $routeName = 'auth.user';
 
     public function test_auth_user_call_requires_being_logged_in(): void

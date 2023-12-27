@@ -27,6 +27,7 @@
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
+        <env name="JWT_REQUIRE_REFRESH" value="true"/>
         
         <ini name="memory_limit" value="-1"/>
     </php>

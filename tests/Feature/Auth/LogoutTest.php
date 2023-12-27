@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\ApiRouteTestCase;
 
 class LogoutTest extends ApiRouteTestCase
 {
-    use RefreshDatabase;
-
     public bool $seed = true;
 
     public string $routeName = 'logout';

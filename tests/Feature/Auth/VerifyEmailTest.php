@@ -6,14 +6,11 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use Illuminate\Auth\Notifications\VerifyEmail;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\URL;
 use Tests\ApiRouteTestCase;
 
 class VerifyEmailTest extends ApiRouteTestCase
 {
-    use RefreshDatabase;
-
     public string $routeName = 'verification.send';
 
     public function test_send_verification_email_endpoint_requires_being_logged_in(): void

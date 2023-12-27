@@ -14,6 +14,7 @@ class EventSeeder extends Seeder
     {
         Event::factory(2)->create();
         Event::factory(2)->active()->create();
-        Event::factory(2)->trashed()->create();
+        Event::factory()->trashed()->create();
+        Event::factory()->active()->trashed()->create();
     }
 }
