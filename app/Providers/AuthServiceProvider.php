@@ -6,6 +6,7 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 
+use App\Enums\RolesEnum;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -51,6 +52,6 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('viewApiDocs', fn (?User $user) => true);
 
         // Allow super user to do anything
-        Gate::after(fn (User $user, $ability) => $user->hasRole('Super Admin'));
+        Gate::after(fn (User $user, $ability) => $user->hasRole(RolesEnum::SuperAdmin));
     }
 }

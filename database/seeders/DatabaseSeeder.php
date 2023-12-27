@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Enums\RolesEnum;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -27,13 +29,13 @@ class DatabaseSeeder extends Seeder
                 'legal_name' => 'Super Admin User',
                 'email' => 'superadmin@example.com',
                 'password' => 'superadmin',
-            ])->assignRole('Super Admin');
+            ])->assignRole(RolesEnum::SuperAdmin);
 
             \App\Models\User::factory()->create([
                 'legal_name' => 'Regular Admin User',
                 'email' => 'admin@example.com',
                 'password' => 'admin',
-            ])->assignRole('Admin');
+            ])->assignRole(RolesEnum::Admin);
         }
 
         $this->call([

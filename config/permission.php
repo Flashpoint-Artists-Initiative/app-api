@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\RolesEnum;
+
 return [
 
     'models' => [
@@ -190,12 +192,12 @@ return [
     'implement' => [
         // Implement new roles as key = Role Name, values = permission names
         'roles' => [
-            'Admin' => [
+            RolesEnum::Admin->value => [
                 'users.*',
                 'events.*',
             ],
             //Super Admin automatically has all permissions, no need to define them all
-            'Super Admin' => [],
+            RolesEnum::SuperAdmin->value => [],
         ],
         // All permissions that will be checked need to be defined here
         'permissions' => [
