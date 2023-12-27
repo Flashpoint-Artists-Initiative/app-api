@@ -192,6 +192,7 @@ return [
         'roles' => [
             'Admin' => [
                 'users.*',
+                'events.*',
             ],
             //Super Admin automatically has all permissions, no need to define them all
             'Super Admin' => [],
@@ -206,6 +207,15 @@ return [
             'users.restore',
             'users.forceDelete',
             'users.*',
+
+            'events.viewAny',
+            'events.view',
+            'events.create',
+            'events.update',
+            'events.delete',
+            'events.restore',
+            'events.forceDelete',
+            'events.*',
         ],
     ],
 ];

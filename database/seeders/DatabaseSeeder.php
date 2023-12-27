@@ -35,5 +35,9 @@ class DatabaseSeeder extends Seeder
                 'password' => 'admin',
             ])->assignRole('Admin');
         }
+
+        $this->call([
+            EventSeeder::class,
+        ]);
     }
 }
