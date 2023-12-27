@@ -23,9 +23,9 @@ class EventRequest extends Request
     {
         return [
             'name' => 'required',
-            'start_date' => 'required',
-            'end_date' => 'required',
-            'contact_email' => 'required',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+            'contact_email' => 'required|email',
         ];
     }
 }
