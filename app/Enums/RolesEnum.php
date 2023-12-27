@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use Spatie\Permission\Models\Role;
+
 enum RolesEnum: string
 {
     case Admin = 'admin';
@@ -17,5 +19,17 @@ enum RolesEnum: string
             self::SuperAdmin => 'Super Admin',
             self::EventManager => 'Event Manager',
         };
+    }
+
+    public function model(): Role
+    {
+        return Role::firstWhere('name', $this->value);
+    }
+
+    public static function fromId($id): static
+    {
+        $role = Role::find($id);
+
+        return self::from($role->name);
     }
 }
