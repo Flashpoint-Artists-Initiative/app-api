@@ -18,7 +18,7 @@ trait PasswordValidationRules
         return [
             'required',
             'string',
-            new Password(config('auth.password_min_length'))
+            new Password(config('auth.password_min_length')),
         ];
     }
 }
