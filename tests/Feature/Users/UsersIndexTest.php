@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\ApiRouteTestCase;
 
-class UsersTest extends ApiRouteTestCase
+class UsersIndexTest extends ApiRouteTestCase
 {
     use RefreshDatabase;
 
