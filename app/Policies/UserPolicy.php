@@ -18,4 +18,22 @@ class UserPolicy extends AbstractModelPolicy
 
         return parent::update($user, $model);
     }
+
+    public function view(User $user, $model): bool
+    {
+        if ($user->id === $model->id) {
+            return true;
+        }
+
+        return parent::update($user, $model);
+    }
+
+    public function delete(User $user, $model): bool
+    {
+        if ($user->id === $model->id) {
+            return true;
+        }
+
+        return parent::update($user, $model);
+    }
 }
