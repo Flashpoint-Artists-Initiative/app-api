@@ -196,6 +196,14 @@ return [
                 'users.*',
                 'events.*',
             ],
+            RolesEnum::EventManager->value => [
+                'events.viewAny',
+                'events.viewPending',
+                'events.create',
+                'events.update',
+                'events.delete',
+                'events.restore',
+            ],
             //Super Admin automatically has all permissions, no need to define them all
             RolesEnum::SuperAdmin->value => [],
         ],
@@ -203,6 +211,7 @@ return [
         'permissions' => [
             'users.viewAny',
             'users.view',
+            'users.viewDeleted',
             'users.create',
             'users.update',
             'users.delete',
@@ -212,6 +221,8 @@ return [
 
             'events.viewAny',
             'events.view',
+            'events.viewPending',
+            'events.viewDeleted',
             'events.create',
             'events.update',
             'events.delete',
