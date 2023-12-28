@@ -18,9 +18,4 @@ class UsersController extends Controller
     {
         return ['roles'];
     }
-
-    public function aggregates(): array
-    {
-        return ['roles'];
-    }
 }

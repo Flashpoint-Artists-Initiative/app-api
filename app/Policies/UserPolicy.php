@@ -25,7 +25,7 @@ class UserPolicy extends AbstractModelPolicy
             return true;
         }
 
-        return parent::update($user, $model);
+        return parent::view($user, $model);
     }
 
     public function delete(User $user, $model): bool
@@ -34,6 +34,6 @@ class UserPolicy extends AbstractModelPolicy
             return true;
         }
 
-        return parent::update($user, $model);
+        return parent::delete($user, $model);
     }
 }

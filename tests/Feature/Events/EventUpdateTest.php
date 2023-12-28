@@ -81,7 +81,7 @@ class EventUpdateTest extends ApiRouteTestCase
 
         $user = User::doesntHave('roles')->first();
 
-        $this->assertFalse($user->can('events.create'));
+        $this->assertFalse($user->can('events.update'));
 
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'name' => 'Test Event',
