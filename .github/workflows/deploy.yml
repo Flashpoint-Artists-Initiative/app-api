@@ -65,3 +65,8 @@ jobs:
           DB_DATABASE: ${{ vars.DB_DATABASE }}
           APP_KEY: ${{ secrets.APP_KEY }}
           APP_URL: ${{ vars.APP_URL }}
+
+      - name: Populate Roles and Permissions
+        uses: serverless/github-action@v3
+        with:
+          args: bref:cli --args="permission:populate" --stage=${{ env.ENVIRONMENT_LC }}
