@@ -21,8 +21,21 @@ abstract class ApiRouteTestCase extends TestCase
     {
         parent::setUp();
 
-        if (! empty($this->routeName)) {
-            $this->endpoint = route($this->routeName, $this->routeParams, false);
+        $this->buildEndpoint();
+    }
+
+    public function buildEndpoint(?string $name = null, ?array $params = null): void
+    {
+        if (empty($name)) {
+            $name = $this->routeName;
+        }
+
+        if (empty($params)) {
+            $params = $this->routeParams;
+        }
+
+        if (! empty($name)) {
+            $this->endpoint = route($name, $params, false);
         }
     }
 

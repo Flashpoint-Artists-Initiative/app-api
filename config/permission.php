@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\RolesEnum;
+
 return [
 
     'models' => [
@@ -190,22 +192,43 @@ return [
     'implement' => [
         // Implement new roles as key = Role Name, values = permission names
         'roles' => [
-            'Admin' => [
+            RolesEnum::Admin->value => [
                 'users.*',
+                'events.*',
+            ],
+            RolesEnum::EventManager->value => [
+                'events.viewAny',
+                'events.viewPending',
+                'events.create',
+                'events.update',
+                'events.delete',
+                'events.restore',
             ],
             //Super Admin automatically has all permissions, no need to define them all
-            'Super Admin' => [],
+            RolesEnum::SuperAdmin->value => [],
         ],
         // All permissions that will be checked need to be defined here
         'permissions' => [
             'users.viewAny',
             'users.view',
+            'users.viewDeleted',
             'users.create',
             'users.update',
             'users.delete',
             'users.restore',
             'users.forceDelete',
             'users.*',
+
+            'events.viewAny',
+            'events.view',
+            'events.viewPending',
+            'events.viewDeleted',
+            'events.create',
+            'events.update',
+            'events.delete',
+            'events.restore',
+            'events.forceDelete',
+            'events.*',
         ],
     ],
 ];

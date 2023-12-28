@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;
 
 class RegisterTest extends ApiRouteTestCase
 {
-    use RefreshDatabase;
-
     public string $routeName = 'register';
 
     public function test_registering_with_valid_data_returns_a_successful_response(): void
@@ -42,7 +39,7 @@ class RegisterTest extends ApiRouteTestCase
 
         $response = $this->postJson($this->endpoint, [
             'legal_name' => 'Test User',
-            'email' => 'test@example.com',
+            'email' => 'regular@example.com',
             'password' => 'password',
         ]);
 

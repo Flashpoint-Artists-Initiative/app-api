@@ -5,9 +5,9 @@
          colors="true"
 >
     <testsuites>
-        <!-- <testsuite name="Unit">
+        <testsuite name="Unit">
             <directory>tests/Unit</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
         </testsuite>
@@ -27,6 +27,7 @@
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
+        <env name="JWT_REQUIRE_REFRESH" value="true"/>
         
         <ini name="memory_limit" value="-1"/>
     </php>
