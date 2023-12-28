@@ -70,3 +70,6 @@ jobs:
         uses: serverless/github-action@v3
         with:
           args: bref:cli --args="permission:populate" --stage=${{ env.ENVIRONMENT_LC }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
