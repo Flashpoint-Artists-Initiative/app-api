@@ -16,6 +16,7 @@ class UserRequest extends Request
             'preferred_name' => 'string',
             'birthday' => 'date',
             'email' => 'email',
+            'password' => 'string',
         ];
     }
 

@@ -6,6 +6,7 @@ namespace Tests\Feature\Users;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Tests\ApiRouteTestCase;
 
 class UsersUpdateTest extends ApiRouteTestCase
@@ -153,5 +154,22 @@ class UsersUpdateTest extends ApiRouteTestCase
         $user->refresh();
 
         $this->assertEquals($email->getOriginalMessage()->getTo()[0]->getAddress(), $user->email, 'Email was sent to the correct address');
+    }
+
+    public function test_users_update_call_changing_password_hashes_correctly(): void
+    {
+        $user = User::find(1);
+        $newPassword = 'new_password';
+        $oldHash = $user->password;
+
+        $response = $this->actingAs($user)->patchJson($this->endpoint, [
+            'password' => $newPassword,
+        ]);
+
+        $response->assertStatus(200);
+        $user->refresh();
+
+        $this->assertNotEquals($oldHash, $user->password);
+        $this->assertTrue(Hash::check($newPassword, $user->password));
     }
 }
