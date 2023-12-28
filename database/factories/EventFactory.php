@@ -31,4 +31,16 @@ class EventFactory extends Factory
             'active' => true,
         ]);
     }
+
+    public function offset(string $offset): static
+    {
+        return $this->state(function (array $attributes) use ($offset) {
+            $start_date = fake()->dateTimeInInterval($offset, '+1 year');
+
+            return [
+                'start_date' => $start_date,
+                'end_date' => $start_date->modify('+2 weeks'),
+            ];
+        });
+    }
 }

@@ -12,9 +12,13 @@ class EventSeeder extends Seeder
      */
     public function run(): void
     {
-        Event::factory(2)->create();
-        Event::factory(2)->active()->create();
-        Event::factory()->trashed()->create();
+        Event::factory()->offset('-5 years')->create();
+        Event::factory()->offset('+2 years')->create();
+
+        Event::factory()->offset('-2 years')->active()->create();
+        Event::factory()->offset('+3 years')->active()->create();
+
+        Event::factory()->offset('-1 year')->trashed()->create();
         Event::factory()->active()->trashed()->create();
     }
 }
