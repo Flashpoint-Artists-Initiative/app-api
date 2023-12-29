@@ -195,6 +195,7 @@ return [
             RolesEnum::Admin->value => [
                 'users.*',
                 'events.*',
+                'roles.*',
             ],
             RolesEnum::EventManager->value => [
                 'events.viewAny',
@@ -229,6 +230,17 @@ return [
             'events.restore',
             'events.forceDelete',
             'events.*',
+
+            'roles.viewAny',
+            'roles.view',
+            'roles.viewPending',
+            'roles.viewDeleted',
+            'roles.create',
+            'roles.update',
+            'roles.delete',
+            'roles.restore',
+            'roles.forceDelete',
+            'roles.*',
         ],
     ],
 ];
