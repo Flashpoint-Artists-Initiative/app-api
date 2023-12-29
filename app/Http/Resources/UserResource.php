@@ -7,6 +7,8 @@ namespace App\Http\Resources;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\MissingValue;
+use Illuminate\Support\Collection;
 
 /**
  * @mixin User
@@ -20,15 +22,22 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        if ($this->relationLoaded('permissions')) {
+            /** @var Collection $collection */
+            $collection = $this->getAllPermissions();
+            $permissions = $collection->map(fn ($p) => $p->name);
+        }
+
         return [
             'id' => $this->id,
             'legal_name' => $this->legal_name,
             'preferred_name' => $this->preferred_name,
-            /** @var string $display_name Calculated Fields */
+            /** @var string $display_name Calculated Field */
             'display_name' => $this->display_name,
             'birthday' => $this->birthday,
             'email' => $this->email,
-            'roles' => $this->whenLoaded('roles'),
+            'roles' => RoleResource::collection($this->whenLoaded('roles')),
+            'permissions' => $permissions ?? new MissingValue(),
         ];
     }
 }

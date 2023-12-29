@@ -32,4 +32,9 @@ enum RolesEnum: string
 
         return self::from($role->name);
     }
+
+    public static function fromModel($role): static
+    {
+        return self::from($role->name);
+    }
 }

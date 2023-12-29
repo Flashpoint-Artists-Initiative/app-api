@@ -6,6 +6,7 @@ namespace Tests\Feature\Users;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;
 
 class UsersShowTest extends ApiRouteTestCase
@@ -62,5 +63,27 @@ class UsersShowTest extends ApiRouteTestCase
         $response = $this->actingAs($user)->get($this->endpoint);
 
         $response->assertStatus(200)->assertJsonPath('data.id', $user->id);
+    }
+
+    public function test_users_view_call_with_roles_is_successful(): void
+    {
+        $user = User::role(RolesEnum::SuperAdmin)->first();
+
+        $this->buildEndpoint(params: ['user' => $user->id, 'include' => 'roles']);
+
+        $response = $this->actingAs($user)->get($this->endpoint);
+
+        $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->has('data.roles'));
+    }
+
+    public function test_users_view_call_with_permissions_is_successful(): void
+    {
+        $user = User::role(RolesEnum::SuperAdmin)->first();
+
+        $this->buildEndpoint(params: ['user' => $user->id, 'include' => 'permissions']);
+
+        $response = $this->actingAs($user)->get($this->endpoint);
+
+        $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->has('data.permissions'));
     }
 }

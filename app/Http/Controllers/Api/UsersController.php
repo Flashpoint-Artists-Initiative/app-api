@@ -16,6 +16,6 @@ class UsersController extends Controller
 
     public function includes(): array
     {
-        return ['roles'];
+        return ['roles', 'permissions'];
     }
 }
