@@ -72,6 +72,8 @@ class AuthController extends Controller
     #[ResponseFromApiResource(UserResource::class, User::class)]
     public function userAction(Request $request): UserResource
     {
+        $request->user()->load('roles');
+
         return new UserResource($request->user());
     }
 

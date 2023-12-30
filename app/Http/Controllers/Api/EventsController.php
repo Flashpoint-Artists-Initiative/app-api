@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\OrionController;
 use App\Models\Event;
 use Illuminate\Database\Eloquent\Builder;
-use Orion\Http\Controllers\Controller;
 use Orion\Http\Requests\Request;
 
-class EventsController extends Controller
+class EventsController extends OrionController
 {
     protected $model = Event::class;
 
@@ -32,7 +32,17 @@ class EventsController extends Controller
 
     public function filterableBy(): array
     {
-        return ['active'];
+        return ['active', 'start_date', 'end_date', 'name'];
+    }
+
+    public function sortableBy(): array
+    {
+        return ['start_date', 'end_date', 'active', 'name', 'location', 'created_at', 'updated_at'];
+    }
+
+    public function searchableBy(): array
+    {
+        return ['start_date', 'end_date', 'name', 'description', 'location', 'created_at', 'updated_at'];
     }
 
     /**
