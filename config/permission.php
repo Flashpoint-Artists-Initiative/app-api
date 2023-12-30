@@ -205,7 +205,7 @@ return [
                 'events.delete',
                 'events.restore',
             ],
-            //Super Admin automatically has all permissions, no need to define them all
+            //Super Admin automatically has all permissions, see AuthServiceProvider
             RolesEnum::SuperAdmin->value => [],
         ],
         // All permissions that will be checked need to be defined here

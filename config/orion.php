@@ -51,4 +51,7 @@ return [
     ],
 
     'use_validated' => true,
+
+    'default_pagination_limit' => 50,
+    'default_pagination_max_limit' => 200,
 ];

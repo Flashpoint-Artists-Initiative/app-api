@@ -36,6 +36,7 @@ class UserResource extends JsonResource
             'display_name' => $this->display_name,
             'birthday' => $this->birthday,
             'email' => $this->email,
+            'email_verified' => $this->email_verified_at != null,
             'roles' => RoleResource::collection($this->whenLoaded('roles')),
             'permissions' => $permissions ?? new MissingValue(),
         ];

@@ -19,7 +19,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/logout', 'logoutAction')->middleware(['auth'])->name('logout');
 
     Route::middleware(['auth', 'token.refresh'])->group(function () {
-        Route::get('/user', 'userAction')->middleware(['verified'])->name('auth.user');
+        Route::get('/user', 'userAction')->name('auth.user');
 
         Route::prefix('email')->group(function () {
             Route::get('/verify/{id}/{hash}', 'verifyEmailAction')->middleware(['signed'])->name('verification.verify');
