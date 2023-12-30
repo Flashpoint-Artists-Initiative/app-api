@@ -20,6 +20,21 @@ class EventsController extends Controller
         parent::__construct();
     }
 
+    public function includes(): array
+    {
+        return ['purchasedTickets', 'reservedTickets', 'ticketTypes'];
+    }
+
+    public function aggregates(): array
+    {
+        return ['purchasedTickets', 'reservedTickets', 'ticketTypes', 'ticketTypes.*'];
+    }
+
+    public function filterableBy(): array
+    {
+        return ['active'];
+    }
+
     /**
      * Builds Eloquent query for fetching entities in index method.
      */
@@ -34,6 +49,7 @@ class EventsController extends Controller
 
         // Hide soft-deleted events for users without specific permission to view them
         if (! auth()->user()?->can('events.viewDeleted')) {
+            dd(1);
             // @phpstan-ignore-next-line
             $query->withoutTrashed();
         }
