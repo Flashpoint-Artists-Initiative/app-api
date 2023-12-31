@@ -40,6 +40,7 @@ class UserTest extends ApiRouteTestCase
             'password' => 'password',
         ]);
 
+        /** @var User $user */
         $user = User::with('roles')->find(1);
         $resource = new UserResource($user);
         $userJson = json_decode($resource->toJson(), true);
