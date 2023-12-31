@@ -12,5 +12,5 @@ use Orion\Facades\Orion;
 */
 Route::middleware(['auth', 'token.refresh'])->as('api.')->group(function () {
     Orion::resource('users', UsersController::class)->withoutBatch()->withSoftDeletes();
-    Orion::belongsToManyResource('users', 'roles', UserRolesController::class)->only(['index', 'attach', 'detach', 'sync']);
+    Orion::belongsToManyResource('users', 'roles', UserRolesController::class)->only(['attach', 'detach', 'sync']);
 });

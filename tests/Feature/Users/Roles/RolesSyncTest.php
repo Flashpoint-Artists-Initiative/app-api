@@ -1,0 +1,51 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Feature\Users;
+
+use App\Enums\RolesEnum;
+use App\Models\User;
+use Tests\ApiRouteTestCase;
+
+class RolessyncTest extends ApiRouteTestCase
+{
+    public bool $seed = true;
+
+    public string $routeName = 'api.users.roles.sync';
+
+    public array $routeParams = ['user' => 1];
+
+    public function test_users_roles_sync_call_with_valid_data_returns_a_successful_response(): void
+    {
+        $user = User::role(RolesEnum::Admin)->first();
+        $this->buildEndpoint(params: ['user' => $user->id]);
+
+        $this->assertCount(1, $user->roles);
+        $this->assertEquals($user->roles->modelKeys(), [1]);
+
+        $response = $this->actingAs($user)->patchJson($this->endpoint, [
+            'resources' => [2],
+        ]);
+
+        $response->assertStatus(200);
+
+        $user->load('roles');
+
+        $this->assertCount(1, $user->roles);
+        $this->assertEquals($user->roles->modelKeys(), [2]);
+    }
+
+    public function test_users_roles_sync_call_without_permissons_returns_an_error(): void
+    {
+        /** @var User $user */
+        $user = User::with('roles')->find(1);
+        $this->assertFalse($user->can('roles.update'));
+
+        $response = $this->actingAs($user)->patchJson($this->endpoint, [
+            'resources' => [1],
+        ]);
+
+        $response->assertStatus(403);
+    }
+}

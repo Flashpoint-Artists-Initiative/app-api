@@ -20,17 +20,18 @@ class UserTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_auth_user_call_requires_verified_email(): void
-    {
-        $this->seed();
+    // It was decided to not require verified email for this call
+    // public function test_auth_user_call_requires_verified_email(): void
+    // {
+    //     $this->seed();
 
-        $user = User::where('email_verified_at', null)->first();
+    //     $user = User::where('email_verified_at', null)->first();
 
-        $this->assertFalse($user->hasVerifiedEmail());
+    //     $this->assertFalse($user->hasVerifiedEmail());
 
-        $response = $this->actingAs($user)->get($this->endpoint);
-        $response->assertStatus(403);
-    }
+    //     $response = $this->actingAs($user)->get($this->endpoint);
+    //     $response->assertStatus(403);
+    // }
 
     public function test_auth_user_call_returns_current_user(): void
     {
