@@ -21,7 +21,6 @@ class UserPolicy extends AbstractModelPolicy
 
     public function view(User $user, $model): bool
     {
-        // dd($user->getAllPermissions());
         if ($user->id === $model->id) {
             return true;
         }
