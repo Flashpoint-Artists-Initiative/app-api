@@ -14,6 +14,11 @@ class TicketType extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $casts = [
+        'sale_start_date' => 'date',
+        'sale_end_date' => 'date',
+    ];
+
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);

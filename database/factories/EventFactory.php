@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\TicketType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -42,5 +43,15 @@ class EventFactory extends Factory
                 'end_date' => $start_date->modify('+2 weeks'),
             ];
         });
+    }
+
+    public function withTicketTypes(): static
+    {
+        return $this->has(TicketType::factory()->withReservedTickets(), 'ticketTypes')
+            ->has(TicketType::factory()->inactive(), 'ticketTypes')
+            ->has(TicketType::factory()->zeroQuantity()->withPurchasedTickets(), 'ticketTypes')
+            ->has(TicketType::factory()->free()->withReservedTickets(), 'ticketTypes')
+            ->has(TicketType::factory()->onSaleInFuture(), 'ticketTypes')
+            ->has(TicketType::factory()->onSaleInPast(), 'ticketTypes');
     }
 }

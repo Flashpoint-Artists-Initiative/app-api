@@ -59,7 +59,6 @@ class EventsController extends OrionController
 
         // Hide soft-deleted events for users without specific permission to view them
         if (! auth()->user()?->can('events.viewDeleted')) {
-            dd(1);
             // @phpstan-ignore-next-line
             $query->withoutTrashed();
         }

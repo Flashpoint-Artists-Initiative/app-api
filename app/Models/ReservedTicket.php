@@ -18,6 +18,11 @@ class ReservedTicket extends Model
         return $this->belongsTo(TicketType::class);
     }
 
+    public function purchasedTicket(): BelongsTo
+    {
+        return $this->belongsTo(PurchasedTicket::class);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
