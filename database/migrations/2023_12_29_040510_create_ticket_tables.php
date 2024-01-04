@@ -17,8 +17,8 @@ return new class extends Migration
             $table->timestamps();
             $table->unsignedInteger('event_id');
             $table->string('name');
-            $table->dateTime('sale_start_date');
-            $table->dateTime('sale_end_date');
+            $table->dateTime('sale_start_date')->nullable();
+            $table->dateTime('sale_end_date')->nullable();
             $table->unsignedInteger('quantity')->default(0);
             $table->unsignedInteger('price');
             $table->text('description');

@@ -12,6 +12,7 @@ class EventSeeder extends Seeder
      */
     public function run(): void
     {
+        Event::factory()->offset('+3 months')->withTicketTypes()->active()->create();
         Event::factory()->offset('-5 years')->withTicketTypes()->create();
 
         Event::factory()->offset('+2 years')->create();

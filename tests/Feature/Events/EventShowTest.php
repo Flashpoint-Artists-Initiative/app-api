@@ -7,6 +7,7 @@ namespace Tests\Feature\Events;
 use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;
 
 class EventShowTest extends ApiRouteTestCase
@@ -69,5 +70,41 @@ class EventShowTest extends ApiRouteTestCase
         $response = $this->actingAs($user)->get($this->endpoint);
 
         $response->assertStatus(200)->assertJsonPath('data.id', $event->id);
+    }
+
+    public function test_events_view_call_with_ticket_types_is_successful(): void
+    {
+        $user = User::role(RolesEnum::Admin)->first();
+        $event = Event::has('ticketTypes')->first();
+
+        $this->buildEndpoint(params: ['event' => $event->id, 'include' => 'ticketTypes']);
+
+        $response = $this->actingAs($user)->get($this->endpoint);
+
+        $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->has('data.ticket_types'));
+    }
+
+    public function test_events_view_call_with_purchased_tickets_is_successful(): void
+    {
+        $user = User::role(RolesEnum::Admin)->first();
+        $event = Event::has('purchasedTickets')->first();
+
+        $this->buildEndpoint(params: ['event' => $event->id, 'include' => 'purchasedTickets']);
+
+        $response = $this->actingAs($user)->get($this->endpoint);
+
+        $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->has('data.purchased_tickets'));
+    }
+
+    public function test_events_view_call_with_reserved_tickets_is_successful(): void
+    {
+        $user = User::role(RolesEnum::Admin)->first();
+        $event = Event::has('reservedTickets')->first();
+
+        $this->buildEndpoint(params: ['event' => $event->id, 'include' => 'reservedTickets']);
+
+        $response = $this->actingAs($user)->get($this->endpoint);
+
+        $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->has('data.reserved_tickets'));
     }
 }

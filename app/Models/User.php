@@ -58,6 +58,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     protected static function booted(): void
     {
+        // Send a new verification email when the email address changes
         static::updating(function (User $user) {
             if ($user->isDirty('email') && $user->hasVerifiedEmail()) {
                 $user->email_verified_at = null;
@@ -66,12 +67,12 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         });
     }
 
-    public function PurchasedTickets(): HasMany
+    public function purchasedTickets(): HasMany
     {
         return $this->hasMany(PurchasedTicket::class);
     }
 
-    public function ReservedTickets(): HasMany
+    public function reservedTickets(): HasMany
     {
         return $this->hasMany(ReservedTicket::class);
     }

@@ -86,4 +86,26 @@ class UsersShowTest extends ApiRouteTestCase
 
         $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->has('data.permissions'));
     }
+
+    public function test_users_view_call_with_purchased_tickets_is_successful(): void
+    {
+        $user = User::has('purchasedTickets')->first();
+
+        $this->buildEndpoint(params: ['user' => $user->id, 'include' => 'purchasedTickets']);
+
+        $response = $this->actingAs($user)->get($this->endpoint);
+
+        $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->has('data.purchased_tickets'));
+    }
+
+    public function test_users_view_call_with_reserved_tickets_is_successful(): void
+    {
+        $user = User::has('reservedTickets')->first();
+
+        $this->buildEndpoint(params: ['user' => $user->id, 'include' => 'reservedTickets']);
+
+        $response = $this->actingAs($user)->get($this->endpoint);
+
+        $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->has('data.reserved_tickets'));
+    }
 }

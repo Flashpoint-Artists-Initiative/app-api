@@ -6,6 +6,6 @@ namespace App\Http\Requests;
 
 use Orion\Http\Requests\Request;
 
-class UpdateReservedTicketRequest extends Request
+class ReservedTicketRequest extends Request
 {
 }

@@ -14,7 +14,7 @@ use Orion\Facades\Orion;
 */
 Route::middleware(['token.refresh'])->as('api.')->group(function () {
     Orion::resource('events', EventsController::class)->withSoftDeletes();
-    Orion::hasManyResource('events', 'ticket-types', TicketTypesController::class)->middleware(['auth']);
+    Orion::hasManyResource('events', 'ticket-types', TicketTypesController::class)->withSoftDeletes()->except(['associate', 'dissociate']);
 
     // TODO: Determine if these routes are needed or not
     // Orion::hasManyThroughResource('events', 'purchased-tickets', PurchasedTicketsController::class);

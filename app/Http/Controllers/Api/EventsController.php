@@ -22,7 +22,7 @@ class EventsController extends OrionController
 
     public function includes(): array
     {
-        return ['purchasedTickets', 'reservedTickets', 'ticketTypes'];
+        return ['purchasedTickets', 'reservedTickets', 'ticketTypes', 'ticketTypes.*'];
     }
 
     public function aggregates(): array
