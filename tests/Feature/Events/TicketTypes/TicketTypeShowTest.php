@@ -102,4 +102,17 @@ class TicketTypeShowTest extends ApiRouteTestCase
 
         $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->has('data.reserved_tickets'));
     }
+
+    public function test_ticket_types_view_call_with_event_is_successful(): void
+    {
+        $user = User::role(RolesEnum::Admin)->first();
+        $event = Event::has('reservedTickets')->first();
+        $ticket_type = $event->ticketTypes()->where('active', true)->first();
+
+        $this->buildEndpoint(params: ['event' => $event->id, 'ticket_type' => $ticket_type->id, 'include' => 'event']);
+
+        $response = $this->actingAs($user)->get($this->endpoint);
+
+        $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->has('data.event'));
+    }
 }

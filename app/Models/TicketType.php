@@ -54,7 +54,7 @@ class TicketType extends Model
 
     public function scopeOnSale(Builder $query): void
     {
-        $query->where('sale_start_Date', '<=', Carbon::now());
+        $query->where('sale_start_date', '<=', Carbon::now());
         $query->where('sale_end_date', '>=', Carbon::now());
     }
 

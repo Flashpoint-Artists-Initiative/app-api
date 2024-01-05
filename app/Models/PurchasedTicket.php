@@ -31,6 +31,14 @@ class PurchasedTicket extends Model
 
     public function event(): HasOneThrough
     {
-        return $this->hasOneThrough(Event::class, TicketType::class);
+        // Set the keys directly because we're effectively going backwards from the indended way
+        return $this->hasOneThrough(
+            Event::class,
+            TicketType::class,
+            'id', // Foreign Key for ticketType
+            'id', // Foreign Key for Event
+            'ticket_type_id', // Local key for purchasedTicket
+            'event_id' //Local key for ticketType
+        );
     }
 }
