@@ -20,6 +20,16 @@ class EventsController extends OrionController
         parent::__construct();
     }
 
+    public function includes(): array
+    {
+        return ['purchasedTickets', 'reservedTickets', 'ticketTypes', 'ticketTypes.*'];
+    }
+
+    public function aggregates(): array
+    {
+        return ['purchasedTickets', 'reservedTickets', 'ticketTypes', 'ticketTypes.*'];
+    }
+
     public function filterableBy(): array
     {
         return ['active', 'start_date', 'end_date', 'name'];

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Users;
+namespace Tests\Feature\Users\Roles;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
 use Tests\ApiRouteTestCase;
 
-class RolessyncTest extends ApiRouteTestCase
+class RolesSyncTest extends ApiRouteTestCase
 {
     public bool $seed = true;
 

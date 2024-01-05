@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Users;
 
 use App\Http\Controllers\OrionRelationsController;
 use App\Models\User;
 use App\Policies\UserRolesPolicy;
 
-class UserRolesController extends OrionRelationsController
+class RolesController extends OrionRelationsController
 {
     protected $model = User::class;
 

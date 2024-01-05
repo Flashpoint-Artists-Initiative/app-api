@@ -39,6 +39,8 @@ class UserResource extends JsonResource
             'email_verified' => $this->email_verified_at != null,
             'roles' => RoleResource::collection($this->whenLoaded('roles')),
             'permissions' => $permissions ?? new MissingValue(),
+            'purchased_tickets' => $this->whenLoaded('purchasedTickets'),
+            'reserved_tickets' => $this->whenLoaded('reservedTickets'),
         ];
     }
 }

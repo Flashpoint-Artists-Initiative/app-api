@@ -16,6 +16,6 @@ class UsersController extends OrionController
 
     public function includes(): array
     {
-        return ['roles', 'permissions'];
+        return ['roles', 'permissions', 'purchasedTickets', 'reservedTickets'];
     }
 }
