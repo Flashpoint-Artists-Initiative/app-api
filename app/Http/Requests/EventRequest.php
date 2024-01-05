@@ -16,6 +16,7 @@ class EventRequest extends Request
             'end_date' => 'date',
             'contact_email' => 'email',
             'active' => 'boolean',
+            'location' => 'string',
         ];
     }
 
