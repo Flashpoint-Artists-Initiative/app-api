@@ -11,7 +11,7 @@ use Orion\Facades\Orion;
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'token.refresh'])->as('api.')->group(function () {
-    Orion::hasManyResource('ticket-types', 'reserved-tickets', ReservedTicketsController::class)->except([]);
+    Orion::hasManyResource('ticket-types', 'reserved-tickets', ReservedTicketsController::class)->middleware(['auth']);
     Orion::hasManyResource('ticket-types', 'purchased-tickets', PurchasedTicketsController::class)->only([
         'index',
         'search',

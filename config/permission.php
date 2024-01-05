@@ -216,6 +216,8 @@ return [
                 'ticketTypes.restore',
             ],
             RolesEnum::BoxOffice->value => [
+                'events.viewPending',
+                'events.viewDeleted',
                 'purchasedTickets.viewAny',
                 'purchasedTickets.view',
                 'reservedTickets.viewAny',

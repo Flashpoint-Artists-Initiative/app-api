@@ -39,6 +39,12 @@ abstract class ApiRouteTestCase extends TestCase
         }
     }
 
+    public function addEndpointParams(array $params): void
+    {
+        $this->routeParams = array_merge($this->routeParams, $params);
+        $this->buildEndpoint();
+    }
+
     /**
      * @param  \App\Models\User  $user
      */

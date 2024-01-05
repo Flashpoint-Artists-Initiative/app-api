@@ -15,6 +15,6 @@ class ReservedTicketsController extends RelationController
 
     public function includes(): array
     {
-        return ['ticketType', 'user', 'event'];
+        return ['ticketType', 'user', 'event', 'purchasedTicket'];
     }
 }
