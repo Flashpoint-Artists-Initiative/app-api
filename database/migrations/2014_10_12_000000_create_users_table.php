@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('legal_name');
             $table->string('preferred_name')->nullable();
+            $table->string('display_name')->virtualAs("IFNULL(NULLIF(preferred_name, ''), legal_name)");
             $table->date('birthday')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

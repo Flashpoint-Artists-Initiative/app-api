@@ -18,4 +18,19 @@ class UsersController extends OrionController
     {
         return ['roles', 'permissions', 'purchasedTickets', 'reservedTickets'];
     }
+
+    public function filterableBy(): array
+    {
+        return ['legal_name', 'preferred_name', 'display_name', 'email', 'birthday', 'created_at', 'updated_at', 'deleted_at', 'email_verified_at'];
+    }
+
+    public function sortableBy(): array
+    {
+        return ['legal_name', 'preferred_name', 'display_name', 'email', 'birthday', 'created_at', 'updated_at', 'deleted_at', 'email_verified_at'];
+    }
+
+    public function searchableBy(): array
+    {
+        return ['legal_name', 'preferred_name', 'display_name', 'email', 'birthday'];
+    }
 }

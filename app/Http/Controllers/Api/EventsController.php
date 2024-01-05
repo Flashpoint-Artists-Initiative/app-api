@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\OrionController;
 use App\Models\Event;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Orion\Http\Requests\Request;
 
@@ -52,13 +53,16 @@ class EventsController extends OrionController
     {
         $query = parent::buildIndexFetchQuery($request, $requestedRelations);
 
+        /** @var ?User $user */
+        $user = auth()->user();
+
         // Hide non-active events for users without specific permission to view them
-        if (! auth()->user()?->can('events.viewPending')) {
+        if (! $user || ! $user->can('events.viewPending')) {
             $query->where('active', true);
         }
 
         // Hide soft-deleted events for users without specific permission to view them
-        if (! auth()->user()?->can('events.viewDeleted')) {
+        if (! $user || ! $user->can('events.viewDeleted')) {
             // @phpstan-ignore-next-line
             $query->withoutTrashed();
         }
@@ -70,8 +74,11 @@ class EventsController extends OrionController
     {
         $query = parent::buildShowFetchQuery($request, $requestedRelations);
 
+        /** @var ?User $user */
+        $user = auth()->user();
+
         // Hide soft-deleted events for users without specific permission to view them
-        if (! auth()->user()?->can('events.viewDeleted')) {
+        if (! $user || ! $user->can('events.viewDeleted')) {
             // @phpstan-ignore-next-line
             $query->withoutTrashed();
         }

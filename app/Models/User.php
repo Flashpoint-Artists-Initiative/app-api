@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Events\EmailUpdated;
+use App\Models\Concerns\HasVirtualColumns;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,7 +21,7 @@ use Spatie\Permission\Traits\HasRoles;
  */
 class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
-    use HasFactory, HasRoles, Notifiable, SoftDeletes;
+    use HasFactory, HasRoles, HasVirtualColumns, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -54,6 +55,15 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'birthday' => 'date',
+    ];
+
+    /**
+     * The virtual generated columns on the model
+     *
+     * @var array<int, string>
+     */
+    protected $virtualColumns = [
+        'display_name',
     ];
 
     protected static function booted(): void
@@ -95,12 +105,12 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         return [];
     }
 
-    public function displayName(): Attribute
-    {
-        return Attribute::make(
-            get: function (mixed $value, array $attributes) {
-                return $attributes['preferred_name'] ?? $attributes['legal_name'];
-            }
-        );
-    }
+    // public function displayName(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: function (mixed $value, array $attributes) {
+    //             return $attributes['preferred_name'] ?? $attributes['legal_name'];
+    //         }
+    //     );
+    // }
 }

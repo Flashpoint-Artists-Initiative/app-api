@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
             try {
                 User::factory()->unverified()->create([
                     'legal_name' => 'Unverified User',
+                    'preferred_name' => 'Unverified Name',
                     'email' => 'unverified@example.com',
                     'password' => 'unverified',
                 ]);
@@ -30,6 +31,7 @@ class UserSeeder extends Seeder
 
                 User::factory()->create([
                     'legal_name' => 'Super Admin User',
+                    'preferred_name' => 'Super Admin Name',
                     'email' => 'superadmin@example.com',
                     'password' => 'superadmin',
                 ])->assignRole(RolesEnum::SuperAdmin);
@@ -42,6 +44,7 @@ class UserSeeder extends Seeder
 
                 User::factory()->create([
                     'legal_name' => 'Event Manager User',
+                    'preferred_name' => 'Event Manager Name',
                     'email' => 'eventmanager@example.com',
                     'password' => 'eventmanager',
                 ])->assignRole(RolesEnum::EventManager);
