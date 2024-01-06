@@ -32,8 +32,7 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'legal_name' => $this->legal_name,
             'preferred_name' => $this->preferred_name,
-            /** @var string $display_name Calculated Field */
-            'display_name' => $this->display_name,
+            'display_name' => $this->display_name, // Virtual attribute
             'birthday' => $this->birthday,
             'email' => $this->email,
             'email_verified' => $this->email_verified_at != null,
