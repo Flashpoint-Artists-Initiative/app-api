@@ -24,7 +24,7 @@ class UsersController extends OrionController
             'purchasedTickets.ticketType.event',
             'reservedTickets',
             'reservedTickets.ticketType',
-            'reservedTickets.ticketType.event'
+            'reservedTickets.ticketType.event',
         ];
     }
 

@@ -8,7 +8,7 @@ trait HasVirtualColumns
 {
     public function save(array $options = [])
     {
-        if (isset($this->virtualColumns)) {
+        if (property_exists($this, 'virtualColumns')) {
             $this->attributes = array_diff_key($this->attributes, array_flip($this->virtualColumns));
         }
 
