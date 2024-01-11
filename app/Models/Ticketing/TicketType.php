@@ -32,8 +32,8 @@ class TicketType extends Model
     ];
 
     protected $casts = [
-        'sale_start_date' => 'date',
-        'sale_end_date' => 'date',
+        'sale_start_date' => 'datetime',
+        'sale_end_date' => 'datetime',
         'active' => 'boolean',
     ];
 

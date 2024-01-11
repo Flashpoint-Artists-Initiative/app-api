@@ -22,7 +22,7 @@ class ReservedTicket extends Model
     ];
 
     protected $casts = [
-        'expiration_date' => 'date',
+        'expiration_date' => 'datetime',
     ];
 
     protected static function booted(): void
