@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tests\Feature\TicketTypes\ReservedTickets;
 
 use App\Enums\RolesEnum;
-use App\Models\ReservedTicket;
-use App\Models\TicketType;
+use App\Models\Ticketing\ReservedTicket;
+use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;

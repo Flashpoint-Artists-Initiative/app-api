@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\TicketTypes\ReservedTickets;
 
-use App\Models\TicketType;
+use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use Tests\ApiRouteTestCase;
 

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use App\Models\TicketType;
+use App\Models\Event;
+use App\Models\Ticketing\TicketType;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -45,10 +46,11 @@ class TicketTypeScopesTest extends TestCase
 
     public function test_event_scope_returns_correct_models(): void
     {
-        $ticketTypes = TicketType::query()->event(1)->get();
+        $event = Event::has('ticketTypes')->with('ticketTypes')->first();
+        $ticketTypes = TicketType::query()->event($event->id)->get();
 
         foreach ($ticketTypes as $type) {
-            $this->assertEquals(1, $type->event_id);
+            $this->assertEquals($event->id, $type->event_id);
         }
     }
 }

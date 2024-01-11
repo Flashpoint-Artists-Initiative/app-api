@@ -6,6 +6,8 @@ namespace App\Models;
 
 use App\Events\EmailUpdated;
 use App\Models\Concerns\HasVirtualColumns;
+use App\Models\Ticketing\PurchasedTicket;
+use App\Models\Ticketing\ReservedTicket;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

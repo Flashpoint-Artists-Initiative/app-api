@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\PurchasedTicket;
-use App\Models\ReservedTicket;
+use App\Models\Ticketing\PurchasedTicket;
+use App\Models\Ticketing\ReservedTicket;
 use Illuminate\Database\Seeder;
 
 class PurchasedTicketSeeder extends Seeder

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Database\Factories;
+namespace Database\Factories\Ticketing;
 
-use App\Models\PurchasedTicket;
-use App\Models\ReservedTicket;
+use App\Models\Ticketing\PurchasedTicket;
+use App\Models\Ticketing\ReservedTicket;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

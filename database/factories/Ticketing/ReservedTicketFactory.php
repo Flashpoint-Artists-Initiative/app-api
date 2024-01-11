@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Ticketing;
 
-use App\Models\PurchasedTicket;
+use App\Models\Ticketing\PurchasedTicket;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

@@ -6,7 +6,7 @@ namespace Tests\Feature\Events\TicketTypes;
 
 use App\Enums\RolesEnum;
 use App\Models\Event;
-use App\Models\TicketType;
+use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use Tests\ApiRouteTestCase;
 

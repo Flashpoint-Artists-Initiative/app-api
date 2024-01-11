@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\ReservedTicket;
-use App\Models\TicketType;
+use App\Models\Ticketing\ReservedTicket;
+use App\Models\Ticketing\TicketType;
 use Illuminate\Database\Seeder;
 
 class ReservedTicketSeeder extends Seeder

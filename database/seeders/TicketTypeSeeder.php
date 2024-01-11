@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Models\Event;
-use App\Models\TicketType;
+use App\Models\Ticketing\TicketType;
 use Illuminate\Database\Seeder;
 
 class TicketTypeSeeder extends Seeder
