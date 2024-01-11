@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Events\TicketTypes;
 
 use App\Enums\RolesEnum;
+use App\Models\Event;
 use App\Models\User;
 use Carbon\Carbon;
 use Tests\ApiRouteTestCase;
@@ -16,6 +17,17 @@ class TicketTypeUpdateTest extends ApiRouteTestCase
     public string $routeName = 'api.events.ticket-types.update';
 
     public array $routeParams = ['event' => 1, 'ticket_type' => 1];
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $event = Event::has('ticketTypes')->inRandomOrder()->first();
+        $this->routeParams = [
+            'event' => $event->id,
+            'ticket_type' => $event->ticketTypes()->inRandomOrder()->first()->id,
+        ];
+        $this->buildEndpoint();
+    }
 
     public function test_ticket_type_update_call_with_valid_data_returns_a_successful_response(): void
     {

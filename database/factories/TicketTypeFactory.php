@@ -21,7 +21,7 @@ class TicketTypeFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->words(asText: true),
+            'name' => fake()->bs(),
             'sale_start_date' => fake()->dateTimeInInterval('-1 month'),
             'sale_end_date' => fake()->dateTimeInInterval('+1 month'),
             'quantity' => fake()->numberBetween(100, 300),
@@ -76,8 +76,8 @@ class TicketTypeFactory extends Factory
 
     public function withPurchasedTickets(): static
     {
-        return $this->has(ReservedTicket::factory()->withEmail()->withPurchasedTicket(), 'reservedTickets')
-            ->has(ReservedTicket::factory()->withPurchasedTicket(), 'reservedTickets')
-            ->has(PurchasedTicket::factory(), 'purchasedTickets');
+        return $this->has(ReservedTicket::factory()->withEmail()->withPurchasedTicket()->count(5), 'reservedTickets');
+        // ->has(ReservedTicket::factory(), 'reservedTickets')
+        // ->has(PurchasedTicket::factory()->withReservedTickets()->count(5), 'purchasedTickets');
     }
 }

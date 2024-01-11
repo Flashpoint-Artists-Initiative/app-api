@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Events\TicketTypes;
+namespace Tests\Feature\TicketTypes\ReservedTickets;
 
 use App\Enums\RolesEnum;
 use App\Models\ReservedTicket;
@@ -28,8 +28,8 @@ class ReservedTicketShowTest extends ApiRouteTestCase
         parent::setUp();
         $this->ticketType = TicketType::has('purchasedTickets')->active()->first();
         $this->reservedTicket = $this->ticketType->reservedTickets()->has('purchasedTicket')->first();
-
-        $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
+        $this->routeParams = ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id];
+        $this->buildEndpoint();
     }
 
     public function test_reserved_ticket_show_call_while_not_logged_in_returns_error(): void

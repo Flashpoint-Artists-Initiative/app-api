@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class ReservedTicket extends Model
@@ -32,7 +33,7 @@ class ReservedTicket extends Model
 
                 if ($user_id) {
                     $reservedTicket->user_id = $user_id;
-                    $reservedTicket->email = null;
+                    // $reservedTicket->email = null;
                 }
             }
         });
@@ -43,9 +44,9 @@ class ReservedTicket extends Model
         return $this->belongsTo(TicketType::class);
     }
 
-    public function purchasedTicket(): BelongsTo
+    public function purchasedTicket(): HasOne
     {
-        return $this->belongsTo(PurchasedTicket::class);
+        return $this->hasOne(PurchasedTicket::class);
     }
 
     public function user(): BelongsTo

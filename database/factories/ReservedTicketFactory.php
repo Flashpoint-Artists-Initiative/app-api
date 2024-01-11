@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\PurchasedTicket;
-use App\Models\ReservedTicket;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +17,9 @@ class ReservedTicketFactory extends Factory
      */
     public function definition(): array
     {
-        return [];
+        return [
+            'expiration_date' => fake()->dateTimeInInterval('+1 weeks', '+1 week'),
+        ];
     }
 
     public function withEmail(): static
@@ -35,19 +36,8 @@ class ReservedTicketFactory extends Factory
         ]);
     }
 
-    public function expirationDateInFuture(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'expiration_date' => fake()->dateTimeInInterval('+1 weeks', '+1 week'),
-        ]);
-    }
-
-    public function withPurchasedTicket(): static
-    {
-        return $this->forUser()->afterCreating(function (ReservedTicket $reservedTicket) {
-            $purchasedTicket = PurchasedTicket::factory()->for($reservedTicket->ticketType)->create();
-            $reservedTicket->purchased_ticket_id = $purchasedTicket->id;
-            $reservedTicket->save();
-        });
-    }
+    // public function withPurchasedTicket(): static
+    // {
+    //     return $this->has(PurchasedTicket::factory()->forUser()->count(3), 'purchasedTicket');
+    // }
 }

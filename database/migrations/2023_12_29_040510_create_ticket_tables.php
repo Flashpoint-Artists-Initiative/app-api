@@ -33,6 +33,7 @@ return new class extends Migration
             $table->unsignedInteger('ticket_type_id');
             $table->unsignedInteger('order_id')->nullable();
             $table->unsignedInteger('user_id');
+            $table->unsignedInteger('reserved_ticket_id')->nullable();
         });
 
         // ReservedTicket
@@ -43,7 +44,6 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->unsignedInteger('user_id')->nullable();
             $table->dateTime('expiration_date')->nullable();
-            $table->unsignedInteger('purchased_ticket_id')->nullable();
         });
     }
 

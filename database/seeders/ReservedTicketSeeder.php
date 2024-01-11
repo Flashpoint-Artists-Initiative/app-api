@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\ReservedTicket;
+use App\Models\TicketType;
 use Illuminate\Database\Seeder;
 
 class ReservedTicketSeeder extends Seeder
@@ -11,6 +13,12 @@ class ReservedTicketSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $ticketTypes = TicketType::inRandomOrder()->take(5)->get();
+
+        foreach ($ticketTypes as $ticketType) {
+            ReservedTicket::factory()->for($ticketType)->withEmail()->count(15)->create();
+            ReservedTicket::factory()->for($ticketType)->forUser()->count(15)->create();
+            ReservedTicket::factory()->for($ticketType)->withEmail()->expirationDateInPast()->count(5)->create();
+        }
     }
 }

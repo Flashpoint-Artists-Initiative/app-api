@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Events\TicketTypes;
+namespace Tests\Feature\TicketTypes\ReservedTickets;
 
 use App\Models\TicketType;
 use App\Models\User;
@@ -43,8 +43,7 @@ class ReservedTicketIndexTest extends ApiRouteTestCase
         $user->givePermissionTo('reservedTickets.viewAny');
 
         $response = $this->actingAs($user)->get($this->endpoint);
-        $response->assertStatus(200);
-        $this->assertEquals($reservedTicketCount, $response->baseResponse->original->count());
+        $response->assertStatus(200)->assertJsonPath('meta.total', $reservedTicketCount);
     }
 
     public function test_reserved_ticket_index_call_without_permission_returns_error(): void

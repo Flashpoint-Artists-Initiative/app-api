@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Events\TicketTypes;
+namespace Tests\Feature\TicketTypes\ReservedTickets;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
@@ -39,7 +39,7 @@ class ReservedTicketCreateTest extends ApiRouteTestCase
             'email' => $user->email,
         ]);
 
-        $response->assertStatus(201)->assertJsonPath('data.user_id', $user->id)->assertJsonPath('data.email', null);
+        $response->assertStatus(201)->assertJsonPath('data.user_id', $user->id);
     }
 
     public function test_reserved_ticket_create_call_with_invalid_data_returns_a_validation_error(): void

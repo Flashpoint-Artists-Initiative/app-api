@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Events\TicketTypes;
+namespace Tests\Feature\TicketTypes\ReservedTickets;
 
 use App\Enums\RolesEnum;
 use App\Models\ReservedTicket;

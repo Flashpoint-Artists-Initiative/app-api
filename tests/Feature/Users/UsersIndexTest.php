@@ -39,6 +39,6 @@ class UsersIndexTest extends ApiRouteTestCase
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
-        $response->assertStatus(200)->assertJsonCount($user_count, 'data');
+        $response->assertStatus(200)->assertJsonPath('meta.total', $user_count);
     }
 }

@@ -18,9 +18,19 @@ class TicketTypeIndexTest extends ApiRouteTestCase
 
     public array $routeParams = ['event' => 1];
 
+    public Event $event;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->event = Event::has('ticketTypes')->where('active', true)->inRandomOrder()->first();
+        $this->routeParams = ['event' => $this->event->id];
+        $this->buildEndpoint();
+    }
+
     public function test_ticket_type_index_call_while_not_logged_in_returns_only_active_untrashed_ticket_types(): void
     {
-        $ticketTypeCount = TicketType::active()->event(1)->withoutTrashed()->count();
+        $ticketTypeCount = TicketType::active()->event($this->event->id)->withoutTrashed()->count();
 
         $response = $this->get($this->endpoint);
 
@@ -30,8 +40,8 @@ class TicketTypeIndexTest extends ApiRouteTestCase
 
     public function test_ticket_type_index_call_with_permission_returns_pending_events(): void
     {
-        $active_ticket_type_count = TicketType::where('active', true)->event(1)->withoutTrashed()->count();
-        $ticket_type_count = TicketType::withoutTrashed()->event(1)->count();
+        $active_ticket_type_count = TicketType::where('active', true)->event($this->event->id)->withoutTrashed()->count();
+        $ticket_type_count = TicketType::withoutTrashed()->event($this->event->id)->count();
 
         $this->assertGreaterThan($active_ticket_type_count, $ticket_type_count);
 
@@ -45,10 +55,10 @@ class TicketTypeIndexTest extends ApiRouteTestCase
 
     public function test_ticket_type_index_call_with_permission_returns_trashed_events(): void
     {
-        $this->buildEndpoint(params: ['event' => 1, 'with_trashed' => true]);
+        $this->addEndpointParams(['with_trashed' => true]);
 
-        $existing_ticket_type_count = TicketType::where('active', true)->event(1)->count();
-        $ticket_type_count = TicketType::where('active', true)->event(1)->withTrashed()->count();
+        $existing_ticket_type_count = TicketType::where('active', true)->event($this->event->id)->count();
+        $ticket_type_count = TicketType::where('active', true)->event($this->event->id)->withTrashed()->count();
 
         $this->assertGreaterThan($existing_ticket_type_count, $ticket_type_count);
 
@@ -62,10 +72,10 @@ class TicketTypeIndexTest extends ApiRouteTestCase
 
     public function test_ticket_type_index_call_without_permission_ignores_trashed_events(): void
     {
-        $this->buildEndpoint(params: ['event' => 1, 'with_trashed' => true]);
+        $this->addEndpointParams(['with_trashed' => true]);
 
-        $existing_ticket_type_count = TicketType::where('active', true)->event(1)->count();
-        $ticket_type_count = TicketType::where('active', true)->event(1)->withTrashed()->count();
+        $existing_ticket_type_count = TicketType::where('active', true)->event($this->event->id)->count();
+        $ticket_type_count = TicketType::where('active', true)->event($this->event->id)->withTrashed()->count();
 
         $this->assertGreaterThan($existing_ticket_type_count, $ticket_type_count);
 
@@ -80,10 +90,10 @@ class TicketTypeIndexTest extends ApiRouteTestCase
 
     public function test_ticket_type_index_call_with_only_trashed_returns_correct_events(): void
     {
-        $this->buildEndpoint(params: ['event' => 1, 'only_trashed' => true]);
+        $this->addEndpointParams(['only_trashed' => true]);
 
-        $ticket_type_count = TicketType::where('active', true)->event(1)->withTrashed()->count();
-        $trashed_ticket_type_count = TicketType::where('active', true)->event(1)->onlyTrashed()->count();
+        $ticket_type_count = TicketType::where('active', true)->event($this->event->id)->withTrashed()->count();
+        $trashed_ticket_type_count = TicketType::where('active', true)->event($this->event->id)->onlyTrashed()->count();
 
         $this->assertLessThan($ticket_type_count, $trashed_ticket_type_count);
 
@@ -97,10 +107,10 @@ class TicketTypeIndexTest extends ApiRouteTestCase
 
     public function test_ticket_type_index_call_as_admin_returns_all_events(): void
     {
-        $this->buildEndpoint(params: ['event' => 1, 'with_trashed' => true]);
+        $this->addEndpointParams(['with_trashed' => true]);
 
-        $ticket_type_count = TicketType::where('event_id', 1)->count();
-        $all_ticket_type_count = TicketType::withTrashed()->event(1)->count();
+        $ticket_type_count = TicketType::where('event_id', $this->event->id)->count();
+        $all_ticket_type_count = TicketType::withTrashed()->event($this->event->id)->count();
 
         $this->assertGreaterThan($ticket_type_count, $all_ticket_type_count);
 

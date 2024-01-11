@@ -12,15 +12,15 @@ class EventSeeder extends Seeder
      */
     public function run(): void
     {
-        Event::factory()->offset('+3 months')->withTicketTypes()->active()->create();
-        Event::factory()->offset('-5 years')->withTicketTypes()->create();
+        Event::factory()->offset('+3 months')->active()->create(['name' => 'Future Active Event']);
+        Event::factory()->offset('-5 years')->create(['name' => 'Past Inactive Event']);
 
-        Event::factory()->offset('+2 years')->create();
+        Event::factory()->offset('+2 years')->create(['name' => 'Future Inactive Event']);
 
-        Event::factory()->offset('-2 years')->active()->create();
-        Event::factory()->offset('+3 years')->active()->create();
+        Event::factory()->offset('-2 years')->active()->create(['name' => 'Past Active Event']);
+        Event::factory()->offset('+3 years')->active()->create(['name' => 'Far Future Active Event']);
 
-        Event::factory()->offset('-1 year')->trashed()->create();
-        Event::factory()->active()->trashed()->create();
+        Event::factory()->offset('-1 year')->trashed()->create(['name' => 'Deleted Inactive Event']);
+        Event::factory()->active()->trashed()->create(['name' => 'Deleted Active Event']);
     }
 }
