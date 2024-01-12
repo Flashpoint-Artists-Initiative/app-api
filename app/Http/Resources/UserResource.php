@@ -42,7 +42,7 @@ class UserResource extends JsonResource
             'roles' => RoleResource::collection($this->whenLoaded('roles')),
             'permissions' => $permissions ?? new MissingValue(),
             'purchased_tickets' => $this->whenLoaded('purchasedTickets'),
-            'reserved_tickets' => $this->whenLoaded('reservedTickets'),
+            'reserved_tickets' => ReservedTicketResource::collection($this->whenLoaded('reservedTickets')),
         ];
     }
 }
