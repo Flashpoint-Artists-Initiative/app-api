@@ -12,7 +12,7 @@ class ReservedTicketRequest extends Request
     {
         return [
             'email' => 'email',
-            'expiration_date' => 'date',
+            'expiration_date' => 'date|nullable',
         ];
     }
 

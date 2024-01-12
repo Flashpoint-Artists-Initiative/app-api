@@ -2,7 +2,6 @@
 
 namespace Database\Factories\Ticketing;
 
-use App\Models\Ticketing\PurchasedTicket;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -35,9 +34,4 @@ class ReservedTicketFactory extends Factory
             'expiration_date' => fake()->dateTimeInInterval('-2 weeks', '-1 day'),
         ]);
     }
-
-    // public function withPurchasedTicket(): static
-    // {
-    //     return $this->has(PurchasedTicket::factory()->forUser()->count(3), 'purchasedTicket');
-    // }
 }

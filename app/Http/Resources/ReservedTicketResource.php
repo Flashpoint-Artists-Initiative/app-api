@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
-use App\Models\Ticketing\TicketType;
+use App\Models\Ticketing\ReservedTicket;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin TicketType
+ * @mixin ReservedTicket
  */
-class TicketTypeResource extends JsonResource
+class ReservedTicketResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -23,8 +23,7 @@ class TicketTypeResource extends JsonResource
         $result = parent::toArray($request);
 
         return array_merge($result, [
-            'remaining_ticket_count' => $this->remaining_ticket_count,
-            'cart_items_quantity' => (int) $this->cart_items_quantity,
+            'is_purchased' => $this->is_purchased,
         ]);
     }
 }

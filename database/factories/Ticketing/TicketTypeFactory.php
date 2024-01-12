@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Database\Factories\Ticketing;
 
-use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -77,7 +76,5 @@ class TicketTypeFactory extends Factory
     public function withPurchasedTickets(): static
     {
         return $this->has(ReservedTicket::factory()->withEmail()->withPurchasedTicket()->count(5), 'reservedTickets');
-        // ->has(ReservedTicket::factory(), 'reservedTickets')
-        // ->has(PurchasedTicket::factory()->withReservedTickets()->count(5), 'purchasedTickets');
     }
 }

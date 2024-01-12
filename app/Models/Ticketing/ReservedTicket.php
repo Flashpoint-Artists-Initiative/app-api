@@ -6,12 +6,16 @@ namespace App\Models\Ticketing;
 
 use App\Models\Event;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
+/**
+ * @property bool $is_purchased
+ */
 class ReservedTicket extends Model
 {
     use HasFactory;
@@ -19,6 +23,8 @@ class ReservedTicket extends Model
     protected $fillable = [
         'email',
         'expiration_date',
+        'note',
+        'name',
     ];
 
     protected $casts = [
@@ -66,6 +72,15 @@ class ReservedTicket extends Model
             'id', // Foreign Key for Event
             'ticket_type_id', // Local key for purchasedTicket
             'event_id' //Local key for ticketType
+        );
+    }
+
+    public function isPurchased(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                return $this->purchasedTicket()->exists();
+            }
         );
     }
 }

@@ -26,7 +26,7 @@ class TicketTypesController extends RelationController
 
     public function includes(): array
     {
-        return ['event', 'purchasedTickets', 'reservedTickets'];
+        return ['event', 'purchasedTickets', 'reservedTickets', 'cartItems'];
     }
 
     protected function buildIndexFetchQuery(Request $request, Model $event, array $requestedRelations): Relation

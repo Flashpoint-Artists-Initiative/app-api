@@ -188,4 +188,7 @@ return [
     'api_version' => env('API_VERSION', '1.0.0'),
     'api_prefix' => env('API_PREFIX', 'v1'),
 
+    'cart_max_quantity' => 4,
+    'cart_expiration_minutes' => 10,
+
 ];

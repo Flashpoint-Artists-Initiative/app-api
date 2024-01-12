@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Models\Ticketing;
 
 use App\Models\Event;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,6 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $remaining_ticket_count
+ * @property ?string $cart_items_quantity
+ * @property bool $available
  */
 class TicketType extends Model
 {
@@ -39,7 +40,7 @@ class TicketType extends Model
 
     protected $withCount = [
         'purchasedTickets',
-        'reservedTickets',
+        'activeReservedTickets',
     ];
 
     public function event(): BelongsTo
@@ -57,6 +58,24 @@ class TicketType extends Model
         return $this->hasMany(ReservedTicket::class);
     }
 
+    public function activeReservedTickets(): HasMany
+    {
+        return $this->hasMany(ReservedTicket::class)
+            ->where('expiration_date', '>', now())
+            ->where('active', true);
+    }
+
+    public function cartItems(): HasMany
+    {
+        return $this->hasMany(CartItem::class);
+    }
+
+    public function activeCartItems(): HasMany
+    {
+        return $this->hasMany(CartItem::class)
+            ->whereHas('cart', fn ($query) => $query->where('expiration_date', '>', now()));
+    }
+
     public function scopeActive(Builder $query): void
     {
         $query->where('active', 1);
@@ -64,8 +83,8 @@ class TicketType extends Model
 
     public function scopeOnSale(Builder $query): void
     {
-        $query->where('sale_start_date', '<=', Carbon::now());
-        $query->where('sale_end_date', '>=', Carbon::now());
+        $query->where('sale_start_date', '<=', now());
+        $query->where('sale_end_date', '>=', now());
     }
 
     public function scopeHasQuantity(Builder $query): void
@@ -78,6 +97,22 @@ class TicketType extends Model
         $query->where('event_id', $eventId);
     }
 
+    public function scopeAvailable(Builder $query): void
+    {
+        // @phpstan-ignore-next-line
+        $query->active()->onSale()->hasQuantity();
+    }
+
+    /**
+     * Overloaded method to eager load a sum aggregate
+     */
+    public function newQueryWithoutScopes()
+    {
+        $query = parent::newQueryWithoutScopes();
+
+        return $query->withSum('activeCartItems as cart_items_quantity', 'quantity');
+    }
+
     public function remainingTicketCount(): Attribute
     {
         return Attribute::make(
@@ -86,8 +121,28 @@ class TicketType extends Model
                     return 0;
                 }
 
-                return $attributes['quantity'] - $attributes['reserved_tickets_count'] - $attributes['purchased_tickets_count'];
+                return $attributes['quantity']
+                     - $attributes['active_reserved_tickets_count']
+                     - $attributes['purchased_tickets_count']
+                     - $attributes['cart_items_quantity'];
             }
         );
+    }
+
+    public function available(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                return $this->remaining_ticket_count > 0
+                && $attributes['active'] == true
+                && now() < $attributes['sale_end_date']
+                && now() > $attributes['sale_start_date'];
+            }
+        );
+    }
+
+    public function hasAvailable(int $quantity): bool
+    {
+        return $this->available && $this->remaining_ticket_count > $quantity;
     }
 }
