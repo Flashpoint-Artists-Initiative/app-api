@@ -26,7 +26,7 @@ class ReservedTicketDeleteTest extends ApiRouteTestCase
     {
         parent::setUp();
         $this->ticketType = TicketType::has('reservedTickets')->active()->first();
-        $this->reservedTicket = $this->ticketType->reservedTickets()->first();
+        $this->reservedTicket = $this->ticketType->reservedTickets()->doesntHave('purchasedTicket')->first();
 
         $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
     }
@@ -63,5 +63,17 @@ class ReservedTicketDeleteTest extends ApiRouteTestCase
         $response = $this->actingAs($user)->delete($this->endpoint);
 
         $response->assertStatus(200);
+    }
+
+    public function test_ticket_type_delete_call_as_box_office_with_purchased_ticket_fails(): void
+    {
+        $user = User::role(RolesEnum::BoxOffice)->first();
+        $this->reservedTicket = $this->ticketType->reservedTickets()->has('purchasedTicket')->first();
+
+        $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
+
+        $response = $this->actingAs($user)->delete($this->endpoint);
+
+        $response->assertStatus(403);
     }
 }

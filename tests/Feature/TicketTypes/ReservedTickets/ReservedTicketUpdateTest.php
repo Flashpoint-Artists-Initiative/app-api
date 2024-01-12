@@ -35,6 +35,9 @@ class ReservedTicketUpdateTest extends ApiRouteTestCase
     public function test_reserved_ticket_update_call_with_valid_data_returns_a_successful_response(): void
     {
         $user = User::role(RolesEnum::Admin)->first();
+        $this->reservedTicket = $this->ticketType->reservedTickets()->doesntHave('purchasedTicket')->first();
+
+        $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
 
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'email' => 'notauser@example.com',
@@ -44,9 +47,24 @@ class ReservedTicketUpdateTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
+    public function test_reserved_ticket_update_call_with_purchased_ticket_returns_an_error(): void
+    {
+        $user = User::role(RolesEnum::Admin)->first();
+
+        $response = $this->actingAs($user)->patchJson($this->endpoint, [
+            'email' => 'notauser@example.com',
+            'expiration_date' => new Carbon('+1 week'),
+        ]);
+
+        $response->assertStatus(403);
+    }
+
     public function test_reserved_ticket_update_call_with_matching_email_returns_a_successful_response(): void
     {
         $user = User::role(RolesEnum::Admin)->first();
+        $this->reservedTicket = $this->ticketType->reservedTickets()->doesntHave('purchasedTicket')->first();
+
+        $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
 
         $this->assertNotEquals($user->id, $this->reservedTicket->user_id);
 

@@ -15,7 +15,6 @@ class ReservedTicketRequest extends Request
             'expiration_date' => 'date|nullable',
             'name' => 'string|nullable',
             'note' => 'string|nullable',
-            'user_id' => 'int|nullable',
         ];
     }
 

@@ -56,7 +56,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'birthday' => 'date',
+        'birthday' => 'date:Y-m-d',
     ];
 
     /**
@@ -86,7 +86,8 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function reservedTickets(): HasMany
     {
-        return $this->hasMany(ReservedTicket::class);
+        return $this->hasMany(ReservedTicket::class)
+            ->whereHas('ticketType', fn ($query) => $query->active()->saleStarted());
     }
 
     /**

@@ -35,7 +35,6 @@ class ReservedTicket extends Model
     {
         // Check submitted email for a matching user, and if found assign to user_id instead.
         static::saving(function (ReservedTicket $reservedTicket) {
-
             if ($reservedTicket->isDirty('email')) {
                 $user_id = User::where('email', $reservedTicket->email)->value('id');
 
@@ -43,6 +42,18 @@ class ReservedTicket extends Model
                     $reservedTicket->user_id = $user_id;
                     // $reservedTicket->email = null;
                 }
+            }
+        });
+
+        static::updating(function (ReservedTicket $reservedTicket) {
+            if ($reservedTicket->is_purchased) {
+                return false;
+            }
+        });
+
+        static::deleting(function (ReservedTicket $reservedTicket) {
+            if ($reservedTicket->is_purchased) {
+                return false;
             }
         });
     }

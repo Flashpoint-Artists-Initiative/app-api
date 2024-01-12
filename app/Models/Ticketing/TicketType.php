@@ -40,7 +40,7 @@ class TicketType extends Model
 
     protected $withCount = [
         'purchasedTickets',
-        'activeReservedTickets',
+        'unsoldReservedTickets',
     ];
 
     public function event(): BelongsTo
@@ -58,11 +58,11 @@ class TicketType extends Model
         return $this->hasMany(ReservedTicket::class);
     }
 
-    public function activeReservedTickets(): HasMany
+    public function unsoldReservedTickets(): HasMany
     {
         return $this->hasMany(ReservedTicket::class)
             ->where('expiration_date', '>', now())
-            ->where('active', true);
+            ->whereDoesntHave('purchasedTicket');
     }
 
     public function cartItems(): HasMany
@@ -85,6 +85,11 @@ class TicketType extends Model
     {
         $query->where('sale_start_date', '<=', now());
         $query->where('sale_end_date', '>=', now());
+    }
+
+    public function scopeSaleStarted(Builder $query): void
+    {
+        $query->where('sale_start_date', '<=', now());
     }
 
     public function scopeHasQuantity(Builder $query): void
@@ -122,7 +127,7 @@ class TicketType extends Model
                 }
 
                 return $attributes['quantity']
-                     - $attributes['active_reserved_tickets_count']
+                     - $attributes['unsold_reserved_tickets_count']
                      - $attributes['purchased_tickets_count']
                      - $attributes['cart_items_quantity'];
             }
