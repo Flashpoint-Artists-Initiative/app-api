@@ -27,7 +27,7 @@ class TicketTypeScopesTest extends TestCase
 
     public function test_on_sale_scope_returns_correct_models(): void
     {
-        $ticketTypes = TicketType::onSale()->get();
+        $ticketTypes = TicketType::query()->onSale()->get();
 
         foreach ($ticketTypes as $type) {
             $this->assertLessThanOrEqual(Carbon::now(), $type->sale_start_date);

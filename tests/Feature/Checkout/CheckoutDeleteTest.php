@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Cart;
+namespace Tests\Feature\Checkout;
 
 use App\Models\Ticketing\Cart;
 use App\Models\User;
 use Tests\ApiRouteTestCase;
 
-class CartDeleteTest extends ApiRouteTestCase
+class CheckoutDeleteTest extends ApiRouteTestCase
 {
-    public string $routeName = 'api.cart.destroy';
+    public string $routeName = 'api.checkout.destroy';
 
     public bool $seed = true;
 

@@ -5,11 +5,16 @@ declare(strict_types=1);
 namespace App\Models\Ticketing;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property bool $is_expired
+ */
 class Cart extends Model
 {
     use HasFactory;
@@ -52,9 +57,18 @@ class Cart extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function isExpired()
+    public function isExpired(): Attribute
     {
-        return $this->expiration_date < now();
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                return $attributes['expiration_date'] < now();
+            }
+        );
+    }
+
+    public function scopeNotExpired(Builder $query): void
+    {
+        $query->where('expiration_date', '>', now());
     }
 
     /**

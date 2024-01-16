@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Cart;
+namespace Tests\Feature\Checkout;
 
 use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\CartItem;
@@ -10,9 +10,9 @@ use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use Tests\ApiRouteTestCase;
 
-class CartCreateTest extends ApiRouteTestCase
+class CheckoutCreateGeneralTest extends ApiRouteTestCase
 {
-    public string $routeName = 'api.cart.store';
+    public string $routeName = 'api.checkout.store';
 
     public bool $seed = true;
 
@@ -89,7 +89,7 @@ class CartCreateTest extends ApiRouteTestCase
         $inactiveTicketType = TicketType::where('active', false)->onSale()->hasQuantity()->first();
         $noQuantityTicketType = TicketType::where('quantity', 0)->onSale()->active()->first();
         $notOnSaleTicketType = TicketType::where('sale_start_date', '>=', now())->active()->hasQuantity()->first();
-        $soldOutTicketType = TicketType::has('reservedTickets')->available()->first();
+        $soldOutTicketType = TicketType::has('purchasedTickets')->available()->first();
 
         // Malformed request
         $response = $this->actingAs($user)->postJson($this->endpoint, [
@@ -230,7 +230,7 @@ class CartCreateTest extends ApiRouteTestCase
         $response->assertStatus(422);
 
         // Sold out ticket type
-        $soldOutTicketType->quantity = $soldOutTicketType->active_reserved_tickets_count - 1;
+        $soldOutTicketType->quantity = $soldOutTicketType->purchased_tickets_count - 1;
         $soldOutTicketType->save();
         $soldOutTicketType->refresh();
         $response = $this->actingAs($user)->postJson($this->endpoint, [

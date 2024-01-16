@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $remaining_ticket_count
  * @property ?string $cart_items_quantity
  * @property bool $available
+ * @property bool $on_sale
  */
 class TicketType extends Model
 {
@@ -61,7 +62,6 @@ class TicketType extends Model
     public function unsoldReservedTickets(): HasMany
     {
         return $this->hasMany(ReservedTicket::class)
-            ->where('expiration_date', '>', now())
             ->whereDoesntHave('purchasedTicket');
     }
 
@@ -73,7 +73,7 @@ class TicketType extends Model
     public function activeCartItems(): HasMany
     {
         return $this->hasMany(CartItem::class)
-            ->whereHas('cart', fn ($query) => $query->where('expiration_date', '>', now()));
+            ->whereHas('cart', fn ($query) => $query->notExpired());
     }
 
     public function scopeActive(Builder $query): void
@@ -85,11 +85,6 @@ class TicketType extends Model
     {
         $query->where('sale_start_date', '<=', now());
         $query->where('sale_end_date', '>=', now());
-    }
-
-    public function scopeSaleStarted(Builder $query): void
-    {
-        $query->where('sale_start_date', '<=', now());
     }
 
     public function scopeHasQuantity(Builder $query): void
@@ -127,7 +122,6 @@ class TicketType extends Model
                 }
 
                 return $attributes['quantity']
-                     - $attributes['unsold_reserved_tickets_count']
                      - $attributes['purchased_tickets_count']
                      - $attributes['cart_items_quantity'];
             }
@@ -141,6 +135,16 @@ class TicketType extends Model
                 return $this->remaining_ticket_count > 0
                 && $attributes['active'] == true
                 && now() < $attributes['sale_end_date']
+                && now() > $attributes['sale_start_date'];
+            }
+        );
+    }
+
+    public function onSale(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                return now() < $attributes['sale_end_date']
                 && now() > $attributes['sale_start_date'];
             }
         );

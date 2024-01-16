@@ -9,7 +9,6 @@ use App\Models\Concerns\HasVirtualColumns;
 use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -86,8 +85,13 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function reservedTickets(): HasMany
     {
+        return $this->hasMany(ReservedTicket::class);
+    }
+
+    public function availableReservedTickets(): HasMany
+    {
         return $this->hasMany(ReservedTicket::class)
-            ->whereHas('ticketType', fn ($query) => $query->active()->saleStarted());
+            ->where(fn ($query) => $query->canBePurchased());
     }
 
     /**
@@ -107,13 +111,4 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return [];
     }
-
-    // public function displayName(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: function (mixed $value, array $attributes) {
-    //             return $attributes['preferred_name'] ?? $attributes['legal_name'];
-    //         }
-    //     );
-    // }
 }

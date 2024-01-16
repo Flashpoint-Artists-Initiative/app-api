@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Cart\CartCreateRequest;
+use App\Http\Requests\Checkout\CheckoutCreateRequest;
 use App\Models\Ticketing\Cart;
 use App\Models\User;
 use Illuminate\Support\Collection;
 
-class CartController extends Controller
+class CheckoutController extends Controller
 {
     protected static bool $cartWasDeleted = false;
 
@@ -32,7 +32,7 @@ class CartController extends Controller
         return response()->json(['data' => $activeCart]);
     }
 
-    public function createAction(CartCreateRequest $request)
+    public function createAction(CheckoutCreateRequest $request)
     {
         $user = auth()->user();
 
@@ -80,7 +80,7 @@ class CartController extends Controller
         // We should never have more than one cart per user, but just in case...
         // Delete all expired carts, and any older than the newest.
         return $carts->filter(function (Cart $c, int $k) {
-            if ($c->isExpired() || $k > 0) {
+            if ($c->is_expired || $k > 0) {
                 $c->delete();
                 static::$cartWasDeleted = true;
             }

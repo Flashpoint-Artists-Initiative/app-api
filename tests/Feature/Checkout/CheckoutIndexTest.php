@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Cart;
+namespace Tests\Feature\Checkout;
 
 use App\Models\Ticketing\Cart;
 use App\Models\User;
 use Tests\ApiRouteTestCase;
 
-class CartIndexTest extends ApiRouteTestCase
+class CheckoutIndexTest extends ApiRouteTestCase
 {
-    public string $routeName = 'api.cart.index';
+    public string $routeName = 'api.checkout.index';
 
     public bool $seed = true;
 

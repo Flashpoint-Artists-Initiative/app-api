@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\Cart;
+namespace App\Http\Requests\Checkout;
 
+use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
-class CartCreateRequest extends FormRequest
+class CheckoutCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,17 +30,27 @@ class CartCreateRequest extends FormRequest
         return [
             'tickets' => 'required|array',
             'tickets.*.id' => 'required|distinct|exists:ticket_types',
-            'tickets.*.quantity' => 'required|integer|max:' . config('app.cart_max_quantity'),
+            'tickets.*.quantity' => 'required|integer',
+            'reserved' => 'boolean',
         ];
     }
 
-    public function withValidator(Validator $validator)
+    public function withValidator(Validator $validator): void
     {
         if ($validator->errors()->count() > 0) {
             return;
         }
 
-        $validator->after(function ($validator) {
+        if ($this->input('reserved')) {
+            $this->reservedValidation($validator);
+        } else {
+            $this->generalSaleValidation($validator);
+        }
+    }
+
+    public function generalSaleValidation(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator) {
             // Make sure the total quantity < the configured max
             $quantities = $this->input('tickets.*.quantity');
             $sum = array_sum($quantities);
@@ -62,6 +74,33 @@ class CartCreateRequest extends FormRequest
                 $ticketType = $ticketTypes->find($values['id']);
                 if (! $ticketType?->hasAvailable($values['quantity'])) {
                     $validator->errors()->add("tickets.$key.available", 'This ticket type is sold out or unavailable for purchase');
+                }
+            }
+        });
+    }
+
+    public function reservedValidation(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator) {
+            /** @var User $user */
+            $user = auth()->user();
+            $user->load('reservedTickets.ticketType');
+
+            // Get valid reserved tickets
+            $reservedTickets = $user->reservedTickets->filter(function (ReservedTicket $value, int $key) {
+                return $value->can_be_purchased;
+            });
+
+            // Check each ticket type passed, make sure there are enough valid reserved tickets of the selected type
+            foreach ($this->input('tickets') as $key => $row) {
+                $matchingTickets = $reservedTickets->where('ticket_type_id', $row['id']);
+                if ($matchingTickets->count() < $row['quantity']) {
+                    $validator->errors()->add(
+                        "tickets.$key.quantity",
+                        sprintf('You do not have enough valid reserved tickets of this type. %d selected, %d available.',
+                            $row['quantity'],
+                            $matchingTickets->count())
+                    );
                 }
             }
         });
