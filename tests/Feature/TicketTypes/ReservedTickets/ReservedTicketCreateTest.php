@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\TicketTypes\ReservedTickets;
 
 use App\Enums\RolesEnum;
+use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use Carbon\Carbon;
 use Tests\ApiRouteTestCase;
@@ -29,6 +30,21 @@ class ReservedTicketCreateTest extends ApiRouteTestCase
         ]);
 
         $response->assertStatus(201);
+    }
+
+    public function test_reserved_ticket_create_call_for_zero_price_type_creates_a_purchased_ticket(): void
+    {
+        $user = User::role(RolesEnum::Admin)->first();
+        $ticketType = TicketType::where('price', 0)->first();
+        $this->buildEndpoint(params: ['ticket_type' => $ticketType->id]);
+
+        $response = $this->actingAs($user)->postJson($this->endpoint, [
+            'email' => $user->email, // Must have a user_id to create a purchased ticket
+            'expiration_date' => new Carbon('+1 week'),
+        ]);
+
+        $response->assertStatus(201);
+        $this->assertModelExists($response->baseResponse->original->purchasedTicket);
     }
 
     public function test_reserved_ticket_create_call_with_matching_email_returns_a_successful_response(): void

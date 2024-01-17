@@ -47,6 +47,23 @@ class ReservedTicketUpdateTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
+    public function test_reserved_ticket_update_call_for_zero_price_type_creates_a_purchased_ticket(): void
+    {
+        $user = User::role(RolesEnum::Admin)->first();
+        $this->ticketType = TicketType::where('price', 0)->whereHas('reservedTickets', fn ($query) => $query->doesntHave('purchasedTicket'))->first();
+        $this->reservedTicket = $this->ticketType->reservedTickets()->doesntHave('purchasedTicket')->first();
+        $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
+
+        $this->assertNull($this->reservedTicket->purchasedTicket);
+
+        $response = $this->actingAs($user)->patchJson($this->endpoint, [
+            'email' => $user->email, // Must have a user_id to create a purchased ticket
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertModelExists($response->baseResponse->original->purchasedTicket);
+    }
+
     public function test_reserved_ticket_update_call_with_purchased_ticket_returns_an_error(): void
     {
         $user = User::role(RolesEnum::Admin)->first();

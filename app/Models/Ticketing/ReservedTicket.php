@@ -35,15 +35,28 @@ class ReservedTicket extends Model
 
     protected static function booted(): void
     {
-        // Check submitted email for a matching user, and if found assign to user_id instead.
         static::saving(function (ReservedTicket $reservedTicket) {
+            // Check submitted email for a matching user, and if found assign to user_id
             if ($reservedTicket->isDirty('email')) {
                 $user_id = User::where('email', $reservedTicket->email)->value('id');
 
                 if ($user_id) {
                     $reservedTicket->user_id = $user_id;
-                    // $reservedTicket->email = null;
                 }
+            }
+        });
+
+        static::saved(function (ReservedTicket $reservedTicket) {
+            // If the reserved ticket type has a price of 0, automatically create a purchased ticket when possible
+            if ($reservedTicket->user_id
+                && $reservedTicket->ticketType->price === 0
+                && $reservedTicket->can_be_purchased
+            ) {
+                $purchasedTicket = new PurchasedTicket();
+                $purchasedTicket->ticket_type_id = $reservedTicket->ticket_type_id;
+                $purchasedTicket->user_id = $reservedTicket->user_id;
+                $purchasedTicket->reserved_ticket_id = $reservedTicket->id;
+                $purchasedTicket->save();
             }
         });
 
@@ -127,8 +140,8 @@ class ReservedTicket extends Model
                 return $this->ticketType->active &&
                 ! $this->is_purchased &&
                 (
-                    ($attributes['expiration_date'] !== null && $attributes['expiration_date'] > now()) ||
-                    ($attributes['expiration_date'] == null && $this->ticketType->on_sale)
+                    (array_key_exists('expiration_date', $attributes) && $attributes['expiration_date'] > now()) ||
+                    ((! array_key_exists('expiration_date', $attributes)) && $this->ticketType->on_sale)
                 );
             }
         );
