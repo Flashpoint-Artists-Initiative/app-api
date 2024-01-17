@@ -68,6 +68,7 @@ class ReservedTicketDeleteTest extends ApiRouteTestCase
     public function test_ticket_type_delete_call_as_box_office_with_purchased_ticket_fails(): void
     {
         $user = User::role(RolesEnum::BoxOffice)->first();
+        $this->ticketType = TicketType::has('reservedTickets.purchasedTicket')->active()->first();
         $this->reservedTicket = $this->ticketType->reservedTickets()->has('purchasedTicket')->first();
 
         $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);

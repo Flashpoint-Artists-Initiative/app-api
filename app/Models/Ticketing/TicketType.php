@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * @property int $remaining_ticket_count
@@ -43,6 +44,20 @@ class TicketType extends Model
         'purchasedTickets',
         'unsoldReservedTickets',
     ];
+
+    protected static function booted()
+    {
+        // Don't allow the price to be updated if any tickets have been sold
+        static::updating(function (TicketType $type) {
+            if (! $type->purchasedTickets()->count()) {
+                return;
+            }
+
+            if ($type->isDirty('price')) {
+                throw new HttpException(422, "Ticket type cannot update it's price after tickets have been sold.");
+            }
+        });
+    }
 
     public function event(): BelongsTo
     {

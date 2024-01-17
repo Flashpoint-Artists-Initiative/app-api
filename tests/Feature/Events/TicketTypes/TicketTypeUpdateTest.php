@@ -38,9 +38,45 @@ class TicketTypeUpdateTest extends ApiRouteTestCase
             'sale_start_date' => new Carbon('-1 day'),
             'sale_end_date' => new Carbon('+1 week'),
             'quantity' => 100,
-            'price' => 50,
+            // 'price' => 50, //Don't test updating the price, there might be purchased tickets
             'description' => fake()->paragraph(),
             'active' => true,
+        ]);
+
+        $response->assertStatus(200);
+    }
+
+    public function test_ticket_type_update_call_with_price_and_purchased_tickets_returns_an_error(): void
+    {
+        $user = User::role(RolesEnum::Admin)->first();
+        $event = Event::has('ticketTypes.purchasedTickets')->inRandomOrder()->first();
+
+        $this->routeParams = [
+            'event' => $event->id,
+            'ticket_type' => $event->ticketTypes()->has('purchasedTickets')->inRandomOrder()->first()->id,
+        ];
+        $this->buildEndpoint();
+
+        $response = $this->actingAs($user)->patchJson($this->endpoint, [
+            'price' => 50,
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    public function test_ticket_type_update_call_with_price_and_without_purchased_tickets_returns_a_successful_response(): void
+    {
+        $user = User::role(RolesEnum::Admin)->first();
+        $event = Event::has('ticketTypes')->inRandomOrder()->first();
+
+        $this->routeParams = [
+            'event' => $event->id,
+            'ticket_type' => $event->ticketTypes()->doesntHave('purchasedTickets')->inRandomOrder()->first()->id,
+        ];
+        $this->buildEndpoint();
+
+        $response = $this->actingAs($user)->patchJson($this->endpoint, [
+            'price' => 50,
         ]);
 
         $response->assertStatus(200);
