@@ -23,13 +23,17 @@ class CheckoutController extends Controller
 
         if (! $activeCart) {
             if (static::$cartWasDeleted) {
-                return response()->json(['message' => 'Your cart expired'], 404);
+                return response()->json(['message' => 'Your checkout session expired'], 404);
             }
 
-            return response()->json(['message' => 'No cart found'], 404);
+            return response()->json(['message' => 'No checkout session found'], 404);
         }
 
-        return response()->json(['data' => $activeCart]);
+        $session = app('stripe')->checkout->sessions->retrieve($activeCart->stripe_checkout_id);
+
+        return response()->json(['data' => [
+            'clientSecret' => $session->client_secret,
+        ]]);
     }
 
     public function createAction(CheckoutCreateRequest $request)
@@ -46,9 +50,13 @@ class CheckoutController extends Controller
 
         $cart = Cart::create(['user_id' => auth()->user()->id]);
         $cart->fillItems($request->validated('tickets'));
-        $cart->load('items');
+        $session = app('stripe')->createCheckoutFromCart($cart);
+        $cart->stripe_checkout_id = $session->id;
+        $cart->saveQuietly();
 
-        return response()->json(['data' => $cart], 201);
+        return response()->json(['data' => [
+            'clientSecret' => $session->client_secret,
+        ]], 201);
     }
 
     public function deleteAction()
@@ -75,7 +83,7 @@ class CheckoutController extends Controller
         $user = auth()->user();
 
         /** @var Collection<int, Cart> $carts */
-        $carts = Cart::where('user_id', $user->id)->with('items')->orderBy('expiration_date', 'asc')->get();
+        $carts = Cart::where('user_id', $user->id)->orderBy('expiration_date', 'asc')->get();
 
         // We should never have more than one cart per user, but just in case...
         // Delete all expired carts, and any older than the newest.

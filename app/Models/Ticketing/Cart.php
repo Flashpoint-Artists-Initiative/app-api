@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Ticketing;
 
+use App\Models\Event;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -14,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property bool $is_expired
+ * @property Event $event
+ * @property int $quantity
  */
 class Cart extends Model
 {
@@ -27,10 +30,15 @@ class Cart extends Model
         'expiration_date' => 'datetime',
     ];
 
+    protected $with = [
+        'items.ticketType',
+    ];
+
     protected static function booted()
     {
         static::deleted(function (Cart $cart) {
             $cart->items()->delete();
+            app('stripe')->expireCheckoutFromCart($cart);
         });
 
         // Don't allow a cart to be created for a user if one already exists
@@ -55,6 +63,22 @@ class Cart extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function event(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                return $this->items->first()->ticketType->event;
+            });
+    }
+
+    public function quantity(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                return $this->items->sum('quantity');
+            });
     }
 
     public function isExpired(): Attribute

@@ -168,6 +168,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\StripeServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -183,6 +184,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'Stripe' => App\Facades\StripeFacade::class,
     ])->toArray(),
 
     'api_version' => env('API_VERSION', '1.0.0'),

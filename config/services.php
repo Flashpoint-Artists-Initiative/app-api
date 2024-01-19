@@ -31,4 +31,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'stripe' => [
+        'secret' => env('STRIPE_SECRET'),
+        'return_url' => env('STRIPE_RETURN_URL'),
+        'tax_rate' => env('STRIPE_TAX_RATE'),
+    ],
+
 ];

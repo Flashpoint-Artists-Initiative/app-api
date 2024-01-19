@@ -22,4 +22,9 @@ class CartItem extends Model
     {
         return $this->belongsTo(Cart::class);
     }
+
+    public function ticketType(): BelongsTo
+    {
+        return $this->belongsTo(TicketType::class);
+    }
 }
