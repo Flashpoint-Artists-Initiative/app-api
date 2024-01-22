@@ -65,7 +65,7 @@ jobs:
           DB_DATABASE: ${{ vars.DB_DATABASE }}
           APP_KEY: ${{ secrets.APP_KEY }}
           APP_URL: ${{ vars.APP_URL }}
-          MAIL_MAILER: ${{ env.MAIL_MAILER }}
+          MAIL_MAILER: ${{ vars.MAIL_MAILER }}
 
       - name: Populate Roles and Permissions
         uses: serverless/github-action@v3
