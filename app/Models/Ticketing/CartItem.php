@@ -15,6 +15,7 @@ class CartItem extends Model
     protected $fillable = [
         'cart_id',
         'ticket_type_id',
+        'reserved_ticket_id',
         'quantity',
     ];
 

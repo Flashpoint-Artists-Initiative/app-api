@@ -34,7 +34,8 @@ return [
     'stripe' => [
         'secret' => env('STRIPE_SECRET'),
         'return_url' => env('STRIPE_RETURN_URL'),
-        'tax_rate' => env('STRIPE_TAX_RATE'),
+        'tax_rates' => env('STRIPE_TAX_RATES', ''),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
     ],
 
 ];

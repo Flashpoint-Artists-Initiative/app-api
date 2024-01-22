@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Events\EmailUpdated;
+use App\Models\Ticketing\Cart;
+use App\Models\Ticketing\CartItem;
+use App\Observers\CartItemObserver;
+use App\Observers\CartObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -24,6 +28,11 @@ class EventServiceProvider extends ServiceProvider
         EmailUpdated::class => [
             SendEmailVerificationNotification::class,
         ],
+    ];
+
+    protected $observers = [
+        Cart::class => CartObserver::class,
+        CartItem::class => CartItemObserver::class,
     ];
 
     /**

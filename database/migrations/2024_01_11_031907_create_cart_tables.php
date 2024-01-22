@@ -24,6 +24,7 @@ return new class extends Migration
             $table->timestamps();
             $table->unsignedInteger('cart_id');
             $table->unsignedInteger('ticket_type_id');
+            $table->unsignedInteger('reserved_ticket_id')->nullable();
             $table->integer('quantity');
         });
     }

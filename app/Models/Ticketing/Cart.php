@@ -34,27 +34,6 @@ class Cart extends Model
         'items.ticketType',
     ];
 
-    protected static function booted()
-    {
-        static::deleted(function (Cart $cart) {
-            $cart->items()->delete();
-            app('stripe')->expireCheckoutFromCart($cart);
-        });
-
-        // Don't allow a cart to be created for a user if one already exists
-        static::creating(function (Cart $cart) {
-            $cart->expiration_date = now()->addMinutes(config('app.cart_expiration_minutes'));
-
-            if (Cart::where('user_id', $cart->user_id)->exists()) {
-                return false;
-            }
-        });
-
-        // Don't allow a cart to be updated
-        // This is mostly so the expiration date doesn't accidentally get changed
-        static::updating(fn () => false);
-    }
-
     public function items(): HasMany
     {
         return $this->hasMany(CartItem::class);
@@ -90,9 +69,21 @@ class Cart extends Model
         );
     }
 
+    public function expire(): void
+    {
+        // is_expired doesn't trigger correctly if it's been less than a second, so subtract 2 to be sure
+        $this->expiration_date = now()->subSeconds(2);
+        $this->saveQuietly();
+    }
+
     public function scopeNotExpired(Builder $query): void
     {
         $query->where('expiration_date', '>', now());
+    }
+
+    public function scopeStripeCheckoutId(Builder $query, string $id): void
+    {
+        $query->where('stripe_checkout_id', $id);
     }
 
     /**
@@ -107,5 +98,11 @@ class Cart extends Model
                 'quantity' => $row['quantity'],
             ]);
         }
+    }
+
+    public function setStripeCheckoutIdAndSave(string $id): void
+    {
+        $this->stripe_checkout_id = $id;
+        $this->saveQuietly();
     }
 }
