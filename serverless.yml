@@ -16,7 +16,7 @@ provider:
         DB_DATABASE: ${env:DB_DATABASE, ''}
         APP_KEY: ${env:APP_KEY, ''}
         MYSQL_ATTR_SSL_CA: /opt/bref/ssl/cert.pem
-        MAIL_MAILER: ses
+        MAIL_MAILER: ${env:MAIL_MAILER, ''}
         APP_URL: ${env:APP_URL, 'localhost'}
 
 package:
