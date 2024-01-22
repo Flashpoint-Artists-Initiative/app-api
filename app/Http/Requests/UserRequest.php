@@ -12,11 +12,11 @@ class UserRequest extends Request
     public function commonRules(): array
     {
         return [
-            'legal_name' => 'string',
-            'preferred_name' => 'string',
-            'birthday' => 'date',
-            'email' => 'email',
-            'password' => 'string',
+            'legal_name' => ['string', 'nullable'],
+            'preferred_name' => ['string', 'nullable'],
+            'birthday' => ['date', 'nullable'],
+            'email' => ['email', 'nullable'],
+            'password' => ['string', 'nullable'],
         ];
     }
 

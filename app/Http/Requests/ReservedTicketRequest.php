@@ -12,16 +12,16 @@ class ReservedTicketRequest extends Request
     {
         return [
             'email' => 'email',
-            'expiration_date' => 'date|nullable',
-            'name' => 'string|nullable',
-            'note' => 'string|nullable',
+            'expiration_date' => ['date', 'nullable'],
+            'name' => ['string', 'nullable'],
+            'note' => ['string', 'nullable'],
         ];
     }
 
     public function storeRules(): array
     {
         return [
-            'email' => 'email|required',
+            'email' => ['email', 'required'],
         ];
     }
 }
