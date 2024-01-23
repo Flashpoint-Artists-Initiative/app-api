@@ -51,6 +51,7 @@ class PurchasedTicketIndexTest extends ApiRouteTestCase
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);
+
         $this->assertEquals($purchasedTicketsCount, $response->baseResponse->original->count());
     }
 }

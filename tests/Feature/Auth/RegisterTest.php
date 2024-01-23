@@ -18,6 +18,7 @@ class RegisterTest extends ApiRouteTestCase
             'legal_name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'password',
+            'birthday' => '2000-01-01',
         ]);
 
         $response->assertStatus(201);
@@ -41,6 +42,7 @@ class RegisterTest extends ApiRouteTestCase
             'legal_name' => 'Test User',
             'email' => 'regular@example.com',
             'password' => 'password',
+            'birthday' => '2000-01-01',
         ]);
 
         $response->assertStatus(422)
@@ -59,6 +61,7 @@ class RegisterTest extends ApiRouteTestCase
             'legal_name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'password',
+            'birthday' => '2000-01-01',
         ]);
 
         $response->assertStatus(400);

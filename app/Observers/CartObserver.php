@@ -16,12 +16,7 @@ class CartObserver
 
     public function creating(Cart $cart): bool
     {
-        // Don't allow a cart to be created for a user if one already exists
         $cart->expiration_date = now()->addMinutes(config('app.cart_expiration_minutes'));
-
-        if (Cart::where('user_id', $cart->user_id)->exists()) {
-            return false;
-        }
 
         return true;
     }

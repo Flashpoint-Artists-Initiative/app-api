@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Checkout;
 
-use App\Models\Ticketing\Cart;
+use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use Tests\ApiRouteTestCase;
 
@@ -32,7 +32,7 @@ class CheckoutIndexTest extends ApiRouteTestCase
     public function test_cart_index_call_with_cart_returns_success(): void
     {
         $user = User::first();
-        Cart::create(['user_id' => $user->id]);
+        $this->createCart($user);
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
@@ -42,12 +42,25 @@ class CheckoutIndexTest extends ApiRouteTestCase
     public function test_cart_index_call_with_expired_cart_returns_error(): void
     {
         $user = User::first();
-        Cart::create(['user_id' => $user->id]);
+        $this->createCart($user);
 
         $this->travel(1)->hour();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
         $response->assertStatus(404);
+    }
+
+    protected function createCart(User $user): void
+    {
+        $ticketType = TicketType::query()->available()->first();
+        $this->actingAs($user)->postJson(route('api.checkout.store'), [
+            'tickets' => [
+                [
+                    'id' => $ticketType->id,
+                    'quantity' => 1,
+                ],
+            ],
+        ]);
     }
 }

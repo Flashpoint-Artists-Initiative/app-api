@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\Events;
 
+use App\Http\Controllers\OrionRelationsController;
 use App\Models\Ticketing\TicketType;
-use Orion\Http\Controllers\RelationController;
 
-class ReservedTicketsController extends RelationController
+class ReservedTicketsController extends OrionRelationsController
 {
     protected $model = TicketType::class;
 

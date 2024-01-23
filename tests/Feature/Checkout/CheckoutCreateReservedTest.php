@@ -13,77 +13,61 @@ use Tests\ApiRouteTestCase;
 
 class CheckoutCreateReservedTest extends ApiRouteTestCase
 {
-    public string $routeName = 'api.checkout.store';
+    public string $routeName = 'api.checkout.store-reserved';
 
     public bool $seed = true;
 
-    public function test_cart_create_call_not_logged_in_returns_error(): void
+    public function test_cart_create_reserved_call_not_logged_in_returns_error(): void
     {
         $response = $this->postJson($this->endpoint, [
             'tickets' => [
-                [
-                    'id' => 1,
-                    'quantity' => 1,
-                ],
+                1,
             ],
-            'reserved' => true,
         ]);
 
         $response->assertStatus(401);
     }
 
-    public function test_cart_create_call_with_valid_data_returns_success(): void
+    public function test_cart_create_reserved_call_with_valid_data_returns_success(): void
     {
         $user = User::doesntHave('roles')->has('availableReservedTickets')->first();
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'tickets' => [
-                [
-                    'id' => $user->availableReservedTickets->first()->ticket_type_id,
-                    'quantity' => 1,
-                ],
+                $user->availableReservedTickets->first()->id,
             ],
-            'reserved' => true,
         ]);
 
         $response->assertStatus(201);
     }
 
-    public function test_cart_create_call_with_valid_data_twice_returns_new_cart(): void
+    public function test_cart_create_reserved_call_with_valid_data_twice_returns_new_cart(): void
     {
         $user = User::doesntHave('roles')->has('availableReservedTickets')->first();
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'tickets' => [
-                [
-                    'id' => $user->availableReservedTickets->first()->ticket_type_id,
-                    'quantity' => 1,
-                ],
+                $user->availableReservedTickets->first()->id,
             ],
-            'reserved' => true,
         ]);
 
         $response->assertStatus(201);
 
         $secondResponse = $this->actingAs($user)->postJson($this->endpoint, [
             'tickets' => [
-                [
-                    'id' => $user->availableReservedTickets->first()->ticket_type_id,
-                    'quantity' => 2,
-                ],
+                $user->availableReservedTickets->first()->id,
             ],
-            'reserved' => true,
         ]);
 
         $secondResponse->assertStatus(201);
 
-        $this->assertNotEquals($response->decodeResponseJson()->json('data.id'), $secondResponse->decodeResponseJson()->json('data.id'));
+        $this->assertNotEquals($response->decodeResponseJson()->json('data.clientSecret'), $secondResponse->decodeResponseJson()->json('data.clientSecret'));
 
-        $this->assertCount(1, Cart::all());
-        $this->assertCount(1, CartItem::all());
+        $this->assertCount(2, Cart::all());
+        $this->assertCount(2, CartItem::all());
     }
 
-    public function test_cart_create_call_with_expiration_date_returns_success(): void
+    public function test_cart_create_reserved_call_with_expiration_date_returns_success(): void
     {
         $user = User::doesntHave('roles')->doesntHave('reservedTickets')->first();
 
@@ -97,18 +81,14 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         // Not on sale ticket type, with set expiration_date
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'tickets' => [
-                [
-                    'id' => $notOnSaleReservedTicketWithExpiration->ticket_type_id,
-                    'quantity' => 1,
-                ],
+                $notOnSaleReservedTicketWithExpiration->id,
             ],
-            'reserved' => true,
         ]);
 
         $response->assertStatus(201);
     }
 
-    public function test_cart_create_call_with_invalid_data_returns_error(): void
+    public function test_cart_create_reserved_call_with_invalid_data_returns_error(): void
     {
         $user = User::doesntHave('roles')->has('availableReservedTickets')->first();
         $availableReservedTicket = $user->availableReservedTickets->first();
@@ -144,32 +124,14 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         // Malformed request
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'random_data' => [1, 2, 3],
-            'reserved' => true,
         ]);
 
         $response->assertStatus(422);
         // Invalid ID
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'tickets' => [
-                [
-                    'id' => 'number',
-                    'quantity' => 1,
-                ],
+                'number',
             ],
-            'reserved' => true,
-        ]);
-
-        $response->assertStatus(422);
-
-        // Invalid Quantity
-        $response = $this->actingAs($user)->postJson($this->endpoint, [
-            'tickets' => [
-                [
-                    'id' => $availableReservedTicket->ticket_type_id,
-                    'quantity' => 'one',
-                ],
-            ],
-            'reserved' => true,
         ]);
 
         $response->assertStatus(422);
@@ -177,25 +139,8 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         // Invalid Ticket ID
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'tickets' => [
-                [
-                    'id' => 9999999,
-                    'quantity' => 1,
-                ],
+                9999999,
             ],
-            'reserved' => true,
-        ]);
-
-        $response->assertStatus(422);
-
-        // No reserved ticket for ticket type
-        $response = $this->actingAs($user)->postJson($this->endpoint, [
-            'tickets' => [
-                [
-                    'id' => $noReservedTicketTypes->last()->id,
-                    'quantity' => 1,
-                ],
-            ],
-            'reserved' => true,
         ]);
 
         $response->assertStatus(422);
@@ -203,12 +148,8 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         // Expired reserved ticket for ticket type
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'tickets' => [
-                [
-                    'id' => $expiredReservedTicket->ticket_type_id,
-                    'quantity' => 1,
-                ],
+                $expiredReservedTicket->id,
             ],
-            'reserved' => true,
         ]);
 
         $response->assertStatus(422);
@@ -216,29 +157,9 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         // Duplicate ticket types
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'tickets' => [
-                [
-                    'id' => $ticketType->id,
-                    'quantity' => 1,
-                ],
-                [
-                    'id' => $ticketType->id,
-                    'quantity' => 1,
-                ],
+                $availableReservedTicket->id,
+                $availableReservedTicket->id,
             ],
-            'reserved' => true,
-        ]);
-
-        $response->assertStatus(422);
-
-        // Not enough reserved for quantity requested
-        $response = $this->actingAs($user)->postJson($this->endpoint, [
-            'tickets' => [
-                [
-                    'id' => $notEnoughReservedTicket->ticket_type_id,
-                    'quantity' => 3,
-                ],
-            ],
-            'reserved' => true,
         ]);
 
         $response->assertStatus(422);
@@ -246,12 +167,8 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         // Inactive ticket type
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'tickets' => [
-                [
-                    'id' => $inactiveReservedTicket->ticket_type_id,
-                    'quantity' => 1,
-                ],
+                $inactiveReservedTicket->id,
             ],
-            'reserved' => true,
         ]);
 
         $response->assertStatus(422);
@@ -259,12 +176,8 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         // Not on sale ticket type, without set expiration_date
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'tickets' => [
-                [
-                    'id' => $notOnSaleReservedTicketWithoutExpiration->ticket_type_id,
-                    'quantity' => 1,
-                ],
+                $notOnSaleReservedTicketWithoutExpiration->id,
             ],
-            'reserved' => true,
         ]);
 
         $response->assertStatus(422);

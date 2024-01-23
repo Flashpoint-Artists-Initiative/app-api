@@ -12,12 +12,12 @@ class TicketTypeRequest extends Request
     {
         return [
             'name' => 'string',
-            'sale_start_date' => ['date', 'nullable'],
-            'sale_end_date' => ['date', 'nullable'],
+            'sale_start_date' => ['date'],
+            'sale_end_date' => ['date'],
             'quantity' => ['integer', 'gte:0', 'nullable'],
             'price' => ['integer', 'gte:0'],
             'active' => ['boolean', 'nullable'],
-            'description' => ['string', 'nullable'],
+            'description' => ['string'],
         ];
     }
 

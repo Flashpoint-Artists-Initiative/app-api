@@ -28,7 +28,7 @@ class CheckoutCreateReservedRequest extends FormRequest
     {
         return [
             'tickets' => ['required', 'array'],
-            'tickets.*' => ['required', 'distinct', 'exists:reserved_tickets'],
+            'tickets.*' => ['required', 'distinct', 'integer', 'exists:reserved_tickets,id'],
         ];
     }
 

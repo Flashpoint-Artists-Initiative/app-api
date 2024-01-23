@@ -14,11 +14,14 @@ class ReservedTicketSeeder extends Seeder
     public function run(): void
     {
         $ticketTypes = TicketType::inRandomOrder()->take(5)->get();
+        $zeroPriceTicketType = TicketType::inRandomOrder()->where('price', 0)->first();
+        $ticketTypes->push($zeroPriceTicketType);
 
         foreach ($ticketTypes as $ticketType) {
             ReservedTicket::factory()->for($ticketType)->withEmail()->count(15)->create();
             ReservedTicket::factory()->for($ticketType)->forUser()->count(15)->create();
             ReservedTicket::factory()->for($ticketType)->withEmail()->expirationDateInPast()->count(5)->create();
         }
+
     }
 }
