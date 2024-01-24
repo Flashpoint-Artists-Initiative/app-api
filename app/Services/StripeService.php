@@ -52,7 +52,7 @@ class StripeService
         $client_reference_id = sprintf('Event: %s - User: %d - Cart: %d', $cart->event->name, $cart->user_id, $cart->id);
 
         $checkout_session = $this->stripeClient->checkout->sessions->create([
-            'return_url' => config('services.stripe.return_url'),
+            'redirect_on_completion' => 'never',
             'mode' => 'payment',
             'ui_mode' => 'embedded',
             'customer_email' => auth()->user()->email,
