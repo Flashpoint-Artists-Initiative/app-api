@@ -27,28 +27,4 @@ class CartItemObserver
     {
         return false;
     }
-
-    /**
-     * Handle the CartItem "deleted" event.
-     */
-    public function deleted(CartItem $cartItem): void
-    {
-        //
-    }
-
-    /**
-     * Handle the CartItem "restored" event.
-     */
-    public function restored(CartItem $cartItem): void
-    {
-        //
-    }
-
-    /**
-     * Handle the CartItem "force deleted" event.
-     */
-    public function forceDeleted(CartItem $cartItem): void
-    {
-        //
-    }
 }

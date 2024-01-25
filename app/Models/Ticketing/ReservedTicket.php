@@ -140,8 +140,8 @@ class ReservedTicket extends Model
                 return $this->ticketType->active &&
                 ! $this->is_purchased &&
                 (
-                    (array_key_exists('expiration_date', $attributes) && $attributes['expiration_date'] > now()) ||
-                    ((! array_key_exists('expiration_date', $attributes)) && $this->ticketType->on_sale)
+                    (! is_null($attributes['expiration_date']) && $attributes['expiration_date'] > now()) ||
+                    (is_null($attributes['expiration_date']) && $this->ticketType->on_sale)
                 );
             }
         );

@@ -6,12 +6,14 @@ namespace App\Services;
 
 use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\CartItem;
-use Illuminate\Support\Collection;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\InvalidRequestException;
 use Stripe\StripeClient;
 
+/**
+ * @mixin StripeClient
+ */
 class StripeService
 {
     public function __construct(public StripeClient $stripeClient)
@@ -38,21 +40,13 @@ class StripeService
         }
     }
 
-    public function getCheckoutSessionLineItems(string $id): Collection
-    {
-        try {
-            return collect($this->stripeClient->checkout->sessions->allLineItems($id)->data);
-        } catch (InvalidRequestException $e) {
-            abort(422, 'Invalid Stripe checkout session id');
-        }
-    }
-
     public function createCheckoutFromCart(Cart $cart): Session
     {
         $client_reference_id = sprintf('Event: %s - User: %d - Cart: %d', $cart->event->name, $cart->user_id, $cart->id);
 
         $checkout_session = $this->stripeClient->checkout->sessions->create([
             'redirect_on_completion' => 'never',
+            'payment_method_configuration' => config('services.stripe.payment_method_configuration'),
             'mode' => 'payment',
             'ui_mode' => 'embedded',
             'customer_email' => auth()->user()->email,
@@ -121,14 +115,5 @@ class StripeService
     {
         abort_if($session->status !== 'complete', 422, 'Session has not been completed');
         abort_if($session->payment_status !== 'paid', 422, 'Session payment is not complete');
-    }
-
-    public function getCompletedCheckoutSessionAndLineItems(string $id): array
-    {
-        $session = $this->getCheckoutSession($id);
-        $this->assertSessionIsPaid($session);
-        $lineItems = $this->getCheckoutSessionLineItems($id);
-
-        return [$session, $lineItems];
     }
 }

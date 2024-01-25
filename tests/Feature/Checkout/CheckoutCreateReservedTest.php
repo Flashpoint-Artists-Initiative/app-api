@@ -88,6 +88,84 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         $response->assertStatus(201);
     }
 
+    public function test_cart_create_reserved_call_without_expiration_date_and_not_on_sale_type_returns_failure(): void
+    {
+        $user = User::doesntHave('roles')->doesntHave('reservedTickets')->first();
+
+        $notOnSaleTicketType = TicketType::where('sale_start_date', '>=', now())->active()->first();
+        $notOnSaleReservedTicketWithExpiration = $this->createReservedTicket([
+            'user_id' => $user->id,
+            'ticket_type_id' => $notOnSaleTicketType->id,
+        ]);
+
+        // Not on sale ticket type, with set expiration_date
+        $response = $this->actingAs($user)->postJson($this->endpoint, [
+            'tickets' => [
+                $notOnSaleReservedTicketWithExpiration->id,
+            ],
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    public function test_cart_create_reserved_call_without_expiration_date_and_on_sale_type_returns_success(): void
+    {
+        $user = User::doesntHave('roles')->doesntHave('reservedTickets')->first();
+
+        $onSaleTicketType = TicketType::query()->onSale()->active()->first();
+        $onSaleReservedTicketWithExpiration = $this->createReservedTicket([
+            'user_id' => $user->id,
+            'ticket_type_id' => $onSaleTicketType->id,
+        ]);
+
+        // Not on sale ticket type, with set expiration_date
+        $response = $this->actingAs($user)->postJson($this->endpoint, [
+            'tickets' => [
+                $onSaleReservedTicketWithExpiration->id,
+            ],
+        ]);
+
+        $response->assertStatus(201);
+    }
+
+    public function test_cart_create_reserved_call_with_inactive_type_returns_failure(): void
+    {
+        $user = User::doesntHave('roles')->doesntHave('reservedTickets')->first();
+
+        $inactiveTicketType = TicketType::query()->onSale()->where('active', false)->first();
+        $inactiveTicketWithExpiration = $this->createReservedTicket([
+            'user_id' => $user->id,
+            'ticket_type_id' => $inactiveTicketType->id,
+        ]);
+
+        $response = $this->actingAs($user)->postJson($this->endpoint, [
+            'tickets' => [
+                $inactiveTicketWithExpiration->id,
+            ],
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    public function test_cart_create_reserved_call_with_zero_quantity_type_returns_success(): void
+    {
+        $user = User::doesntHave('roles')->doesntHave('reservedTickets')->first();
+
+        $zeroQuantityTicketType = TicketType::query()->onSale()->active()->where('quantity', 0)->first();
+        $zeroQuantityTicketWithExpiration = $this->createReservedTicket([
+            'user_id' => $user->id,
+            'ticket_type_id' => $zeroQuantityTicketType->id,
+        ]);
+
+        $response = $this->actingAs($user)->postJson($this->endpoint, [
+            'tickets' => [
+                $zeroQuantityTicketWithExpiration->id,
+            ],
+        ]);
+
+        $response->assertStatus(201);
+    }
+
     public function test_cart_create_reserved_call_with_invalid_data_returns_error(): void
     {
         $user = User::doesntHave('roles')->has('availableReservedTickets')->first();

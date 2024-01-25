@@ -26,7 +26,7 @@ class CartService
      */
     public function getActiveCart(?User $user = null): ?Cart
     {
-        $carts = $this->getAllCarts($user);
+        $carts = $this->getAllUnexpiredCarts($user);
 
         // A User can only have one active cart at a time
         $carts = $this->expireExtraCarts($carts);
@@ -35,11 +35,11 @@ class CartService
         return $carts->first();
     }
 
-    public function getAllCarts(?User $user = null): Collection
+    public function getAllUnexpiredCarts(?User $user = null): Collection
     {
         $user = $this->ensureUser($user);
 
-        return Cart::where('user_id', $user->id)->orderBy('expiration_date', 'asc')->get();
+        return Cart::where('user_id', $user->id)->notExpired()->orderBy('expiration_date', 'asc')->get();
     }
 
     public function expireAllUnexpiredCarts(?User $user = null): void
@@ -57,6 +57,9 @@ class CartService
         return $user ?? auth()->user();
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     protected function assertSingleCart(Collection $carts): void
     {
         if ($carts->count() > 1) {
@@ -120,7 +123,7 @@ class CartService
 
     public function assertSessionHasCart(string $id): void
     {
-        abort_if(Cart::query()->stripeCheckoutId($id)->exists(), 422, 'No cart found for the session_id');
+        abort_unless(Cart::query()->stripeCheckoutId($id)->exists(), 422, 'No cart found for the session_id');
     }
 
     public function resolveCompletedCart(string $sessionId, int $orderId): void

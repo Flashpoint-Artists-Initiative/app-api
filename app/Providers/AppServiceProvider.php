@@ -40,6 +40,11 @@ class AppServiceProvider extends ServiceProvider
                 SecurityScheme::http('bearer', 'JWT')
             );
         });
+
+        // Add localhost to the whitelisted stripe webhook ips when testing or local
+        if ($this->app->isLocal() || $this->app->runningUnitTests()) {
+            config(['services.stripe.webhook_ips.WEBHOOK.100' => '127.0.0.1']);
+        }
     }
 
     protected function registerStripeClient()

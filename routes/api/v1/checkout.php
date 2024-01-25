@@ -13,4 +13,5 @@ Route::middleware(['auth', 'token.refresh'])->controller(CheckoutController::cla
     Route::post('/checkout', 'createGeneralSaleAction')->name('store');
     Route::post('/checkout-reserved', 'createReservedAction')->name('store-reserved');
     Route::delete('/checkout', 'deleteAction')->name('destroy');
+    Route::post('/checkout/complete', 'completeCheckoutAction')->name('complete');
 });

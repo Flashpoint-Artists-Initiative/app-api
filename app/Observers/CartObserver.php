@@ -35,20 +35,4 @@ class CartObserver
         $cart->items()->delete();
         $this->stripeService->expireCheckoutFromCart($cart);
     }
-
-    /**
-     * Handle the Cart "restored" event.
-     */
-    public function restored(Cart $cart): void
-    {
-        //
-    }
-
-    /**
-     * Handle the Cart "force deleted" event.
-     */
-    public function forceDeleted(Cart $cart): void
-    {
-        //
-    }
 }

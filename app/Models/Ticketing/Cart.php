@@ -86,20 +86,6 @@ class Cart extends Model
         $query->where('stripe_checkout_id', $id);
     }
 
-    /**
-     * Create CartItem models for the given ticket types and quantities
-     */
-    public function fillItems(array $input): void
-    {
-        foreach ($input as $row) {
-            CartItem::create([
-                'cart_id' => $this->id,
-                'ticket_type_id' => $row['id'],
-                'quantity' => $row['quantity'],
-            ]);
-        }
-    }
-
     public function setStripeCheckoutIdAndSave(string $id): void
     {
         $this->stripe_checkout_id = $id;

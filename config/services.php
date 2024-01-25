@@ -1,5 +1,8 @@
 <?php
 
+$stripeIps = json_decode(file_get_contents(storage_path('stripeWebhookIPs.json')), true);
+$stripeIps[] = '127.0.0.1';  // For testing
+
 return [
 
     /*
@@ -33,9 +36,10 @@ return [
 
     'stripe' => [
         'secret' => env('STRIPE_SECRET'),
-        'return_url' => env('STRIPE_RETURN_URL'),
+        'payment_method_configuration' => env('STRIPE_PAYMENT_METHOD_CONFIG'),
         'tax_rates' => env('STRIPE_TAX_RATES', ''),
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+        'webhook_ips' => $stripeIps,
     ],
 
 ];
