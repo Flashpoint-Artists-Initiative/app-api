@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Tests;
 
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
 abstract class ApiRouteTestCase extends TestCase
 {
-    use RefreshDatabase;
+    use LazilyRefreshDatabase;
 
     public string $routeName;
 
