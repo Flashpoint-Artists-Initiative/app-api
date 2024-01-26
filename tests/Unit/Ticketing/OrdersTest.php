@@ -7,6 +7,7 @@ namespace Tests\Unit\Ticketing;
 use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\Order;
 use App\Models\User;
+use Database\Seeders\Testing\EventSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -15,6 +16,8 @@ class OrdersTest extends TestCase
     use RefreshDatabase;
 
     public bool $seed = true;
+
+    public string $seeder = EventSeeder::class;
 
     public function test_user_relation(): void
     {

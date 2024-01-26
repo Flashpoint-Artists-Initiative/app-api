@@ -8,7 +8,7 @@ use App\Models\Ticketing\ReservedTicket;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TicketType>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Ticketing\TicketType>
  */
 class TicketTypeFactory extends Factory
 {

@@ -22,9 +22,13 @@ class VerifyEmailTest extends ApiRouteTestCase
 
     public function test_verification_email_is_sent(): void
     {
-        $this->seed();
+        User::create([
+            'legal_name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'password',
+        ]);
 
-        $user = User::find(1);
+        $user = User::first();
 
         /** @var \Illuminate\Mail\Transport\ArrayTransport */
         $emailTransport = app('mailer')->getSymfonyTransport();
@@ -44,9 +48,13 @@ class VerifyEmailTest extends ApiRouteTestCase
 
     public function test_email_verification_link_works(): void
     {
-        $this->seed();
+        User::create([
+            'legal_name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'password',
+        ]);
 
-        $user = User::find(1);
+        $user = User::first();
 
         $this->assertFalse($user->hasVerifiedEmail());
 
@@ -65,13 +73,21 @@ class VerifyEmailTest extends ApiRouteTestCase
         $user->refresh();
 
         $this->assertTrue($user->hasVerifiedEmail());
+
+        // Calling endpoint when already verified fails
+        $response = $this->actingAs($user)->postJson($this->endpoint);
+        $response->assertStatus(400);
     }
 
     public function test_email_verification_link_fails_the_second_time(): void
     {
-        $this->seed();
+        User::create([
+            'legal_name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'password',
+        ]);
 
-        $user = User::find(1);
+        $user = User::first();
 
         $this->assertFalse($user->hasVerifiedEmail());
 
@@ -92,7 +108,12 @@ class VerifyEmailTest extends ApiRouteTestCase
 
     public function test_invalid_email_verification_link_fails(): void
     {
-        $this->seed();
+        User::factory()->create([
+            'legal_name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'password',
+        ]);
+
         $user = User::first();
 
         $params = ['id' => 1, 'hash' => 'abcdef'];

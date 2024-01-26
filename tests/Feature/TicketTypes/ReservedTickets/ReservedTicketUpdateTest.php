@@ -9,11 +9,14 @@ use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use Carbon\Carbon;
+use Database\Seeders\Testing\EventWithMultipleTicketTypesSeeder;
 use Tests\ApiRouteTestCase;
 
 class ReservedTicketUpdateTest extends ApiRouteTestCase
 {
     public bool $seed = true;
+
+    public string $seeder = EventWithMultipleTicketTypesSeeder::class;
 
     public string $routeName = 'api.ticket-types.reserved-tickets.update';
 
@@ -26,7 +29,7 @@ class ReservedTicketUpdateTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->ticketType = TicketType::has('purchasedTickets')->active()->first();
+        $this->ticketType = TicketType::has('reservedTickets.purchasedTicket')->active()->first();
         $this->reservedTicket = $this->ticketType->reservedTickets()->has('purchasedTicket')->first();
 
         $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
@@ -50,8 +53,8 @@ class ReservedTicketUpdateTest extends ApiRouteTestCase
     public function test_reserved_ticket_update_call_for_zero_price_type_creates_a_purchased_ticket(): void
     {
         $user = User::role(RolesEnum::Admin)->first();
-        $this->ticketType = TicketType::where('price', 0)->whereHas('reservedTickets', fn ($query) => $query->doesntHave('purchasedTicket'))->first();
-        $this->reservedTicket = $this->ticketType->reservedTickets()->doesntHave('purchasedTicket')->first();
+        $this->ticketType = TicketType::where('price', 0)->first();
+        $this->reservedTicket = ReservedTicket::factory()->for($this->ticketType)->create(['email' => 'not-a-user@example.com']);
         $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
 
         $this->assertNull($this->reservedTicket->purchasedTicket);

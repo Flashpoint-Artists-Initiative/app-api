@@ -6,11 +6,14 @@ namespace Tests\Feature\TicketTypes\PurchasedTickets;
 
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
+use Database\Seeders\Testing\EventSeeder;
 use Tests\ApiRouteTestCase;
 
 class PurchasedTicketIndexTest extends ApiRouteTestCase
 {
     public bool $seed = true;
+
+    public string $seeder = EventSeeder::class;
 
     public string $routeName = 'api.ticket-types.purchased-tickets.index';
 

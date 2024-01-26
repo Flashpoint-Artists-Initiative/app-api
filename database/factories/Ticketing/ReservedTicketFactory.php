@@ -5,7 +5,7 @@ namespace Database\Factories\Ticketing;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ReservedTicket>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Ticketing\ReservedTicket>
  */
 class ReservedTicketFactory extends Factory
 {

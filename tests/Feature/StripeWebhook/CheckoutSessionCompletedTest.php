@@ -11,6 +11,7 @@ use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use App\Services\CartService;
 use App\Services\StripeService;
+use Database\Seeders\Testing\EventSeeder;
 use Mockery\MockInterface;
 use Stripe\Checkout\Session;
 use Stripe\Event;
@@ -21,6 +22,8 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
     public string $routeName = 'api.stripe-webhook';
 
     public bool $seed = true;
+
+    public string $seeder = EventSeeder::class;
 
     public Session $session;
 

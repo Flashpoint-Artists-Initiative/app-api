@@ -7,12 +7,15 @@ namespace Tests\Feature\Events\TicketTypes;
 use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
+use Database\Seeders\Testing\EventWithMultipleTicketTypesSeeder;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;
 
 class TicketTypeShowTest extends ApiRouteTestCase
 {
     public bool $seed = true;
+
+    public string $seeder = EventWithMultipleTicketTypesSeeder::class;
 
     public string $routeName = 'api.events.ticket-types.show';
 
