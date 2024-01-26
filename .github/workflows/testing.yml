@@ -14,7 +14,6 @@ on:
 jobs:
   php-tests:
     runs-on: ubuntu-latest
-    environment: development
 
     strategy:
       fail-fast: false
@@ -56,9 +55,9 @@ jobs:
           JWT_PRIVATE_KEY: ${{ vars.JWT_PRIVATE_KEY }}
           JWT_PUBLIC_KEY: ${{ vars.JWT_PUBLIC_KEY }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
-          STRIPE_PAYMENT_METHOD_CONFIG: ${{ vars.STRIPE_PAYMENT_METHOD_CONFIG }}
-          STRIPE_TAX_RATES: ${{ vars.STRIPE_TAX_RATES }}
+          STRIPE_SECRET: ${{ secrets.TEST_STRIPE_SECRET }}
+          STRIPE_PAYMENT_METHOD_CONFIG: ${{ vars.TEST_STRIPE_PAYMENT_METHOD_CONFIG }}
+          STRIPE_TAX_RATES: ${{ vars.TEST_STRIPE_TAX_RATES }}
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3

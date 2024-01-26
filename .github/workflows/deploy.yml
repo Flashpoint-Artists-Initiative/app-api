@@ -66,6 +66,9 @@ jobs:
           APP_KEY: ${{ secrets.APP_KEY }}
           APP_URL: ${{ vars.APP_URL }}
           MAIL_MAILER: ${{ vars.MAIL_MAILER }}
+          STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
+          STRIPE_PAYMENT_METHOD_CONFIG: ${{ vars.STRIPE_PAYMENT_METHOD_CONFIG }}
+          STRIPE_TAX_RATES: ${{ vars.STRIPE_TAX_RATES }}
 
       - name: Populate Roles and Permissions
         uses: serverless/github-action@v3
