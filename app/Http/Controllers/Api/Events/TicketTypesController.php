@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\Events;
 
+use App\Http\Controllers\OrionRelationsController;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Orion\Http\Controllers\RelationController;
 use Orion\Http\Requests\Request;
 
-class TicketTypesController extends RelationController
+class TicketTypesController extends OrionRelationsController
 {
     protected $model = Event::class;
 

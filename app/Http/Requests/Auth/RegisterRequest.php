@@ -30,7 +30,7 @@ class RegisterRequest extends FormRequest
     {
         return [
             'legal_name' => ['required', 'string', 'max:255'],
-            'preferred_name' => ['string', 'max:255'],
+            'preferred_name' => ['nullable', 'string', 'max:255'],
             'email' => [
                 'required',
                 'string',
@@ -38,7 +38,7 @@ class RegisterRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class),
             ],
-            'birthday' => ['date'],
+            'birthday' => ['date', 'required'],
             'password' => $this->passwordRules(),
         ];
     }

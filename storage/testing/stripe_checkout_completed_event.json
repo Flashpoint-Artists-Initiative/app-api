@@ -1,0 +1,122 @@
+{
+    "id": "evt_1OaXRYF3YeG6eaSeZaBBkTvQ",
+    "object": "event",
+    "api_version": "2020-08-27",
+    "created": 1705729812,
+    "data": {
+        "object": {
+            "id": "cs_test_b14SHxG9XNCkTpAmb7Wisoutf6IEfBj7psnN81pmZbj2XQrV4GRlvyMPEO_fake",
+            "object": "checkout.session",
+            "after_expiration": null,
+            "allow_promotion_codes": null,
+            "amount_subtotal": 13100,
+            "amount_total": 14397,
+            "automatic_tax": {
+                "enabled": false,
+                "status": null
+            },
+            "billing_address_collection": null,
+            "cancel_url": null,
+            "client_reference_id": "Event: Past Active Event - User: 3 - Cart: 15",
+            "client_secret": null,
+            "consent": null,
+            "consent_collection": null,
+            "created": 1705646539,
+            "currency": "usd",
+            "currency_conversion": null,
+            "custom_fields": [],
+            "custom_text": {
+                "after_submit": null,
+                "shipping_address": null,
+                "submit": {
+                    "message": "You'll receive an email confirmation with your ticket information."
+                },
+                "terms_of_service_acceptance": null
+            },
+            "customer": null,
+            "customer_creation": "if_required",
+            "customer_details": {
+                "address": {
+                    "city": null,
+                    "country": "US",
+                    "line1": null,
+                    "line2": null,
+                    "postal_code": "00000",
+                    "state": null
+                },
+                "email": "superadmin@example.com",
+                "name": "Mah Man",
+                "phone": null,
+                "tax_exempt": "none",
+                "tax_ids": []
+            },
+            "customer_email": "superadmin@example.com",
+            "expires_at": 1705648398,
+            "invoice": null,
+            "invoice_creation": {
+                "enabled": false,
+                "invoice_data": {
+                    "account_tax_ids": null,
+                    "custom_fields": null,
+                    "description": null,
+                    "footer": null,
+                    "metadata": {},
+                    "rendering_options": null
+                }
+            },
+            "livemode": false,
+            "locale": null,
+            "metadata": {
+                "event_id": "4",
+                "ticket_quantity": "2",
+                "user_id": "3"
+            },
+            "mode": "payment",
+            "payment_intent": "pi_3OaBmyF3YeG6eaSe0T9ymcul",
+            "payment_link": null,
+            "payment_method_collection": "if_required",
+            "payment_method_configuration_details": {
+                "id": "pmc_1OVObIF3YeG6eaSejhFxI3cW",
+                "parent": null
+            },
+            "payment_method_options": {},
+            "payment_method_types": [
+                "card",
+                "afterpay_clearpay",
+                "klarna",
+                "affirm",
+                "cashapp"
+            ],
+            "payment_status": "paid",
+            "phone_number_collection": {
+                "enabled": false
+            },
+            "recovered_from": null,
+            "redirect_on_completion": "always",
+            "return_url": "https://google.com",
+            "setup_intent": null,
+            "shipping": null,
+            "shipping_address_collection": null,
+            "shipping_options": [],
+            "shipping_rate": null,
+            "status": "complete",
+            "submit_type": null,
+            "subscription": null,
+            "success_url": null,
+            "total_details": {
+                "amount_discount": 0,
+                "amount_shipping": 0,
+                "amount_tax": 1297
+            },
+            "ui_mode": "embedded",
+            "url": null
+        }
+    },
+    "livemode": false,
+    "pending_webhooks": 2,
+    "request": {
+        "id": null,
+        "idempotency_key": null
+    },
+    "type": "checkout.session.completed"
+}

@@ -8,11 +8,14 @@ use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
 use Carbon\Carbon;
+use Database\Seeders\Testing\EventWithMultipleTicketTypesSeeder;
 use Tests\ApiRouteTestCase;
 
 class TicketTypeUpdateTest extends ApiRouteTestCase
 {
     public bool $seed = true;
+
+    public string $seeder = EventWithMultipleTicketTypesSeeder::class;
 
     public string $routeName = 'api.events.ticket-types.update';
 

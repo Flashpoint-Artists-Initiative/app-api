@@ -6,11 +6,14 @@ namespace App\Models;
 
 use App\Events\EmailUpdated;
 use App\Models\Concerns\HasVirtualColumns;
+use App\Models\Ticketing\Cart;
+use App\Models\Ticketing\Order;
 use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -92,6 +95,22 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return $this->hasMany(ReservedTicket::class)
             ->where(fn ($query) => $query->canBePurchased());
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function carts(): HasMany
+    {
+        return $this->hasMany(Cart::class);
+    }
+
+    public function activeCart(): HasOne
+    {
+        return $this->hasOne(Cart::class)
+            ->where(fn ($query) => $query->notExpired());
     }
 
     /**

@@ -5,17 +5,22 @@ declare(strict_types=1);
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
+use Database\Seeders\Testing\UserSeeder;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;
 
 class ForgotPasswordTest extends ApiRouteTestCase
 {
-    public bool $seed = true;
+    // public bool $seed = true;
+
+    // public string $seeder = UserSeeder::class;
 
     public string $routeName = 'password.email';
 
     public function test_forgot_password_call_with_valid_data_returns_a_successful_response(): void
     {
+        $this->seed(UserSeeder::class);
+
         $response = $this->postJson($this->endpoint, ['email' => 'regular@example.com']);
 
         $response->assertStatus(200);
@@ -23,6 +28,8 @@ class ForgotPasswordTest extends ApiRouteTestCase
 
     public function test_forgot_password_email_is_sent(): void
     {
+        $this->seed(UserSeeder::class);
+
         $email = 'regular@example.com';
 
         /** @var \Illuminate\Mail\Transport\ArrayTransport */
@@ -43,11 +50,14 @@ class ForgotPasswordTest extends ApiRouteTestCase
 
     public function test_multiple_forgot_password_calls_too_fast_returns_an_error_response(): void
     {
+        $this->seed(UserSeeder::class);
+
         $this->postJson($this->endpoint, ['email' => 'regular@example.com']);
         $response = $this->postJson($this->endpoint, ['email' => 'regular@example.com']);
 
         $response->assertStatus(422)
-            ->assertJson(fn (AssertableJson $json) => $json->hasAll(['message', 'errors.email']));
+            ->assertJson(fn (AssertableJson $json) => $json->hasAll(['message', 'errors.email']))
+            ->assertJsonPath('message', 'Please wait before retrying.');
     }
 
     public function test_forgot_password_call_with_missing_data_returns_a_validation_error(): void
@@ -80,6 +90,8 @@ class ForgotPasswordTest extends ApiRouteTestCase
 
     public function test_forgot_password_call_while_logged_in_returns_an_error(): void
     {
+        $this->seed(UserSeeder::class);
+
         $user = User::find(1);
         $response = $this->actingAs($user)->postJson($this->endpoint, ['email' => $user->email]);
 

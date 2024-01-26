@@ -8,11 +8,14 @@ use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
+use Database\Seeders\Testing\EventWithMultipleTicketTypesSeeder;
 use Tests\ApiRouteTestCase;
 
 class TicketTypeIndexTest extends ApiRouteTestCase
 {
     public bool $seed = true;
+
+    public string $seeder = EventWithMultipleTicketTypesSeeder::class;
 
     public string $routeName = 'api.events.ticket-types.index';
 
@@ -38,7 +41,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
         $this->assertEquals($ticketTypeCount, $response->baseResponse->original->count());
     }
 
-    public function test_ticket_type_index_call_with_permission_returns_pending_events(): void
+    public function test_ticket_type_index_call_with_permission_returns_pending_types(): void
     {
         $active_ticket_type_count = TicketType::where('active', true)->event($this->event->id)->withoutTrashed()->count();
         $ticket_type_count = TicketType::withoutTrashed()->event($this->event->id)->count();
@@ -53,7 +56,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
         $this->assertEquals($ticket_type_count, $response->baseResponse->original->count());
     }
 
-    public function test_ticket_type_index_call_with_permission_returns_trashed_events(): void
+    public function test_ticket_type_index_call_with_permission_returns_trashed_types(): void
     {
         $this->addEndpointParams(['with_trashed' => true]);
 
@@ -70,7 +73,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
         $this->assertEquals($ticket_type_count, $response->baseResponse->original->count());
     }
 
-    public function test_ticket_type_index_call_without_permission_ignores_trashed_events(): void
+    public function test_ticket_type_index_call_without_permission_ignores_trashed_types(): void
     {
         $this->addEndpointParams(['with_trashed' => true]);
 
@@ -88,7 +91,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
         $this->assertEquals($existing_ticket_type_count, $response->baseResponse->original->count());
     }
 
-    public function test_ticket_type_index_call_with_only_trashed_returns_correct_events(): void
+    public function test_ticket_type_index_call_with_only_trashed_returns_correct_types(): void
     {
         $this->addEndpointParams(['only_trashed' => true]);
 
@@ -105,7 +108,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
         $this->assertEquals($trashed_ticket_type_count, $response->baseResponse->original->count());
     }
 
-    public function test_ticket_type_index_call_as_admin_returns_all_events(): void
+    public function test_ticket_type_index_call_as_admin_returns_all_types(): void
     {
         $this->addEndpointParams(['with_trashed' => true]);
 

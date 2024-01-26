@@ -1,5 +1,8 @@
 <?php
 
+$stripeIps = json_decode(file_get_contents(storage_path('stripeWebhookIPs.json')), true);
+$stripeIps[] = '127.0.0.1';  // For testing
+
 return [
 
     /*
@@ -29,6 +32,14 @@ return [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+    ],
+
+    'stripe' => [
+        'secret' => env('STRIPE_SECRET'),
+        'payment_method_configuration' => env('STRIPE_PAYMENT_METHOD_CONFIG'),
+        'tax_rates' => env('STRIPE_TAX_RATES', ''),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+        'webhook_ips' => $stripeIps,
     ],
 
 ];

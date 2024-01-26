@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Ticketing;
 
+use App\Models\Event;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -14,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property bool $is_expired
+ * @property Event $event
+ * @property int $quantity
  */
 class Cart extends Model
 {
@@ -27,25 +30,9 @@ class Cart extends Model
         'expiration_date' => 'datetime',
     ];
 
-    protected static function booted()
-    {
-        static::deleted(function (Cart $cart) {
-            $cart->items()->delete();
-        });
-
-        // Don't allow a cart to be created for a user if one already exists
-        static::creating(function (Cart $cart) {
-            $cart->expiration_date = now()->addMinutes(config('app.cart_expiration_minutes'));
-
-            if (Cart::where('user_id', $cart->user_id)->exists()) {
-                return false;
-            }
-        });
-
-        // Don't allow a cart to be updated
-        // This is mostly so the expiration date doesn't accidentally get changed
-        static::updating(fn () => false);
-    }
+    protected $with = [
+        'items.ticketType',
+    ];
 
     public function items(): HasMany
     {
@@ -57,6 +44,22 @@ class Cart extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function event(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                return $this->items->first()->ticketType->event;
+            });
+    }
+
+    public function quantity(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                return $this->items->sum('quantity');
+            });
+    }
+
     public function isExpired(): Attribute
     {
         return Attribute::make(
@@ -66,22 +69,26 @@ class Cart extends Model
         );
     }
 
+    public function expire(): void
+    {
+        // is_expired doesn't trigger correctly if it's been less than a second, so subtract 2 to be sure
+        $this->expiration_date = now()->subSeconds(2);
+        $this->saveQuietly();
+    }
+
     public function scopeNotExpired(Builder $query): void
     {
         $query->where('expiration_date', '>', now());
     }
 
-    /**
-     * Create CartItem models for the given ticket types and quantities
-     */
-    public function fillItems(array $input): void
+    public function scopeStripeCheckoutId(Builder $query, string $id): void
     {
-        foreach ($input as $row) {
-            CartItem::create([
-                'cart_id' => $this->id,
-                'ticket_type_id' => $row['id'],
-                'quantity' => $row['quantity'],
-            ]);
-        }
+        $query->where('stripe_checkout_id', $id);
+    }
+
+    public function setStripeCheckoutIdAndSave(string $id): void
+    {
+        $this->stripe_checkout_id = $id;
+        $this->saveQuietly();
     }
 }

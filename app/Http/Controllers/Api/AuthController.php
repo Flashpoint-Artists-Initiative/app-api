@@ -207,6 +207,10 @@ class AuthController extends Controller
      */
     public function resendVerificationEmailAction(Request $request): JsonResponse
     {
+        if ($request->user()->hasVerifiedEmail()) {
+            return response()->json(['message' => 'Email already verified'], 400);
+        }
+
         $request->user()->sendEmailVerificationNotification();
 
         return response()->json(['message' => 'Email verification link sent.'], 202);

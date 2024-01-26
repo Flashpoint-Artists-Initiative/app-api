@@ -15,6 +15,13 @@ class PurchasedTicket extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'user_id',
+        'ticket_type_id',
+        'reserved_ticket_id',
+        'order_id',
+    ];
+
     public function ticketType(): BelongsTo
     {
         return $this->belongsTo(TicketType::class);
@@ -41,5 +48,17 @@ class PurchasedTicket extends Model
             'ticket_type_id', // Local key for purchasedTicket
             'event_id' //Local key for ticketType
         );
+    }
+
+    public static function createFromCartItem(CartItem $item, ?int $userId = null, ?int $orderId = null): void
+    {
+        for ($i = 0; $i < $item->quantity; $i++) {
+            static::create([
+                'user_id' => $userId ?? $item->cart->user_id,
+                'ticket_type_id' => $item->ticket_type_id,
+                'reserved_ticket_id' => $item->reserved_ticket_id,
+                'order_id' => $orderId,
+            ]);
+        }
     }
 }

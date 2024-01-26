@@ -7,12 +7,15 @@ namespace Tests\Feature\Events;
 use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
+use Database\Seeders\Testing\EventSeeder;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;
 
 class EventShowTest extends ApiRouteTestCase
 {
     public bool $seed = true;
+
+    public string $seeder = EventSeeder::class;
 
     public string $routeName = 'api.events.show';
 

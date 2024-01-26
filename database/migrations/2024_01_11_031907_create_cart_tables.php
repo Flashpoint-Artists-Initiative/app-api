@@ -16,6 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->unsignedInteger('user_id');
             $table->datetime('expiration_date');
+            $table->string('stripe_checkout_id')->nullable()->index()->collation('utf8mb4_bin');
         });
 
         Schema::create('cart_items', function (Blueprint $table) {
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->timestamps();
             $table->unsignedInteger('cart_id');
             $table->unsignedInteger('ticket_type_id');
+            $table->unsignedInteger('reserved_ticket_id')->nullable();
             $table->integer('quantity');
         });
     }

@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use App\Enums\RolesEnum;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class RolesEnumTest extends TestCase
 {
-    use RefreshDatabase;
-
-    public bool $seed = true;
+    use LazilyRefreshDatabase;
 
     public function test_roles_enum_has_case_for_every_role_in_database(): void
     {

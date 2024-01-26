@@ -15,11 +15,17 @@ class CartItem extends Model
     protected $fillable = [
         'cart_id',
         'ticket_type_id',
+        'reserved_ticket_id',
         'quantity',
     ];
 
     public function cart(): BelongsTo
     {
         return $this->belongsTo(Cart::class);
+    }
+
+    public function ticketType(): BelongsTo
+    {
+        return $this->belongsTo(TicketType::class);
     }
 }

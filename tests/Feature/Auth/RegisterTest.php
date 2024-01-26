@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
+use Database\Seeders\Testing\UserSeeder;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;
 
@@ -18,6 +19,7 @@ class RegisterTest extends ApiRouteTestCase
             'legal_name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'password',
+            'birthday' => '2000-01-01',
         ]);
 
         $response->assertStatus(201);
@@ -35,12 +37,13 @@ class RegisterTest extends ApiRouteTestCase
 
     public function test_registering_with_existing_email_returns_validation_errors(): void
     {
-        $this->seed();
+        $this->seed(UserSeeder::class);
 
         $response = $this->postJson($this->endpoint, [
             'legal_name' => 'Test User',
             'email' => 'regular@example.com',
             'password' => 'password',
+            'birthday' => '2000-01-01',
         ]);
 
         $response->assertStatus(422)
@@ -51,7 +54,7 @@ class RegisterTest extends ApiRouteTestCase
 
     public function test_registering_when_logged_in_returns_error(): void
     {
-        $this->seed();
+        $this->seed(UserSeeder::class);
 
         $user = User::find(1);
 
@@ -59,6 +62,7 @@ class RegisterTest extends ApiRouteTestCase
             'legal_name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'password',
+            'birthday' => '2000-01-01',
         ]);
 
         $response->assertStatus(400);

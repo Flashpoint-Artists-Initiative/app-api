@@ -6,6 +6,7 @@ namespace Tests\Feature\Checkout;
 
 use App\Models\Ticketing\Cart;
 use App\Models\User;
+use Database\Seeders\Testing\UserSeeder;
 use Tests\ApiRouteTestCase;
 
 class CheckoutDeleteTest extends ApiRouteTestCase
@@ -13,6 +14,8 @@ class CheckoutDeleteTest extends ApiRouteTestCase
     public string $routeName = 'api.checkout.destroy';
 
     public bool $seed = true;
+
+    public string $seeder = UserSeeder::class;
 
     public function test_cart_delete_call_not_logged_in_returns_error(): void
     {

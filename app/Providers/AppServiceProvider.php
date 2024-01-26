@@ -8,6 +8,7 @@ use Dedoc\Scramble\Scramble;
 use Dedoc\Scramble\Support\Generator\OpenApi;
 use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Illuminate\Support\ServiceProvider;
+use Stripe\StripeClient;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->registerStripeClient();
     }
 
     /**
@@ -38,6 +39,22 @@ class AppServiceProvider extends ServiceProvider
             $openApi->secure(
                 SecurityScheme::http('bearer', 'JWT')
             );
+        });
+
+        // Add localhost to the whitelisted stripe webhook ips when testing or local
+        if ($this->app->isLocal() || $this->app->runningUnitTests()) {
+            config(['services.stripe.webhook_ips.WEBHOOK.100' => '127.0.0.1']);
+        }
+    }
+
+    protected function registerStripeClient()
+    {
+        $this->app->singleton(StripeClient::class, function ($app) {
+            $config = $app['config']->get('services.stripe');
+
+            $secret = $config['secret'] ?? null;
+
+            return new StripeClient($secret);
         });
     }
 }

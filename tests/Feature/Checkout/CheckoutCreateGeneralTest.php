@@ -74,10 +74,10 @@ class CheckoutCreateGeneralTest extends ApiRouteTestCase
 
         $secondResponse->assertStatus(201);
 
-        $this->assertNotEquals($response->decodeResponseJson()->json('data.id'), $secondResponse->decodeResponseJson()->json('data.id'));
+        $this->assertNotEquals($response->decodeResponseJson()->json('data.clientSecret'), $secondResponse->decodeResponseJson()->json('data.clientSecret'));
 
-        $this->assertCount(1, Cart::all());
-        $this->assertCount(1, CartItem::all());
+        $this->assertCount(2, Cart::all());
+        $this->assertCount(2, CartItem::all());
     }
 
     public function test_cart_create_call_with_invalid_data_returns_error(): void
