@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\Events;
 
 use App\Http\Controllers\OrionRelationsController;
+use App\Http\Requests\TicketTransferRequest;
+use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Http\JsonResponse;
 use Orion\Http\Requests\Request;
 
 class PurchasedTicketsController extends OrionRelationsController
@@ -34,5 +37,14 @@ class PurchasedTicketsController extends OrionRelationsController
         }
 
         return $relation;
+    }
+
+    public function transferAction(TicketTransferRequest $request, TicketType $ticketType, PurchasedTicket $purchasedTicket): JsonResponse
+    {
+        $user = User::where('email', $request->email)->firstOrFail();
+        $purchasedTicket->user_id = $user->id;
+        $purchasedTicket->save();
+
+        return response()->json(status: 204);
     }
 }

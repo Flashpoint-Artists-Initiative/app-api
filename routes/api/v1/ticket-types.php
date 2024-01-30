@@ -7,14 +7,19 @@ use Orion\Facades\Orion;
 
 /*
 |--------------------------------------------------------------------------
-| Users Routes
+| Ticket Type Routes
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'token.refresh'])->as('api.')->group(function () {
-    Orion::hasManyResource('ticket-types', 'reserved-tickets', ReservedTicketsController::class)->middleware(['auth']);
+    Orion::hasManyResource('ticket-types', 'reserved-tickets', ReservedTicketsController::class);
     Orion::hasManyResource('ticket-types', 'purchased-tickets', PurchasedTicketsController::class)->only([
         'index',
         'search',
         'show',
     ]);
+
+    Route::post('/ticket-types/{ticket_type}/purchased-tickets/{purchased_ticket}/transfer', [PurchasedTicketsController::class, 'transferAction'])
+        ->name('ticket-types.purchased-tickets.transfer');
+    Route::post('/ticket-types/{ticket_type}/reserved-tickets/{reserved_ticket}/transfer', [ReservedTicketsController::class, 'transferAction'])
+        ->name('ticket-types.reserved-tickets.transfer');
 });
