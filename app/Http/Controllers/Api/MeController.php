@@ -57,4 +57,13 @@ class MeController extends Controller
 
         return $user;
     }
+
+    public function waiversAction()
+    {
+        /** @var User $user */
+        $user = auth()->user();
+        $user->load('waivers');
+
+        return $user;
+    }
 }

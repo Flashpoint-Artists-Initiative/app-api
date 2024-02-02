@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
+use App\Models\Ticketing\Waiver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -44,5 +45,10 @@ class Event extends Model
     public function reservedTickets(): HasManyThrough
     {
         return $this->hasManyThrough(ReservedTicket::class, TicketType::class);
+    }
+
+    public function waivers(): HasMany
+    {
+        return $this->hasMany(Waiver::class);
     }
 }

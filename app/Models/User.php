@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Events\EmailUpdated;
 use App\Models\Concerns\HasVirtualColumns;
 use App\Models\Ticketing\Cart;
+use App\Models\Ticketing\CompletedWaiver;
 use App\Models\Ticketing\Order;
 use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
@@ -111,6 +112,11 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return $this->hasOne(Cart::class)
             ->where(fn ($query) => $query->notExpired());
+    }
+
+    public function waivers(): HasMany
+    {
+        return $this->hasMany(CompletedWaiver::class);
     }
 
     /**
