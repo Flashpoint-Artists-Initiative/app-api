@@ -51,6 +51,8 @@ class CheckoutCreateGeneralTest extends ApiRouteTestCase
     {
         $user = User::doesntHave('roles')->first();
         $ticketType = TicketType::query()->available()->first();
+        $cartCount = Cart::count();
+        $cartItemCount = CartItem::count();
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'tickets' => [
@@ -76,8 +78,8 @@ class CheckoutCreateGeneralTest extends ApiRouteTestCase
 
         $this->assertNotEquals($response->decodeResponseJson()->json('data.clientSecret'), $secondResponse->decodeResponseJson()->json('data.clientSecret'));
 
-        $this->assertCount(2, Cart::all());
-        $this->assertCount(2, CartItem::all());
+        $this->assertCount($cartCount + 2, Cart::all());
+        $this->assertCount($cartItemCount + 2, CartItem::all());
     }
 
     public function test_cart_create_call_with_invalid_data_returns_error(): void

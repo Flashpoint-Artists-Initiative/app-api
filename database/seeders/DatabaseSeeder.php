@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             TicketTypeSeeder::class,
             ReservedTicketSeeder::class,
             PurchasedTicketSeeder::class,
+            OrderSeeder::class,
+            WaiverSeeder::class,
         ]);
     }
 }

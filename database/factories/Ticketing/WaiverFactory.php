@@ -2,6 +2,7 @@
 
 namespace Database\Factories\Ticketing;
 
+use App\Models\Event;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,6 +20,7 @@ class WaiverFactory extends Factory
         return [
             'title' => fake()->bs(),
             'content' => fake()->paragraphs(asText: true),
+            'event_id' => Event::factory(),
         ];
     }
 

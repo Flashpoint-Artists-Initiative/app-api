@@ -44,6 +44,8 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
     public function test_cart_create_reserved_call_with_valid_data_twice_returns_new_cart(): void
     {
         $user = User::doesntHave('roles')->has('availableReservedTickets')->first();
+        $cartCount = Cart::count();
+        $cartItemCount = CartItem::count();
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'tickets' => [
@@ -63,8 +65,8 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
 
         $this->assertNotEquals($response->decodeResponseJson()->json('data.clientSecret'), $secondResponse->decodeResponseJson()->json('data.clientSecret'));
 
-        $this->assertCount(2, Cart::all());
-        $this->assertCount(2, CartItem::all());
+        $this->assertCount($cartCount + 2, Cart::all());
+        $this->assertCount($cartItemCount + 2, CartItem::all());
     }
 
     public function test_cart_create_reserved_call_with_expiration_date_returns_success(): void
