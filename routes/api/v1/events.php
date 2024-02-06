@@ -18,6 +18,7 @@ Route::middleware(['token.refresh'])->as('api.')->group(function () {
     Orion::hasManyResource('events', 'ticket-types', TicketTypesController::class)->withSoftDeletes()->except(['associate', 'dissociate']);
     Orion::hasManyResource('events', 'waivers', WaiversController::class)->except(['associate', 'dissociate', 'batchStore', 'batchUpdate', 'batchDestroy', 'batchRestore']);
 
+    Route::post('/events/{event}/waivers/{waiver?}/complete', [WaiversController::class, 'completeAction'])->middleware(['auth'])->name('events.waivers.complete');
     // TODO: Determine if these routes are needed or not
     // Orion::hasManyThroughResource('events', 'purchased-tickets', PurchasedTicketsController::class);
     // Orion::hasManyThroughResource('events', 'reserved-tickets', ReservedTicketsController::class);

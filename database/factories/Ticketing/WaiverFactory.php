@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Ticketing;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,7 +17,15 @@ class WaiverFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => fake()->bs(),
+            'content' => fake()->paragraphs(asText: true),
         ];
+    }
+
+    public function minorWaiver(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'minor_waiver' => true,
+        ]);
     }
 }

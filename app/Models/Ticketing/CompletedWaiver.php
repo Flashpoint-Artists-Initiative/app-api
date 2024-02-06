@@ -13,6 +13,13 @@ class CompletedWaiver extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'waiver_id',
+        'user_id',
+        'form_data',
+        'paper_completion',
+    ];
+
     protected $casts = [
         'form_data' => 'array',
     ];

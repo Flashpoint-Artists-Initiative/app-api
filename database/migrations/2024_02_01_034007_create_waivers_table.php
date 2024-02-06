@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->unsignedInteger('event_id');
+            $table->string('title');
             $table->text('content');
             $table->boolean('minor_waiver')->default(false);
         });

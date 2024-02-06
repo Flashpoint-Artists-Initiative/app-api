@@ -25,13 +25,21 @@ class WaiverPolicy extends AbstractModelPolicy
         return parent::update($user, $waiver);
     }
 
-    public function viewAny(User $user): bool
+    public function viewAny(?User $user): bool
     {
         return true;
     }
 
-    public function view(User $user, Model $model): bool
+    public function view(?User $user, Model $waiver): bool
     {
         return true;
+    }
+
+    /**
+     * @param  Waiver  $waiver
+     */
+    public function complete(User $user, Model $waiver): bool
+    {
+        return $user->waivers()->where('waiver_id', $waiver->id)->count() === 0;
     }
 }

@@ -14,6 +14,12 @@ class Waiver extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'title',
+        'content',
+        'minor_waiver',
+    ];
+
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);

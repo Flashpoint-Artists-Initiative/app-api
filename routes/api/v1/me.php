@@ -14,5 +14,6 @@ Route::controller(MeController::class)->middleware(['auth'])->prefix('me')->as('
     Route::match(['PUT', 'PATCH'], '/', 'update')->name('update');
     Route::get('/tickets', 'ticketsAction')->name('tickets');
     Route::get('/orders', 'ordersAction')->name('orders');
+    Route::get('/waivers', 'waiversAction')->name('waivers');
     Route::post('/tickets/transfer', [TicketsController::class, 'transferAction'])->name('tickets.transfer');
 });
