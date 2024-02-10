@@ -30,9 +30,10 @@ class MeController extends Controller
 
     public function indexAction(MeRequest $request)
     {
+        $includes = array_merge($request->input('include', []), ['roles', 'permissions']);
         /** @var User $user */
         $user = auth()->user();
-        $user->load($request->input('include', []));
+        $user->load($includes);
 
         return new UserResource($user);
     }
