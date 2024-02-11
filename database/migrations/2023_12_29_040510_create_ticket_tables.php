@@ -23,6 +23,8 @@ return new class extends Migration
             $table->unsignedInteger('price');
             $table->text('description');
             $table->boolean('active')->default(false);
+            $table->boolean('transferable')->default(true);
+            $table->boolean('addon')->default(false);
             $table->softDeletes();
         });
 
