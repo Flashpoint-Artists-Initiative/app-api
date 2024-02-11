@@ -13,7 +13,7 @@ class TicketsController extends Controller
 {
     public function indexAction(User $user)
     {
-        $this->authorize('user.ticket-transfer', $user);
+        $this->authorize('view', $user);
 
         $reservedTickets = ReservedTicket::where('user_id', $user->id)->get();
         $purchasedTickets = PurchasedTicket::where('user_id', $user->id)->get();
