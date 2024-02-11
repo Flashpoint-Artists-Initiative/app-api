@@ -11,9 +11,13 @@ use Dedoc\Scramble\Scramble;
 use Dedoc\Scramble\Support\Generator\OpenApi;
 use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Stripe\StripeClient;
 
+/**
+ * @property Application $app
+ */
 class AppServiceProvider extends ServiceProvider
 {
     /**
