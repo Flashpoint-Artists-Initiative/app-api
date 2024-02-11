@@ -17,9 +17,4 @@ Route::middleware(['auth', 'token.refresh'])->as('api.')->group(function () {
         'search',
         'show',
     ]);
-
-    Route::post('/ticket-types/{ticket_type}/purchased-tickets/{purchased_ticket}/transfer', [PurchasedTicketsController::class, 'transferAction'])
-        ->name('ticket-types.purchased-tickets.transfer');
-    Route::post('/ticket-types/{ticket_type}/reserved-tickets/{reserved_ticket}/transfer', [ReservedTicketsController::class, 'transferAction'])
-        ->name('ticket-types.reserved-tickets.transfer');
 });
