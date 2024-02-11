@@ -22,12 +22,6 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        if ($this->relationLoaded('permissions')) {
-            /** @var Collection $collection */
-            $collection = $this->getAllPermissions();
-            $permissions = $collection->map(fn ($p) => $p->name);
-        }
-
         return [
             'id' => $this->id,
             'legal_name' => $this->legal_name,
@@ -40,9 +34,22 @@ class UserResource extends JsonResource
             'updated_at' => $this->updated_at,
             'deleted_at' => $this->deleted_at ?? new MissingValue(),
             'roles' => RoleResource::collection($this->whenLoaded('roles')),
-            'permissions' => $permissions ?? new MissingValue(),
+            'permissions' => $this->formatPermissions(),
             'purchased_tickets' => $this->whenLoaded('purchasedTickets'),
             'reserved_tickets' => ReservedTicketResource::collection($this->whenLoaded('reservedTickets')),
+            'transfers' => TicketTransferResource::collection($this->whenLoaded('ticketTransfers')),
         ];
+    }
+
+    protected function formatPermissions(): Collection|MissingValue
+    {
+        if (! $this->relationLoaded('permissions')) {
+            return new MissingValue();
+        }
+
+        /** @var Collection $collection */
+        $collection = $this->getAllPermissions();
+
+        return $collection->map(fn ($p) => $p->name);
     }
 }

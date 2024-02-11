@@ -11,6 +11,7 @@ use App\Models\Ticketing\CompletedWaiver;
 use App\Models\Ticketing\Order;
 use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
+use App\Models\Ticketing\TicketTransfer;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -117,6 +118,11 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function waivers(): HasMany
     {
         return $this->hasMany(CompletedWaiver::class);
+    }
+
+    public function ticketTransfers(): HasMany
+    {
+        return $this->hasMany(TicketTransfer::class);
     }
 
     /**

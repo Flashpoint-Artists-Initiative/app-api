@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\Ticketing\PurchasedTicket;
+use App\Models\Ticketing\ReservedTicket;
+use App\Models\User;
 use Dedoc\Scramble\Scramble;
 use Dedoc\Scramble\Support\Generator\OpenApi;
 use Dedoc\Scramble\Support\Generator\SecurityScheme;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 use Stripe\StripeClient;
 
@@ -45,6 +49,12 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->isLocal() || $this->app->runningUnitTests()) {
             config(['services.stripe.webhook_ips.WEBHOOK.100' => '127.0.0.1']);
         }
+
+        Relation::enforceMorphMap([
+            'purchasedTicket' => PurchasedTicket::class,
+            'reservedTicket' => ReservedTicket::class,
+            'user' => User::class,
+        ]);
     }
 
     protected function registerStripeClient()
