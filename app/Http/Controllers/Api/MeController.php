@@ -25,6 +25,7 @@ class MeController extends Controller
             'purchasedTickets',
             'orders',
             'waivers',
+            'ticketTransfers',
         ];
     }
 

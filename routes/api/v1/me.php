@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\Api\Me\TicketsController;
+use App\Http\Controllers\Api\Me\TicketTransfersController;
 use App\Http\Controllers\Api\MeController;
 use Illuminate\Support\Facades\Route;
+use Orion\Facades\Orion;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,5 +16,8 @@ Route::controller(MeController::class)->middleware(['auth'])->prefix('me')->as('
     Route::get('/tickets', 'ticketsAction')->name('tickets');
     Route::get('/orders', 'ordersAction')->name('orders');
     Route::get('/waivers', 'waiversAction')->name('waivers');
-    Route::post('/tickets/transfer', [TicketsController::class, 'transferAction'])->name('tickets.transfer');
+
+    Orion::resource('ticket-transfers', TicketTransfersController::class)->only(['index', 'search', 'show', 'destroy']);
+    // creating a transfer take custom input, so we pull it out of Orion
+    Route::post('/ticket-transfers', [TicketTransfersController::class, 'transferAction'])->name('users.ticket-transfers.store');
 });
