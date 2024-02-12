@@ -27,6 +27,7 @@ class TicketTypeFactory extends Factory
             'price' => fake()->numberBetween(20, 100),
             'description' => fake()->paragraph(),
             'active' => true,
+            'transferable' => true,
         ];
     }
 
@@ -34,6 +35,13 @@ class TicketTypeFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'active' => false,
+        ]);
+    }
+
+    public function notTransferable(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'transferable' => false,
         ]);
     }
 

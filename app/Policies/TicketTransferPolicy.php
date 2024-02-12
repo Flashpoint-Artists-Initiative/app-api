@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TicketTransferPolicy extends AbstractModelPolicy
 {
+    protected string $prefix = 'ticketTransfers';
+
     public function update(User $user, Model $model): bool
     {
         return false;
@@ -18,6 +20,10 @@ class TicketTransferPolicy extends AbstractModelPolicy
     public function delete(User $user, Model $model): bool
     {
         /** @var TicketTransfer $model */
-        return ! $model->completed;
+        if ($model->completed) {
+            return false;
+        }
+
+        return parent::delete($user, $model);
     }
 }

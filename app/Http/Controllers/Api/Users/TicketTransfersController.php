@@ -22,7 +22,7 @@ class TicketTransfersController extends OrionRelationsController
 
     public function transferAction(TicketTransferCreateWithUserRequest $request, User $user)
     {
-        $this->authorize('user.ticket-transfer');
+        $this->authorize('create', [TicketTransfer::class]);
         $transfer = TicketTransfer::createTransfer($user->id, $request->email, $request->purchased_tickets, $request->reserved_tickets);
 
         return new TicketTransferResource($transfer);

@@ -199,6 +199,7 @@ return [
                 'ticketTypes.*',
                 'purchasedTickets.*',
                 'reservedTickets.*',
+                'ticketTransfers.*',
             ],
             RolesEnum::EventManager->value => [
                 'events.viewAny',
@@ -291,6 +292,13 @@ return [
             'reservedTickets.associate',
             'reservedTickets.dissociate',
             'reservedTickets.*',
+
+            'ticketTransfers.viewAny',
+            'ticketTransfers.view',
+            'ticketTransfers.create',
+            'ticketTransfers.update',
+            'ticketTransfers.delete',
+            'ticketTransfers.*',
         ],
     ],
 ];

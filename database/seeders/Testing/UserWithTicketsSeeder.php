@@ -23,7 +23,9 @@ class UserWithTicketsSeeder extends Seeder
         $ticketType = TicketType::factory()->for($event)->create();
         $reservedTicket = ReservedTicket::factory()->forUser()->for($ticketType)->create();
 
-        PurchasedTicket::factory()->forUser()->for($ticketType)->create();
+        ReservedTicket::factory()->for($reservedTicket->user)->for($ticketType)->create();
+
+        PurchasedTicket::factory()->for($reservedTicket->user)->for($ticketType)->create();
         PurchasedTicket::factory()->for($reservedTicket->user)->for($reservedTicket)->for($ticketType)->create();
 
     }

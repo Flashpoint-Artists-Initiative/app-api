@@ -22,6 +22,7 @@ class EventWithMultipleTicketTypesSeeder extends Seeder
         $event = Event::factory()->offset('+3 months')->active()->create(['name' => 'Future Active Event']);
 
         TicketType::factory()->for($event)->create();
+        TicketType::factory()->for($event)->notTransferable()->create();
         TicketType::factory()->for($event)->inactive()->trashed()->create();
         TicketType::factory()->for($event)->inactive()->create();
         TicketType::factory()->for($event)->zeroQuantity()->create();

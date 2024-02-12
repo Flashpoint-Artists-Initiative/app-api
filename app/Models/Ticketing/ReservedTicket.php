@@ -21,6 +21,8 @@ class ReservedTicket extends Model
     use HasFactory, HasTicketType;
 
     protected $fillable = [
+        'user_id',
+        'ticket_type_id',
         'email',
         'expiration_date',
         'note',

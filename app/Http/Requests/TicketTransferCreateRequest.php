@@ -19,9 +19,9 @@ class TicketTransferCreateRequest extends FormRequest
     {
         return [
             'purchased_tickets' => ['array'],
-            'purchased_tickets.*' => ['distinct', 'integer', 'exists:reserved_tickets,id'],
+            'purchased_tickets.*' => ['distinct', 'integer', 'exists:purchased_tickets,id'],
             'reserved_tickets' => ['array'],
-            'reserved_tickets.*' => ['distinct', 'integer', 'exists:purchased_tickets,id'],
+            'reserved_tickets.*' => ['distinct', 'integer', 'exists:reserved_tickets,id'],
             'email' => ['required', 'email'],
         ];
     }
@@ -33,11 +33,11 @@ class TicketTransferCreateRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        if (is_string($this->purchased_tickets)) {
+        if (! is_null($this->purchased_tickets) && ! is_array($this->purchased_tickets)) {
             $this->merge(['purchased_tickets' => [$this->purchased_tickets]]);
         }
 
-        if (is_string($this->reserved_tickets)) {
+        if (! is_null($this->reserved_tickets) && ! is_array($this->reserved_tickets)) {
             $this->merge(['reserved_tickets' => [$this->reserved_tickets]]);
         }
     }

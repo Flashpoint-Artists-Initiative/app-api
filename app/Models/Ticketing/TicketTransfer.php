@@ -7,6 +7,7 @@ namespace App\Models\Ticketing;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 
@@ -35,6 +36,16 @@ class TicketTransfer extends Model
         return $this->morphedByMany(ReservedTicket::class, 'ticket', 'ticket_transfer_items');
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function recipient(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'recipient_email', 'email');
+    }
+
     /**
      * Finish the transfer and mark it as completed
      */
@@ -57,7 +68,7 @@ class TicketTransfer extends Model
         return $this;
     }
 
-    public static function createTransfer(int $userId, string $email, Collection $purchasedTicketIds, Collection $reservedTicketIds): TicketTransfer
+    public static function createTransfer(int $userId, string $email, ?array $purchasedTicketIds = [], ?array $reservedTicketIds = []): TicketTransfer
     {
         $transfer = TicketTransfer::create([
             'user_id' => $userId,

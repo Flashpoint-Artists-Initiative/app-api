@@ -2,6 +2,7 @@
 
 namespace Database\Factories\Ticketing;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,8 @@ class TicketTransferFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => User::factory(),
+            'recipient_email' => fake()->safeEmail(),
         ];
     }
 }
