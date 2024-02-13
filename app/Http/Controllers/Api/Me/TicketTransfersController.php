@@ -8,12 +8,20 @@ use App\Http\Controllers\OrionController;
 use App\Http\Requests\TicketTransferCreateRequest;
 use App\Http\Resources\TicketTransferResource;
 use App\Models\Ticketing\TicketTransfer;
+use App\Policies\MeTicketTransferPolicy;
 use Illuminate\Database\Eloquent\Builder;
 use Orion\Http\Requests\Request;
 
 class TicketTransfersController extends OrionController
 {
     protected $model = TicketTransfer::class;
+
+    protected $policy = MeTicketTransferPolicy::class;
+
+    public function alwaysIncludes(): array
+    {
+        return ['purchasedTickets', 'reservedTickets'];
+    }
 
     protected function buildIndexFetchQuery(Request $request, array $requestedRelations): Builder
     {
@@ -32,6 +40,10 @@ class TicketTransfersController extends OrionController
 
     public function completeAction(Request $request, TicketTransfer $ticketTransfer)
     {
+        $this->authorize('complete', [$ticketTransfer]);
+
         $ticketTransfer->complete();
+
+        return response()->json(status: 204);
     }
 }

@@ -24,10 +24,10 @@ trait HasTicketType
         return $this->morphToMany(TicketTransfer::class, 'ticket', 'ticket_transfer_items');
     }
 
-    public function latestTransfer(): MorphOne
-    {
-        return $this->morphOne(TicketTransfer::class, 'ticket')->latestOfMany();
-    }
+    // public function latestTransfer(): MorphOne
+    // {
+    //     return $this->morphOne(TicketTransfer::class, 'ticket')->latestOfMany();
+    // }
 
     public function ticketType(): BelongsTo
     {

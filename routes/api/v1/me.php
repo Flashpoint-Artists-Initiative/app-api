@@ -19,5 +19,6 @@ Route::controller(MeController::class)->middleware(['auth'])->prefix('me')->as('
 
     Orion::resource('ticket-transfers', TicketTransfersController::class)->only(['index', 'search', 'show', 'destroy']);
     // creating a transfer take custom input, so we pull it out of Orion
-    Route::post('/ticket-transfers', [TicketTransfersController::class, 'transferAction'])->name('users.ticket-transfers.store');
+    Route::post('/ticket-transfers', [TicketTransfersController::class, 'transferAction'])->name('ticket-transfers.store');
+    Route::post('/ticket-transfers/{ticket_transfer}/complete', [TicketTransfersController::class, 'completeAction'])->name('ticket-transfers.complete');
 });

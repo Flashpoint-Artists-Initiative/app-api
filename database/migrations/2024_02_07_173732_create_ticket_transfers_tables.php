@@ -16,6 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->unsignedInteger('user_id');
             $table->string('recipient_email');
+            $table->unsignedInteger('recipient_user_id')->nullable();
             $table->boolean('completed')->default(false);
         });
 

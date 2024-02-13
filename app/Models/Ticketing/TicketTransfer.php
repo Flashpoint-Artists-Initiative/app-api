@@ -63,7 +63,7 @@ class TicketTransfer extends Model
 
         $tickets->each(fn ($ticket) => $ticket->update(['user_id' => $user->id]));
 
-        $this->update(['completed' => true]);
+        $this->updateQuietly(['completed' => true, 'recipient_user_id' => $user->id]);
 
         return $this;
     }

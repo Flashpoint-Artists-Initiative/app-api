@@ -12,9 +12,17 @@ class TicketTransferPolicy extends AbstractModelPolicy
 {
     protected string $prefix = 'ticketTransfers';
 
-    public function update(User $user, Model $model): bool
+    public function view(User $user, Model $model): bool
     {
-        return false;
+        /** @var TicketTransfer $model */
+        if ($user->id === $model->user_id ||
+            $user->id === $model->recipient_user_id ||
+            ($model->completed == false && $user->email === $model->recipient_email)
+        ) {
+            return true;
+        }
+
+        return parent::view($user, $model);
     }
 
     public function delete(User $user, Model $model): bool
@@ -24,6 +32,24 @@ class TicketTransferPolicy extends AbstractModelPolicy
             return false;
         }
 
+        if ($user->id === $model->user_id) {
+            return true;
+        }
+
         return parent::delete($user, $model);
+    }
+
+    public function complete(User $user, Model $model): bool
+    {
+        /** @var TicketTransfer $model */
+        if ($model->completed) {
+            return false;
+        }
+
+        if ($user->email === $model->recipient_email) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -7,8 +7,10 @@ namespace App\Providers;
 use App\Events\EmailUpdated;
 use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\CartItem;
+use App\Models\Ticketing\TicketTransfer;
 use App\Observers\CartItemObserver;
 use App\Observers\CartObserver;
+use App\Observers\TicketTransferObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -33,6 +35,7 @@ class EventServiceProvider extends ServiceProvider
     protected $observers = [
         Cart::class => CartObserver::class,
         CartItem::class => CartItemObserver::class,
+        TicketTransfer::class => TicketTransferObserver::class,
     ];
 
     /**
