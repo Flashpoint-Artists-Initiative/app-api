@@ -70,7 +70,7 @@ abstract class AbstractModelPolicy
     /**
      * Determine whether the user can attach a many-to-many relation to the model
      *
-     * @param $relation  The name of the relation according to the $model
+     * @param  $relation  The name of the relation according to the $model
      */
     public function attach(User $user, Model $model, string $relation): bool
     {
@@ -80,7 +80,7 @@ abstract class AbstractModelPolicy
     /**
      * Determine whether the user can detach a many-to-many relation to the model
      *
-     * @param $relation  The name of the relation according to the $model
+     * @param  $relation  The name of the relation according to the $model
      */
     public function detach(User $user, Model $model, string $relation): bool
     {
