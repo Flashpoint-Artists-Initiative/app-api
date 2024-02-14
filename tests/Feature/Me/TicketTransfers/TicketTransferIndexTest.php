@@ -39,4 +39,12 @@ class TicketTransferIndexTest extends ApiRouteTestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_me_ticket_transfer_index_call_with_received_param_returns_success(): void
+    {
+        $this->addEndpointParams(['received' => true]);
+        $response = $this->actingAs($this->user)->get($this->endpoint);
+
+        $response->assertStatus(200);
+    }
 }

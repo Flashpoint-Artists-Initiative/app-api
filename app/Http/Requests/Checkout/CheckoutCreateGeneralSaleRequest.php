@@ -63,7 +63,9 @@ class CheckoutCreateGeneralSaleRequest extends FormRequest
             }
 
             // Attach the event_id to the request for easy reference later
-            $this->merge(['event_id' => $eventIds[0]]);
+            if (count($eventIds) > 0) {
+                $this->merge(['event_id' => $eventIds[0]]);
+            }
 
             // Ensure each ticket type is available to purchase
             $input = $this->input('tickets');

@@ -54,13 +54,15 @@ class CheckoutCreateReservedRequest extends FormRequest
             });
 
             // Validate that the ticket type event ids are all the same
-            $eventIds = $reservedTickets->pluck('event_id')->toArray();
+            $eventIds = $reservedTickets->pluck('ticketType.event_id')->toArray();
             if (count(array_unique($eventIds)) > 1) {
                 $validator->errors()->add('tickets', 'All ticket types must belong to the same event');
             }
 
             // Attach the event_id to the request for easy reference later
-            $this->merge(['event_id' => $eventIds[0]]);
+            if (count($eventIds) > 0) {
+                $this->merge(['event_id' => $eventIds[0]]);
+            }
 
             // Check each ticket type passed, make sure there are enough valid reserved tickets of the selected type
             foreach ($this->input('tickets') as $id) {

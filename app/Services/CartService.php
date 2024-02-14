@@ -146,11 +146,4 @@ class CartService
 
         return $item->ticketType->event_id;
     }
-
-    public function getEventIdFromSessionId(string $sessionId): int
-    {
-        $cart = $this->getCartFromSessionId($sessionId);
-
-        return $this->getEventIdFromCart($cart);
-    }
 }
