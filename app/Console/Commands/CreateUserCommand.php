@@ -58,6 +58,8 @@ class CreateUserCommand extends Command implements PromptsForMissingInput
                 'birthday' => $this->argument('birthday'),
                 'password' => $this->argument('legal_name'),
             ]);
+            $user->email_verified_at = now();
+            $user->save();
         } catch (UniqueConstraintViolationException $e) {
             $this->error($e->getPrevious()->getMessage());
 
@@ -67,7 +69,7 @@ class CreateUserCommand extends Command implements PromptsForMissingInput
         $role = $this->option('role');
         $roleText = '';
 
-        if ($role !== 'none') {
+        if ($role !== 'none' && $role !== null) {
             $user->assignRole($role);
             $roleText = 'and role <options=bold>' . RolesEnum::from($role)->label() . '</>';
         }
