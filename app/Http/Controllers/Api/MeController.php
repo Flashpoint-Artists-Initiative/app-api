@@ -29,6 +29,11 @@ class MeController extends Controller
         ];
     }
 
+    /**
+     * Get the currently logged in user
+     *
+     * Always returns the user's roles and permissions.  Optionally returns other relations
+     */
     public function indexAction(MeRequest $request)
     {
         $includes = array_merge($request->input('include', []), ['roles', 'permissions']);
@@ -39,7 +44,9 @@ class MeController extends Controller
         return new UserResource($user);
     }
 
-    // Going against naming convention here to use the existing UserRequest
+    /**
+     * Update the logged in user
+     */
     public function update(UserRequest $request)
     {
         /** @var User $user */
@@ -49,6 +56,11 @@ class MeController extends Controller
         return new UserResource($user);
     }
 
+    /**
+     * Get the logged in user's tickets
+     *
+     * Returns all purchased and reserved tickets
+     */
     public function ticketsAction()
     {
         /** @var User $user */
@@ -64,6 +76,9 @@ class MeController extends Controller
         ];
     }
 
+    /**
+     * Get the logged in user's orders
+     */
     public function ordersAction()
     {
         /** @var User $user */
@@ -73,6 +88,9 @@ class MeController extends Controller
         return OrderResource::collection($orders);
     }
 
+    /**
+     * Get the logged in user's waivers
+     */
     public function waiversAction()
     {
         /** @var User $user */

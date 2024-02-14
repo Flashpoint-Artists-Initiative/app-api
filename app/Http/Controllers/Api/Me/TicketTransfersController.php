@@ -12,6 +12,9 @@ use App\Policies\MeTicketTransferPolicy;
 use Illuminate\Database\Eloquent\Builder;
 use Orion\Http\Requests\Request;
 
+/**
+ * @tags Me/TicketTransfers
+ */
 class TicketTransfersController extends OrionController
 {
     protected $model = TicketTransfer::class;
@@ -26,11 +29,23 @@ class TicketTransfersController extends OrionController
     protected function buildIndexFetchQuery(Request $request, array $requestedRelations): Builder
     {
         $query = parent::buildIndexFetchQuery($request, $requestedRelations);
-        $query->where('user_id', auth()->user()->id);
+
+        if ($request->input('received', false) == true) {
+            $query->where('recipient_user_id', auth()->user()->id)
+                ->orWhere(function (Builder $innerQuery) {
+                    $innerQuery->whereNull('recipient_user_id')
+                        ->where('recipient_email', auth()->user()->email);
+                });
+        } else {
+            $query->where('user_id', auth()->user()->id);
+        }
 
         return $query;
     }
 
+    /**
+     * Initiate a ticket transfer
+     */
     public function transferAction(TicketTransferCreateRequest $request)
     {
         $transfer = TicketTransfer::createTransfer($request->getTransferUser()->id, $request->email, $request->purchased_tickets, $request->reserved_tickets);
@@ -38,6 +53,9 @@ class TicketTransfersController extends OrionController
         return new TicketTransferResource($transfer);
     }
 
+    /**
+     * Complete a ticket transfer
+     */
     public function completeAction(Request $request, TicketTransfer $ticketTransfer)
     {
         $this->authorize('complete', [$ticketTransfer]);
