@@ -30,7 +30,9 @@ class TicketTransfersController extends OrionController
     {
         $query = parent::buildIndexFetchQuery($request, $requestedRelations);
 
-        if ($request->input('received', false) == true) {
+        $method = $request->route()->getActionMethod();
+
+        if ($method === 'received') {
             $query->where('recipient_user_id', auth()->user()->id)
                 ->orWhere(function (Builder $innerQuery) {
                     $innerQuery->whereNull('recipient_user_id')
@@ -63,5 +65,13 @@ class TicketTransfersController extends OrionController
         $ticketTransfer->complete();
 
         return response()->json(status: 204);
+    }
+
+    /**
+     * Get received transfers
+     */
+    public function received(Request $request)
+    {
+        return parent::index($request);
     }
 }

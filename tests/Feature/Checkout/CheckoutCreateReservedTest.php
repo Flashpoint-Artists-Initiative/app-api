@@ -200,6 +200,15 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         ]);
 
         $ticketType = TicketType::query()->available()->first();
+        $secondEventTicketType = TicketType::query()->available()->where('event_id', '!=', $ticketType->event_id)->first();
+        $firstTicket = $this->createReservedTicket([
+            'user_id' => $user->id,
+            'ticket_type_id' => $ticketType->id,
+        ]);
+        $secondEventTicket = $this->createReservedTicket([
+            'user_id' => $user->id,
+            'ticket_type_id' => $secondEventTicketType->id,
+        ]);
 
         // Malformed request
         $response = $this->actingAs($user)->postJson($this->endpoint, [
@@ -257,6 +266,16 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'tickets' => [
                 $notOnSaleReservedTicketWithoutExpiration->id,
+            ],
+        ]);
+
+        $response->assertStatus(422);
+
+        // Two tickets from different events
+        $response = $this->actingAs($user)->postJson($this->endpoint, [
+            'tickets' => [
+                $firstTicket->id,
+                $secondEventTicket->id,
             ],
         ]);
 
