@@ -128,10 +128,29 @@ class CartService
 
     public function resolveCompletedCart(string $sessionId, int $orderId): void
     {
-        $this->assertSessionHasCart($sessionId);
-
-        $cart = Cart::query()->stripeCheckoutId($sessionId)->firstOrFail();
+        $cart = $this->getCartFromSessionId($sessionId);
 
         $cart->items->each(fn ($item) => PurchasedTicket::createFromCartItem($item, $cart->user_id, $orderId));
+    }
+
+    public function getCartFromSessionId(string $sessionId): Cart
+    {
+        $this->assertSessionHasCart($sessionId);
+
+        return Cart::query()->stripeCheckoutId($sessionId)->firstOrFail();
+    }
+
+    public function getEventIdFromCart(Cart $cart): int
+    {
+        $item = $cart->items->first();
+
+        return $item->ticketType->event_id;
+    }
+
+    public function getEventIdFromSessionId(string $sessionId): int
+    {
+        $cart = $this->getCartFromSessionId($sessionId);
+
+        return $this->getEventIdFromCart($cart);
     }
 }

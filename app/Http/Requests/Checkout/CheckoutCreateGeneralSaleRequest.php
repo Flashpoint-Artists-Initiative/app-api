@@ -49,7 +49,7 @@ class CheckoutCreateGeneralSaleRequest extends FormRequest
             $quantities = $this->input('tickets.*.quantity');
             $sum = array_sum($quantities);
             if ($sum > (int) config('app.cart_max_quantity')) {
-                $validator->errors()->add('quantity_sum', 'The total number of tickets in the cart cannot be more than ' . config('app.cart_max_quantity'));
+                $validator->errors()->add('tickets', 'The total number of tickets in the cart cannot be more than ' . config('app.cart_max_quantity'));
 
                 return;
             }
@@ -59,15 +59,18 @@ class CheckoutCreateGeneralSaleRequest extends FormRequest
             $ticketTypes = TicketType::findMany($ids);
             $eventIds = $ticketTypes->pluck('event_id')->toArray();
             if (count(array_unique($eventIds)) > 1) {
-                $validator->errors()->add('same_event', 'All ticket types must belong to the same event');
+                $validator->errors()->add('tickets', 'All ticket types must belong to the same event');
             }
+
+            // Attach the event_id to the request for easy reference later
+            $this->merge(['event_id' => $eventIds[0]]);
 
             // Ensure each ticket type is available to purchase
             $input = $this->input('tickets');
             foreach ($input as $key => $values) {
                 $ticketType = $ticketTypes->find($values['id']);
                 if (! $ticketType?->hasAvailable($values['quantity'])) {
-                    $validator->errors()->add("tickets.$key.available", 'This ticket type is sold out or unavailable for purchase');
+                    $validator->errors()->add("tickets.$key", 'This ticket type is sold out or unavailable for purchase');
                 }
             }
         });

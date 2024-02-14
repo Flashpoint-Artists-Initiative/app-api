@@ -37,8 +37,15 @@ class CheckoutController extends Controller
 
         $session = $this->stripeService->getCheckoutSession($cart->stripe_checkout_id);
 
+        $eventId = $this->cartService->getEventIdFromCart($cart);
+
+        /** @var User $user */
+        $user = auth()->user();
+        $hasSignedWaivers = $user->hasSignedWaiverFromEvent($eventId);
+
         return response()->json(['data' => [
             'clientSecret' => $session->client_secret,
+            'hasSignedWaiver' => $hasSignedWaivers,
         ]]);
     }
 
@@ -49,8 +56,13 @@ class CheckoutController extends Controller
         $session = $this->stripeService->createCheckoutFromCart($cart);
         $cart->setStripeCheckoutIdAndSave($session->id);
 
+        /** @var User $user */
+        $user = auth()->user();
+        $hasSignedWaivers = $user->hasSignedWaiverFromEvent($request->event_id);
+
         return response()->json(['data' => [
             'clientSecret' => $session->client_secret,
+            'hasSignedWaiver' => $hasSignedWaivers,
         ]], 201);
     }
 
@@ -61,8 +73,13 @@ class CheckoutController extends Controller
         $session = $this->stripeService->createCheckoutFromCart($cart);
         $cart->setStripeCheckoutIdAndSave($session->id);
 
+        /** @var User $user */
+        $user = auth()->user();
+        $hasSignedWaivers = $user->hasSignedWaiverFromEvent($request->event_id);
+
         return response()->json(['data' => [
             'clientSecret' => $session->client_secret,
+            'hasSignedWaiver' => $hasSignedWaivers,
         ]], 201);
     }
 

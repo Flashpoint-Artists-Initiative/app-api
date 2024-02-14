@@ -142,4 +142,11 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return [];
     }
+
+    public function hasSignedWaiverFromEvent(int $eventId): bool
+    {
+        return $this->waivers()->whereHas('waiver', function ($query) use ($eventId) {
+            return $query->where('event_id', $eventId);
+        })->count() > 0;
+    }
 }
