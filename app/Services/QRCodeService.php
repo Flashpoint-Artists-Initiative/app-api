@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Services\Helpers\SVGWithLogoOptions;
+use App\Services\Helpers\SvgWithLogoOptions;
 use chillerlan\QRCode\QRCode;
 
 class QRCodeService
 {
     public function buildQrCode(string $content): ?string
     {
-        $options = new SVGWithLogoOptions();
+        $options = new SvgWithLogoOptions();
 
         $out = (new QRCode($options))->render($content);
 
