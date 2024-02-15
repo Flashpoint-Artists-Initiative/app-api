@@ -1,7 +1,6 @@
 <?php
 
 $stripeIps = json_decode(file_get_contents(storage_path('stripeWebhookIPs.json')), true);
-$stripeIps[] = '127.0.0.1';  // For testing
 
 return [
 

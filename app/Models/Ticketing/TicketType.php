@@ -112,10 +112,26 @@ class TicketType extends Model
         $query->where('event_id', $eventId);
     }
 
+    public function scopeActiveEvent(Builder $query): void
+    {
+        $query->whereRelation('event', 'active', true);
+    }
+
     public function scopeAvailable(Builder $query): void
     {
         // @phpstan-ignore-next-line
         $query->active()->onSale()->hasQuantity();
+    }
+
+    public function scopeAdmittance(Builder $query, ?int $eventId = null): void
+    {
+        // @phpstan-ignore-next-line
+        $query->where('addon', false)->activeEvent();
+
+        if ($eventId) {
+            // @phpstan-ignore-next-line
+            $query->event($eventId);
+        }
     }
 
     /**

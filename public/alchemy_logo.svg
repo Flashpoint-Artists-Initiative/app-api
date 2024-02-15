@@ -1,0 +1,29 @@
+<svg id="Shape_3_copy_3_Image" data-name="Shape 3 copy 3 Image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 103.8 172">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #000cff;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: #00bf24;
+      }
+
+      .cls-3 {
+        fill: #fe0;
+      }
+
+      .cls-4 {
+        fill: #bf1b00;
+      }
+    </style>
+  </defs>
+  <path class="cls-4" d="M51.9,89.25l30.31,41.69H21.6l30.31-41.69M51.9,70.55L0,141.95h103.8l-51.9-71.4h0Z"/>
+  <path class="cls-3" d="M51.9,119.31l30.31,41.69H21.6l30.31-41.69M51.9,100.6L0,172h103.8l-51.9-71.4h0Z"/>
+  <path class="cls-1" d="M82.21,41.15l-30.31,41.69-30.31-41.69h60.61M103.8,30.15H0l51.9,71.4L103.8,30.15h0Z"/>
+  <path class="cls-2" d="M82.21,11l-30.31,41.69L21.6,11h60.61M103.8,0H0l51.9,71.4L103.8,0h0Z"/>
+</svg>

@@ -42,6 +42,7 @@ class Kernel extends HttpKernel
 
         'api' => [
             \App\Http\Middleware\ForceJsonResponse::class,
+            \App\Http\Middleware\SetAcceptHeaderJson::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],

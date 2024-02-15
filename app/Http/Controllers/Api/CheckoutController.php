@@ -41,7 +41,7 @@ class CheckoutController extends Controller
 
         /** @var User $user */
         $user = auth()->user();
-        $hasSignedWaivers = $user->hasSignedWaiverFromEvent($eventId);
+        $hasSignedWaivers = $user->hasSignedWaiverForEvent($eventId);
 
         return response()->json(['data' => [
             'clientSecret' => $session->client_secret,
@@ -58,7 +58,7 @@ class CheckoutController extends Controller
 
         /** @var User $user */
         $user = auth()->user();
-        $hasSignedWaivers = $user->hasSignedWaiverFromEvent($request->event_id);
+        $hasSignedWaivers = $user->hasSignedWaiverForEvent($request->event_id);
 
         return response()->json(['data' => [
             'clientSecret' => $session->client_secret,
@@ -75,7 +75,7 @@ class CheckoutController extends Controller
 
         /** @var User $user */
         $user = auth()->user();
-        $hasSignedWaivers = $user->hasSignedWaiverFromEvent($request->event_id);
+        $hasSignedWaivers = $user->hasSignedWaiverForEvent($request->event_id);
 
         return response()->json(['data' => [
             'clientSecret' => $session->client_secret,
