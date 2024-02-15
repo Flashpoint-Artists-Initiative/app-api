@@ -11,7 +11,7 @@ use chillerlan\QRCode\QROptions;
 /**
  * @codeCoverageIgnore
  */
-class SVGWithLogoOptions extends QROptions
+class SvgWithLogoOptions extends QROptions
 {
     // path to svg logo
     public string $svgLogo;
