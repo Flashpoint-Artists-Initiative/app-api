@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\CompletedWaiversController;
+use App\Http\Controllers\Api\Admin\CompletedWaiversController;
 use Illuminate\Support\Facades\Route;
 use Orion\Facades\Orion;
 
