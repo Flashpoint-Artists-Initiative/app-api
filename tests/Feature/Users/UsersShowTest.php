@@ -45,7 +45,7 @@ class UsersShowTest extends ApiRouteTestCase
     {
         $this->seed(UserSeeder::class);
 
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $this->assertTrue($user->can('users.view'));
         $this->assertNotEquals($this->routeParams['user'], $user->id);
@@ -75,7 +75,7 @@ class UsersShowTest extends ApiRouteTestCase
     {
         $this->seed(UserSeeder::class);
 
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $this->buildEndpoint(params: ['user' => $user->id, 'include' => 'roles']);
 
@@ -88,7 +88,7 @@ class UsersShowTest extends ApiRouteTestCase
     {
         $this->seed(UserSeeder::class);
 
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $this->buildEndpoint(params: ['user' => $user->id, 'include' => 'permissions']);
 

@@ -19,7 +19,7 @@ class WaiverCreateTest extends ApiRouteTestCase
     {
         $this->seed(WaiverSeeder::class);
 
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'title' => 'Test Waiver',
@@ -41,7 +41,7 @@ class WaiverCreateTest extends ApiRouteTestCase
     {
         $this->seed(WaiverSeeder::class);
 
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         // Bad title
         $response = $this->actingAs($user)->postJson($this->endpoint, [

@@ -93,7 +93,7 @@ class EventDeleteTest extends ApiRouteTestCase
         $event = Event::where('active', true)->first();
         $this->buildEndpoint(params: ['event' => $event->id]);
 
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -105,7 +105,7 @@ class EventDeleteTest extends ApiRouteTestCase
         $event = Event::where('active', true)->first();
         $this->buildEndpoint(params: ['event' => $event->id, 'force' => true]);
 
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -117,7 +117,7 @@ class EventDeleteTest extends ApiRouteTestCase
         $event = Event::where('active', true)->onlyTrashed()->first();
         $this->buildEndpoint(params: ['event' => $event->id, 'force' => true]);
 
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -129,7 +129,7 @@ class EventDeleteTest extends ApiRouteTestCase
         $event = Event::where('active', true)->onlyTrashed()->first();
         $this->buildEndpoint(name: 'api.events.restore', params: ['event' => $event->id]);
 
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($user)->post($this->endpoint);
 

@@ -22,7 +22,7 @@ class EventUpdateTest extends ApiRouteTestCase
 
     public function test_event_update_call_with_valid_data_returns_a_successful_response(): void
     {
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'name' => 'Test Event',
@@ -36,7 +36,7 @@ class EventUpdateTest extends ApiRouteTestCase
 
     public function test_event_update_call_with_invalid_data_returns_a_validation_error(): void
     {
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         // Bad email
         $response = $this->actingAs($user)->patchJson($this->endpoint, [

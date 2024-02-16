@@ -38,7 +38,7 @@ class UsersIndexTest extends ApiRouteTestCase
         $this->seed(UserSeeder::class);
 
         $user_count = User::count();
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 

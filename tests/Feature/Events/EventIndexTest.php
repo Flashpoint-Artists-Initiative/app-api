@@ -104,7 +104,7 @@ class EventIndexTest extends ApiRouteTestCase
 
         $this->assertGreaterThan($event_count, $all_event_count);
 
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);

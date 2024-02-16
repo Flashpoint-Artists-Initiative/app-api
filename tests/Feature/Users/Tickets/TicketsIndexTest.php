@@ -56,7 +56,7 @@ class TicketsIndexTest extends ApiRouteTestCase
     {
         $this->seed(UserSeeder::class);
 
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $this->assertTrue($user->can('users.view'));
         $this->assertNotEquals($this->routeParams['user'], $user->id);

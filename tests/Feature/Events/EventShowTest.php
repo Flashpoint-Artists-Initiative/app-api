@@ -56,7 +56,7 @@ class EventShowTest extends ApiRouteTestCase
         $event = Event::where('active', false)->first();
         $this->buildEndpoint(params: ['event' => $event->id]);
 
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
@@ -68,7 +68,7 @@ class EventShowTest extends ApiRouteTestCase
         $event = Event::where('active', true)->onlyTrashed()->first();
         $this->buildEndpoint(params: ['event' => $event->id, 'with_trashed' => true]);
 
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 

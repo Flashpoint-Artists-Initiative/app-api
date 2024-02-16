@@ -22,7 +22,7 @@ class WaiverUpdateTest extends ApiRouteTestCase
 
     public function test_waiver_update_call_with_valid_data_returns_a_successful_response(): void
     {
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'title' => 'Test Waiver Update',
@@ -34,7 +34,7 @@ class WaiverUpdateTest extends ApiRouteTestCase
 
     public function test_waiver_update_call_with_invalid_data_returns_a_validation_error(): void
     {
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         // Bad title
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
@@ -85,7 +85,7 @@ class WaiverUpdateTest extends ApiRouteTestCase
 
     public function test_waiver_update_call_with_completed_waivers_returns_error(): void
     {
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         CompletedWaiver::create(['user_id' => $user->id, 'waiver_id' => 1]);
 

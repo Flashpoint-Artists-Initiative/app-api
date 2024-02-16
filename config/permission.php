@@ -201,6 +201,7 @@ return [
                 'reservedTickets.*',
                 'ticketTransfers.*',
                 'completedWaivers.*',
+                'waivers.*',
                 'orders.*',
             ],
             RolesEnum::EventManager->value => [
@@ -217,6 +218,7 @@ return [
                 'ticketTypes.update',
                 'ticketTypes.delete',
                 'ticketTypes.restore',
+                'waivers.*',
             ],
             RolesEnum::BoxOffice->value => [
                 'events.viewPending',
@@ -303,6 +305,13 @@ return [
             'ticketTransfers.update',
             'ticketTransfers.delete',
             'ticketTransfers.*',
+
+            'waivers.viewAny',
+            'waivers.view',
+            'waivers.create',
+            'waivers.update',
+            'waivers.delete',
+            'waivers.*',
 
             'completedWaivers.viewAny',
             'completedWaivers.view',

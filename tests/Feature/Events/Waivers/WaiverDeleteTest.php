@@ -37,7 +37,7 @@ class WaiverDeleteTest extends ApiRouteTestCase
 
     public function test_waiver_delete_call_as_admin_succeeds(): void
     {
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 

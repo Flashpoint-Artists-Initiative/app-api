@@ -18,7 +18,7 @@ class EventCreateTest extends ApiRouteTestCase
     {
         $this->seed(UserSeeder::class);
 
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'name' => 'Test Event',
@@ -34,7 +34,7 @@ class EventCreateTest extends ApiRouteTestCase
     {
         $this->seed(UserSeeder::class);
 
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         // Bad email
         $response = $this->actingAs($user)->postJson($this->endpoint, [

@@ -17,7 +17,7 @@ class UsersCreateTest extends ApiRouteTestCase
     {
         $this->seed(UserSeeder::class);
 
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'legal_name' => fake()->name(),
@@ -34,7 +34,7 @@ class UsersCreateTest extends ApiRouteTestCase
     {
         $this->seed(UserSeeder::class);
 
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         // Bad legal_name
         $response = $this->actingAs($user)->postJson($this->endpoint, [

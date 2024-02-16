@@ -22,7 +22,7 @@ class UsersUpdateTest extends ApiRouteTestCase
 
     public function test_users_update_call_with_valid_data_returns_a_successful_response(): void
     {
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
         $model = User::find($this->routeParams['user']);
 
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
@@ -39,7 +39,7 @@ class UsersUpdateTest extends ApiRouteTestCase
 
     public function test_users_update_call_with_invalid_data_returns_a_validation_error(): void
     {
-        $user = User::role(RolesEnum::SuperAdmin)->first();
+        $user = User::role(RolesEnum::Admin)->first();
 
         // Bad legal_name
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
