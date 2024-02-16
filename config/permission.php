@@ -201,6 +201,7 @@ return [
                 'reservedTickets.*',
                 'ticketTransfers.*',
                 'completedWaivers.*',
+                'orders.*',
             ],
             RolesEnum::EventManager->value => [
                 'events.viewAny',
@@ -229,6 +230,7 @@ return [
                 'reservedTickets.update',
                 'reservedTickets.delete',
                 'ticketTransfers.*',
+                'orders.*',
             ],
             //Super Admin automatically has all permissions, see AuthServiceProvider
             RolesEnum::SuperAdmin->value => [],
@@ -307,6 +309,10 @@ return [
             'completedWaivers.create',
             'completedWaivers.delete',
             'completedWaivers.*',
+
+            'orders.viewAny',
+            'orders.view',
+            'orders.*',
         ],
     ],
 ];
