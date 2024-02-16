@@ -12,7 +12,7 @@ use Orion\Facades\Orion;
 | (User) Me Routes
 |--------------------------------------------------------------------------
 */
-Route::controller(MeController::class)->middleware(['auth'])->prefix('me')->as('api.me.')->group(function () {
+Route::controller(MeController::class)->middleware(['auth', 'token.refresh'])->prefix('me')->as('api.me.')->group(function () {
     Route::get('/', 'indexAction')->name('index');
     Route::match(['PUT', 'PATCH'], '/', 'update')->name('update');
     Route::get('/orders', 'ordersAction')->name('orders');

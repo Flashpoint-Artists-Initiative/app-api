@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 | Auth Routes
 |--------------------------------------------------------------------------
 */
-Route::controller(AuthController::class)->group(function () {
+Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::middleware(['guest:api'])->group(function () {
         Route::post('/login', 'loginAction')->name('login');
         Route::post('/register', 'registerAction')->name('register');
