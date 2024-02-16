@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\Events;
 
 use App\Http\Controllers\OrionRelationsController;
-use App\Http\Requests\CompletedWaiverRequest;
+use App\Http\Requests\WaiverCompleteRequest;
 use App\Models\Event;
 use App\Models\Ticketing\CompletedWaiver;
 use App\Models\Ticketing\Waiver;
@@ -23,7 +23,7 @@ class WaiversController extends OrionRelationsController
         parent::__construct();
     }
 
-    public function completeAction(Event $event, Waiver $waiver, CompletedWaiverRequest $request)
+    public function completeAction(Event $event, Waiver $waiver, WaiverCompleteRequest $request)
     {
         $this->authorize('complete', [$waiver]);
         $completedWaiver = CompletedWaiver::create([

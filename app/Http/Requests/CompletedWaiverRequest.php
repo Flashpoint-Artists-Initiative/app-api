@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Orion\Http\Requests\Request;
 
-class CompletedWaiverRequest extends FormRequest
+class CompletedWaiverRequest extends Request
 {
-    public function rules(): array
+    public function storeRules(): array
     {
         return [
+            'waiver_id' => ['required', 'integer', 'exists:waivers,id'],
+            'user_id' => ['required', 'integer', 'exists:users,id'],
             'form_data' => ['json', 'nullable'],
+            'paper_completion' => ['boolean', 'nullable'],
         ];
     }
 }
