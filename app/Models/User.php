@@ -12,8 +12,10 @@ use App\Models\Ticketing\Order;
 use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketTransfer;
+use App\Models\Volunteering\Shift;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -123,6 +125,11 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function ticketTransfers(): HasMany
     {
         return $this->hasMany(TicketTransfer::class);
+    }
+
+    public function shifts(): BelongsToMany
+    {
+        return $this->belongsToMany(Shift::class, 'shift_signups')->as('signup')->withTimestamps();
     }
 
     /**
