@@ -6,6 +6,7 @@ namespace Tests\Feature\Checkout;
 
 use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\CartItem;
+use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use Tests\ApiRouteTestCase;
@@ -80,6 +81,31 @@ class CheckoutCreateGeneralTest extends ApiRouteTestCase
 
         $this->assertCount($cartCount + 2, Cart::all());
         $this->assertCount($cartItemCount + 2, CartItem::all());
+    }
+
+    public function test_cart_create_call_with_general_and_reserved_data_returns_success(): void
+    {
+        $user = User::doesntHave('roles')->first();
+        $ticketType = TicketType::query()->available()->first();
+        $sameTicketType = TicketType::query()->event($ticketType->event_id)->where('id', '!=', $ticketType->id)->available()->first();
+        $reservedTicket = ReservedTicket::create([
+            'ticket_type_id' => $sameTicketType->id,
+            'user_id' => $user->id,
+        ]);
+
+        $response = $this->actingAs($user)->postJson($this->endpoint, [
+            'tickets' => [
+                [
+                    'id' => $ticketType->id,
+                    'quantity' => 2,
+                ],
+            ],
+            'reserved' => [
+                $reservedTicket->id,
+            ],
+        ]);
+
+        $response->assertStatus(201);
     }
 
     public function test_cart_create_call_with_invalid_data_returns_error(): void

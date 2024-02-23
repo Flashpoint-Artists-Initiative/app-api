@@ -67,7 +67,7 @@ class CartService
         }
     }
 
-    public function createGeneralSaleCartAndItems(array $tickets): Cart
+    public function createCartAndItems(array $tickets = [], array $reserved = []): Cart
     {
         $cart = Cart::create(['user_id' => auth()->user()->id]);
 
@@ -79,15 +79,8 @@ class CartService
             ]);
         }
 
-        return $cart;
-    }
-
-    public function createReservedCartAndItems(array $tickets): Cart
-    {
-        $cart = Cart::create(['user_id' => auth()->user()->id]);
         $reservedTickets = auth()->user()->reservedTickets;
-
-        foreach ($tickets as $reservedId) {
+        foreach ($reserved as $reservedId) {
             if ($reservedTicket = $reservedTickets->find($reservedId)) {
                 CartItem::create([
                     'cart_id' => $cart->id,

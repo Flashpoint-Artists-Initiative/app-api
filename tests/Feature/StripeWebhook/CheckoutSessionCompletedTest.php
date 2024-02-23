@@ -49,7 +49,7 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
 
         $ticketType = TicketType::query()->available()->first();
 
-        $cart = $cartService->createGeneralSaleCartAndItems([
+        $cart = $cartService->createCartAndItems([
             [
                 'id' => $ticketType->id,
                 'quantity' => 1,

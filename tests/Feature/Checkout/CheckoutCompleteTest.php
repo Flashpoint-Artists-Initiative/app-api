@@ -6,6 +6,7 @@ namespace Tests\Feature\Checkout;
 
 use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\Order;
+use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use App\Services\CartService;
@@ -42,12 +43,18 @@ class CheckoutCompleteTest extends ApiRouteTestCase
         $cartService = app()->make(CartService::class);
 
         $ticketType = TicketType::query()->available()->first();
+        $reservedTicket = ReservedTicket::create([
+            'ticket_type_id' => $ticketType->id,
+            'user_id' => auth()->user(),
+        ]);
 
-        $cart = $cartService->createGeneralSaleCartAndItems([
+        $cart = $cartService->createCartAndItems([
             [
                 'id' => $ticketType->id,
                 'quantity' => 1,
             ],
+        ], [
+            $reservedTicket->id,
         ]);
 
         $cart->setStripeCheckoutIdAndSave($this->session->id);

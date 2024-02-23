@@ -6,8 +6,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Checkout\CheckoutCompleteRequest;
-use App\Http\Requests\Checkout\CheckoutCreateGeneralSaleRequest;
-use App\Http\Requests\Checkout\CheckoutCreateReservedRequest;
+use App\Http\Requests\Checkout\CheckoutCreateRequest;
 use App\Models\Ticketing\Cart;
 use App\Models\User;
 use App\Services\CartService;
@@ -49,27 +48,10 @@ class CheckoutController extends Controller
         ]]);
     }
 
-    public function createGeneralSaleAction(CheckoutCreateGeneralSaleRequest $request): JsonResponse
+    public function createAction(CheckoutCreateRequest $request): JsonResponse
     {
         $this->cartService->expireAllUnexpiredCarts();
-        $cart = $this->cartService->createGeneralSaleCartAndItems($request->tickets);
-        $session = $this->stripeService->createCheckoutFromCart($cart);
-        $cart->setStripeCheckoutIdAndSave($session->id);
-
-        /** @var User $user */
-        $user = auth()->user();
-        $hasSignedWaivers = $user->hasSignedWaiverForEvent($request->event_id);
-
-        return response()->json(['data' => [
-            'clientSecret' => $session->client_secret,
-            'hasSignedWaiver' => $hasSignedWaivers,
-        ]], 201);
-    }
-
-    public function createReservedAction(CheckoutCreateReservedRequest $request): JsonResponse
-    {
-        $this->cartService->expireAllUnexpiredCarts();
-        $cart = $this->cartService->createReservedCartAndItems($request->tickets);
+        $cart = $this->cartService->createCartAndItems($request->input('tickets', []), $request->input('reserved', []));
         $session = $this->stripeService->createCheckoutFromCart($cart);
         $cart->setStripeCheckoutIdAndSave($session->id);
 
