@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        if (app()->environment(['local', 'testing'])) {
+        if (app()->environment(['local', 'testing', 'development'])) {
             try {
                 User::factory()->unverified()->create([
                     'legal_name' => 'Unverified User',
