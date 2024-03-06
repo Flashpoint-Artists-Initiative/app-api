@@ -17,6 +17,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -56,11 +57,20 @@ class AuthController extends Controller
             $this->throwFailedAuthenticationException($request);
         }
 
+        /** @var User $user */
+        $user = auth()->user();
+
+        /** @var Collection $collection */
+        $collection = $user->getAllPermissions();
+
+        $permissions = $collection->map(fn ($p) => $p->name);
+
         // Returns a new JWT
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $this->guard->factory()->getTTL() * 60,
+            'permissions' => $permissions,
         ]);
     }
 

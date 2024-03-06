@@ -29,7 +29,7 @@ class LoginTest extends ApiRouteTestCase
 
         $response->assertJson(function (AssertableJson $json) {
             return $json->where('token_type', 'bearer')
-                ->hasAll(['access_token', 'expires_in']);
+                ->hasAll(['access_token', 'expires_in', 'permissions']);
         });
     }
 
