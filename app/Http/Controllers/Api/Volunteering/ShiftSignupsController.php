@@ -5,7 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\Volunteering;
 
 use App\Http\Controllers\OrionRelationsController;
+use App\Http\Requests\Volunteering\ShiftCancelRequest;
+use App\Http\Requests\Volunteering\ShiftSignupRequest;
+use App\Models\User;
 use App\Models\Volunteering\Shift;
+use App\Policies\Volunteering\ShiftPolicy;
+use App\Policies\Volunteering\ShiftSignupPolicy;
+use Illuminate\Http\JsonResponse;
 
 class ShiftSignupsController extends OrionRelationsController
 {
@@ -13,18 +19,25 @@ class ShiftSignupsController extends OrionRelationsController
 
     protected $relation = 'volunteers';
 
-    public function __construct()
+    protected $policy = ShiftSignupPolicy::class;
+
+    protected $parentPolicy = ShiftPolicy::class;
+
+    public function signupAction(Shift $shift, ShiftSignupRequest $request): JsonResponse
     {
-        parent::__construct();
+        /** @var User $user */
+        $user = auth()->user();
+        $user->shifts()->attach($shift->id);
+
+        return response()->json(status: 204);
     }
 
-    public function signupAction()
+    public function cancelAction(Shift $shift, ShiftCancelRequest $request): JsonResponse
     {
+        /** @var User $user */
+        $user = auth()->user();
+        $user->shifts()->detach($shift->id);
 
-    }
-
-    public function cancelAction()
-    {
-
+        return response()->json(status: 204);
     }
 }

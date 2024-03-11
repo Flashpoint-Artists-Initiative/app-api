@@ -6,6 +6,7 @@ namespace App\Models\Volunteering;
 
 use App\Models\Event;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,6 +14,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
+/**
+ * @property int $total_num_spots
+ * @property float $percent_filled
+ */
 class Team extends Model
 {
     use HasFactory;
@@ -23,6 +28,10 @@ class Team extends Model
         'description',
         'email',
         'active',
+    ];
+
+    protected $withCount = [
+        'volunteers',
     ];
 
     public function event(): BelongsTo
@@ -37,11 +46,31 @@ class Team extends Model
 
     public function shifts(): HasManyThrough
     {
-        return $this->hasManyThrough(ShiftType::class, Shift::class);
+        return $this->hasManyThrough(Shift::class, ShiftType::class);
     }
 
     public function volunteers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'volunteer_data');
+    }
+
+    public function totalNumSpots(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                return $this->shifts->sum('num_spots');
+            }
+        );
+    }
+
+    public function percentFilled(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                $total = 100 * ($this->volunteers_count / max(1, $this->total_num_spots));
+
+                return sprintf('%.1f', $total);
+            }
+        );
     }
 }

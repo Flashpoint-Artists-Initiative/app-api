@@ -22,5 +22,8 @@ Route::middleware(['token.refresh'])->as('api.')->group(function () {
     Orion::resource('shift-requirements', RequirementsController::class)->withSoftDeletes();
 
     Orion::belongsToManyResource('shift-types', 'requirements', ShiftRequirementsController::class);
-    Orion::belongsToManyResource('shifts', 'signups', ShiftSignupsController::class);
+
+    Orion::belongsToManyResource('shifts', 'signups', ShiftSignupsController::class)->only(['search', 'index']);
+    Route::post('/shifts/{shift}/signup', [ShiftSignupsController::class, 'signupAction'])->name('api.shifts.signups.signup');
+    Route::post('/shifts/{shift}/cancel', [ShiftSignupsController::class, 'cancelAction'])->name('api.shifts.signups.cancel');
 });

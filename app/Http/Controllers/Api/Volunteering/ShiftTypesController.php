@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\Volunteering;
 
 use App\Http\Controllers\OrionRelationsController;
-use App\Http\Requests\Volunteering\ShiftRequest;
+use App\Http\Requests\Volunteering\ShiftTypeRequest;
 use App\Models\Volunteering\Team;
+use App\Policies\Volunteering\ShiftTypePolicy;
+use App\Policies\Volunteering\TeamPolicy;
 
 class ShiftTypesController extends OrionRelationsController
 {
@@ -14,7 +16,11 @@ class ShiftTypesController extends OrionRelationsController
 
     protected $relation = 'shiftTypes';
 
-    // protected $request = ShiftRequest::class;
+    protected $request = ShiftTypeRequest::class;
+
+    protected $policy = ShiftTypePolicy::class;
+
+    protected $parentPolicy = TeamPolicy::class;
 
     public function __construct()
     {

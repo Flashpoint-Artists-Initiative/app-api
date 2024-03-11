@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\Volunteering;
 use App\Http\Controllers\OrionRelationsController;
 use App\Http\Requests\Volunteering\TeamRequest;
 use App\Models\Event;
+use App\Policies\Volunteering\TeamPolicy;
 
 class TeamsController extends OrionRelationsController
 {
@@ -14,7 +15,9 @@ class TeamsController extends OrionRelationsController
 
     protected $relation = 'teams';
 
-    // protected $request = TeamRequest::class;
+    protected $request = TeamRequest::class;
+
+    protected $policy = TeamPolicy::class;
 
     public function __construct()
     {
