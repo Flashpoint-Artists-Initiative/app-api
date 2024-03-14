@@ -37,7 +37,9 @@ class UserResource extends JsonResource
             'permissions' => $this->formatPermissions(),
             'purchased_tickets' => $this->whenLoaded('purchasedTickets'),
             'reserved_tickets' => ReservedTicketResource::collection($this->whenLoaded('reservedTickets')),
-            'transfers' => TicketTransferResource::collection($this->whenLoaded('ticketTransfers')),
+            'ticketTransfers' => TicketTransferResource::collection($this->whenLoaded('ticketTransfers')),
+            'waivers' => WaiverResource::collection($this->whenLoaded('waivers')),
+            'orders' => OrderResource::collection($this->whenLoaded('orders')),
         ];
     }
 
