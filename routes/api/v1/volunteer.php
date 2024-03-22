@@ -14,8 +14,8 @@ use Orion\Facades\Orion;
 | Volunteer Routes
 |--------------------------------------------------------------------------
 */
-Route::middleware(['token.refresh'])->as('api.')->group(function () {
-    Orion::hasManyResource('events', 'teams', TeamsController::class)->except(['associate', 'dissociate', 'restore']);
+Route::middleware(['auth', 'token.refresh'])->as('api.')->group(function () {
+    Orion::hasManyResource('events', 'teams', TeamsController::class)->except(['associate', 'dissociate']);
     Orion::hasManyResource('teams', 'shift-types', ShiftTypesController::class)->except(['associate', 'dissociate']);
     Orion::hasManyResource('shift-types', 'shifts', ShiftsController::class)->except(['associate', 'dissociate']);
 

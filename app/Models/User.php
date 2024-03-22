@@ -13,7 +13,9 @@ use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketTransfer;
 use App\Models\Volunteering\Shift;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -62,7 +64,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'birthday' => 'date:Y-m-d',
+        'birthday' => 'date:Y/m/d',
     ];
 
     /**
@@ -162,5 +164,13 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         $ticket = $this->purchasedTickets()->whereRelation('ticketType', fn ($query) => $query->admittance($eventId))->with('ticketType')->first();
 
         return $ticket;
+    }
+
+    public function birthday(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => $attributes['birthday'],
+            set: fn (string $value) => Carbon::parse($value)->format('Y-m-d'),
+        );
     }
 }

@@ -12,8 +12,9 @@ class ShiftRequest extends Request
     {
         return [
             'start_offset' => ['integer', 'gte:0'],
-            'length' => ['integer', 'gt:0'],
-            'num_spots' => ['integer', 'gt:0'],
+            'multiplier' => ['nullable', 'integer', 'gte:1'],
+            'length' => ['nullable', 'integer', 'gt:0'],
+            'num_spots' => ['nullable', 'integer', 'gt:0'],
         ];
     }
 

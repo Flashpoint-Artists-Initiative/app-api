@@ -331,6 +331,7 @@ return [
             'teams.viewAny',
             'teams.view',
             'teams.viewPending',
+            'teams.viewDeleted',
             'teams.create',
             'teams.update',
             'teams.delete',

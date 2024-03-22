@@ -21,11 +21,4 @@ class ShiftTypesController extends OrionRelationsController
     protected $policy = ShiftTypePolicy::class;
 
     protected $parentPolicy = TeamPolicy::class;
-
-    public function __construct()
-    {
-        $this->middleware('auth')->except(['index', 'show', 'search']);
-
-        parent::__construct();
-    }
 }

@@ -58,7 +58,15 @@ class Shift extends Model
 
     public function team(): HasOneThrough
     {
-        return $this->hasOneThrough(Team::class, ShiftType::class);
+        // Set the keys directly because we're effectively going backwards from the intended way
+        return $this->hasOneThrough(
+            Team::class,
+            ShiftType::class,
+            'id', // Foreign Key for shiftType
+            'id', // Foreign Key for team
+            'shift_type_id', // Local key for shift
+            'team_id' //Local key for shiftType
+        );
     }
 
     public function event(): Event

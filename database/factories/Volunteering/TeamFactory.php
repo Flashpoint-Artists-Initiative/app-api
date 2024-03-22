@@ -25,4 +25,11 @@ class TeamFactory extends Factory
             'active' => true,
         ];
     }
+
+    public function inactive(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'active' => false,
+        ]);
+    }
 }

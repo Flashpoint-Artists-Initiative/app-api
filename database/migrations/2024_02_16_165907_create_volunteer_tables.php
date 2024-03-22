@@ -38,7 +38,8 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->unsignedInteger('shift_type_id');
-            $table->unsignedInteger('start_offset');
+            $table->unsignedInteger('start_offset'); //minutes
+            $table->boolean('multiplier')->nullable();
             $table->unsignedInteger('length')->nullable();
             $table->unsignedInteger('num_spots')->nullable();
         });

@@ -13,7 +13,7 @@ class TeamRequest extends Request
         return [
             'name' => ['string', 'required'],
             'description' => ['string', 'required'],
-            'email' => ['nullable', 'string'],
+            'email' => ['nullable', 'string', 'email'],
             'active' => ['nullable', 'boolean'],
         ];
     }
@@ -23,7 +23,7 @@ class TeamRequest extends Request
         return [
             'name' => ['string'],
             'description' => ['string'],
-            'email' => ['string'],
+            'email' => ['string', 'email'],
             'active' => ['boolean'],
         ];
     }

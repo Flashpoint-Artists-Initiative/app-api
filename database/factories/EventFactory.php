@@ -20,8 +20,8 @@ class EventFactory extends Factory
         return [
             'name' => fake()->words(3, true),
             'location' => fake()->streetAddress(),
-            'start_date' => fake()->dateTimeBetween('-1 week'),
-            'end_date' => fake()->dateTimeBetween('+1 week', '+2 weeks'),
+            'start_date' => fake()->dateTimeBetween('-1 week')->format('Y-m-d'),
+            'end_date' => fake()->dateTimeBetween('+1 week', '+2 weeks')->format('Y-m-d'),
             'contact_email' => fake()->safeEmail(),
         ];
     }
@@ -39,8 +39,8 @@ class EventFactory extends Factory
             $start_date = fake()->dateTimeInInterval($offset, '+1 year');
 
             return [
-                'start_date' => $start_date,
-                'end_date' => $start_date->modify('+2 weeks'),
+                'start_date' => $start_date->format('Y-m-d'),
+                'end_date' => $start_date->modify('+2 weeks')->format('Y-m-d'),
             ];
         });
     }

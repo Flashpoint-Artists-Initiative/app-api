@@ -6,6 +6,7 @@ namespace App\Models\Volunteering;
 
 use App\Models\Event;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $total_num_spots
@@ -20,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  */
 class Team extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'event_id',
@@ -72,5 +74,20 @@ class Team extends Model
                 return sprintf('%.1f', $total);
             }
         );
+    }
+
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('active', 1);
+    }
+
+    public function scopeEvent(Builder $query, int $eventId): void
+    {
+        $query->where('event_id', $eventId);
+    }
+
+    public function scopeActiveEvent(Builder $query): void
+    {
+        $query->whereRelation('event', 'active', true);
     }
 }

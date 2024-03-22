@@ -15,9 +15,9 @@ class TeamPolicy extends AbstractModelPolicy
     /**
      * Allow unathenticated users to view all events
      *
-     * Filtering for non-active events happens in the TeamsController
+     * Filtering for non-active teams happens in the TeamsController
      */
-    public function viewAny(?User $user): bool
+    public function viewAny(User $user): bool
     {
         return true;
     }
@@ -25,16 +25,17 @@ class TeamPolicy extends AbstractModelPolicy
     /**
      * @param  Team  $team
      */
-    public function view(?User $user, $team): bool
+    public function view(User $user, $team): bool
     {
-        if ($team->active) {
+
+        if ($team->active && $team->event->active) {
             return true;
         }
 
-        if ($user?->can('teams.viewPending')) {
+        if ($user->can('teams.viewPending')) {
             return true;
         }
 
-        return false;
+        return parent::view($user, $team);
     }
 }
