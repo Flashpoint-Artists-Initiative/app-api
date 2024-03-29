@@ -34,6 +34,10 @@ class ShiftType extends Model
         'volunteers',
     ];
 
+    protected $with = [
+        'requirements',
+    ];
+
     public function event(): HasOneThrough
     {
         // Set the keys directly because we're effectively going backwards from the intended way
@@ -59,7 +63,7 @@ class ShiftType extends Model
 
     public function requirements(): BelongsToMany
     {
-        return $this->belongsToMany(Requirement::class, 'shift_requirements')->withTimestamps();
+        return $this->belongsToMany(Requirement::class, 'shift_type_requirements')->withTimestamps();
     }
 
     public function volunteers(): BelongsToMany

@@ -85,9 +85,4 @@ class Team extends Model
     {
         $query->where('event_id', $eventId);
     }
-
-    public function scopeActiveEvent(Builder $query): void
-    {
-        $query->whereRelation('event', 'active', true);
-    }
 }

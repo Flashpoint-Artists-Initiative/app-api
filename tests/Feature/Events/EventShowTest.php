@@ -8,6 +8,7 @@ use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
 use Database\Seeders\Testing\EventSeeder;
+use Database\Seeders\Testing\ShiftTypeSeeder;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;
 
@@ -109,5 +110,19 @@ class EventShowTest extends ApiRouteTestCase
         $response = $this->actingAs($user)->get($this->endpoint);
 
         $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->has('data.reserved_tickets'));
+    }
+
+    public function test_events_view_call_with_shift_types_is_successful(): void
+    {
+        $this->seed(ShiftTypeSeeder::class);
+
+        $user = User::role(RolesEnum::Admin)->first();
+        $event = Event::has('shiftTypes')->first();
+
+        $this->buildEndpoint(params: ['event' => $event->id, 'include' => 'shiftTypes']);
+
+        $response = $this->actingAs($user)->get($this->endpoint);
+
+        $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->has('data.shift_types'));
     }
 }

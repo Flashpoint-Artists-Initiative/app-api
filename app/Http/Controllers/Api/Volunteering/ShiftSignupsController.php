@@ -10,7 +10,6 @@ use App\Http\Requests\Volunteering\ShiftSignupRequest;
 use App\Models\User;
 use App\Models\Volunteering\Shift;
 use App\Policies\Volunteering\ShiftPolicy;
-use App\Policies\Volunteering\ShiftSignupPolicy;
 use Illuminate\Http\JsonResponse;
 
 class ShiftSignupsController extends OrionRelationsController
@@ -19,12 +18,12 @@ class ShiftSignupsController extends OrionRelationsController
 
     protected $relation = 'volunteers';
 
-    protected $policy = ShiftSignupPolicy::class;
-
     protected $parentPolicy = ShiftPolicy::class;
 
     public function signupAction(Shift $shift, ShiftSignupRequest $request): JsonResponse
     {
+        $this->authorize('view', [$shift]);
+
         /** @var User $user */
         $user = auth()->user();
         $user->shifts()->attach($shift->id);
@@ -34,6 +33,8 @@ class ShiftSignupsController extends OrionRelationsController
 
     public function cancelAction(Shift $shift, ShiftCancelRequest $request): JsonResponse
     {
+        $this->authorize('view', [$shift]);
+
         /** @var User $user */
         $user = auth()->user();
         $user->shifts()->detach($shift->id);

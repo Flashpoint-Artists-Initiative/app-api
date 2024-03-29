@@ -29,7 +29,7 @@ class ShiftSignupRequest extends FormRequest
             $shift = $this->route('shift');
 
             // Prevent signup if shift is full
-            if ($shift->volunteers_count >= $shift->length) {
+            if ($shift->volunteers_count >= $shift->num_spots) {
                 $validator->errors()->add('shift', 'This shift is full');
             }
 

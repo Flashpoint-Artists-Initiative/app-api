@@ -18,11 +18,4 @@ class ShiftRequirementsController extends OrionRelationsController
     protected $policy = ShiftRequirementPolicy::class;
 
     protected $parentPolicy = ShiftTypePolicy::class;
-
-    public function __construct()
-    {
-        $this->middleware('auth')->except(['index', 'show', 'search']);
-
-        parent::__construct();
-    }
 }
