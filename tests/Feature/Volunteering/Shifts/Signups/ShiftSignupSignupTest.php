@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Volunteering\Shifts;
+namespace Tests\Feature\Volunteering\Shifts\Signups;
 
 use App\Models\Event;
 use App\Models\User;
