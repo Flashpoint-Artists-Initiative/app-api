@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             PurchasedTicketSeeder::class,
             OrderSeeder::class,
             WaiverSeeder::class,
+            VolunteerSeeder::class,
         ]);
     }
 }

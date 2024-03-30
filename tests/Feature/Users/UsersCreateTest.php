@@ -30,6 +30,23 @@ class UsersCreateTest extends ApiRouteTestCase
         $response->assertStatus(201);
     }
 
+    public function test_users_create_call_with_different_birthday_formats_returns_a_successful_response(): void
+    {
+        $this->seed(UserSeeder::class);
+
+        $user = User::role(RolesEnum::Admin)->first();
+
+        $response = $this->actingAs($user)->postJson($this->endpoint, [
+            'legal_name' => fake()->name(),
+            'preferred_name' => fake()->userName(),
+            'email' => fake()->safeEmail(),
+            'birthday' => fake()->date('m/d/Y'),
+            'password' => 'password',
+        ]);
+
+        $response->assertStatus(201);
+    }
+
     public function test_users_create_call_with_invalid_data_returns_a_validation_error(): void
     {
         $this->seed(UserSeeder::class);

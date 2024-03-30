@@ -2,20 +2,26 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Api\Events;
+namespace App\Http\Controllers\Api\Volunteering;
 
 use App\Http\Controllers\OrionRelationsController;
+use App\Http\Requests\Volunteering\TeamRequest;
 use App\Models\Event;
 use App\Models\User;
+use App\Policies\Volunteering\TeamPolicy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Orion\Http\Requests\Request;
+use Illuminate\Http\Request;
 
-class TicketTypesController extends OrionRelationsController
+class TeamsController extends OrionRelationsController
 {
     protected $model = Event::class;
 
-    protected $relation = 'ticketTypes';
+    protected $relation = 'teams';
+
+    protected $request = TeamRequest::class;
+
+    protected $policy = TeamPolicy::class;
 
     public function __construct()
     {
@@ -24,24 +30,19 @@ class TicketTypesController extends OrionRelationsController
         parent::__construct();
     }
 
-    public function includes(): array
-    {
-        return ['event', 'purchasedTickets', 'reservedTickets', 'cartItems'];
-    }
-
     protected function buildIndexFetchQuery(Request $request, Model $event, array $requestedRelations): Relation
     {
         $relation = parent::buildIndexFetchQuery($request, $event, $requestedRelations);
         /** @var ?User $user */
         $user = auth()->user();
 
-        // Hide non-active ticketTypes for users without specific permission to view them
-        if (! $user?->can('ticketTypes.viewPending')) {
+        // Hide non-active teams for users without specific permission to view them
+        if (! $user?->can('teams.viewPending')) {
             $relation->getQuery()->where('active', true);
         }
 
-        // Hide soft-deleted ticketTypes for users without specific permission to view them
-        if (! $user?->can('ticketTypes.viewDeleted')) {
+        // Hide soft-deleted teams for users without specific permission to view them
+        if (! $user?->can('teams.viewDeleted')) {
             // @phpstan-ignore-next-line
             $relation->getQuery()->withoutTrashed();
         }
@@ -55,8 +56,8 @@ class TicketTypesController extends OrionRelationsController
         /** @var ?User $user */
         $user = auth()->user();
 
-        // Hide soft-deleted ticketTypes for users without specific permission to view them
-        if (! $user?->can('ticketTypes.viewDeleted')) {
+        // Hide soft-deleted teams for users without specific permission to view them
+        if (! $user?->can('teams.viewDeleted')) {
             // @phpstan-ignore-next-line
             $relation->getQuery()->withoutTrashed();
         }
