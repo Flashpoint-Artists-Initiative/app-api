@@ -50,7 +50,7 @@ jobs:
           composer-options: "--prefer-dist --optimize-autoloader"
 
       - name: Execute tests
-        run: vendor/bin/phpunit
+        run: php artisan test -p
         env:
           JWT_PRIVATE_KEY: ${{ vars.JWT_PRIVATE_KEY }}
           JWT_PUBLIC_KEY: ${{ vars.JWT_PUBLIC_KEY }}
