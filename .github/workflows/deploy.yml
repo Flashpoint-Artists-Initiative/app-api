@@ -59,9 +59,9 @@ jobs:
           JWT_PRIVATE_KEY: ${{ vars.JWT_PRIVATE_KEY }}
           JWT_PUBLIC_KEY: ${{ vars.JWT_PUBLIC_KEY }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          DB_USERNAME: ${{ secrets.PLANETSCALE_USERNAME }}
-          DB_PASSWORD: ${{ secrets.PLANETSCALE_PASSWORD }}
-          DB_HOST: ${{ vars.PLANETSCALE_HOST }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_HOST: ${{ secrets.DB_HOST }}
           DB_DATABASE: ${{ vars.DB_DATABASE }}
           APP_KEY: ${{ secrets.APP_KEY }}
           APP_URL: ${{ vars.APP_URL }}
