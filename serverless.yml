@@ -15,7 +15,8 @@ provider:
         DB_HOST: ${env:DB_HOST, ''}
         DB_DATABASE: ${env:DB_DATABASE, ''}
         APP_KEY: ${env:APP_KEY, ''}
-        MYSQL_ATTR_SSL_CA: /opt/bref/ssl/cert.pem
+        # MYSQL_ATTR_SSL_CA: /opt/bref/ssl/cert.pem
+        # MYSQL_ATTR_SSL_CA: /var/task/storage/certs/us-east-1-bundle.pem
         MAIL_MAILER: ${env:MAIL_MAILER, 'log'}
         APP_URL: ${env:APP_URL, 'localhost'}
         STRIPE_SECRET: ${env:STRIPE_SECRET, ''}
