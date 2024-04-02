@@ -9,16 +9,11 @@ use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
-use Database\Seeders\Testing\EventWithMultipleTicketTypesSeeder;
-use Database\Seeders\Testing\UserSeeder;
-use Database\Seeders\Testing\UserWithTicketsSeeder;
 use Tests\ApiRouteTestCase;
 
 class TicketTransferCreateTest extends ApiRouteTestCase
 {
-    public bool $seed = true;
-
-    public string $seeder = UserWithTicketsSeeder::class;
+    protected bool $seed = true;
 
     public string $routeName = 'api.users.ticket-transfers.store';
 
@@ -26,24 +21,28 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
     public User $user;
 
+    public ReservedTicket $reservedTicket;
+
+    public PurchasedTicket $purchasedTicket;
+
     public function setUp(): void
     {
         parent::setUp();
-        $this->user = User::has('purchasedTickets')->first();
-        $this->routeParams['user'] = $this->user->id;
-        $this->buildEndpoint();
+        $this->user = User::factory()->create();
+        $this->purchasedTicket = PurchasedTicket::factory()->for($this->user)->create();
+        $this->reservedTicket = ReservedTicket::factory()->for($this->user)->create();
+
+        $this->addEndpointParams(['user' => $this->user->id]);
     }
 
     public function test_ticket_transfer_create_call_with_valid_data_returns_a_successful_response(): void
     {
-        $this->seed(UserSeeder::class);
-
         $admin = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($admin)->postJson($this->endpoint, [
             'email' => 'test@test.com',
-            'purchased_tickets' => [$this->user->purchasedTickets->first()->id],
-            'reserved_tickets' => [$this->user->reservedTickets()->doesntHave('purchasedTicket')->first()->id],
+            'purchased_tickets' => [$this->purchasedTicket->id],
+            'reserved_tickets' => [$this->reservedTicket->id],
         ]);
 
         $response->assertStatus(201);
@@ -51,11 +50,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
     public function test_ticket_transfer_create_call_with_invalid_data_returns_a_validation_error(): void
     {
-        $this->seed(UserSeeder::class);
-
         $user = User::role(RolesEnum::Admin)->first();
-        $purchasedTicketId = $this->user->purchasedTickets->first()->id;
-        $reservedTicketId = $this->user->reservedTickets()->doesntHave('purchasedTicket')->first()->id;
 
         // No data
         $response = $this->actingAs($user)->postJson($this->endpoint, [
@@ -66,8 +61,8 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         //Bad email
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'bad_email',
-            'purchased_tickets' => [$purchasedTicketId],
-            'reserved_tickets' => [$reservedTicketId],
+            'purchased_tickets' => [$this->purchasedTicket->id],
+            'reserved_tickets' => [$this->reservedTicket->id],
         ]);
 
         $response->assertStatus(422);
@@ -76,7 +71,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
             'purchased_tickets' => 'one',
-            'reserved_tickets' => [$reservedTicketId],
+            'reserved_tickets' => [$this->reservedTicket->id],
         ]);
 
         $response->assertStatus(422);
@@ -84,7 +79,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         //Bad reserved_tickets
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
-            'purchased_tickets' => [$purchasedTicketId],
+            'purchased_tickets' => [$this->purchasedTicket->id],
             'reserved_tickets' => 'one',
         ]);
 
@@ -94,7 +89,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
             'purchased_tickets' => ['one'],
-            'reserved_tickets' => [$reservedTicketId],
+            'reserved_tickets' => [$this->reservedTicket->id],
         ]);
 
         $response->assertStatus(422);
@@ -103,7 +98,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
             'purchased_tickets' => [1000],
-            'reserved_tickets' => [$reservedTicketId],
+            'reserved_tickets' => [$this->reservedTicket->id],
         ]);
 
         $response->assertStatus(422);
@@ -111,8 +106,8 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         //Bad purchased_tickets.id - duplicate
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
-            'purchased_tickets' => [$purchasedTicketId, $purchasedTicketId],
-            'reserved_tickets' => [$reservedTicketId],
+            'purchased_tickets' => [$this->purchasedTicket->id, $this->purchasedTicket->id],
+            'reserved_tickets' => [$this->reservedTicket->id],
         ]);
 
         $response->assertStatus(422);
@@ -120,7 +115,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         //Bad reserved_tickets.id - not an int
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
-            'purchased_tickets' => [$purchasedTicketId],
+            'purchased_tickets' => [$this->purchasedTicket->id],
             'reserved_tickets' => ['one'],
         ]);
 
@@ -129,7 +124,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         //Bad reserved_tickets.id - invalid
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
-            'purchased_tickets' => [$purchasedTicketId],
+            'purchased_tickets' => [$this->purchasedTicket->id],
             'reserved_tickets' => [1000],
         ]);
 
@@ -138,8 +133,8 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         //Bad reserved_tickets.id - duplicate
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
-            'purchased_tickets' => [$purchasedTicketId],
-            'reserved_tickets' => [$reservedTicketId, $reservedTicketId],
+            'purchased_tickets' => [$this->purchasedTicket->id],
+            'reserved_tickets' => [$this->reservedTicket->id, $this->reservedTicket->id],
         ]);
 
         $response->assertStatus(422);
@@ -150,7 +145,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         //Bad purchased_tickets
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
-            'purchased_tickets' => [$purchasedTicketId],
+            'purchased_tickets' => [$this->purchasedTicket->id],
         ]);
 
         $response->assertStatus(422);
@@ -158,7 +153,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         //Bad reserved_tickets
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
-            'reserved_tickets' => [$reservedTicketId],
+            'reserved_tickets' => [$this->reservedTicket->id],
         ]);
 
         $response->assertStatus(422);
@@ -191,8 +186,6 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
     public function test_ticket_transfer_create_call_with_bad_purchased_ticket_data_returns_validation_error(): void
     {
-        $this->seed(EventWithMultipleTicketTypesSeeder::class);
-
         $nonTransferableTicket = PurchasedTicket::create([
             'user_id' => $this->user->id,
             'ticket_type_id' => TicketType::where('transferable', false)->first()->id,
@@ -208,8 +201,6 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
     public function test_ticket_transfer_create_call_with_bad_reserved_ticket_data_returns_validation_error(): void
     {
-        $this->seed(EventWithMultipleTicketTypesSeeder::class);
-
         $admin = User::role(RolesEnum::Admin)->first();
 
         $nonTransferableTicket = ReservedTicket::create([
@@ -255,8 +246,6 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
     public function test_ticket_transfer_create_call_with_duplicate_data_returns_validation_error(): void
     {
-        $this->seed(UserSeeder::class);
-
         $admin = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($admin)->postJson($this->endpoint, [

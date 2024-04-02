@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Tests\Feature\Me;
 
 use App\Models\User;
-use Database\Seeders\Testing\UserSeeder;
 use Tests\ApiRouteTestCase;
 
 class MeIndexTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = UserSeeder::class;
 
     public string $routeName = 'api.me.index';
 
@@ -33,7 +30,6 @@ class MeIndexTest extends ApiRouteTestCase
 
     public function test_me_index_call_with_includes_returns_success(): void
     {
-        $this->seed();
         // reservedTickets
         $user = User::has('reservedTickets')->first();
         $this->buildEndpoint(params: ['include' => 'reservedTickets']);

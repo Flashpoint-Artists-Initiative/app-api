@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Tests\Feature\Events\Waivers;
 
 use App\Models\Ticketing\Waiver;
-use Database\Seeders\Testing\WaiverSeeder;
 use Tests\ApiRouteTestCase;
 
 class WaiverIndexTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = WaiverSeeder::class;
 
     public string $routeName = 'api.events.waivers.index';
 

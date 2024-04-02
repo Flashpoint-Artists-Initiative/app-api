@@ -19,9 +19,13 @@ class DatabaseSeeder extends Seeder
             TicketTypeSeeder::class,
             ReservedTicketSeeder::class,
             PurchasedTicketSeeder::class,
+            TicketTransferSeeder::class,
             OrderSeeder::class,
             WaiverSeeder::class,
-            VolunteerSeeder::class,
+            TeamSeeder::class,
+            ShiftTypeSeeder::class,
+            ShiftSeeder::class,
+            ShiftRequirementSeeder::class,
         ]);
     }
 }

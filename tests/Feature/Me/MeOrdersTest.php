@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Tests\Feature\Me;
 
 use App\Models\User;
-use Database\Seeders\OrderSeeder;
 use Tests\ApiRouteTestCase;
 
 class MeOrdersTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = OrderSeeder::class;
 
     public string $routeName = 'api.me.orders';
 

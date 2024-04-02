@@ -8,14 +8,11 @@ use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
 use Carbon\Carbon;
-use Database\Seeders\Testing\EventWithMultipleTicketTypesSeeder;
 use Tests\ApiRouteTestCase;
 
 class TicketTypeUpdateTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = EventWithMultipleTicketTypesSeeder::class;
 
     public string $routeName = 'api.events.ticket-types.update';
 
@@ -53,15 +50,16 @@ class TicketTypeUpdateTest extends ApiRouteTestCase
     {
         $user = User::role(RolesEnum::Admin)->first();
         $event = Event::has('ticketTypes.purchasedTickets')->inRandomOrder()->first();
+        $ticketType = $event->ticketTypes()->has('purchasedTickets')->inRandomOrder()->first();
 
         $this->routeParams = [
             'event' => $event->id,
-            'ticket_type' => $event->ticketTypes()->has('purchasedTickets')->inRandomOrder()->first()->id,
+            'ticket_type' => $ticketType->id,
         ];
         $this->buildEndpoint();
 
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
-            'price' => 50,
+            'price' => $ticketType->price + 10,
         ]);
 
         $response->assertStatus(422);

@@ -2,18 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Volunteering\ShiftTypes;
+namespace Tests\Feature\Volunteering\Requirements;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
-use Database\Seeders\Testing\ShiftRequirementSeeder;
 use Tests\ApiRouteTestCase;
 
 class RequirementUpdateTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = ShiftRequirementSeeder::class;
 
     public string $routeName = 'api.shift-requirements.update';
 

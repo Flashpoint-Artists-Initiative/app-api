@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
-use Database\Seeders\Testing\UserSeeder;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
@@ -15,18 +14,20 @@ use Tests\ApiRouteTestCase;
 
 class ResetPasswordTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'password.update';
 
     public array $routeParams = [''];
 
     public function test_reset_password_call_with_valid_data_returns_a_successful_response(): void
     {
-        User::factory()->create([
+        $user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => Hash::make('oldpassword'),
         ]);
 
-        $token = Password::createToken(User::first());
+        $token = Password::createToken($user);
 
         Event::fake();
 
@@ -38,15 +39,15 @@ class ResetPasswordTest extends ApiRouteTestCase
 
         $response->assertStatus(200);
 
-        $this->assertTrue(Hash::check('newpassword', User::first()->password));
+        $user->refresh();
+
+        $this->assertTrue(Hash::check('newpassword', $user->password));
 
         Event::assertDispatched(PasswordReset::class);
     }
 
     public function test_reset_password_call_with_missing_data_returns_a_validation_error(): void
     {
-        $this->seed(UserSeeder::class);
-
         $response = $this->postJson($this->endpoint, []);
 
         $response->assertStatus(422)
@@ -55,8 +56,6 @@ class ResetPasswordTest extends ApiRouteTestCase
 
     public function test_reset_password_call_with_invalid_email_returns_a_validation_error(): void
     {
-        $this->seed(UserSeeder::class);
-
         $response = $this->postJson($this->endpoint, ['email' => 'invalid_email']);
 
         $response->assertStatus(422)
@@ -65,8 +64,6 @@ class ResetPasswordTest extends ApiRouteTestCase
 
     public function test_reset_password_call_with_invalid_password_returns_a_validation_error(): void
     {
-        $this->seed(UserSeeder::class);
-
         $response = $this->postJson($this->endpoint, ['password' => 'short']);
 
         $response->assertStatus(422)
@@ -75,8 +72,6 @@ class ResetPasswordTest extends ApiRouteTestCase
 
     public function test_reset_password_call_with_invalid_token_returns_a_validation_error(): void
     {
-        $this->seed(UserSeeder::class);
-
         $response = $this->postJson($this->endpoint, [
             'email' => 'regular@example.com',
             'password' => 'newpassword',
@@ -131,8 +126,6 @@ class ResetPasswordTest extends ApiRouteTestCase
 
     public function test_reset_password_call_while_logged_in_returns_an_error(): void
     {
-        $this->seed(UserSeeder::class);
-
         $user = User::find(1);
         $response = $this->actingAs($user)->postJson($this->endpoint, ['email' => $user->email]);
 

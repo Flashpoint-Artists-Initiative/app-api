@@ -6,16 +6,14 @@ namespace Tests\Feature\Events\TicketTypes;
 
 use App\Enums\RolesEnum;
 use App\Models\Event;
+use App\Models\Ticketing\TicketType;
 use App\Models\User;
-use Database\Seeders\Testing\EventWithMultipleTicketTypesSeeder;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;
 
 class TicketTypeShowTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = EventWithMultipleTicketTypesSeeder::class;
 
     public string $routeName = 'api.events.ticket-types.show';
 
@@ -35,7 +33,7 @@ class TicketTypeShowTest extends ApiRouteTestCase
     public function test_ticket_type_show_call_while_not_logged_in_does_not_return_pending_ticket_type(): void
     {
         $event = Event::has('ticketTypes')->where('active', true)->first();
-        $ticket_type = $event->ticketTypes()->where('active', false)->first();
+        $ticket_type = TicketType::factory()->for($event)->inactive()->create();
         $this->buildEndpoint(params: ['event' => $event->id, 'ticket_type' => $ticket_type->id]);
 
         $response = $this->get($this->endpoint);
@@ -46,7 +44,8 @@ class TicketTypeShowTest extends ApiRouteTestCase
     public function test_ticket_type_show_call_while_not_logged_in_does_not_return_trashed_ticket_type(): void
     {
         $event = Event::has('ticketTypes')->where('active', true)->first();
-        $ticket_type = $event->ticketTypes()->where('active', true)->onlyTrashed()->first();
+        /** @phpstan-ignore-next-line */
+        $ticket_type = TicketType::factory()->for($event)->trashed()->create();
         $this->buildEndpoint(params: ['event' => $event->id, 'ticket_type' => $ticket_type->id, 'with_trashed' => true]);
 
         $response = $this->get($this->endpoint);
@@ -57,7 +56,7 @@ class TicketTypeShowTest extends ApiRouteTestCase
     public function test_ticket_type_show_call_as_admin_returns_pending_ticket_type(): void
     {
         $event = Event::has('ticketTypes')->where('active', true)->first();
-        $ticket_type = $event->ticketTypes()->where('active', false)->first();
+        $ticket_type = TicketType::factory()->for($event)->inactive()->create();
         $this->buildEndpoint(params: ['event' => $event->id, 'ticket_type' => $ticket_type->id]);
 
         $user = User::role(RolesEnum::Admin)->first();
@@ -70,7 +69,8 @@ class TicketTypeShowTest extends ApiRouteTestCase
     public function test_ticket_type_show_call_as_admin_returns_trashed_ticket_type(): void
     {
         $event = Event::has('ticketTypes')->where('active', true)->first();
-        $ticket_type = $event->ticketTypes()->where('active', true)->onlyTrashed()->first();
+        /** @phpstan-ignore-next-line */
+        $ticket_type = TicketType::factory()->for($event)->trashed()->create();
         $this->buildEndpoint(params: ['event' => $event->id, 'ticket_type' => $ticket_type->id, 'with_trashed' => true]);
 
         $user = User::role(RolesEnum::Admin)->first();

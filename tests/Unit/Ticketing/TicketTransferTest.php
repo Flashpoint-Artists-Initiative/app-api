@@ -6,17 +6,14 @@ namespace Tests\Unit\Ticketing;
 
 use App\Models\Ticketing\TicketTransfer;
 use App\Models\User;
-use Database\Seeders\Testing\TicketTransferSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 
 class TicketTransferTest extends TestCase
 {
-    use RefreshDatabase;
+    use LazilyRefreshDatabase;
 
     public bool $seed = true;
-
-    public string $seeder = TicketTransferSeeder::class;
 
     public function test_second_completion(): void
     {

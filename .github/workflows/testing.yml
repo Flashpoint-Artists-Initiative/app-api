@@ -22,6 +22,17 @@ jobs:
         coverage: [xdebug]
     name: 'Tests - PHP ${{ matrix.php }}'
 
+    services:
+      mysql:
+        image: mysql:8.1
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testing
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -52,12 +63,14 @@ jobs:
       - name: Execute tests
         run: vendor/bin/phpunit
         env:
+          DB_USERNAME: root
+          DB_PASSWORD: password
           JWT_PRIVATE_KEY: ${{ vars.JWT_PRIVATE_KEY }}
           JWT_PUBLIC_KEY: ${{ vars.JWT_PUBLIC_KEY }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           STRIPE_SECRET: ${{ secrets.TEST_STRIPE_SECRET }}
-          STRIPE_PAYMENT_METHOD_CONFIG: ${{ vars.TEST_STRIPE_PAYMENT_METHOD_CONFIG }}
-          STRIPE_TAX_RATES: ${{ vars.TEST_STRIPE_TAX_RATES }}
+          STRIPE_PAYMENT_METHOD_CONFIG: ${{ vars.TESTING_STRIPE_PAYMENT_METHOD_CONFIG }}
+          STRIPE_TAX_RATES: ${{ vars.TESTING_STRIPE_TAX_RATES }}
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3

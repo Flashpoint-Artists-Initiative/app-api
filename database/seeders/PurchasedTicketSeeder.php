@@ -16,9 +16,9 @@ class PurchasedTicketSeeder extends Seeder
         $reservedTickets = ReservedTicket::inRandomOrder()->with('ticketType')->take(10)->get();
 
         foreach ($reservedTickets as $reservedTicket) {
-            PurchasedTicket::factory()->for($reservedTicket)->for($reservedTicket->ticketType)->forUser()->create();
+            PurchasedTicket::factory()->for($reservedTicket)->for($reservedTicket->ticketType)->create();
             for ($i = 0; $i < fake()->randomDigit(); $i++) {
-                PurchasedTicket::factory()->forUser()->for($reservedTicket->ticketType)->create();
+                PurchasedTicket::factory()->for($reservedTicket->user)->for($reservedTicket->ticketType)->create();
             }
         }
     }

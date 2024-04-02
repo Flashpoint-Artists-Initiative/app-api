@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
-use Database\Seeders\Testing\UserSeeder;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;
 
 class RegisterTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'register';
 
     public function test_registering_with_valid_data_returns_a_successful_response(): void
@@ -37,8 +38,6 @@ class RegisterTest extends ApiRouteTestCase
 
     public function test_registering_with_existing_email_returns_validation_errors(): void
     {
-        $this->seed(UserSeeder::class);
-
         $response = $this->postJson($this->endpoint, [
             'legal_name' => 'Test User',
             'email' => 'regular@example.com',
@@ -54,8 +53,6 @@ class RegisterTest extends ApiRouteTestCase
 
     public function test_registering_when_logged_in_returns_error(): void
     {
-        $this->seed(UserSeeder::class);
-
         $user = User::find(1);
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [

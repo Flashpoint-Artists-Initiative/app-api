@@ -7,16 +7,12 @@ namespace Tests\Feature\Events;
 use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
-use Database\Seeders\Testing\EventSeeder;
-use Database\Seeders\Testing\ShiftTypeSeeder;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;
 
 class EventShowTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = EventSeeder::class;
 
     public string $routeName = 'api.events.show';
 
@@ -114,8 +110,6 @@ class EventShowTest extends ApiRouteTestCase
 
     public function test_events_view_call_with_shift_types_is_successful(): void
     {
-        $this->seed(ShiftTypeSeeder::class);
-
         $user = User::role(RolesEnum::Admin)->first();
         $event = Event::has('shiftTypes')->first();
 

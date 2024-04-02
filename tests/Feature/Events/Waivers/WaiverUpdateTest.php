@@ -5,20 +5,27 @@ declare(strict_types=1);
 namespace Tests\Feature\Events\Waivers;
 
 use App\Enums\RolesEnum;
+use App\Models\Event;
 use App\Models\Ticketing\CompletedWaiver;
 use App\Models\User;
-use Database\Seeders\Testing\WaiverSeeder;
 use Tests\ApiRouteTestCase;
 
 class WaiverUpdateTest extends ApiRouteTestCase
 {
     public bool $seed = true;
 
-    public string $seeder = WaiverSeeder::class;
-
     public string $routeName = 'api.events.waivers.update';
 
     public array $routeParams = ['event' => 1, 'waiver' => 1];
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $event = Event::has('waivers')->first();
+        $waiver = $event->waivers->first();
+
+        $this->addEndpointParams(['event' => $event->id, 'waiver' => $waiver->id]);
+    }
 
     public function test_waiver_update_call_with_valid_data_returns_a_successful_response(): void
     {

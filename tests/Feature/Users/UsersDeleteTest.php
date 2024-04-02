@@ -6,11 +6,12 @@ namespace Tests\Feature\Users;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
-use Database\Seeders\Testing\UserSeeder;
 use Tests\ApiRouteTestCase;
 
 class UsersDeleteTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.users.destroy';
 
     public array $routeParams = ['user' => 1];
@@ -35,8 +36,6 @@ class UsersDeleteTest extends ApiRouteTestCase
 
     public function test_users_delete_call_without_permission_fails(): void
     {
-        $this->seed(UserSeeder::class);
-
         $this->generateUserForDeletion();
 
         $user = User::doesntHave('roles')->first();
@@ -50,8 +49,6 @@ class UsersDeleteTest extends ApiRouteTestCase
 
     public function test_users_delete_call_as_admin_succeeds(): void
     {
-        $this->seed(UserSeeder::class);
-
         $this->generateUserForDeletion();
 
         $user = User::role(RolesEnum::Admin)->first();
@@ -63,8 +60,6 @@ class UsersDeleteTest extends ApiRouteTestCase
 
     public function test_users_force_delete_call_as_admin_succeeds(): void
     {
-        $this->seed(UserSeeder::class);
-
         $this->generateUserForDeletion(true);
 
         $user = User::role(RolesEnum::Admin)->first();
@@ -76,8 +71,6 @@ class UsersDeleteTest extends ApiRouteTestCase
 
     public function test_users_force_delete_call_of_trashed_users_as_admin_succeeds(): void
     {
-        $this->seed(UserSeeder::class);
-
         $model = $this->generateUserForDeletion(true);
         $model->delete();
 
@@ -90,8 +83,6 @@ class UsersDeleteTest extends ApiRouteTestCase
 
     public function test_users_delete_restore_call_as_admin_succeeds(): void
     {
-        $this->seed(UserSeeder::class);
-
         $model = $this->generateUserForDeletion(true);
         $model->delete();
         $this->buildEndpoint(name: 'api.users.restore', params: ['user' => $model->id]);

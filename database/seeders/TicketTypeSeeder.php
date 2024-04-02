@@ -19,6 +19,7 @@ class TicketTypeSeeder extends Seeder
 
         foreach ($events as $event) {
             TicketType::factory()->for($event)->count(3)->create();
+            TicketType::factory()->for($event)->notTransferable()->create();
             TicketType::factory()->for($event)->inactive()->trashed()->create();
             TicketType::factory()->for($event)->inactive()->create();
             TicketType::factory()->for($event)->zeroQuantity()->create();

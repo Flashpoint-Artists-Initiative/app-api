@@ -6,14 +6,11 @@ namespace Tests\Feature\Me\Tickets;
 
 use App\Models\Event;
 use App\Models\User;
-use Database\Seeders\Testing\EventSeeder;
 use Tests\ApiRouteTestCase;
 
 class MeTicketsQrTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = EventSeeder::class;
 
     public string $routeName = 'api.me.tickets.qr';
 

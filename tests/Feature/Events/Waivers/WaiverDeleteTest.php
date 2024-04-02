@@ -5,19 +5,26 @@ declare(strict_types=1);
 namespace Tests\Feature\Events\Waivers;
 
 use App\Enums\RolesEnum;
+use App\Models\Event;
 use App\Models\User;
-use Database\Seeders\Testing\WaiverSeeder;
 use Tests\ApiRouteTestCase;
 
 class WaiverDeleteTest extends ApiRouteTestCase
 {
     public bool $seed = true;
 
-    public string $seeder = WaiverSeeder::class;
-
     public string $routeName = 'api.events.waivers.destroy';
 
     public array $routeParams = ['event' => 1, 'waiver' => 1];
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $event = Event::has('waivers')->first();
+        $waiver = $event->waivers->first();
+
+        $this->addEndpointParams(['event' => $event->id, 'waiver' => $waiver->id]);
+    }
 
     public function test_waiver_delete_call_while_not_logged_in_fails(): void
     {

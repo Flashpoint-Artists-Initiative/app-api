@@ -6,13 +6,13 @@ namespace Tests\Feature\Users;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
-use Database\Seeders\Testing\UserSeeder;
-use Database\Seeders\Testing\UserWithTicketsSeeder;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;
 
 class UsersShowTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.users.show';
 
     public array $routeParams = ['user' => 1];
@@ -26,8 +26,6 @@ class UsersShowTest extends ApiRouteTestCase
 
     public function test_users_view_call_without_permission_returns_error(): void
     {
-        $this->seed(UserSeeder::class);
-
         $user = User::factory()->create([
             'email' => 'newuser@example.com',
             'password' => 'password',
@@ -43,8 +41,6 @@ class UsersShowTest extends ApiRouteTestCase
 
     public function test_users_view_call_with_permission_is_successful(): void
     {
-        $this->seed(UserSeeder::class);
-
         $user = User::role(RolesEnum::Admin)->first();
 
         $this->assertTrue($user->can('users.view'));
@@ -57,8 +53,6 @@ class UsersShowTest extends ApiRouteTestCase
 
     public function test_users_view_call_to_own_id_without_permission_is_successful(): void
     {
-        $this->seed(UserSeeder::class);
-
         $user = User::doesntHave('roles')->first();
 
         $this->assertFalse($user->can('users.view'));
@@ -73,8 +67,6 @@ class UsersShowTest extends ApiRouteTestCase
 
     public function test_users_view_call_with_roles_is_successful(): void
     {
-        $this->seed(UserSeeder::class);
-
         $user = User::role(RolesEnum::Admin)->first();
 
         $this->buildEndpoint(params: ['user' => $user->id, 'include' => 'roles']);
@@ -86,8 +78,6 @@ class UsersShowTest extends ApiRouteTestCase
 
     public function test_users_view_call_with_permissions_is_successful(): void
     {
-        $this->seed(UserSeeder::class);
-
         $user = User::role(RolesEnum::Admin)->first();
 
         $this->buildEndpoint(params: ['user' => $user->id, 'include' => 'permissions']);
@@ -99,8 +89,6 @@ class UsersShowTest extends ApiRouteTestCase
 
     public function test_users_view_call_with_purchased_tickets_is_successful(): void
     {
-        $this->seed(UserWithTicketsSeeder::class);
-
         $user = User::has('purchasedTickets')->first();
 
         $this->buildEndpoint(params: ['user' => $user->id, 'include' => 'purchasedTickets']);
@@ -112,8 +100,6 @@ class UsersShowTest extends ApiRouteTestCase
 
     public function test_users_view_call_with_reserved_tickets_is_successful(): void
     {
-        $this->seed(UserWithTicketsSeeder::class);
-
         $user = User::has('reservedTickets')->first();
 
         $this->buildEndpoint(params: ['user' => $user->id, 'include' => 'reservedTickets']);

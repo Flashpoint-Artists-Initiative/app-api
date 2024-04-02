@@ -7,36 +7,20 @@ namespace Tests\Unit\Ticketing;
 use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\CartItem;
 use App\Models\User;
-use Database\Seeders\Testing\UserSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 
 class CartManagementTest extends TestCase
 {
-    use RefreshDatabase;
+    use LazilyRefreshDatabase;
 
     public bool $seed = true;
-
-    public string $seeder = UserSeeder::class;
-
-    // public function test_cart_create_twice_fails(): void
-    // {
-    //     $user = User::first();
-    //     Cart::create(['user_id' => $user->id]);
-
-    //     $this->assertCount(1, Cart::all());
-
-    //     Cart::create(['user_id' => $user->id]);
-
-    //     $this->assertCount(1, Cart::all());
-    // }
 
     public function test_cart_user_relation(): void
     {
         $user = User::first();
-        Cart::create(['user_id' => $user->id]);
+        $cart = Cart::create(['user_id' => $user->id]);
 
-        $cart = Cart::first();
         $this->assertEquals($user->id, $cart->user->id);
     }
 

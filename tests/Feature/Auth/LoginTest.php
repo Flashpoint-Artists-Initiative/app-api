@@ -4,22 +4,17 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Auth;
 
-use Database\Seeders\Testing\UserSeeder;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;
 
 class LoginTest extends ApiRouteTestCase
 {
-    // public bool $seed = true;
-
-    public string $seeder = UserSeeder::class;
+    public bool $seed = true;
 
     public string $routeName = 'login';
 
     public function test_logging_in_returns_a_successful_response(): void
     {
-        $this->seed(UserSeeder::class);
-
         $response = $this->postJson($this->endpoint, [
             'email' => 'regular@example.com',
             'password' => 'regular',
@@ -47,8 +42,6 @@ class LoginTest extends ApiRouteTestCase
 
     public function test_logging_in_without_a_password_returns_a_password_validation_error(): void
     {
-        $this->seed(UserSeeder::class);
-
         $response = $this->postJson($this->endpoint, [
             'email' => 'regular@example.com',
         ]);

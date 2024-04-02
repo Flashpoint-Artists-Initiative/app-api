@@ -11,6 +11,8 @@ use Tests\ApiRouteTestCase;
 
 class UserTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'auth.user';
 
     public function test_auth_user_call_requires_being_logged_in(): void

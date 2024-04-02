@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Tests\Feature\Me\TicketTransfers;
 
 use App\Models\User;
-use Database\Seeders\Testing\TicketTransferSeeder;
 use Tests\ApiRouteTestCase;
 
 class TicketTransferDeleteTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = TicketTransferSeeder::class;
 
     public string $routeName = 'api.me.ticket-transfers.destroy';
 

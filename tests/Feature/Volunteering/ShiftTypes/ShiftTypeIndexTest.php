@@ -8,14 +8,11 @@ use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Volunteering\Team;
-use Database\Seeders\Testing\ShiftTypeSeeder;
 use Tests\ApiRouteTestCase;
 
 class ShiftTypeIndexTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = ShiftTypeSeeder::class;
 
     public string $routeName = 'api.teams.shift-types.index';
 

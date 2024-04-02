@@ -2,20 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Volunteering\Shifts;
+namespace Tests\Feature\Volunteering\Shifts\Signups;
 
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Volunteering\Shift;
 use App\Models\Volunteering\Team;
-use Database\Seeders\Testing\ShiftSeeder;
 use Tests\ApiRouteTestCase;
 
 class ShiftSignupSignupTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = ShiftSeeder::class;
 
     public string $routeName = 'api.shifts.signups.signup';
 

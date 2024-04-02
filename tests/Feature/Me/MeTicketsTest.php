@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Tests\Feature\Me;
 
 use App\Models\User;
-use Database\Seeders\Testing\UserWithTicketsSeeder;
 use Tests\ApiRouteTestCase;
 
 class MeTicketsTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = UserWithTicketsSeeder::class;
 
     public string $routeName = 'api.me.tickets';
 

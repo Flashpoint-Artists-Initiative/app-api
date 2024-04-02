@@ -7,15 +7,11 @@ namespace Tests\Feature\Admin\Orders;
 use App\Enums\RolesEnum;
 use App\Models\Ticketing\Order;
 use App\Models\User;
-use Database\Seeders\OrderSeeder;
-use Database\Seeders\Testing\UserSeeder;
 use Tests\ApiRouteTestCase;
 
 class OrdersIndexTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = OrderSeeder::class;
 
     public string $routeName = 'api.admin.orders.index';
 
@@ -28,8 +24,6 @@ class OrdersIndexTest extends ApiRouteTestCase
 
     public function test_orders_index_call_without_permission_returns_error(): void
     {
-        $this->seed(UserSeeder::class);
-
         $user = User::doesntHave('roles')->first();
 
         $this->assertFalse($user->can('orders.viewAny'));
@@ -41,8 +35,6 @@ class OrdersIndexTest extends ApiRouteTestCase
 
     public function test_orders_index_call_with_permission_returns_success(): void
     {
-        $this->seed(UserSeeder::class);
-
         $count = Order::count();
         $user = User::role(RolesEnum::Admin)->first();
 
