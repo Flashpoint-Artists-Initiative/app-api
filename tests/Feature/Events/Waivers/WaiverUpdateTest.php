@@ -12,6 +12,8 @@ use Tests\ApiRouteTestCase;
 
 class WaiverUpdateTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.events.waivers.update';
 
     public array $routeParams = ['event' => 1, 'waiver' => 1];

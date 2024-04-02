@@ -8,14 +8,11 @@ use App\Enums\RolesEnum;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use Carbon\Carbon;
-use Database\Seeders\Testing\EventWithMultipleTicketTypesSeeder;
 use Tests\ApiRouteTestCase;
 
 class ReservedTicketCreateTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = EventWithMultipleTicketTypesSeeder::class;
 
     public string $routeName = 'api.ticket-types.reserved-tickets.store';
 

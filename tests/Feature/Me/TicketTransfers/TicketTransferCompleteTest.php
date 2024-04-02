@@ -6,14 +6,11 @@ namespace Tests\Feature\Me\TicketTransfers;
 
 use App\Models\Ticketing\TicketTransfer;
 use App\Models\User;
-use Database\Seeders\Testing\TicketTransferSeeder;
 use Tests\ApiRouteTestCase;
 
 class TicketTransferCompleteTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = TicketTransferSeeder::class;
 
     public string $routeName = 'api.me.ticket-transfers.complete';
 

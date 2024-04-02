@@ -10,6 +10,8 @@ use Tests\ApiRouteTestCase;
 
 class MeUpdateTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.me.update';
 
     public array $routeParams = ['user' => 1];

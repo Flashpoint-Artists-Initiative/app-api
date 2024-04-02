@@ -14,6 +14,8 @@ use Tests\ApiRouteTestCase;
 
 class ResetPasswordTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'password.update';
 
     public array $routeParams = [''];

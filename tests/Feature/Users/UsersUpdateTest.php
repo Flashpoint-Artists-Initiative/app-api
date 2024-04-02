@@ -6,15 +6,12 @@ namespace Tests\Feature\Users;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
-use Database\Seeders\Testing\UserSeeder;
 use Illuminate\Support\Facades\Hash;
 use Tests\ApiRouteTestCase;
 
 class UsersUpdateTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = UserSeeder::class;
 
     public string $routeName = 'api.users.update';
 

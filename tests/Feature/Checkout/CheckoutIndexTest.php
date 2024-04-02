@@ -7,7 +7,6 @@ namespace Tests\Feature\Checkout;
 use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
-use Database\Seeders\Testing\EventSeeder;
 use Tests\ApiRouteTestCase;
 
 class CheckoutIndexTest extends ApiRouteTestCase
@@ -15,8 +14,6 @@ class CheckoutIndexTest extends ApiRouteTestCase
     public string $routeName = 'api.checkout.index';
 
     public bool $seed = true;
-
-    public string $seeder = EventSeeder::class;
 
     public function test_cart_index_call_not_logged_in_returns_error(): void
     {

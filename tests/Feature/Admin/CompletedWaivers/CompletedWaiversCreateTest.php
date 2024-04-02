@@ -7,14 +7,11 @@ namespace Tests\Feature\Admin\CompletedWaivers;
 use App\Enums\RolesEnum;
 use App\Models\Ticketing\Waiver;
 use App\Models\User;
-use Database\Seeders\Testing\WaiverSeeder;
 use Tests\ApiRouteTestCase;
 
 class CompletedWaiversCreateTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = WaiverSeeder::class;
 
     public string $routeName = 'api.admin.completed-waivers.store';
 

@@ -12,6 +12,8 @@ use Tests\ApiRouteTestCase;
 
 class EventShowTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.events.show';
 
     public array $routeParams = ['event' => 1];

@@ -11,6 +11,8 @@ use Tests\ApiRouteTestCase;
 
 class OrdersIndexTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.admin.orders.index';
 
     public function test_orders_index_call_not_logged_in_returns_error(): void

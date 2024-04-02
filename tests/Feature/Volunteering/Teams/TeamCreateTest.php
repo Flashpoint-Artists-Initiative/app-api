@@ -10,6 +10,8 @@ use Tests\ApiRouteTestCase;
 
 class TeamCreateTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.events.teams.store';
 
     public array $routeParams = ['event' => 1];

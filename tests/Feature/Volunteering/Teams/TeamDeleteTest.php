@@ -11,6 +11,8 @@ use Tests\ApiRouteTestCase;
 
 class TeamDeleteTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.events.teams.destroy';
 
     public array $routeParams = ['event' => 1, 'team' => 1];

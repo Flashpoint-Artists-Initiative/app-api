@@ -11,6 +11,8 @@ use Tests\ApiRouteTestCase;
 
 class WaiverDeleteTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.events.waivers.destroy';
 
     public array $routeParams = ['event' => 1, 'waiver' => 1];

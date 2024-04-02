@@ -6,14 +6,11 @@ namespace Tests\Feature\TicketTypes\ReservedTickets;
 
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
-use Database\Seeders\Testing\EventWithMultipleTicketTypesSeeder;
 use Tests\ApiRouteTestCase;
 
 class ReservedTicketIndexTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = EventWithMultipleTicketTypesSeeder::class;
 
     public string $routeName = 'api.ticket-types.reserved-tickets.index';
 

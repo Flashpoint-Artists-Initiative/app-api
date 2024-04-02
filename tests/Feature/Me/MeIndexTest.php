@@ -9,6 +9,8 @@ use Tests\ApiRouteTestCase;
 
 class MeIndexTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.me.index';
 
     public function test_me_index_call_while_not_logged_in_returns_error(): void

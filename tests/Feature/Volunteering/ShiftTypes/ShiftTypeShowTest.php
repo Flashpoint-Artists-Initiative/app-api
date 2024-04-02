@@ -9,14 +9,11 @@ use App\Models\Event;
 use App\Models\User;
 use App\Models\Volunteering\ShiftType;
 use App\Models\Volunteering\Team;
-use Database\Seeders\Testing\ShiftTypeSeeder;
 use Tests\ApiRouteTestCase;
 
 class ShiftTypeShowTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = ShiftTypeSeeder::class;
 
     public string $routeName = 'api.teams.shift-types.show';
 

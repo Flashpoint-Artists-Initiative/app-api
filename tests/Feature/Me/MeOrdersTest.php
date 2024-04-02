@@ -9,6 +9,8 @@ use Tests\ApiRouteTestCase;
 
 class MeOrdersTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.me.orders';
 
     public function test_me_orders_call_while_not_logged_in_returns_error(): void

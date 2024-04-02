@@ -8,14 +8,11 @@ use App\Models\Event;
 use App\Models\User;
 use App\Models\Volunteering\Shift;
 use App\Models\Volunteering\Team;
-use Database\Seeders\Testing\ShiftSeeder;
 use Tests\ApiRouteTestCase;
 
 class ShiftSignupCancelTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = ShiftSeeder::class;
 
     public string $routeName = 'api.shifts.signups.cancel';
 

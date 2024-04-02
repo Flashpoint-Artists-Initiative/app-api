@@ -18,6 +18,8 @@ use Tests\ApiRouteTestCase;
 
 class CheckoutCompleteTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.checkout.complete';
 
     public Session $session;

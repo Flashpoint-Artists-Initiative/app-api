@@ -10,6 +10,8 @@ use Tests\ApiRouteTestCase;
 
 class TicketTransferDeleteTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.users.ticket-transfers.destroy';
 
     public array $routeParams = ['user' => 1];

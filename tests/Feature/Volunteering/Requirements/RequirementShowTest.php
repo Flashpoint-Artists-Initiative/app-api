@@ -7,14 +7,11 @@ namespace Tests\Feature\Volunteering\Requirements;
 use App\Enums\RolesEnum;
 use App\Models\User;
 use App\Models\Volunteering\Requirement;
-use Database\Seeders\Testing\ShiftRequirementSeeder;
 use Tests\ApiRouteTestCase;
 
 class RequirementShowTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = ShiftRequirementSeeder::class;
 
     public string $routeName = 'api.shift-requirements.show';
 

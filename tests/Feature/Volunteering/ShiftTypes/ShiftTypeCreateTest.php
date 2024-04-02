@@ -6,14 +6,11 @@ namespace Tests\Feature\Volunteering\ShiftTypes;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
-use Database\Seeders\Testing\TeamSeeder;
 use Tests\ApiRouteTestCase;
 
 class ShiftTypeCreateTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = TeamSeeder::class;
 
     public string $routeName = 'api.teams.shift-types.store';
 

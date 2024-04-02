@@ -9,14 +9,11 @@ use App\Models\Event;
 use App\Models\User;
 use App\Models\Volunteering\Shift;
 use App\Models\Volunteering\ShiftType;
-use Database\Seeders\Testing\ShiftSeeder;
 use Tests\ApiRouteTestCase;
 
 class ShiftIndexTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = ShiftSeeder::class;
 
     public string $routeName = 'api.shift-types.shifts.index';
 

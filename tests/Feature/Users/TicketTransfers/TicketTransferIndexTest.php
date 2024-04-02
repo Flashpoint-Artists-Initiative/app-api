@@ -10,6 +10,8 @@ use Tests\ApiRouteTestCase;
 
 class TicketTransferIndexTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.users.ticket-transfers.index';
 
     public array $routeParams = ['user' => 1];

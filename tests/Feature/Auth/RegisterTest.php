@@ -10,6 +10,8 @@ use Tests\ApiRouteTestCase;
 
 class RegisterTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'register';
 
     public function test_registering_with_valid_data_returns_a_successful_response(): void

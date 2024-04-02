@@ -7,14 +7,11 @@ namespace Tests\Feature\Events;
 use App\Enums\RolesEnum;
 use App\Models\User;
 use Carbon\Carbon;
-use Database\Seeders\Testing\EventSeeder;
 use Tests\ApiRouteTestCase;
 
 class EventUpdateTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = EventSeeder::class;
 
     public string $routeName = 'api.events.update';
 
