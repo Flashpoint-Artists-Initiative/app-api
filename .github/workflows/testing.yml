@@ -22,6 +22,17 @@ jobs:
         coverage: [xdebug]
     name: 'Tests - PHP ${{ matrix.php }}'
 
+    services:
+      mysql:
+        image: mysql:8.1
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testing
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -49,8 +60,14 @@ jobs:
         with:
           composer-options: "--prefer-dist --optimize-autoloader"
 
+
+      - name: Prepare Laravel
+        run: |
+          cp .env.ci .env
+          php artisan key:generate
+
       - name: Execute tests
-        run: php artisan test -p
+        run: vendor/bin/phpunit
         env:
           JWT_PRIVATE_KEY: ${{ vars.JWT_PRIVATE_KEY }}
           JWT_PUBLIC_KEY: ${{ vars.JWT_PUBLIC_KEY }}
