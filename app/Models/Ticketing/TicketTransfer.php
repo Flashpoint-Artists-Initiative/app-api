@@ -58,7 +58,6 @@ class TicketTransfer extends Model
         $user = User::where('email', $this->recipient_email)->firstOrFail();
 
         /** @var Collection $tickets */
-        // @phpstan-ignore-next-line
         $tickets = $this->purchasedTickets->concat($this->reservedTickets);
 
         $tickets->each(fn ($ticket) => $ticket->update(['user_id' => $user->id]));
