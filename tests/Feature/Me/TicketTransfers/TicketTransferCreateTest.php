@@ -28,7 +28,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->create();
+        $this->user = User::doesntHave('purchasedTickets')->doesntHave('reservedTickets')->first();
         $this->purchasedTicket = PurchasedTicket::factory()->for($this->user)->create();
         $this->reservedTicket = ReservedTicket::factory()->for($this->user)->create();
     }
