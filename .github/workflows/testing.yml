@@ -60,15 +60,11 @@ jobs:
         with:
           composer-options: "--prefer-dist --optimize-autoloader"
 
-
-      - name: Prepare Laravel
-        run: |
-          cp .env.ci .env
-          php artisan key:generate
-
       - name: Execute tests
         run: vendor/bin/phpunit
         env:
+          DB_USERNAME: root
+          DB_PASSWORD: password
           JWT_PRIVATE_KEY: ${{ vars.JWT_PRIVATE_KEY }}
           JWT_PUBLIC_KEY: ${{ vars.JWT_PUBLIC_KEY }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
