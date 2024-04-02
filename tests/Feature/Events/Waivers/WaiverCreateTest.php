@@ -10,6 +10,8 @@ use Tests\ApiRouteTestCase;
 
 class WaiverCreateTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.events.waivers.store';
 
     public array $routeParams = ['event' => 1];

@@ -9,6 +9,8 @@ use Tests\ApiRouteTestCase;
 
 class LoginTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'login';
 
     public function test_logging_in_returns_a_successful_response(): void

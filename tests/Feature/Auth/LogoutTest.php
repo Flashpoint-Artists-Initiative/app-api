@@ -9,6 +9,8 @@ use Tests\ApiRouteTestCase;
 
 class LogoutTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'logout';
 
     public function test_logging_out_invalidates_auth_token(): void

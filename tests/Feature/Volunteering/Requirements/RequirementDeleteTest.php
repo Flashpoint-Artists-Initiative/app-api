@@ -6,14 +6,11 @@ namespace Tests\Feature\Volunteering\ShiftTypes;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
-use Database\Seeders\Testing\ShiftRequirementSeeder;
 use Tests\ApiRouteTestCase;
 
 class RequirementDeleteTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = ShiftRequirementSeeder::class;
 
     public string $routeName = 'api.shift-requirements.destroy';
 

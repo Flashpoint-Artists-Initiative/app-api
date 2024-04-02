@@ -10,6 +10,8 @@ use Tests\ApiRouteTestCase;
 
 class TicketsIndexTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.users.tickets.index';
 
     public array $routeParams = ['user' => 1];

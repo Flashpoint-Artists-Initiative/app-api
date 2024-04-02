@@ -10,6 +10,8 @@ use Tests\ApiRouteTestCase;
 
 class ForgotPasswordTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'password.email';
 
     public function test_forgot_password_call_with_valid_data_returns_a_successful_response(): void

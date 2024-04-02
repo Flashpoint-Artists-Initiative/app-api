@@ -10,6 +10,8 @@ use Tests\ApiRouteTestCase;
 
 class OrdersShowTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.admin.orders.show';
 
     public array $routeParams = ['order' => 1];

@@ -10,6 +10,8 @@ use Tests\ApiRouteTestCase;
 
 class TicketTransferShowTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.users.ticket-transfers.show';
 
     public array $routeParams = ['user' => 1, 'ticket_transfer' => 1];

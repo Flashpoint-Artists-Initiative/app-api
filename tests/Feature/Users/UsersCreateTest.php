@@ -10,6 +10,8 @@ use Tests\ApiRouteTestCase;
 
 class UsersCreateTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.users.store';
 
     public function test_users_create_call_with_valid_data_returns_a_successful_response(): void

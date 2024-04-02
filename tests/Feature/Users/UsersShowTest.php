@@ -11,6 +11,8 @@ use Tests\ApiRouteTestCase;
 
 class UsersShowTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.users.show';
 
     public array $routeParams = ['user' => 1];

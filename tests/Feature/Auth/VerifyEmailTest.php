@@ -11,6 +11,8 @@ use Tests\ApiRouteTestCase;
 
 class VerifyEmailTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'verification.send';
 
     public function test_send_verification_email_endpoint_requires_being_logged_in(): void

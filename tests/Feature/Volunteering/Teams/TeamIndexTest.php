@@ -8,14 +8,11 @@ use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Volunteering\Team;
-use Database\Seeders\Testing\TeamSeeder;
 use Tests\ApiRouteTestCase;
 
 class TeamIndexTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = TeamSeeder::class;
 
     public string $routeName = 'api.events.teams.index';
 

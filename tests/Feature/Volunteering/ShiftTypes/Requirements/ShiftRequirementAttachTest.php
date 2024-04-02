@@ -9,14 +9,11 @@ use App\Models\Event;
 use App\Models\User;
 use App\Models\Volunteering\ShiftType;
 use App\Models\Volunteering\Team;
-use Database\Seeders\Testing\ShiftRequirementSeeder;
 use Tests\ApiRouteTestCase;
 
 class ShiftRequirementAttachTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = ShiftRequirementSeeder::class;
 
     public string $routeName = 'api.shift-types.requirements.attach';
 

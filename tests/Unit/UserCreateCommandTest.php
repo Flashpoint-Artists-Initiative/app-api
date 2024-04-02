@@ -12,6 +12,8 @@ class UserCreateCommandTest extends TestCase
 {
     use LazilyRefreshDatabase;
 
+    public bool $seed = true;
+
     public function test_user_create_with_provided_input_returns_success(): void
     {
         $count = User::count();

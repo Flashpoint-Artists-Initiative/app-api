@@ -11,6 +11,8 @@ use Tests\ApiRouteTestCase;
 
 class EventCreateTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.events.store';
 
     public function test_event_create_call_with_valid_data_returns_a_successful_response(): void

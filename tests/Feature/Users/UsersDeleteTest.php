@@ -10,6 +10,8 @@ use Tests\ApiRouteTestCase;
 
 class UsersDeleteTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.users.destroy';
 
     public array $routeParams = ['user' => 1];

@@ -58,6 +58,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
     {
         $this->addEndpointParams(['with_trashed' => true]);
 
+        /** @phpstan-ignore-next-line */
         TicketType::factory()->for($this->event)->trashed()->count(3)->create();
         $existing_ticket_type_count = TicketType::where('active', true)->event($this->event->id)->count();
         $ticket_type_count = TicketType::where('active', true)->event($this->event->id)->withTrashed()->count();
@@ -76,6 +77,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
     {
         $this->addEndpointParams(['with_trashed' => true]);
 
+        /** @phpstan-ignore-next-line */
         TicketType::factory()->for($this->event)->trashed()->count(3)->create();
         $existing_ticket_type_count = TicketType::where('active', true)->event($this->event->id)->count();
         $ticket_type_count = TicketType::where('active', true)->event($this->event->id)->withTrashed()->count();

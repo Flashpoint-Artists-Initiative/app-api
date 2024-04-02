@@ -6,14 +6,11 @@ namespace Tests\Feature\Volunteering\Requirements;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
-use Database\Seeders\Testing\ShiftTypeSeeder;
 use Tests\ApiRouteTestCase;
 
 class RequirementCreateTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = ShiftTypeSeeder::class;
 
     public string $routeName = 'api.shift-requirements.store';
 

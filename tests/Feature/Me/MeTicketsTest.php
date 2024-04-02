@@ -9,6 +9,8 @@ use Tests\ApiRouteTestCase;
 
 class MeTicketsTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.me.tickets';
 
     public function test_me_tickets_call_while_not_logged_in_returns_error(): void

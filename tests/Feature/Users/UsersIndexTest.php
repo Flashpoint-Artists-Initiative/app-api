@@ -10,6 +10,8 @@ use Tests\ApiRouteTestCase;
 
 class UsersIndexTest extends ApiRouteTestCase
 {
+    public bool $seed = true;
+
     public string $routeName = 'api.users.index';
 
     public function test_users_index_call_not_logged_in_returns_error(): void

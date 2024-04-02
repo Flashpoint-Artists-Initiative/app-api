@@ -44,6 +44,7 @@ class TicketTypeShowTest extends ApiRouteTestCase
     public function test_ticket_type_show_call_while_not_logged_in_does_not_return_trashed_ticket_type(): void
     {
         $event = Event::has('ticketTypes')->where('active', true)->first();
+        /** @phpstan-ignore-next-line */
         $ticket_type = TicketType::factory()->for($event)->trashed()->create();
         $this->buildEndpoint(params: ['event' => $event->id, 'ticket_type' => $ticket_type->id, 'with_trashed' => true]);
 
@@ -68,6 +69,7 @@ class TicketTypeShowTest extends ApiRouteTestCase
     public function test_ticket_type_show_call_as_admin_returns_trashed_ticket_type(): void
     {
         $event = Event::has('ticketTypes')->where('active', true)->first();
+        /** @phpstan-ignore-next-line */
         $ticket_type = TicketType::factory()->for($event)->trashed()->create();
         $this->buildEndpoint(params: ['event' => $event->id, 'ticket_type' => $ticket_type->id, 'with_trashed' => true]);
 

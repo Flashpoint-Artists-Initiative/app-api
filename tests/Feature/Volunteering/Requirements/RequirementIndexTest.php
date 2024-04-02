@@ -6,14 +6,11 @@ namespace Tests\Feature\Volunteering\ShiftTypes;
 
 use App\Models\User;
 use App\Models\Volunteering\Requirement;
-use Database\Seeders\Testing\ShiftRequirementSeeder;
 use Tests\ApiRouteTestCase;
 
 class RequirementIndexTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = ShiftRequirementSeeder::class;
 
     public string $routeName = 'api.shift-requirements.index';
 
