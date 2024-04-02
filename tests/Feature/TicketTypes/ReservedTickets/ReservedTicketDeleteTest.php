@@ -8,14 +8,11 @@ use App\Enums\RolesEnum;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
-use Database\Seeders\Testing\EventWithMultipleTicketTypesSeeder;
 use Tests\ApiRouteTestCase;
 
 class ReservedTicketDeleteTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = EventWithMultipleTicketTypesSeeder::class;
 
     public string $routeName = 'api.ticket-types.reserved-tickets.destroy';
 
@@ -29,7 +26,7 @@ class ReservedTicketDeleteTest extends ApiRouteTestCase
     {
         parent::setUp();
         $this->ticketType = TicketType::has('reservedTickets')->active()->first();
-        $this->reservedTicket = $this->ticketType->reservedTickets()->doesntHave('purchasedTicket')->first();
+        $this->reservedTicket = ReservedTicket::factory()->for($this->ticketType)->create();
 
         $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
     }

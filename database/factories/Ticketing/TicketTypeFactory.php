@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories\Ticketing;
 
+use App\Models\Event;
 use App\Models\Ticketing\ReservedTicket;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -28,6 +29,7 @@ class TicketTypeFactory extends Factory
             'description' => fake()->paragraph(),
             'active' => true,
             'transferable' => true,
+            'event_id' => Event::factory()->create()->id,
         ];
     }
 

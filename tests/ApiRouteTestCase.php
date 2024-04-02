@@ -6,16 +6,20 @@ namespace Tests;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 abstract class ApiRouteTestCase extends TestCase
 {
     use LazilyRefreshDatabase;
+    // use RefreshDatabase;
 
     public string $routeName;
 
     public array $routeParams = [];
 
     public string $endpoint;
+
+    public $connectionsToTransact = ['testing'];
 
     public function setUp(): void
     {

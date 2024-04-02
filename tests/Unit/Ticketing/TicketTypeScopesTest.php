@@ -7,17 +7,14 @@ namespace Tests\Unit\Ticketing;
 use App\Models\Event;
 use App\Models\Ticketing\TicketType;
 use Carbon\Carbon;
-use Database\Seeders\Testing\EventWithMultipleTicketTypesSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 
 class TicketTypeScopesTest extends TestCase
 {
-    use RefreshDatabase;
+    use LazilyRefreshDatabase;
 
     public bool $seed = true;
-
-    public string $seeder = EventWithMultipleTicketTypesSeeder::class;
 
     public function test_active_scope_returns_correct_models(): void
     {

@@ -5,16 +5,11 @@ declare(strict_types=1);
 namespace Tests\Feature\Me;
 
 use App\Models\User;
-use Database\Seeders\Testing\UserSeeder;
 use Illuminate\Support\Facades\Hash;
 use Tests\ApiRouteTestCase;
 
 class MeUpdateTest extends ApiRouteTestCase
 {
-    public bool $seed = true;
-
-    public string $seeder = UserSeeder::class;
-
     public string $routeName = 'api.me.update';
 
     public array $routeParams = ['user' => 1];

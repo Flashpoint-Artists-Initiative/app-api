@@ -9,15 +9,11 @@ use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
-use Database\Seeders\Testing\EventWithMultipleTicketTypesSeeder;
-use Database\Seeders\Testing\UserWithTicketsSeeder;
 use Tests\ApiRouteTestCase;
 
 class TicketTransferCreateTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = UserWithTicketsSeeder::class;
 
     public string $routeName = 'api.me.ticket-transfers.store';
 
@@ -25,10 +21,16 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
     public User $user;
 
+    public ReservedTicket $reservedTicket;
+
+    public PurchasedTicket $purchasedTicket;
+
     public function setUp(): void
     {
         parent::setUp();
-        $this->user = User::has('purchasedTickets')->first();
+        $this->user = User::factory()->create();
+        $this->purchasedTicket = PurchasedTicket::factory()->for($this->user)->create();
+        $this->reservedTicket = ReservedTicket::factory()->for($this->user)->create();
     }
 
     public function test_me_ticket_transfer_create_call_with_valid_data_returns_a_successful_response(): void
@@ -147,8 +149,6 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
     public function test_me_ticket_transfer_create_call_with_bad_purchased_ticket_data_returns_validation_error(): void
     {
-        $this->seed(EventWithMultipleTicketTypesSeeder::class);
-
         $nonTransferableTicket = PurchasedTicket::create([
             'user_id' => $this->user->id,
             'ticket_type_id' => TicketType::where('transferable', false)->first()->id,
@@ -175,8 +175,6 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
     public function test_me_ticket_transfer_create_call_with_bad_reserved_ticket_data_returns_validation_error(): void
     {
-        $this->seed(EventWithMultipleTicketTypesSeeder::class);
-
         $admin = User::role(RolesEnum::Admin)->first();
 
         $nonTransferableTicket = ReservedTicket::create([

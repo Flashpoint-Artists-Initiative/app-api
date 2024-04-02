@@ -7,17 +7,14 @@ namespace Tests\Unit\Ticketing;
 use App\Models\Ticketing\CompletedWaiver;
 use App\Models\Ticketing\Waiver;
 use App\Models\User;
-use Database\Seeders\Testing\WaiverSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 
 class CompletedWaiversTest extends TestCase
 {
-    use RefreshDatabase;
+    use LazilyRefreshDatabase;
 
     public bool $seed = true;
-
-    public string $seeder = WaiverSeeder::class;
 
     public function test_relations(): void
     {

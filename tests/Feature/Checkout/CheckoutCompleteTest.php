@@ -11,7 +11,6 @@ use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use App\Services\CartService;
 use App\Services\StripeService;
-use Database\Seeders\Testing\EventSeeder;
 use Mockery\MockInterface;
 use Stripe\Checkout\Session;
 use Stripe\Event;
@@ -20,10 +19,6 @@ use Tests\ApiRouteTestCase;
 class CheckoutCompleteTest extends ApiRouteTestCase
 {
     public string $routeName = 'api.checkout.complete';
-
-    public bool $seed = true;
-
-    public string $seeder = EventSeeder::class;
 
     public Session $session;
 
@@ -45,7 +40,7 @@ class CheckoutCompleteTest extends ApiRouteTestCase
         $ticketType = TicketType::query()->available()->first();
         $reservedTicket = ReservedTicket::create([
             'ticket_type_id' => $ticketType->id,
-            'user_id' => auth()->user(),
+            'user_id' => auth()->user()->id,
         ]);
 
         $cart = $cartService->createCartAndItems([
@@ -105,7 +100,7 @@ class CheckoutCompleteTest extends ApiRouteTestCase
 
         $response->assertStatus(204);
 
-        $this->assertEquals(1, User::first()->PurchasedTickets()->count());
+        $this->assertEquals(2, $user->PurchasedTickets()->count());
     }
 
     public function test_checkout_complete_call_with_incorrect_checkout_id_returns_error(): void

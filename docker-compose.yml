@@ -25,6 +25,7 @@ services:
     ports: [ '${DB_PORT}:3306' ]
     volumes:
       - ./.dev-db:/var/lib/mysql
+      - ./.docker:/docker-entrypoint-initdb.d
     environment:
       MYSQL_DATABASE: ${DB_DATABASE} 
       MYSQL_USER: ${DB_USERNAME}

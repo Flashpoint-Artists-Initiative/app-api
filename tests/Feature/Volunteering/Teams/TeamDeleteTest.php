@@ -7,15 +7,10 @@ namespace Tests\Feature\Volunteering\Teams;
 use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
-use Database\Seeders\Testing\TeamSeeder;
 use Tests\ApiRouteTestCase;
 
 class TeamDeleteTest extends ApiRouteTestCase
 {
-    public bool $seed = true;
-
-    public string $seeder = TeamSeeder::class;
-
     public string $routeName = 'api.events.teams.destroy';
 
     public array $routeParams = ['event' => 1, 'team' => 1];

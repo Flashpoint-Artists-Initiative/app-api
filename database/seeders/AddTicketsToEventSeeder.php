@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\Testing;
+namespace Database\Seeders;
 
 use App\Models\Event;
 use App\Models\Ticketing\PurchasedTicket;
@@ -15,12 +15,8 @@ class AddTicketsToEventSeeder extends Seeder
      */
     public function run(Event $event): void
     {
-        if (! app()->environment('testing')) {
-            throw new \Exception('Testing seeders can only be used during testing');
-        }
-
         $ticketType = TicketType::factory()->for($event)->create();
-        ReservedTicket::factory()->forUser()->for($ticketType)->count(3)->create();
+        // ReservedTicket::factory()->forUser()->for($ticketType)->count(3)->create();
         $reservedTicket = ReservedTicket::factory()->forUser()->for($ticketType)->create();
 
         PurchasedTicket::factory()->forUser()->for($ticketType)->create();

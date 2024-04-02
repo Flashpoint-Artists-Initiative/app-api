@@ -83,7 +83,10 @@ class Shift extends Model
     {
         return Attribute::make(
             get: function (?int $numSpots) {
-                return $numSpots ?? $this->shiftType->num_spots;
+                // Null-safe accessor for when a shiftType is deleted,
+                // it returns the model including sum(num_spots) for the child shifts
+                // TODO: Add events to delete child shifts, solving this problem
+                return $numSpots ?? $this->shiftType?->num_spots;
             }
         );
     }

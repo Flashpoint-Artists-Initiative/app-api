@@ -5,27 +5,28 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 
 class UserCreateCommandTest extends TestCase
 {
-    use RefreshDatabase;
+    use LazilyRefreshDatabase;
 
     public function test_user_create_with_provided_input_returns_success(): void
     {
-        $this->assertEquals(0, User::count());
+        $count = User::count();
 
         $this->artisan('user:create "Test User" "test@example.com" "1980-01-02", "password" --preferred_name="My Name" --role="admin" -y')->assertSuccessful();
 
-        $user = User::first();
+        $this->assertGreaterThan($count, User::count());
+
+        $user = User::latest('id')->first();
         $this->assertEquals($user->email, 'test@example.com');
         $this->assertTrue($user->hasRole('admin'));
     }
 
     public function test_user_create_command_with_prompts_returns_success(): void
     {
-        $this->assertEquals(0, User::count());
 
         $this->artisan('user:create')
             ->expectsQuestion('Legal Name', 'Test User')
@@ -45,7 +46,7 @@ class UserCreateCommandTest extends TestCase
             ->expectsConfirmation('Add user?', 'yes')
             ->assertSuccessful();
 
-        $user = User::first();
+        $user = User::latest('id')->first();
         $this->assertEquals($user->email, 'test@example.com');
         $this->assertTrue($user->hasRole('admin'));
     }
