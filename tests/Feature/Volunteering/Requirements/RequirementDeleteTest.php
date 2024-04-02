@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Volunteering\ShiftTypes;
+namespace Tests\Feature\Volunteering\Requirements;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
