@@ -87,7 +87,7 @@ class CheckoutCreateGeneralTest extends ApiRouteTestCase
     {
         $user = User::doesntHave('roles')->first();
         $ticketType = TicketType::query()->available()->first();
-        $sameTicketType = TicketType::query()->event($ticketType->event_id)->where('id', '!=', $ticketType->id)->available()->first();
+        $sameTicketType = TicketType::factory()->for($ticketType->event)->create();
         $reservedTicket = ReservedTicket::create([
             'ticket_type_id' => $sameTicketType->id,
             'user_id' => $user->id,
@@ -112,7 +112,7 @@ class CheckoutCreateGeneralTest extends ApiRouteTestCase
     {
         $user = User::doesntHave('roles')->first();
         $ticketType = TicketType::query()->available()->first();
-        $sameTicketType = TicketType::query()->event($ticketType->event_id)->where('id', '!=', $ticketType->id)->available()->first();
+        $sameTicketType = TicketType::factory()->for($ticketType->event)->create();
         $differentTicketType = TicketType::where('event_id', '!=', $ticketType->event_id)->available()->first();
         $inactiveTicketType = TicketType::where('active', false)->onSale()->hasQuantity()->first();
         $noQuantityTicketType = TicketType::where('quantity', 0)->onSale()->active()->first();

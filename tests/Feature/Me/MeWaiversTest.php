@@ -5,15 +5,10 @@ declare(strict_types=1);
 namespace Tests\Feature\Me;
 
 use App\Models\User;
-use Database\Seeders\Testing\WaiverSeeder;
 use Tests\ApiRouteTestCase;
 
 class MeWaiversTest extends ApiRouteTestCase
 {
-    public bool $seed = true;
-
-    public string $seeder = WaiverSeeder::class;
-
     public string $routeName = 'api.me.waivers';
 
     public function test_me_waivers_call_while_not_logged_in_returns_error(): void

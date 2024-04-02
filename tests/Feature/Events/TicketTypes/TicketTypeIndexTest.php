@@ -8,14 +8,11 @@ use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
-use Database\Seeders\Testing\EventWithMultipleTicketTypesSeeder;
 use Tests\ApiRouteTestCase;
 
 class TicketTypeIndexTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = EventWithMultipleTicketTypesSeeder::class;
 
     public string $routeName = 'api.events.ticket-types.index';
 
@@ -43,6 +40,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
 
     public function test_ticket_type_index_call_with_permission_returns_pending_types(): void
     {
+        TicketType::factory()->for($this->event)->inactive()->count(3)->create();
         $active_ticket_type_count = TicketType::where('active', true)->event($this->event->id)->withoutTrashed()->count();
         $ticket_type_count = TicketType::withoutTrashed()->event($this->event->id)->count();
 
@@ -60,6 +58,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
     {
         $this->addEndpointParams(['with_trashed' => true]);
 
+        TicketType::factory()->for($this->event)->trashed()->count(3)->create();
         $existing_ticket_type_count = TicketType::where('active', true)->event($this->event->id)->count();
         $ticket_type_count = TicketType::where('active', true)->event($this->event->id)->withTrashed()->count();
 
@@ -77,6 +76,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
     {
         $this->addEndpointParams(['with_trashed' => true]);
 
+        TicketType::factory()->for($this->event)->trashed()->count(3)->create();
         $existing_ticket_type_count = TicketType::where('active', true)->event($this->event->id)->count();
         $ticket_type_count = TicketType::where('active', true)->event($this->event->id)->withTrashed()->count();
 
@@ -112,6 +112,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
     {
         $this->addEndpointParams(['with_trashed' => true]);
 
+        TicketType::factory()->for($this->event)->count(3)->create();
         $ticket_type_count = TicketType::where('event_id', $this->event->id)->count();
         $all_ticket_type_count = TicketType::withTrashed()->event($this->event->id)->count();
 

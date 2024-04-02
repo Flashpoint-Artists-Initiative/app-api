@@ -7,7 +7,6 @@ namespace Tests\Feature\Events;
 use App\Enums\RolesEnum;
 use App\Models\User;
 use Carbon\Carbon;
-use Database\Seeders\Testing\UserSeeder;
 use Tests\ApiRouteTestCase;
 
 class EventCreateTest extends ApiRouteTestCase
@@ -16,8 +15,6 @@ class EventCreateTest extends ApiRouteTestCase
 
     public function test_event_create_call_with_valid_data_returns_a_successful_response(): void
     {
-        $this->seed(UserSeeder::class);
-
         $user = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
@@ -32,8 +29,6 @@ class EventCreateTest extends ApiRouteTestCase
 
     public function test_event_create_call_with_invalid_data_returns_a_validation_error(): void
     {
-        $this->seed(UserSeeder::class);
-
         $user = User::role(RolesEnum::Admin)->first();
 
         // Bad email
@@ -79,8 +74,6 @@ class EventCreateTest extends ApiRouteTestCase
 
     public function test_event_create_call_without_permission_returns_error(): void
     {
-        $this->seed(UserSeeder::class);
-
         $user = User::doesntHave('roles')->first();
 
         $this->assertFalse($user->can('events.create'));

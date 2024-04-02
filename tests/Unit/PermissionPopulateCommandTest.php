@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 
 class PermissionPopulateCommandTest extends TestCase
 {
-    use RefreshDatabase;
+    use LazilyRefreshDatabase;
+
+    public bool $seed = true;
 
     /**
      * A basic unit test example.

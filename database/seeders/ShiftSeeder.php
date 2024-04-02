@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\Testing;
+namespace Database\Seeders;
 
 use App\Models\Event;
 use App\Models\Volunteering\Shift;
@@ -13,8 +13,6 @@ class ShiftSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(ShiftTypeSeeder::class);
-
         $activeEvent = Event::where('active', true)->has('teams')->first();
         $inactiveEvent = Event::where('active', false)->has('teams')->first();
 

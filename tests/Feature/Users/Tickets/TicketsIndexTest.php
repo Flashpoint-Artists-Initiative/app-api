@@ -6,8 +6,6 @@ namespace Tests\Feature\Users\Tickets;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
-use Database\Seeders\Testing\UserSeeder;
-use Database\Seeders\Testing\UserWithTicketsSeeder;
 use Tests\ApiRouteTestCase;
 
 class TicketsIndexTest extends ApiRouteTestCase
@@ -15,10 +13,6 @@ class TicketsIndexTest extends ApiRouteTestCase
     public string $routeName = 'api.users.tickets.index';
 
     public array $routeParams = ['user' => 1];
-
-    public bool $seed = true;
-
-    public string $seeder = UserWithTicketsSeeder::class;
 
     public User $user;
 
@@ -54,8 +48,6 @@ class TicketsIndexTest extends ApiRouteTestCase
 
     public function test_user_tickets_index_call_with_permission_is_successful(): void
     {
-        $this->seed(UserSeeder::class);
-
         $user = User::role(RolesEnum::Admin)->first();
 
         $this->assertTrue($user->can('users.view'));

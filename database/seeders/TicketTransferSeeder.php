@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\Testing;
+namespace Database\Seeders;
 
 use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\TicketTransfer;
@@ -14,12 +14,6 @@ class TicketTransferSeeder extends Seeder
      */
     public function run(): void
     {
-        if (! app()->environment('testing')) {
-            throw new \Exception('Testing seeders can only be used during testing');
-        }
-
-        $this->call(EventWithMultipleTicketTypesSeeder::class);
-
         $user = User::has('purchasedTickets')->first();
 
         $transfer = TicketTransfer::factory()->for($user)->create();

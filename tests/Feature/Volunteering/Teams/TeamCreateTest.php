@@ -6,15 +6,10 @@ namespace Tests\Feature\Volunteering\Teams;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
-use Database\Seeders\Testing\EventSeeder;
 use Tests\ApiRouteTestCase;
 
 class TeamCreateTest extends ApiRouteTestCase
 {
-    public bool $seed = true;
-
-    public string $seeder = EventSeeder::class;
-
     public string $routeName = 'api.events.teams.store';
 
     public array $routeParams = ['event' => 1];

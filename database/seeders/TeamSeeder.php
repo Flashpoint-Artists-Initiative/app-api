@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\Testing;
+namespace Database\Seeders;
 
 use App\Models\Event;
 use App\Models\Volunteering\Team;
@@ -13,8 +13,6 @@ class TeamSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(EventSeeder::class);
-
         $event = Event::where('active', true)->first();
         $inactive = Event::where('active', false)->first();
 

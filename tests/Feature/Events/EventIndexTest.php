@@ -7,14 +7,11 @@ namespace Tests\Feature\Events;
 use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
-use Database\Seeders\Testing\EventSeeder;
 use Tests\ApiRouteTestCase;
 
 class EventIndexTest extends ApiRouteTestCase
 {
     public bool $seed = true;
-
-    public string $seeder = EventSeeder::class;
 
     public string $routeName = 'api.events.index';
 
@@ -39,8 +36,7 @@ class EventIndexTest extends ApiRouteTestCase
         $user->givePermissionTo('events.viewPending');
 
         $response = $this->actingAs($user)->get($this->endpoint);
-        $response->assertStatus(200);
-        $this->assertEquals($event_count, $response->baseResponse->original->count());
+        $response->assertStatus(200)->assertJsonPath('meta.total', $event_count);
     }
 
     public function test_event_index_call_with_permission_returns_trashed_events(): void
@@ -56,8 +52,7 @@ class EventIndexTest extends ApiRouteTestCase
         $user->givePermissionTo('events.viewDeleted');
 
         $response = $this->actingAs($user)->get($this->endpoint);
-        $response->assertStatus(200);
-        $this->assertEquals($event_count, $response->baseResponse->original->count());
+        $response->assertStatus(200)->assertJsonPath('meta.total', $event_count);
     }
 
     public function test_event_index_call_without_permission_ignores_trashed_events(): void
@@ -73,9 +68,8 @@ class EventIndexTest extends ApiRouteTestCase
         $user = User::doesntHave('roles')->first();
 
         $response = $this->actingAs($user)->get($this->endpoint);
-        $response->assertStatus(200);
         // Matches existing event count, not trashed
-        $this->assertEquals($existing_event_count, $response->baseResponse->original->count());
+        $response->assertStatus(200)->assertJsonPath('meta.total', $existing_event_count);
     }
 
     public function test_event_index_call_with_only_trashed_returns_correct_events(): void
@@ -91,8 +85,7 @@ class EventIndexTest extends ApiRouteTestCase
         $user->givePermissionTo('events.viewDeleted');
 
         $response = $this->actingAs($user)->get($this->endpoint);
-        $response->assertStatus(200);
-        $this->assertEquals($trashed_event_count, $response->baseResponse->original->count());
+        $response->assertStatus(200)->assertJsonPath('meta.total', $trashed_event_count);
     }
 
     public function test_event_index_call_as_admin_returns_all_events(): void
@@ -107,7 +100,6 @@ class EventIndexTest extends ApiRouteTestCase
         $user = User::role(RolesEnum::Admin)->first();
 
         $response = $this->actingAs($user)->get($this->endpoint);
-        $response->assertStatus(200);
-        $this->assertEquals($all_event_count, $response->baseResponse->original->count());
+        $response->assertStatus(200)->assertJsonPath('meta.total', $all_event_count);
     }
 }

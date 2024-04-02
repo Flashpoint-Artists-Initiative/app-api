@@ -6,15 +6,10 @@ namespace Tests\Feature\Users\TicketTransfers;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
-use Database\Seeders\Testing\TicketTransferSeeder;
 use Tests\ApiRouteTestCase;
 
 class TicketTransferShowTest extends ApiRouteTestCase
 {
-    public bool $seed = true;
-
-    public string $seeder = TicketTransferSeeder::class;
-
     public string $routeName = 'api.users.ticket-transfers.show';
 
     public array $routeParams = ['user' => 1, 'ticket_transfer' => 1];

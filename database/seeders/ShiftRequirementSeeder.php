@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\Testing;
+namespace Database\Seeders;
 
 use App\Models\Volunteering\Requirement;
 use Illuminate\Database\Seeder;
@@ -12,8 +12,6 @@ class ShiftRequirementSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(ShiftTypeSeeder::class);
-
         Requirement::factory()->count(3)->create();
         Requirement::factory()->trashed()->create();
     }
