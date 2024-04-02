@@ -114,7 +114,8 @@ class TicketTypeIndexTest extends ApiRouteTestCase
     {
         $this->addEndpointParams(['with_trashed' => true]);
 
-        TicketType::factory()->for($this->event)->count(3)->create();
+        /** @phpstan-ignore-next-line */
+        TicketType::factory()->for($this->event)->trashed()->count(3)->create();
         $ticket_type_count = TicketType::where('event_id', $this->event->id)->count();
         $all_ticket_type_count = TicketType::withTrashed()->event($this->event->id)->count();
 
