@@ -1,2 +1,2 @@
-CREATE DATABASE testing;
-GRANT ALL ON `testing`.* TO 'user'@'%'; -- Username is hardcded here, update to whatever is in .env
+CREATE DATABASE IF NOT EXISTS `testing`;
+GRANT ALL ON *.* TO 'user'@'%'; -- username is hardcoded here, unfortunately
