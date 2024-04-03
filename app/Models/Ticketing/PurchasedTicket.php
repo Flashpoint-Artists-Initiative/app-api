@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Models\Ticketing;
 
 use App\Models\Concerns\HasTicketType;
+use App\Models\Concerns\TicketInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PurchasedTicket extends Model
+class PurchasedTicket extends Model implements TicketInterface
 {
     use HasFactory, HasTicketType;
 

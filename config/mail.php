@@ -123,4 +123,5 @@ return [
         ],
     ],
 
+    'helpAddress' => env('MAIL_HELP_ADDRESS', 'help@example.com'),
 ];

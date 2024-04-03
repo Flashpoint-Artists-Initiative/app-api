@@ -17,6 +17,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Alchemy'),
+    'copyrightOrg' => env('ORG_NAME', 'Organization'),
 
     /*
     |--------------------------------------------------------------------------

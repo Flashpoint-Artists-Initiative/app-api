@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  * @property bool $has_active_transfer
+ *
+ * @phpstan-require-implements TicketInterface
  */
 trait HasTicketType
 {

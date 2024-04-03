@@ -4,13 +4,20 @@ declare(strict_types=1);
 
 namespace App\Models\Ticketing;
 
+use App\Models\Event;
 use App\Models\User;
+use App\Notifications\TicketTransferNotification;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 
+/**
+ * @property Event $event
+ * @property int $ticketCount
+ */
 class TicketTransfer extends Model
 {
     use HasFactory;
@@ -44,6 +51,36 @@ class TicketTransfer extends Model
     public function recipient(): BelongsTo
     {
         return $this->belongsTo(User::class, 'recipient_email', 'email');
+    }
+
+    public function ticketCount(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                if (! $this->relationLoaded('purchasedTickets') || ! $this->relationLoaded('reservedTickets')) {
+                    $this->load(['purchasedTickets', 'reservedTickets']);
+                }
+
+                return $this->purchasedTickets->count() + $this->reservedTickets->count();
+            }
+        );
+    }
+
+    public function event(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                if (! $this->relationLoaded('purchasedTickets') || ! $this->relationLoaded('reservedTickets')) {
+                    $this->load(['purchasedTickets', 'reservedTickets']);
+                }
+
+                if ($this->purchasedTickets->count() > 0) {
+                    return $this->purchasedTickets->first()->event;
+                } else {
+                    return $this->reservedTickets->first()->event;
+                }
+            }
+        );
     }
 
     /**
@@ -83,6 +120,9 @@ class TicketTransfer extends Model
         });
 
         $transfer->load(['reservedTickets', 'purchasedTickets']);
+
+        $user = User::find($userId);
+        $user->notify(new TicketTransferNotification($transfer));
 
         return $transfer;
     }
