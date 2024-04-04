@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\OrionController;
+use App\Http\Resources\AuditResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\Request;
+use OwenIt\Auditing\Models\Audit;
 
 class UsersController extends OrionController
 {
@@ -41,5 +44,15 @@ class UsersController extends OrionController
     public function searchableBy(): array
     {
         return ['legal_name', 'preferred_name', 'display_name', 'email', 'birthday'];
+    }
+
+    public function historyAction(Request $request, User $user)
+    {
+        $this->authorize('history', [$user]);
+
+        /** @phpstan-ignore-next-line */
+        $audits = Audit::where('user_id', $user->id)->with('user')->paginate();
+
+        return AuditResource::collection($audits);
     }
 }

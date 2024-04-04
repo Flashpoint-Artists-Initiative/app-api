@@ -86,4 +86,9 @@ abstract class AbstractModelPolicy
     {
         return $user->can("{$relation}.detach");
     }
+
+    public function history(User $user, Model $model): bool
+    {
+        return $user->can("{$this->prefix}.history");
+    }
 }

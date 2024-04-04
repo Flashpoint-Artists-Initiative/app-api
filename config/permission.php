@@ -252,6 +252,7 @@ return [
             'users.delete',
             'users.restore',
             'users.forceDelete',
+            'users.history',
             'users.*',
 
             'events.viewAny',
