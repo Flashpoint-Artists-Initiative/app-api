@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
 /**
  * @property int $end_offset
@@ -21,9 +23,9 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
  * @property int $volunteers_count
  * @property float $percent_filled
  */
-class Shift extends Model
+class Shift extends Model implements ContractsAuditable
 {
-    use HasFactory;
+    use Auditable, HasFactory;
 
     protected $fillable = [
         'shift_type_id',

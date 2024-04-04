@@ -12,14 +12,16 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
 /**
  * @property bool $is_purchased
  * @property bool $can_be_purchased
  */
-class ReservedTicket extends Model implements TicketInterface
+class ReservedTicket extends Model implements ContractsAuditable, TicketInterface
 {
-    use HasFactory, HasTicketType;
+    use Auditable, HasFactory, HasTicketType;
 
     protected $fillable = [
         'user_id',

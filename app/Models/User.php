@@ -23,15 +23,17 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
  * @property string $display_name
  */
-class User extends Authenticatable implements JWTSubject, MustVerifyEmail
+class User extends Authenticatable implements ContractsAuditable, JWTSubject, MustVerifyEmail
 {
-    use HasFactory, HasRoles, HasVirtualColumns, Notifiable, SoftDeletes;
+    use Auditable, HasFactory, HasRoles, HasVirtualColumns, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -52,6 +54,11 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
      * @var array<int, string>
      */
     protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $uaditExclude = [
         'password',
         'remember_token',
     ];

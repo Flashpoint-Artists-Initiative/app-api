@@ -13,14 +13,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
 /**
  * @property Event $event
  * @property int $ticketCount
  */
-class TicketTransfer extends Model
+class TicketTransfer extends Model implements ContractsAuditable
 {
-    use HasFactory;
+    use Auditable, HasFactory;
 
     protected $fillable = [
         'user_id',

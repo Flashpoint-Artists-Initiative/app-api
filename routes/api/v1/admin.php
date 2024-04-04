@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\AuditController;
 use App\Http\Controllers\Api\Admin\CompletedWaiversController;
 use App\Http\Controllers\Api\Admin\OrdersController;
 use Illuminate\Support\Facades\Route;
@@ -13,4 +14,5 @@ use Orion\Facades\Orion;
 Route::middleware(['auth', 'token.refresh'])->prefix('admin')->as('api.admin.')->group(function () {
     Orion::resource('completed-waivers', CompletedWaiversController::class)->except(['update', 'batchUpdate']);
     Orion::resource('orders', OrdersController::class)->only(['index', 'show', 'search']);
+    Orion::resource('audits', AuditController::class)->only(['index', 'show', 'search']);
 });

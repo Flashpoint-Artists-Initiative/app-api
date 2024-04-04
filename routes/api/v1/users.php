@@ -17,8 +17,10 @@ Route::middleware(['auth', 'token.refresh'])->as('api.')->group(function () {
     Orion::belongsToManyResource('users', 'roles', RolesController::class)->only(['index', 'attach', 'detach', 'sync']);
 
     Orion::hasManyResource('users', 'ticket-transfers', TicketTransfersController::class)->only(['index', 'search', 'show', 'destroy']);
-    // creating a transfer take custom input, so we pull it out of Orion
+    // creating a transfer takes custom input, so we pull it out of Orion
     Route::post('/users/{user}/ticket-transfers', [TicketTransfersController::class, 'transferAction'])->name('users.ticket-transfers.store');
 
     Route::get('/users/{user}/tickets', [TicketsController::class, 'indexAction'])->name('users.tickets.index');
+
+    Route::get('/users/{user}/history', [UsersController::class, 'historyAction'])->name('users.history');
 });

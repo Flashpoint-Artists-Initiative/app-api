@@ -10,10 +10,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
-class Order extends Model
+class Order extends Model implements ContractsAuditable
 {
-    use HasFactory;
+    use Auditable, HasFactory;
 
     protected $fillable = [
         'user_email',
