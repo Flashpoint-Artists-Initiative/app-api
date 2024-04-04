@@ -13,14 +13,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
 /**
  * @property int $total_num_spots
  * @property float $percent_filled
  */
-class ShiftType extends Model
+class ShiftType extends Model implements ContractsAuditable
 {
-    use HasFactory;
+    use Auditable, HasFactory;
 
     protected $fillable = [
         'team_id',

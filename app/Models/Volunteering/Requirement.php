@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
-class Requirement extends Model
+class Requirement extends Model implements ContractsAuditable
 {
-    use HasFactory, SoftDeletes;
+    use Auditable, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',

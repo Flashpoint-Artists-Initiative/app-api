@@ -8,10 +8,12 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
-class CompletedWaiver extends Model
+class CompletedWaiver extends Model implements ContractsAuditable
 {
-    use HasFactory;
+    use Auditable, HasFactory;
 
     protected $fillable = [
         'waiver_id',

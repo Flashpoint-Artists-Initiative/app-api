@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -20,9 +22,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  * @property bool $available
  * @property bool $on_sale
  */
-class TicketType extends Model
+class TicketType extends Model implements ContractsAuditable
 {
-    use HasFactory, SoftDeletes;
+    use Auditable, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
