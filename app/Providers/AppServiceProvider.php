@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Models\Ticketing\PurchasedTicket;
-use App\Models\Ticketing\ReservedTicket;
-use App\Models\User;
 use Dedoc\Scramble\Scramble;
 use Dedoc\Scramble\Support\Generator\OpenApi;
 use Dedoc\Scramble\Support\Generator\SecurityScheme;
@@ -55,9 +52,23 @@ class AppServiceProvider extends ServiceProvider
         }
 
         Relation::enforceMorphMap([
-            'purchasedTicket' => PurchasedTicket::class,
-            'reservedTicket' => ReservedTicket::class,
-            'user' => User::class,
+            'cart' => \App\Models\Ticketing\Cart::class,
+            'cartItem' => \App\Models\Ticketing\CartItem::class,
+            'completedWaiver' => \App\Models\Ticketing\CompletedWaiver::class,
+            'order' => \App\Models\Ticketing\Order::class,
+            'purchasedTicket' => \App\Models\Ticketing\PurchasedTicket::class,
+            'reservedTicket' => \App\Models\Ticketing\ReservedTicket::class,
+            'ticketTransfer' => \App\Models\Ticketing\TicketTransfer::class,
+            'ticketType' => \App\Models\Ticketing\TicketType::class,
+            'waiver' => \App\Models\Ticketing\Waiver::class,
+
+            'requirement' => \App\Models\Volunteering\Requirement::class,
+            'shift' => \App\Models\Volunteering\Shift::class,
+            'shiftType' => \App\Models\Volunteering\ShiftType::class,
+            'Team' => \App\Models\Volunteering\Team::class,
+
+            'event' => \App\Models\Event::class,
+            'user' => \App\Models\User::class,
         ]);
     }
 
