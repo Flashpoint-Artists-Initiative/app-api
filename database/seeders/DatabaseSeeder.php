@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             ShiftTypeSeeder::class,
             ShiftSeeder::class,
             ShiftRequirementSeeder::class,
+            AuditSeeder::class,
         ]);
     }
 }

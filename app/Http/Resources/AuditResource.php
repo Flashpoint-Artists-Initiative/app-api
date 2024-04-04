@@ -6,10 +6,13 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\MissingValue;
 use OwenIt\Auditing\Models\Audit;
 
 /**
  * @mixin Audit
+ *
+ * @property int $user_id
  */
 class AuditResource extends JsonResource
 {
@@ -21,7 +24,7 @@ class AuditResource extends JsonResource
     public function toArray(Request $request): array
     {
         $array = parent::toArray($request);
-        $array['user_name'] = $this->user->display_name;
+        $array['user_name'] = $this->user_id ? $this->user->display_name : new MissingValue();
         $array['modified'] = $this->getModified();
 
         unset($array['user'], $array['user_type'], $array['old_values'], $array['new_values']);

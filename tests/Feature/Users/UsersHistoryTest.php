@@ -6,7 +6,6 @@ namespace Tests\Feature\Users;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
-use OwenIt\Auditing\Models\Audit;
 use Tests\ApiRouteTestCase;
 
 class UsersHistoryTest extends ApiRouteTestCase
@@ -42,17 +41,6 @@ class UsersHistoryTest extends ApiRouteTestCase
     public function test_users_history_call_with_permission_is_successful(): void
     {
         $admin = User::role(RolesEnum::Admin)->first();
-
-        // Create an audit
-        Audit::create([
-            'user_id' => $this->routeParams['user'],
-            'user_type' => 'user',
-            'event' => 'created',
-            'auditable_type' => 'event',
-            'auditable_id' => 1,
-            'old_values' => [],
-            'new_values' => [],
-        ]);
 
         $this->assertTrue($admin->can('users.history'));
         $this->assertNotEquals($this->routeParams['user'], $admin->id);

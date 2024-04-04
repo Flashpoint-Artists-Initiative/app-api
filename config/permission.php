@@ -208,6 +208,7 @@ return [
                 'shifts.*',
                 'requirements.*',
                 'shiftSignups.*',
+                'audits.*',
             ],
             RolesEnum::EventManager->value => [
                 'events.viewAny',
@@ -370,6 +371,10 @@ return [
             'shiftSignups.signup',
             'shiftSignups.cancel',
             'shiftSignups.*',
+
+            'audits.viewAny',
+            'audits.view',
+            'audits.*',
         ],
     ],
 ];
