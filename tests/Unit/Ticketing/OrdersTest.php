@@ -65,7 +65,7 @@ class OrdersTest extends TestCase
             'amount_total' => 110,
             'amount_tax' => 10,
             'stripe_checkout_id' => 'abc',
-            'ticket_data' => '{}',
+            'ticket_data' => [],
         ]);
     }
 }

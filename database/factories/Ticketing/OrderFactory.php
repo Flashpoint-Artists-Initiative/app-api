@@ -29,7 +29,7 @@ class OrderFactory extends Factory
             'amount_tax' => fake()->randomNumber(3),
             'quantity' => fake()->numberBetween(1, 4),
             'stripe_checkout_id' => fake()->regexify('cs_test_[A-Z0-9a-z]{58}_fake'),
-            'ticket_data' => '{}',
+            'ticket_data' => [],
         ];
     }
 }

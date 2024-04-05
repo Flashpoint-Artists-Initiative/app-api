@@ -139,7 +139,7 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
             'amount_tax' => 1,
             'quantity' => 1,
             'stripe_checkout_id' => $this->session->id,
-            'ticket_data' => '{}',
+            'ticket_data' => [],
         ]);
 
         $response = $this->actingAs($user)->postJson($this->endpoint, $this->eventData);

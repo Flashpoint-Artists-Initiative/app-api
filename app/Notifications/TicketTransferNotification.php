@@ -42,7 +42,7 @@ class TicketTransferNotification extends Notification
         $ticketString = Str::plural('Ticket', $this->ticketTransfer->ticketCount);
 
         $message = (new MailMessage())
-            ->subject('Pending Ticket Transfer for ' . $eventName)
+            ->subject($eventName . ': Pending Ticket Transfer')
             ->line('You have a pending ticket transfer for ' . $eventName)
             ->action('Click Here to Accept your ' . $ticketString, url('/'))
             ->line('If you already have an account, click the link and login to accept your ' . strtolower($ticketString) .
@@ -50,17 +50,5 @@ class TicketTransferNotification extends Notification
             ->salutation(' ');
 
         return $message;
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
-    {
-        return [
-            //
-        ];
     }
 }

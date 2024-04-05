@@ -59,10 +59,6 @@ class TicketTransfer extends Model implements ContractsAuditable
     {
         return Attribute::make(
             get: function (mixed $value, array $attributes) {
-                if (! $this->relationLoaded('purchasedTickets') || ! $this->relationLoaded('reservedTickets')) {
-                    $this->load(['purchasedTickets', 'reservedTickets']);
-                }
-
                 return $this->purchasedTickets->count() + $this->reservedTickets->count();
             }
         );
@@ -72,10 +68,6 @@ class TicketTransfer extends Model implements ContractsAuditable
     {
         return Attribute::make(
             get: function (mixed $value, array $attributes) {
-                if (! $this->relationLoaded('purchasedTickets') || ! $this->relationLoaded('reservedTickets')) {
-                    $this->load(['purchasedTickets', 'reservedTickets']);
-                }
-
                 if ($this->purchasedTickets->count() > 0) {
                     return $this->purchasedTickets->first()->event;
                 } else {

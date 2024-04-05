@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Ticketing;
 
+use App\Models\Event;
+use App\Models\Ticketing\PurchasedTicket;
+use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketTransfer;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -68,5 +71,21 @@ class TicketTransferTest extends TestCase
         $transfer->refresh();
 
         $this->assertNotEquals($transfer->recipient_email, $newEmail);
+    }
+
+    public function test_event_attribute(): void
+    {
+        $transfer = TicketTransfer::factory()->create();
+        $reservedTicket = ReservedTicket::factory()->create();
+        $purchasedTicket = PurchasedTicket::factory()->create();
+
+        $transfer->reservedTickets()->attach($reservedTicket->id);
+
+        $this->assertInstanceOf(Event::class, $transfer->event);
+
+        $transfer = TicketTransfer::factory()->create();
+        $transfer->purchasedTickets()->attach($purchasedTicket->id);
+
+        $this->assertInstanceOf(Event::class, $transfer->event);
     }
 }

@@ -6,13 +6,17 @@ namespace App\Models\Ticketing;
 
 use App\Models\Event;
 use App\Models\User;
+use App\Observers\OrderObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
+#[ObservedBy(OrderObserver::class)]
 class Order extends Model implements ContractsAuditable
 {
     use Auditable, HasFactory;
@@ -47,6 +51,15 @@ class Order extends Model implements ContractsAuditable
     public function cart(): BelongsTo
     {
         return $this->belongsTo(Cart::class);
+    }
+
+    public function ticketTypes(): Collection
+    {
+        return once(function () {
+            $ids = array_column($this->ticket_data, 'ticket_type_id');
+
+            return TicketType::whereIn('id', $ids)->get();
+        });
     }
 
     public function scopeStripeCheckoutId(Builder $query, string $sessionId): void

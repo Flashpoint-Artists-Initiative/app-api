@@ -55,13 +55,13 @@ class OrderService
         ];
     }
 
-    protected function jsonFromCartItems(Collection $items): string
+    protected function jsonFromCartItems(Collection $items): array
     {
         return $items->each->setVisible([
             'id',
             'ticket_type_id',
             'reserved_ticket_id',
             'quantity',
-        ])->toJson();
+        ])->toArray();
     }
 }
