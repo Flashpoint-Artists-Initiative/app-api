@@ -19,7 +19,7 @@ class TicketTransferResource extends JsonResource
         $array = parent::toArray($request);
 
         return array_merge($array, [
-            'purchased_tickets' => $this->whenLoaded('purchasedTickets'),
+            'purchased_tickets' => PurchasedTicketResource::collection($this->whenLoaded('purchasedTickets')),
             'reserved_tickets' => ReservedTicketResource::collection($this->whenLoaded('reservedTickets')),
         ]);
     }

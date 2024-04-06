@@ -35,7 +35,7 @@ class UserResource extends JsonResource
             'deleted_at' => $this->deleted_at ?? new MissingValue(),
             'roles' => RoleResource::collection($this->whenLoaded('roles')),
             'permissions' => $this->formatPermissions(),
-            'purchased_tickets' => $this->whenLoaded('purchasedTickets'),
+            'purchased_tickets' => PurchasedTicketResource::collection($this->whenLoaded('purchasedTickets')),
             'reserved_tickets' => ReservedTicketResource::collection($this->whenLoaded('reservedTickets')),
             'ticketTransfers' => TicketTransferResource::collection($this->whenLoaded('ticketTransfers')),
             'waivers' => WaiverResource::collection($this->whenLoaded('waivers')),

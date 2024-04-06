@@ -31,8 +31,8 @@ class TicketTransfer extends Model implements ContractsAuditable
     ];
 
     protected $with = [
-        'purchasedTickets',
-        'reservedTickets',
+        'purchasedTickets.ticketType',
+        'reservedTickets.ticketType',
     ];
 
     public function purchasedTickets(): MorphToMany
