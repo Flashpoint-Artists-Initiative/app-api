@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Admin\AuditController;
 use App\Http\Controllers\Api\Admin\CompletedWaiversController;
 use App\Http\Controllers\Api\Admin\OrdersController;
+use App\Http\Controllers\Api\Admin\TicketTransfersController;
 use App\Http\Controllers\LockdownController;
 use App\Services\LockdownService;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +18,7 @@ Route::middleware(['auth', 'token.refresh'])->prefix('admin')->as('api.admin.')-
     Orion::resource('completed-waivers', CompletedWaiversController::class)->except(['update', 'batchUpdate']);
     Orion::resource('orders', OrdersController::class)->only(['index', 'show', 'search']);
     Orion::resource('audits', AuditController::class)->only(['index', 'show', 'search']);
+    Orion::resource('ticket-transfers', TicketTransfersController::class)->only(['index', 'show', 'search', 'destroy']);
 
     //Lockdown Routes
     Route::get('lockdown', [LockdownController::class, 'getLockdownStatus'])->whereIn('type', LockdownService::lockdownTypes())->name('lockdown.status');
