@@ -24,6 +24,7 @@ class ReservedTicketResource extends JsonResource
 
         return array_merge($result, [
             'is_purchased' => $this->is_purchased,
+            'has_active_transfer' => $this->has_active_transfer,
         ]);
     }
 }

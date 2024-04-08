@@ -24,6 +24,7 @@ class PurchasedTicketResource extends JsonResource
 
         return array_merge($result, [
             'ticket_type' => $this->whenPivotLoaded('ticket_transfer_items', $this->ticketType),
+            'has_active_transfer' => $this->has_active_transfer,
         ]);
     }
 }
