@@ -20,6 +20,13 @@ class ShiftSignupsController extends OrionRelationsController
 
     protected $parentPolicy = ShiftPolicy::class;
 
+    public function __construct()
+    {
+        $this->middleware(['lockdown:volunteer'])->except(['index', 'show', 'search']);
+
+        parent::__construct();
+    }
+
     public function signupAction(Shift $shift, ShiftSignupRequest $request): JsonResponse
     {
         $this->authorize('view', [$shift]);

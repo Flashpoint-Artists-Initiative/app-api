@@ -20,6 +20,13 @@ class RequirementsController extends OrionController
 
     protected $request = RequirementRequest::class;
 
+    public function __construct()
+    {
+        $this->middleware(['lockdown:volunteer'])->except(['index', 'show', 'search']);
+
+        parent::__construct();
+    }
+
     protected function buildIndexFetchQuery(Request $request, array $requestedRelations): Builder
     {
         $query = parent::buildIndexFetchQuery($request, $requestedRelations);

@@ -17,6 +17,13 @@ use Orion\Http\Requests\Request;
  */
 class TicketTransfersController extends OrionController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->middleware(['lockdown:ticket'])->only('delete');
+    }
+
     protected $model = TicketTransfer::class;
 
     protected $policy = MeTicketTransferPolicy::class;

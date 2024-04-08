@@ -21,4 +21,11 @@ class ShiftsController extends OrionRelationsController
     protected $policy = ShiftPolicy::class;
 
     protected $parentPolicy = ShiftTypePolicy::class;
+
+    public function __construct()
+    {
+        $this->middleware(['lockdown:volunteer'])->except(['index', 'show', 'search']);
+
+        parent::__construct();
+    }
 }

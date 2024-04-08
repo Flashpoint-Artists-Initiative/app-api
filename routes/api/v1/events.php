@@ -13,8 +13,9 @@ use Orion\Facades\Orion;
 */
 Route::middleware(['token.refresh'])->as('api.')->group(function () {
     Orion::resource('events', EventsController::class)->withSoftDeletes();
-    Orion::hasManyResource('events', 'ticket-types', TicketTypesController::class)->withSoftDeletes()->except(['associate', 'dissociate']);
 
+    Orion::hasManyResource('events', 'ticket-types', TicketTypesController::class)->withSoftDeletes()->except(['associate', 'dissociate']);
     Orion::hasManyResource('events', 'waivers', WaiversController::class)->except(['associate', 'dissociate', 'batchStore', 'batchUpdate', 'batchDestroy', 'batchRestore']);
-    Route::post('/events/{event}/waivers/{waiver?}/complete', [WaiversController::class, 'completeAction'])->middleware(['auth'])->name('events.waivers.complete');
+
+    Route::post('/events/{event}/waivers/{waiver?}/complete', [WaiversController::class, 'completeAction'])->name('events.waivers.complete');
 });

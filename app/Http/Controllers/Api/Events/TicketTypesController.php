@@ -19,7 +19,7 @@ class TicketTypesController extends OrionRelationsController
 
     public function __construct()
     {
-        $this->middleware('auth')->except(['index', 'show', 'search']);
+        $this->middleware(['auth', 'lockdown:ticket'])->except(['index', 'show', 'search']);
 
         parent::__construct();
     }

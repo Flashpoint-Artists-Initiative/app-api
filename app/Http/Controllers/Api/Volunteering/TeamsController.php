@@ -25,7 +25,7 @@ class TeamsController extends OrionRelationsController
 
     public function __construct()
     {
-        $this->middleware('auth')->except(['index', 'show', 'search']);
+        $this->middleware(['lockdown:volunteer'])->except(['index', 'show', 'search']);
 
         parent::__construct();
     }

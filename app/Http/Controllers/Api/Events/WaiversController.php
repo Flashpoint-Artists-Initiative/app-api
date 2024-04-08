@@ -18,7 +18,7 @@ class WaiversController extends OrionRelationsController
 
     public function __construct()
     {
-        $this->middleware('auth')->except(['index', 'show', 'search']);
+        $this->middleware(['auth', 'lockdown'])->except(['index', 'show', 'search']);
 
         parent::__construct();
     }

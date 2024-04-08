@@ -13,6 +13,13 @@ class ReservedTicketsController extends OrionRelationsController
 
     protected $relation = 'reservedTickets';
 
+    public function __construct()
+    {
+        $this->middleware(['lockdown:ticket'])->except(['index', 'show', 'search']);
+
+        parent::__construct();
+    }
+
     public function includes(): array
     {
         return ['ticketType', 'user', 'event', 'purchasedTicket'];
