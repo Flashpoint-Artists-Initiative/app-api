@@ -14,7 +14,7 @@ class TicketTypeRequest extends Request
     public function commonRules(): array
     {
         return [
-            'name' => 'string',
+            'name' => ['string'],
             'sale_start_date' => ['date'],
             'sale_end_date' => ['date'],
             'quantity' => ['integer', 'gte:0', 'nullable'],

@@ -46,7 +46,7 @@ class RolesEnumTest extends TestCase
 
         foreach ($cases as $case) {
             $model = $case->model();
-            $enum = RolesEnum::fromId($model->id);
+            $enum = RolesEnum::fromId((int) $model->id);
             $this->assertEquals($case, $enum);
         }
     }

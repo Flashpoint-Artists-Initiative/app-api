@@ -10,6 +10,7 @@ class TicketTransferCreateWithUserRequest extends TicketTransferCreateRequest
 {
     public function getTransferUser(): User
     {
+        /** @var User */
         return $this->route()->parameter('user');
     }
 }

@@ -23,6 +23,7 @@ class AuditResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        /** @var array<mixed> */
         $array = parent::toArray($request);
         $array['user_name'] = $this->user_id ? $this->user->display_name : new MissingValue();
         $array['modified'] = $this->getModified();

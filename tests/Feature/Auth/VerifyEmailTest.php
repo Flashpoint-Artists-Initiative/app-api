@@ -65,7 +65,10 @@ class VerifyEmailTest extends ApiRouteTestCase
         $url = $verificationEmail->toMail($user)->actionUrl;
         $parts = parse_url($url);
 
-        $relativeUrl = "{$parts['path']}?{$parts['query']}";
+        $path = $parts['path'] ?? '';
+        $query = $parts['query'] ?? '';
+
+        $relativeUrl = "$path?$query";
 
         $response = $this->actingAs($user)->get($relativeUrl);
 
@@ -98,7 +101,10 @@ class VerifyEmailTest extends ApiRouteTestCase
         $url = $verificationEmail->toMail($user)->actionUrl;
         $parts = parse_url($url);
 
-        $relativeUrl = "{$parts['path']}?{$parts['query']}";
+        $path = $parts['path'] ?? '';
+        $query = $parts['query'] ?? '';
+
+        $relativeUrl = "$path?$query";
 
         // First request
         $this->actingAs($user)->get($relativeUrl);

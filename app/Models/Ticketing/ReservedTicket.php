@@ -6,6 +6,8 @@ namespace App\Models\Ticketing;
 
 use App\Models\Concerns\HasTicketType;
 use App\Models\Concerns\TicketInterface;
+use App\Observers\ReservedTicketObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +20,7 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
  * @property bool $is_purchased
  * @property bool $can_be_purchased
  */
+#[ObservedBy(ReservedTicketObserver::class)]
 class ReservedTicket extends Model implements ContractsAuditable, TicketInterface
 {
     use Auditable, HasFactory, HasTicketType;

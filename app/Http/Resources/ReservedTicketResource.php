@@ -20,6 +20,7 @@ class ReservedTicketResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        /** @var array<mixed> $result */
         $result = parent::toArray($request);
 
         return array_merge($result, [

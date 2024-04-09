@@ -14,7 +14,7 @@ class ReservedTicketRequest extends Request
     public function commonRules(): array
     {
         return [
-            'email' => 'email',
+            'email' => ['email'],
             'expiration_date' => ['date', 'nullable'],
             'name' => ['string', 'nullable'],
             'note' => ['string', 'nullable'],

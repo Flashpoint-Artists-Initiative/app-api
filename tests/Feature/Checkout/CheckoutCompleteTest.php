@@ -30,7 +30,11 @@ class CheckoutCompleteTest extends ApiRouteTestCase
 
         auth()->login(User::first());
 
-        $data = json_decode(file_get_contents(storage_path('testing/stripe_checkout_completed_event.json')), true);
+        $content = file_get_contents(storage_path('testing/stripe_checkout_completed_event.json'));
+
+        $this->assertNotFalse($content);
+
+        $data = json_decode($content, true);
 
         $event = Event::constructFrom($data);
         /** @phpstan-ignore-next-line */
@@ -57,7 +61,9 @@ class CheckoutCompleteTest extends ApiRouteTestCase
         $cart->setStripeCheckoutIdAndSave($this->session->id);
 
         $this->partialMock(StripeService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('getCheckoutSession')->andReturn($this->session);
+            /** @var \Mockery\Expectation $receive */
+            $receive = $mock->shouldReceive('getCheckoutSession');
+            $receive->andReturn($this->session);
         });
 
     }

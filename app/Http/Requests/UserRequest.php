@@ -24,7 +24,7 @@ class UserRequest extends Request
     }
 
     /**
-     * @return array<string, string[]>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function storeRules(): array
     {

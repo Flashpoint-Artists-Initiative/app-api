@@ -12,7 +12,6 @@ use App\Policies\MeTicketTransferPolicy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Orion\Http\Requests\Request;
-use Orion\Http\Resources\CollectionResource;
 
 /**
  * @tags Me/TicketTransfers
@@ -86,7 +85,7 @@ class TicketTransfersController extends OrionController
     /**
      * Get received transfers
      */
-    public function received(Request $request): CollectionResource
+    public function received(Request $request): mixed
     {
         return parent::index($request);
     }

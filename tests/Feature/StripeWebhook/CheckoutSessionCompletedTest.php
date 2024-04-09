@@ -35,7 +35,10 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
 
         auth()->login(User::first());
 
-        $this->eventData = json_decode(file_get_contents(storage_path('testing/stripe_checkout_completed_event.json')), true);
+        $content = file_get_contents(storage_path('testing/stripe_checkout_completed_event.json'));
+
+        $this->assertNotFalse($content);
+        $this->eventData = json_decode($content, true);
 
         $this->event = Event::constructFrom($this->eventData);
         $this->eventData['event'] = $this->event;
@@ -57,7 +60,9 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
         $cart->setStripeCheckoutIdAndSave($this->session->id);
 
         $this->partialMock(StripeService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('getCheckoutSession')->andReturn($this->session);
+            /** @var \Mockery\Expectation $receive */
+            $receive = $mock->shouldReceive('getCheckoutSession');
+            $receive->andReturn($this->session);
         });
 
         // Override middleware with test version to add event to request without all the checks

@@ -6,6 +6,8 @@ namespace App\Models\Ticketing;
 
 use App\Models\Event;
 use App\Models\User;
+use App\Observers\CartObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,6 +22,7 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
  * @property Event $event
  * @property int $quantity
  */
+#[ObservedBy(CartObserver::class)]
 class Cart extends Model implements ContractsAuditable
 {
     use Auditable, HasFactory;

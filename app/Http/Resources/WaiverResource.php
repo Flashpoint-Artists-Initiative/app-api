@@ -16,6 +16,7 @@ class WaiverResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        /** @var array<mixed> */
         return parent::toArray($request);
     }
 }

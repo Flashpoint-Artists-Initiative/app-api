@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Services\Helpers\SvgWithLogoOptions;
 use chillerlan\QRCode\QRCode;
+use Illuminate\Support\Facades\Log;
 
 class QRCodeService
 {
@@ -22,6 +23,13 @@ class QRCodeService
     {
         $content = ['user_id' => $userId, 'event_id' => $eventId];
 
-        return json_encode($content);
+        $json = json_encode($content);
+
+        if ($json === false) {
+            Log::channel('stderr')->info('QR code generation failed', ['user_id' => $userId, 'event_id' => $eventId, 'exception' => json_last_error_msg()]);
+            abort(500, 'Error Generating QR Code');
+        }
+
+        return $json;
     }
 }

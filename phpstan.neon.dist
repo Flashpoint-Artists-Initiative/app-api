@@ -8,7 +8,7 @@ parameters:
         - database
         - public
         - routes
-    level: 6
+    level: 7
     ergebnis:
         final:
             enabled: false

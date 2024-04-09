@@ -18,6 +18,10 @@ class PermissionPopulateCommandTest extends TestCase
      */
     public function test_permission_populate_command_returns_zero(): void
     {
-        $this->artisan('permission:populate')->assertExitCode(0);
+        $result = $this->artisan('permission:populate');
+
+        $this->assertIsNotInt($result);
+
+        $result->assertExitCode(0);
     }
 }
