@@ -58,7 +58,8 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
         'remember_token',
     ];
 
-    protected $uaditExclude = [
+    /** @var string[] */
+    protected $auditExclude = [
         'password',
         'remember_token',
     ];
@@ -94,48 +95,75 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
         });
     }
 
+    /**
+     * @return HasMany<PurchasedTicket>
+     */
     public function purchasedTickets(): HasMany
     {
         return $this->hasMany(PurchasedTicket::class);
     }
 
+    /**
+     * @return HasMany<ReservedTicket>
+     */
     public function reservedTickets(): HasMany
     {
         return $this->hasMany(ReservedTicket::class);
     }
 
+    /**
+     * @return HasMany<ReservedTicket>
+     */
     public function availableReservedTickets(): HasMany
     {
         return $this->hasMany(ReservedTicket::class)
             ->where(fn ($query) => $query->canBePurchased());
     }
 
+    /**
+     * @return HasMany<Order>
+     */
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
     }
 
+    /**
+     * @return HasMany<Cart>
+     */
     public function carts(): HasMany
     {
         return $this->hasMany(Cart::class);
     }
 
+    /**
+     * @return HasOne<Cart>
+     */
     public function activeCart(): HasOne
     {
         return $this->hasOne(Cart::class)
             ->where(fn ($query) => $query->notExpired());
     }
 
+    /**
+     * @return HasMany<CompletedWaiver>
+     */
     public function waivers(): HasMany
     {
         return $this->hasMany(CompletedWaiver::class);
     }
 
+    /**
+     * @return HasMany<TicketTransfer>
+     */
     public function ticketTransfers(): HasMany
     {
         return $this->hasMany(TicketTransfer::class);
     }
 
+    /**
+     * @return BelongsToMany<Shift>
+     */
     public function shifts(): BelongsToMany
     {
         return $this->belongsToMany(Shift::class, 'shift_signups')->as('signup')->withTimestamps();
@@ -166,13 +194,16 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
         })->count() > 0;
     }
 
-    public function getValidTicketForEvent(?int $eventId = null): ?PurchasedTicket
+    public function getValidTicketForEventOrFail(?int $eventId = null): PurchasedTicket
     {
-        $ticket = $this->purchasedTickets()->whereRelation('ticketType', fn ($query) => $query->admittance($eventId))->with('ticketType')->first();
+        $ticket = $this->purchasedTickets()->whereRelation('ticketType', fn ($query) => $query->admittance($eventId))->with('ticketType')->firstOrFail();
 
         return $ticket;
     }
 
+    /**
+     * @return Attribute<string, string>
+     */
     public function birthday(): Attribute
     {
         return Attribute::make(

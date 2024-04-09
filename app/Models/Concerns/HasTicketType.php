@@ -9,6 +9,7 @@ use App\Models\Ticketing\TicketTransfer;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -21,6 +22,9 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  */
 trait HasTicketType
 {
+    /**
+     * @return MorphToMany<TicketTransfer>
+     */
     public function transfers(): MorphToMany
     {
         return $this->morphToMany(TicketTransfer::class, 'ticket', 'ticket_transfer_items');
@@ -31,16 +35,25 @@ trait HasTicketType
     //     return $this->morphOne(TicketTransfer::class, 'ticket')->latestOfMany();
     // }
 
+    /**
+     * @return BelongsTo<TicketType, covariant Model>
+     */
     public function ticketType(): BelongsTo
     {
         return $this->belongsTo(TicketType::class);
     }
 
+    /**
+     * @return BelongsTo<User, covariant Model>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return HasOneThrough<Event>
+     */
     public function event(): HasOneThrough
     {
         // Set the keys directly because we're effectively going backwards from the intended way
@@ -54,6 +67,9 @@ trait HasTicketType
         );
     }
 
+    /**
+     * @return Attribute<bool, void>
+     */
     public function hasActiveTransfer(): Attribute
     {
         return Attribute::make(

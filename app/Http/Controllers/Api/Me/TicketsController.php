@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\QrRequest;
 use App\Models\User;
 use App\Services\QRCodeService;
+use Illuminate\Http\Response;
 
 class TicketsController extends Controller
 {
@@ -15,15 +16,11 @@ class TicketsController extends Controller
     {
     }
 
-    public function qrAction(QrRequest $request, ?int $eventId = null)
+    public function qrAction(QrRequest $request, ?int $eventId = null): Response
     {
         /** @var User $user */
         $user = auth()->user();
-        $ticket = $user->getValidTicketForEvent($eventId);
-
-        if (! $ticket) {
-            return response()->json(['error' => 'No valid ticket'], 404);
-        }
+        $ticket = $user->getValidTicketForEventOrFail($eventId);
 
         $content = $this->qrCodeService->buildTicketContent($user->id, $ticket->ticketType->event_id);
 

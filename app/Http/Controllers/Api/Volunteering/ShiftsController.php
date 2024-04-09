@@ -20,6 +20,7 @@ class ShiftsController extends OrionRelationsController
 
     protected $policy = ShiftPolicy::class;
 
+    /** @var class-string */
     protected $parentPolicy = ShiftTypePolicy::class;
 
     public function __construct()

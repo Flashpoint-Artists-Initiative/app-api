@@ -42,6 +42,7 @@ class TicketType extends Model implements ContractsAuditable
         'active' => 'boolean',
     ];
 
+    /** @var string[] */
     protected $withCount = [
         'purchasedTickets',
         'unsoldReservedTickets',
@@ -61,91 +62,132 @@ class TicketType extends Model implements ContractsAuditable
         });
     }
 
+    /**
+     * @return BelongsTo<Event, TicketType>
+     */
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
     }
 
+    /**
+     * @return HasMany<PurchasedTicket>
+     */
     public function purchasedTickets(): HasMany
     {
         return $this->hasMany(PurchasedTicket::class);
     }
 
+    /**
+     * @return HasMany<ReservedTicket>
+     */
     public function reservedTickets(): HasMany
     {
         return $this->hasMany(ReservedTicket::class);
     }
 
+    /**
+     * @return HasMany<ReservedTicket>
+     */
     public function unsoldReservedTickets(): HasMany
     {
         return $this->hasMany(ReservedTicket::class)
             ->whereDoesntHave('purchasedTicket');
     }
 
+    /**
+     * @return HasMany<CartItem>
+     */
     public function cartItems(): HasMany
     {
         return $this->hasMany(CartItem::class);
     }
 
+    /**
+     * @return HasMany<CartItem>
+     */
     public function activeCartItems(): HasMany
     {
         return $this->hasMany(CartItem::class)
             ->whereHas('cart', fn ($query) => $query->notExpired());
     }
 
+    /**
+     * @param  Builder<TicketType>  $query
+     */
     public function scopeActive(Builder $query): void
     {
         $query->where('active', 1);
     }
 
+    /**
+     * @param  Builder<TicketType>  $query
+     */
     public function scopeOnSale(Builder $query): void
     {
         $query->where('sale_start_date', '<=', now());
         $query->where('sale_end_date', '>=', now());
     }
 
+    /**
+     * @param  Builder<TicketType>  $query
+     */
     public function scopeHasQuantity(Builder $query): void
     {
         $query->where('quantity', '>', 0);
     }
 
+    /**
+     * @param  Builder<TicketType>  $query
+     */
     public function scopeEvent(Builder $query, int $eventId): void
     {
         $query->where('event_id', $eventId);
     }
 
+    /**
+     * @param  Builder<TicketType>  $query
+     */
     public function scopeActiveEvent(Builder $query): void
     {
         $query->whereRelation('event', 'active', true);
     }
 
+    /**
+     * @param  Builder<TicketType>  $query
+     */
     public function scopeAvailable(Builder $query): void
     {
-        // @phpstan-ignore-next-line
         $query->active()->onSale()->hasQuantity();
     }
 
+    /**
+     * @param  Builder<TicketType>  $query
+     */
     public function scopeAdmittance(Builder $query, ?int $eventId = null): void
     {
-        // @phpstan-ignore-next-line
         $query->where('addon', false)->activeEvent();
 
         if ($eventId) {
-            // @phpstan-ignore-next-line
             $query->event($eventId);
         }
     }
 
     /**
      * Overloaded method to eager load a sum aggregate
+     *
+     * @return Builder<Model>
      */
-    public function newQueryWithoutScopes()
+    public function newQueryWithoutScopes(): Builder
     {
         $query = parent::newQueryWithoutScopes();
 
         return $query->withSum('activeCartItems as cart_items_quantity', 'quantity');
     }
 
+    /**
+     * @return Attribute<int, void>
+     */
     public function remainingTicketCount(): Attribute
     {
         return Attribute::make(
@@ -161,6 +203,9 @@ class TicketType extends Model implements ContractsAuditable
         );
     }
 
+    /**
+     * @return Attribute<bool, void>
+     */
     public function available(): Attribute
     {
         return Attribute::make(
@@ -173,6 +218,9 @@ class TicketType extends Model implements ContractsAuditable
         );
     }
 
+    /**
+     * @return Attribute<bool, void>
+     */
     public function onSale(): Attribute
     {
         return Attribute::make(

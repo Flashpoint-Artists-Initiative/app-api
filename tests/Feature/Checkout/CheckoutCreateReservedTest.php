@@ -74,7 +74,7 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         $user = User::doesntHave('roles')->doesntHave('reservedTickets')->first();
 
         $notOnSaleTicketType = TicketType::where('sale_start_date', '>=', now())->active()->first();
-        $notOnSaleReservedTicketWithExpiration = $this->createReservedTicket([
+        $notOnSaleReservedTicketWithExpiration = ReservedTicket::create([
             'user_id' => $user->id,
             'expiration_date' => now()->addMinute(),
             'ticket_type_id' => $notOnSaleTicketType->id,
@@ -95,7 +95,7 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         $user = User::doesntHave('roles')->doesntHave('reservedTickets')->first();
 
         $notOnSaleTicketType = TicketType::where('sale_start_date', '>=', now())->active()->first();
-        $notOnSaleReservedTicketWithExpiration = $this->createReservedTicket([
+        $notOnSaleReservedTicketWithExpiration = ReservedTicket::create([
             'user_id' => $user->id,
             'ticket_type_id' => $notOnSaleTicketType->id,
         ]);
@@ -115,7 +115,7 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         $user = User::doesntHave('roles')->doesntHave('reservedTickets')->first();
 
         $onSaleTicketType = TicketType::query()->onSale()->active()->first();
-        $onSaleReservedTicketWithExpiration = $this->createReservedTicket([
+        $onSaleReservedTicketWithExpiration = ReservedTicket::create([
             'user_id' => $user->id,
             'ticket_type_id' => $onSaleTicketType->id,
         ]);
@@ -135,7 +135,7 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         $user = User::doesntHave('roles')->doesntHave('reservedTickets')->first();
 
         $inactiveTicketType = TicketType::query()->onSale()->where('active', false)->first();
-        $inactiveTicketWithExpiration = $this->createReservedTicket([
+        $inactiveTicketWithExpiration = ReservedTicket::create([
             'user_id' => $user->id,
             'ticket_type_id' => $inactiveTicketType->id,
         ]);
@@ -154,7 +154,7 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         $user = User::doesntHave('roles')->doesntHave('reservedTickets')->first();
 
         $zeroQuantityTicketType = TicketType::query()->onSale()->active()->where('quantity', 0)->first();
-        $zeroQuantityTicketWithExpiration = $this->createReservedTicket([
+        $zeroQuantityTicketWithExpiration = ReservedTicket::create([
             'user_id' => $user->id,
             'ticket_type_id' => $zeroQuantityTicketType->id,
         ]);
@@ -174,38 +174,33 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         $availableReservedTicket = $user->availableReservedTickets->first();
 
         $noReservedTicketTypes = TicketType::query()->doesntHave('reservedTickets')->available()->get();
-        $notEnoughReservedTicket = $this->createReservedTicket([
-            'user_id' => $user->id,
-            'expiration_date' => now()->addMinute(),
-            'ticket_type_id' => $noReservedTicketTypes->first()->id,
-        ]);
 
-        $expiredReservedTicket = $this->createReservedTicket([
+        $expiredReservedTicket = ReservedTicket::create([
             'user_id' => $user->id,
             'expiration_date' => now()->subMinute(),
             'ticket_type_id' => $noReservedTicketTypes[1]->id,
         ]);
 
         $inactiveTicketType = TicketType::where('active', false)->onSale()->first();
-        $inactiveReservedTicket = $this->createReservedTicket([
+        $inactiveReservedTicket = ReservedTicket::create([
             'user_id' => $user->id,
             'expiration_date' => now()->addMinute(),
             'ticket_type_id' => $inactiveTicketType->id,
         ]);
 
         $notOnSaleTicketType = TicketType::where('sale_start_date', '>=', now())->doesntHave('reservedTickets')->active()->first();
-        $notOnSaleReservedTicketWithoutExpiration = $this->createReservedTicket([
+        $notOnSaleReservedTicketWithoutExpiration = ReservedTicket::create([
             'user_id' => $user->id,
             'ticket_type_id' => $notOnSaleTicketType->id,
         ]);
 
         $ticketType = TicketType::query()->available()->first();
         $secondEventTicketType = TicketType::query()->available()->where('event_id', '!=', $ticketType->event_id)->first();
-        $firstTicket = $this->createReservedTicket([
+        $firstTicket = ReservedTicket::create([
             'user_id' => $user->id,
             'ticket_type_id' => $ticketType->id,
         ]);
-        $secondEventTicket = $this->createReservedTicket([
+        $secondEventTicket = ReservedTicket::create([
             'user_id' => $user->id,
             'ticket_type_id' => $secondEventTicketType->id,
         ]);
@@ -295,17 +290,5 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         ]);
 
         $response->assertStatus(422);
-    }
-
-    protected function createReservedTicket(array $args): ReservedTicket
-    {
-        $ticket = new ReservedTicket();
-        foreach ($args as $k => $v) {
-            $ticket->{$k} = $v;
-        }
-
-        $ticket->save();
-
-        return $ticket;
     }
 }

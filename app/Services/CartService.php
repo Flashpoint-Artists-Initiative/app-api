@@ -35,6 +35,9 @@ class CartService
         return $carts->first();
     }
 
+    /**
+     * @return Collection<int, Cart>
+     */
     public function getAllUnexpiredCarts(?User $user = null): Collection
     {
         $user = $this->ensureUser($user);
@@ -59,6 +62,8 @@ class CartService
 
     /**
      * @codeCoverageIgnore
+     *
+     * @param  Collection<int, Cart>  $carts
      */
     protected function assertSingleCart(Collection $carts): void
     {
@@ -67,6 +72,10 @@ class CartService
         }
     }
 
+    /**
+     * @param  array<array{id:int, quantity:int}>  $tickets
+     * @param  int[]  $reserved
+     */
     public function createCartAndItems(array $tickets = [], array $reserved = []): Cart
     {
         $cart = Cart::create(['user_id' => auth()->user()->id]);
@@ -96,6 +105,9 @@ class CartService
 
     /**
      * Expire all carts except the newest.
+     *
+     * @param  Collection<int, Cart>  $carts
+     * @return Collection<int, Cart>
      */
     public function expireExtraCarts(Collection $carts): Collection
     {

@@ -18,8 +18,6 @@ class ResetPasswordTest extends ApiRouteTestCase
 
     public string $routeName = 'password.update';
 
-    public array $routeParams = [''];
-
     public function test_reset_password_call_with_valid_data_returns_a_successful_response(): void
     {
         $user = User::factory()->create([

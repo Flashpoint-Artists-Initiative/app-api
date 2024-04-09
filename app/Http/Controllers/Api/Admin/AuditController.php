@@ -14,6 +14,9 @@ class AuditController extends OrionController
 
     protected $policy = AuditPolicy::class;
 
+    /**
+     * @return string[]
+     */
     public function includes(): array
     {
         return [
@@ -22,6 +25,9 @@ class AuditController extends OrionController
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function filterableBy(): array
     {
         return [
@@ -38,6 +44,9 @@ class AuditController extends OrionController
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function sortableBy(): array
     {
         return [
@@ -54,6 +63,9 @@ class AuditController extends OrionController
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function searchableBy(): array
     {
         return [

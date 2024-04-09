@@ -21,12 +21,12 @@ class StripeService
     }
 
     // These magic methods redirect all calls to the $stripeClient
-    public function __get($name)
+    public function __get(mixed $name): mixed
     {
         return $this->stripeClient->$name;
     }
 
-    public function __call($name, $arguments)
+    public function __call(mixed $name, mixed $arguments): mixed
     {
         return $this->stripeClient->$name($arguments);
     }
@@ -81,6 +81,8 @@ class StripeService
 
     /**
      * Create the line_items array for a checkout session from the cart's items
+     *
+     * @return array<string, mixed>
      */
     protected function buildLineItems(Cart $cart): array
     {
@@ -102,6 +104,9 @@ class StripeService
         })->toArray();
     }
 
+    /**
+     * @return string[]
+     */
     public function getTaxRatesArray(): array
     {
         $tax_rates = explode(',', config('services.stripe.tax_rates'));

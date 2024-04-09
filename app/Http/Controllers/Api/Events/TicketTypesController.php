@@ -24,11 +24,18 @@ class TicketTypesController extends OrionRelationsController
         parent::__construct();
     }
 
+    /**
+     * @return string[]
+     */
     public function includes(): array
     {
         return ['event', 'purchasedTickets', 'reservedTickets', 'cartItems'];
     }
 
+    /**
+     * @param  string[]  $requestedRelations
+     * @return Relation<\App\Models\Ticketing\TicketType>
+     */
     protected function buildIndexFetchQuery(Request $request, Model $event, array $requestedRelations): Relation
     {
         $relation = parent::buildIndexFetchQuery($request, $event, $requestedRelations);
@@ -49,6 +56,10 @@ class TicketTypesController extends OrionRelationsController
         return $relation;
     }
 
+    /**
+     * @param  string[]  $requestedRelations
+     * @return Relation<\App\Models\Ticketing\TicketType>
+     */
     protected function buildShowFetchQuery(Request $request, Model $event, array $requestedRelations): Relation
     {
         $relation = parent::buildShowFetchQuery($request, $event, $requestedRelations);

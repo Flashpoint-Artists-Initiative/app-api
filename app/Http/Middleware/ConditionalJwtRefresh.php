@@ -16,7 +16,7 @@ class ConditionalJwtRefresh extends RefreshToken
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next): mixed
     {
         if (config('jwt.refresh_token', true)) {
             try {

@@ -32,6 +32,9 @@ class OrderService
         return Order::create($data);
     }
 
+    /**
+     * @return array<string, string|int>
+     */
     protected function mapDataFromSession(Session $session): array
     {
         return [
@@ -44,6 +47,9 @@ class OrderService
         ];
     }
 
+    /**
+     * @return array<string, string|int|array<string, string|int>>
+     */
     protected function mapDataFromCart(Cart $cart): array
     {
         return [
@@ -55,6 +61,10 @@ class OrderService
         ];
     }
 
+    /**
+     * @param  Collection<int, \App\Models\Ticketing\CartItem>  $items
+     * @return array<string, string|int>
+     */
     protected function jsonFromCartItems(Collection $items): array
     {
         return $items->each->setVisible([

@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Support\Collection;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
@@ -30,31 +29,47 @@ class TicketTransfer extends Model implements ContractsAuditable
         'completed',
     ];
 
+    /** @var string[] */
     protected $with = [
         'purchasedTickets.ticketType',
         'reservedTickets.ticketType',
     ];
 
+    /**
+     * @return MorphToMany<PurchasedTicket>
+     */
     public function purchasedTickets(): MorphToMany
     {
         return $this->morphedByMany(PurchasedTicket::class, 'ticket', 'ticket_transfer_items');
     }
 
+    /**
+     * @return MorphToMany<ReservedTicket>
+     */
     public function reservedTickets(): MorphToMany
     {
         return $this->morphedByMany(ReservedTicket::class, 'ticket', 'ticket_transfer_items');
     }
 
+    /**
+     * @return BelongsTo<User, TicketTransfer>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo<User, TicketTransfer>
+     */
     public function recipient(): BelongsTo
     {
         return $this->belongsTo(User::class, 'recipient_email', 'email');
     }
 
+    /**
+     * @return Attribute<int, void>
+     */
     public function ticketCount(): Attribute
     {
         return Attribute::make(
@@ -64,6 +79,9 @@ class TicketTransfer extends Model implements ContractsAuditable
         );
     }
 
+    /**
+     * @return Attribute<Event, void>
+     */
     public function event(): Attribute
     {
         return Attribute::make(
@@ -88,7 +106,6 @@ class TicketTransfer extends Model implements ContractsAuditable
 
         $user = User::where('email', $this->recipient_email)->firstOrFail();
 
-        /** @var Collection $tickets */
         $tickets = $this->purchasedTickets->concat($this->reservedTickets);
 
         $tickets->each(fn ($ticket) => $ticket->update(['user_id' => $user->id]));
@@ -98,6 +115,10 @@ class TicketTransfer extends Model implements ContractsAuditable
         return $this;
     }
 
+    /**
+     * @param  int[]  $purchasedTicketIds
+     * @param  int[]  $reservedTicketIds
+     */
     public static function createTransfer(int $userId, string $email, ?array $purchasedTicketIds = [], ?array $reservedTicketIds = []): TicketTransfer
     {
         $transfer = TicketTransfer::create([

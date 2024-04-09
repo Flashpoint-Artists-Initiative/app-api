@@ -17,11 +17,18 @@ class PurchasedTicketsController extends OrionRelationsController
 
     protected $relation = 'purchasedTickets';
 
+    /**
+     * @return string[]
+     */
     public function includes(): array
     {
         return ['ticketType', 'user', 'event', 'reservedTicket'];
     }
 
+    /**
+     * @param  string[]  $requestedRelations
+     * @return Relation<\App\Models\Ticketing\PurchasedTicket>
+     */
     protected function buildIndexFetchQuery(Request $request, Model $event, array $requestedRelations): Relation
     {
         $relation = parent::buildIndexFetchQuery($request, $event, $requestedRelations);

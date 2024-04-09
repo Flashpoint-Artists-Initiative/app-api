@@ -11,11 +11,6 @@ use Illuminate\Validation\Validator;
 
 class ShiftCancelRequest extends FormRequest
 {
-    public function rules(): array
-    {
-        return [];
-    }
-
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator) {

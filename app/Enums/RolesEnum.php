@@ -28,14 +28,14 @@ enum RolesEnum: string
         return Role::firstWhere('name', $this->value);
     }
 
-    public static function fromId($id): static
+    public static function fromId(int $id): static
     {
         $role = Role::find($id);
 
         return self::from($role->name);
     }
 
-    public static function fromModel($role): static
+    public static function fromModel(Role $role): static
     {
         return self::from($role->name);
     }

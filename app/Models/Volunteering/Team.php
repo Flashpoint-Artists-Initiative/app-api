@@ -34,30 +34,46 @@ class Team extends Model implements ContractsAuditable
         'active',
     ];
 
+    /** @var string[] */
     protected $withCount = [
         'volunteers',
     ];
 
+    /**
+     * @return BelongsTo<Event, Team>
+     */
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
     }
 
+    /**
+     * @return HasMany<ShiftType>
+     */
     public function shiftTypes(): HasMany
     {
         return $this->hasMany(ShiftType::class);
     }
 
+    /**
+     * @return HasManyThrough<Shift>
+     */
     public function shifts(): HasManyThrough
     {
         return $this->hasManyThrough(Shift::class, ShiftType::class);
     }
 
+    /**
+     * @return BelongsToMany<User>
+     */
     public function volunteers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'volunteer_data');
     }
 
+    /**
+     * @return Attribute<int, void>
+     */
     public function totalNumSpots(): Attribute
     {
         return Attribute::make(
@@ -67,6 +83,9 @@ class Team extends Model implements ContractsAuditable
         );
     }
 
+    /**
+     * @return Attribute<float, void>
+     */
     public function percentFilled(): Attribute
     {
         return Attribute::make(
@@ -78,11 +97,17 @@ class Team extends Model implements ContractsAuditable
         );
     }
 
+    /**
+     * @param  Builder<Team>  $query
+     */
     public function scopeActive(Builder $query): void
     {
         $query->where('active', 1);
     }
 
+    /**
+     * @param  Builder<Team>  $query
+     */
     public function scopeEvent(Builder $query, int $eventId): void
     {
         $query->where('event_id', $eventId);

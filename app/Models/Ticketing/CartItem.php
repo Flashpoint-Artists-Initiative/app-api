@@ -19,11 +19,17 @@ class CartItem extends Model
         'quantity',
     ];
 
+    /**
+     * @return BelongsTo<Cart, CartItem>
+     */
     public function cart(): BelongsTo
     {
         return $this->belongsTo(Cart::class);
     }
 
+    /**
+     * @return BelongsTo<TicketType, CartItem>
+     */
     public function ticketType(): BelongsTo
     {
         return $this->belongsTo(TicketType::class);

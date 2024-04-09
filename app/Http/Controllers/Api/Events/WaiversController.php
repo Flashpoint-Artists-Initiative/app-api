@@ -23,7 +23,7 @@ class WaiversController extends OrionRelationsController
         parent::__construct();
     }
 
-    public function completeAction(Event $event, Waiver $waiver, WaiverCompleteRequest $request)
+    public function completeAction(Event $event, Waiver $waiver, WaiverCompleteRequest $request): CompletedWaiver
     {
         $this->authorize('complete', [$waiver]);
         $completedWaiver = CompletedWaiver::create([

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StripeWebhookRequest;
 use App\Services\CheckoutService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Stripe\Checkout\Session;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -19,7 +20,7 @@ class StripeWebhookController extends Controller
     ) {
     }
 
-    public function webhookAction(StripeWebhookRequest $request)
+    public function webhookAction(StripeWebhookRequest $request): JsonResponse
     {
         return match ($request->type) {
             'checkout.session.completed' => $this->checkoutSessionCompleted(),
@@ -27,7 +28,7 @@ class StripeWebhookController extends Controller
         };
     }
 
-    public function checkoutSessionCompleted()
+    public function checkoutSessionCompleted(): JsonResponse
     {
         /** @var Session $session */
         $session = request('event')->data->object;

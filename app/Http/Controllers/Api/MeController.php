@@ -15,9 +15,14 @@ use App\Models\Ticketing\Order;
 use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class MeController extends Controller
 {
+    /**
+     * @return string[]
+     */
     public static function includes(): array
     {
         return [
@@ -34,7 +39,7 @@ class MeController extends Controller
      *
      * Always returns the user's roles and permissions.  Optionally returns other relations
      */
-    public function indexAction(MeRequest $request)
+    public function indexAction(MeRequest $request): UserResource
     {
         $includes = array_merge($request->input('include', []), ['roles', 'permissions']);
         /** @var User $user */
@@ -47,7 +52,7 @@ class MeController extends Controller
     /**
      * Update the logged in user
      */
-    public function update(UserRequest $request)
+    public function update(UserRequest $request): UserResource
     {
         /** @var User $user */
         $user = auth()->user();
@@ -60,8 +65,10 @@ class MeController extends Controller
      * Get the logged in user's tickets
      *
      * Returns all purchased and reserved tickets
+     *
+     * @return array{data: array{purchasedTickets: Collection<int, PurchasedTicket>, reservedTickets: Collection<int, ReservedTicket>}}
      */
-    public function ticketsAction()
+    public function ticketsAction(): array
     {
         /** @var User $user */
         $user = auth()->user();
@@ -79,7 +86,7 @@ class MeController extends Controller
     /**
      * Get the logged in user's orders
      */
-    public function ordersAction()
+    public function ordersAction(): AnonymousResourceCollection
     {
         /** @var User $user */
         $user = auth()->user();
@@ -91,7 +98,7 @@ class MeController extends Controller
     /**
      * Get the logged in user's waivers
      */
-    public function waiversAction()
+    public function waiversAction(): AnonymousResourceCollection
     {
         /** @var User $user */
         $user = auth()->user();

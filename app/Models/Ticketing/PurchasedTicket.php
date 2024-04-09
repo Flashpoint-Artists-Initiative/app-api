@@ -23,6 +23,9 @@ class PurchasedTicket extends Model implements ContractsAuditable, TicketInterfa
         'order_id',
     ];
 
+    /**
+     * @return BelongsTo<ReservedTicket, PurchasedTicket>
+     */
     public function reservedTicket(): BelongsTo
     {
         return $this->belongsTo(ReservedTicket::class);

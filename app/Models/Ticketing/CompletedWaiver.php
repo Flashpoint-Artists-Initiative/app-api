@@ -26,11 +26,17 @@ class CompletedWaiver extends Model implements ContractsAuditable
         'form_data' => 'array',
     ];
 
+    /**
+     * @return BelongsTo<Waiver, CompletedWaiver>
+     */
     public function waiver(): BelongsTo
     {
         return $this->belongsTo(Waiver::class);
     }
 
+    /**
+     * @return BelongsTo<User, CompletedWaiver>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

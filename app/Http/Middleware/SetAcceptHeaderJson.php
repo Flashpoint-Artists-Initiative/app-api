@@ -14,7 +14,7 @@ class SetAcceptHeaderJson
     {
     }
 
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
         $request->headers->set('Accept', 'application/json');
 

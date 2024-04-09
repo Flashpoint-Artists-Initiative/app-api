@@ -8,6 +8,7 @@ use App\Http\Controllers\OrionRelationsController;
 use App\Http\Requests\Volunteering\TeamRequest;
 use App\Models\Event;
 use App\Models\User;
+use App\Models\Volunteering\Team;
 use App\Policies\Volunteering\TeamPolicy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -30,6 +31,10 @@ class TeamsController extends OrionRelationsController
         parent::__construct();
     }
 
+    /**
+     * @param  string[]  $requestedRelations
+     * @return Relation<Team>
+     */
     protected function buildIndexFetchQuery(Request $request, Model $event, array $requestedRelations): Relation
     {
         $relation = parent::buildIndexFetchQuery($request, $event, $requestedRelations);
@@ -50,6 +55,10 @@ class TeamsController extends OrionRelationsController
         return $relation;
     }
 
+    /**
+     * @param  string[]  $requestedRelations
+     * @return Relation<Team>
+     */
     protected function buildShowFetchQuery(Request $request, Model $event, array $requestedRelations): Relation
     {
         $relation = parent::buildShowFetchQuery($request, $event, $requestedRelations);

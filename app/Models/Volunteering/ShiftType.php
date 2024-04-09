@@ -32,14 +32,19 @@ class ShiftType extends Model implements ContractsAuditable
         'num_spots',
     ];
 
+    /** @var string[] */
     protected $withCount = [
         'volunteers',
     ];
 
+    /** @var string[] */
     protected $with = [
         'requirements',
     ];
 
+    /**
+     * @return HasOneThrough<Event>
+     */
     public function event(): HasOneThrough
     {
         // Set the keys directly because we're effectively going backwards from the intended way
@@ -53,26 +58,41 @@ class ShiftType extends Model implements ContractsAuditable
         );
     }
 
+    /**
+     * @return BelongsTo<Team, ShiftType>
+     */
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
     }
 
+    /**
+     * @return HasMany<Shift>
+     */
     public function shifts(): HasMany
     {
         return $this->hasMany(Shift::class);
     }
 
+    /**
+     * @return BelongsToMany<Requirement>
+     */
     public function requirements(): BelongsToMany
     {
         return $this->belongsToMany(Requirement::class, 'shift_type_requirements')->withTimestamps();
     }
 
+    /**
+     * @return BelongsToMany<User>
+     */
     public function volunteers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'volunteer_data');
     }
 
+    /**
+     * @return Attribute<int, void>
+     */
     public function totalNumSpots(): Attribute
     {
         return Attribute::make(
@@ -82,6 +102,9 @@ class ShiftType extends Model implements ContractsAuditable
         );
     }
 
+    /**
+     * @return Attribute<float, void>
+     */
     public function percentFilled(): Attribute
     {
         return Attribute::make(

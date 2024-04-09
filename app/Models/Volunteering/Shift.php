@@ -34,20 +34,28 @@ class Shift extends Model implements ContractsAuditable
         'num_spots',
     ];
 
+    /** @var string[] */
     protected $with = [
         'shiftType',
         'team',
     ];
 
+    /** @var string[] */
     protected $withCount = [
         'volunteers',
     ];
 
+    /**
+     * @return BelongsTo<ShiftType, Shift>
+     */
     public function shiftType(): BelongsTo
     {
         return $this->belongsTo(ShiftType::class);
     }
 
+    /**
+     * @return BelongsToMany<User>
+     */
     public function volunteers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'shift_signups')->as('signup')->withTimestamps();
@@ -58,6 +66,9 @@ class Shift extends Model implements ContractsAuditable
     //     return $this->belongsToMany(Requirement::class, 'shift_requirements')->withTimestamps();
     // }
 
+    /**
+     * @return HasOneThrough<Team>
+     */
     public function team(): HasOneThrough
     {
         // Set the keys directly because we're effectively going backwards from the intended way
@@ -71,7 +82,11 @@ class Shift extends Model implements ContractsAuditable
         );
     }
 
-    // Define accessors to pull default values from the shiftType if none are set
+    /**
+     * Pulls default value from shiftType if not set
+     *
+     * @return Attribute<int, void>
+     */
     public function length(): Attribute
     {
         return Attribute::make(
@@ -81,6 +96,11 @@ class Shift extends Model implements ContractsAuditable
         );
     }
 
+    /**
+     * Pulls default value from shiftType if not set
+     *
+     * @return Attribute<int, void>
+     */
     public function numSpots(): Attribute
     {
         return Attribute::make(
@@ -93,6 +113,9 @@ class Shift extends Model implements ContractsAuditable
         );
     }
 
+    /**
+     * @return Attribute<int, void>
+     */
     public function endOffset(): Attribute
     {
         return Attribute::make(
@@ -100,6 +123,9 @@ class Shift extends Model implements ContractsAuditable
         );
     }
 
+    /**
+     * @return Attribute<string, void>
+     */
     public function title(): Attribute
     {
         return Attribute::make(
@@ -107,6 +133,9 @@ class Shift extends Model implements ContractsAuditable
         );
     }
 
+    /**
+     * @return Attribute<string, void>
+     */
     public function startDatetime(): Attribute
     {
         return Attribute::make(
@@ -120,6 +149,9 @@ class Shift extends Model implements ContractsAuditable
         );
     }
 
+    /**
+     * @return Attribute<string, void>
+     */
     public function endDatetime(): Attribute
     {
         return Attribute::make(
@@ -133,6 +165,9 @@ class Shift extends Model implements ContractsAuditable
         );
     }
 
+    /**
+     * @return Attribute<float, void>
+     */
     public function percentFilled(): Attribute
     {
         return Attribute::make(

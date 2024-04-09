@@ -8,6 +8,9 @@ use Orion\Http\Requests\Request;
 
 class RequirementRequest extends Request
 {
+    /**
+     * @return array<string, string[]>
+     */
     public function commonRules(): array
     {
         return [
@@ -17,6 +20,9 @@ class RequirementRequest extends Request
         ];
     }
 
+    /**
+     * @return array<string, string[]>
+     */
     public function storeRules(): array
     {
         return [

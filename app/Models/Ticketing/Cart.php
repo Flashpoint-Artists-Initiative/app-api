@@ -32,20 +32,32 @@ class Cart extends Model implements ContractsAuditable
         'expiration_date' => 'datetime',
     ];
 
+    /**
+     * @var string[]
+     */
     protected $with = [
         'items.ticketType',
     ];
 
+    /**
+     * @return HasMany<CartItem>
+     */
     public function items(): HasMany
     {
         return $this->hasMany(CartItem::class);
     }
 
+    /**
+     * @return BelongsTo<User, Cart>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return Attribute<Event, void>
+     */
     public function event(): Attribute
     {
         return Attribute::make(
@@ -54,6 +66,9 @@ class Cart extends Model implements ContractsAuditable
             });
     }
 
+    /**
+     * @return Attribute<int, void>
+     */
     public function quantity(): Attribute
     {
         return Attribute::make(
@@ -62,6 +77,9 @@ class Cart extends Model implements ContractsAuditable
             });
     }
 
+    /**
+     * @return Attribute<bool, void>
+     */
     public function isExpired(): Attribute
     {
         return Attribute::make(
@@ -78,11 +96,17 @@ class Cart extends Model implements ContractsAuditable
         $this->saveQuietly();
     }
 
+    /**
+     * @param  Builder<Cart>  $query
+     */
     public function scopeNotExpired(Builder $query): void
     {
         $query->where('expiration_date', '>', now());
     }
 
+    /**
+     * @param  Builder<Cart>  $query
+     */
     public function scopeStripeCheckoutId(Builder $query, string $id): void
     {
         $query->where('stripe_checkout_id', $id);

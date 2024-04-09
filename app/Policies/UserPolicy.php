@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace App\Policies;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 
 class UserPolicy extends AbstractModelPolicy
 {
     protected string $prefix = 'users';
 
-    public function update(User $user, $model): bool
+    /**
+     * @param  User  $model
+     */
+    public function update(User $user, Model $model): bool
     {
         if ($user->id === $model->id) {
             return true;
@@ -19,7 +23,10 @@ class UserPolicy extends AbstractModelPolicy
         return parent::update($user, $model);
     }
 
-    public function view(User $user, $model): bool
+    /**
+     * @param  User  $model
+     */
+    public function view(User $user, Model $model): bool
     {
         if ($user->id === $model->id) {
             return true;
@@ -28,7 +35,10 @@ class UserPolicy extends AbstractModelPolicy
         return parent::view($user, $model);
     }
 
-    public function delete(User $user, $model): bool
+    /**
+     * @param  User  $model
+     */
+    public function delete(User $user, Model $model): bool
     {
         if ($user->id === $model->id) {
             return true;

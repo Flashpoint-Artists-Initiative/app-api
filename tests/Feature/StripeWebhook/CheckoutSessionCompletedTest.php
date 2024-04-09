@@ -26,6 +26,7 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
 
     public Event $event;
 
+    /** @var array<mixed> */
     public array $eventData;
 
     public function setUp(): void
@@ -145,9 +146,5 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
         $response = $this->actingAs($user)->postJson($this->endpoint, $this->eventData);
 
         $response->assertStatus(204);
-    }
-
-    protected function overrideMiddleware()
-    {
     }
 }

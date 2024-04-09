@@ -17,7 +17,6 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -60,7 +59,6 @@ class AuthController extends Controller
         /** @var User $user */
         $user = auth()->user();
 
-        /** @var Collection $collection */
         $collection = $user->getAllPermissions();
 
         $permissions = $collection->map(fn ($p) => $p->name);

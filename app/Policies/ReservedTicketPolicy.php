@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
+use App\Models\Ticketing\ReservedTicket;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 
 class ReservedTicketPolicy extends AbstractModelPolicy
 {
     protected string $prefix = 'reservedTickets';
 
-    public function update(User $user, $model): bool
+    /**
+     * @param  ReservedTicket  $model
+     */
+    public function update(User $user, Model $model): bool
     {
         if ($model->is_purchased) {
             return false;
@@ -19,7 +24,10 @@ class ReservedTicketPolicy extends AbstractModelPolicy
         return parent::update($user, $model);
     }
 
-    public function delete(User $user, $model): bool
+    /**
+     * @param  ReservedTicket  $model
+     */
+    public function delete(User $user, Model $model): bool
     {
         if ($model->is_purchased) {
             return false;

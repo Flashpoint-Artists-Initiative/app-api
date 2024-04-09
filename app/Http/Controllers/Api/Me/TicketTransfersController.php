@@ -10,7 +10,9 @@ use App\Http\Resources\TicketTransferResource;
 use App\Models\Ticketing\TicketTransfer;
 use App\Policies\MeTicketTransferPolicy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Orion\Http\Requests\Request;
+use Orion\Http\Resources\CollectionResource;
 
 /**
  * @tags Me/TicketTransfers
@@ -28,11 +30,18 @@ class TicketTransfersController extends OrionController
 
     protected $policy = MeTicketTransferPolicy::class;
 
+    /**
+     * @return string[]
+     */
     public function alwaysIncludes(): array
     {
         return ['purchasedTickets', 'reservedTickets'];
     }
 
+    /**
+     * @param  string[]  $requestedRelations
+     * @return Builder<TicketTransfer>
+     */
     protected function buildIndexFetchQuery(Request $request, array $requestedRelations): Builder
     {
         $query = parent::buildIndexFetchQuery($request, $requestedRelations);
@@ -55,7 +64,7 @@ class TicketTransfersController extends OrionController
     /**
      * Initiate a ticket transfer
      */
-    public function transferAction(TicketTransferCreateRequest $request)
+    public function transferAction(TicketTransferCreateRequest $request): TicketTransferResource
     {
         $transfer = TicketTransfer::createTransfer($request->getTransferUser()->id, $request->email, $request->purchased_tickets, $request->reserved_tickets);
 
@@ -65,7 +74,7 @@ class TicketTransfersController extends OrionController
     /**
      * Complete a ticket transfer
      */
-    public function completeAction(Request $request, TicketTransfer $ticketTransfer)
+    public function completeAction(Request $request, TicketTransfer $ticketTransfer): JsonResponse
     {
         $this->authorize('complete', [$ticketTransfer]);
 
@@ -77,7 +86,7 @@ class TicketTransfersController extends OrionController
     /**
      * Get received transfers
      */
-    public function received(Request $request)
+    public function received(Request $request): CollectionResource
     {
         return parent::index($request);
     }
