@@ -25,7 +25,7 @@ class RequirementDeleteTest extends ApiRouteTestCase
 
     public function test_requirement_delete_call_without_permission_fails(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -34,7 +34,7 @@ class RequirementDeleteTest extends ApiRouteTestCase
 
     public function test_requirement_delete_call_as_admin_succeeds(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 

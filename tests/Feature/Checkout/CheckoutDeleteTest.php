@@ -23,7 +23,7 @@ class CheckoutDeleteTest extends ApiRouteTestCase
 
     public function test_cart_delete_call_without_cart_returns_error(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $response = $this->actingAs($user)->delete($this->endpoint);
 
         $response->assertStatus(404);
@@ -31,7 +31,7 @@ class CheckoutDeleteTest extends ApiRouteTestCase
 
     public function test_cart_delete_call_with_cart_returns_success(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         Cart::create(['user_id' => $user->id]);
 
         $response = $this->actingAs($user)->delete($this->endpoint);
@@ -41,7 +41,7 @@ class CheckoutDeleteTest extends ApiRouteTestCase
 
     public function test_cart_delete_call_with_expired_cart_returns_error(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         Cart::create(['user_id' => $user->id]);
 
         $this->travel(1)->hour();

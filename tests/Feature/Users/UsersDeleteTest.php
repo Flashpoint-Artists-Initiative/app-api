@@ -38,7 +38,7 @@ class UsersDeleteTest extends ApiRouteTestCase
     {
         $this->generateUserForDeletion();
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $this->assertFalse($user->can('users.delete'));
 
@@ -51,7 +51,7 @@ class UsersDeleteTest extends ApiRouteTestCase
     {
         $this->generateUserForDeletion();
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -62,7 +62,7 @@ class UsersDeleteTest extends ApiRouteTestCase
     {
         $this->generateUserForDeletion(true);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -74,7 +74,7 @@ class UsersDeleteTest extends ApiRouteTestCase
         $model = $this->generateUserForDeletion(true);
         $model->delete();
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -87,7 +87,7 @@ class UsersDeleteTest extends ApiRouteTestCase
         $model->delete();
         $this->buildEndpoint(name: 'api.users.restore', params: ['user' => $model->id]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->post($this->endpoint);
 

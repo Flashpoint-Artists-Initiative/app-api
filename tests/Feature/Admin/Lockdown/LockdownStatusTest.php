@@ -22,7 +22,7 @@ class LockdownStatusTest extends ApiRouteTestCase
 
     public function test_lockdown_status_call_without_permission_in_returns_success(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 

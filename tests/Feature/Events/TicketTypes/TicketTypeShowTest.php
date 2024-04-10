@@ -21,8 +21,8 @@ class TicketTypeShowTest extends ApiRouteTestCase
 
     public function test_ticket_type_show_call_while_not_logged_in_returns_active_ticket_type(): void
     {
-        $event = Event::has('ticketTypes')->where('active', true)->first();
-        $ticket_type = $event->ticketTypes()->where('active', true)->first();
+        $event = Event::has('ticketTypes')->where('active', true)->firstOrFail();
+        $ticket_type = $event->ticketTypes()->where('active', true)->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id, 'ticket_type' => $ticket_type->id]);
 
         $response = $this->get($this->endpoint);
@@ -32,7 +32,7 @@ class TicketTypeShowTest extends ApiRouteTestCase
 
     public function test_ticket_type_show_call_while_not_logged_in_does_not_return_pending_ticket_type(): void
     {
-        $event = Event::has('ticketTypes')->where('active', true)->first();
+        $event = Event::has('ticketTypes')->where('active', true)->firstOrFail();
         $ticket_type = TicketType::factory()->for($event)->inactive()->create();
         $this->buildEndpoint(params: ['event' => $event->id, 'ticket_type' => $ticket_type->id]);
 
@@ -43,7 +43,7 @@ class TicketTypeShowTest extends ApiRouteTestCase
 
     public function test_ticket_type_show_call_while_not_logged_in_does_not_return_trashed_ticket_type(): void
     {
-        $event = Event::has('ticketTypes')->where('active', true)->first();
+        $event = Event::has('ticketTypes')->where('active', true)->firstOrFail();
         /** @phpstan-ignore-next-line */
         $ticket_type = TicketType::factory()->for($event)->trashed()->create();
         $this->buildEndpoint(params: ['event' => $event->id, 'ticket_type' => $ticket_type->id, 'with_trashed' => true]);
@@ -55,11 +55,11 @@ class TicketTypeShowTest extends ApiRouteTestCase
 
     public function test_ticket_type_show_call_as_admin_returns_pending_ticket_type(): void
     {
-        $event = Event::has('ticketTypes')->where('active', true)->first();
+        $event = Event::has('ticketTypes')->where('active', true)->firstOrFail();
         $ticket_type = TicketType::factory()->for($event)->inactive()->create();
         $this->buildEndpoint(params: ['event' => $event->id, 'ticket_type' => $ticket_type->id]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
@@ -68,12 +68,12 @@ class TicketTypeShowTest extends ApiRouteTestCase
 
     public function test_ticket_type_show_call_as_admin_returns_trashed_ticket_type(): void
     {
-        $event = Event::has('ticketTypes')->where('active', true)->first();
+        $event = Event::has('ticketTypes')->where('active', true)->firstOrFail();
         /** @phpstan-ignore-next-line */
         $ticket_type = TicketType::factory()->for($event)->trashed()->create();
         $this->buildEndpoint(params: ['event' => $event->id, 'ticket_type' => $ticket_type->id, 'with_trashed' => true]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
@@ -82,9 +82,9 @@ class TicketTypeShowTest extends ApiRouteTestCase
 
     public function test_ticket_types_view_call_with_purchased_tickets_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $event = Event::has('purchasedTickets')->first();
-        $ticket_type = $event->ticketTypes()->where('active', true)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $event = Event::has('purchasedTickets')->firstOrFail();
+        $ticket_type = $event->ticketTypes()->where('active', true)->firstOrFail();
 
         $this->buildEndpoint(params: ['event' => $event->id, 'ticket_type' => $ticket_type->id, 'include' => 'purchasedTickets']);
 
@@ -95,9 +95,9 @@ class TicketTypeShowTest extends ApiRouteTestCase
 
     public function test_ticket_types_view_call_with_reserved_tickets_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $event = Event::has('reservedTickets')->first();
-        $ticket_type = $event->ticketTypes()->where('active', true)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $event = Event::has('reservedTickets')->firstOrFail();
+        $ticket_type = $event->ticketTypes()->where('active', true)->firstOrFail();
 
         $this->buildEndpoint(params: ['event' => $event->id, 'ticket_type' => $ticket_type->id, 'include' => 'reservedTickets']);
 
@@ -108,9 +108,9 @@ class TicketTypeShowTest extends ApiRouteTestCase
 
     public function test_ticket_types_view_call_with_event_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $event = Event::has('reservedTickets')->first();
-        $ticket_type = $event->ticketTypes()->where('active', true)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $event = Event::has('reservedTickets')->firstOrFail();
+        $ticket_type = $event->ticketTypes()->where('active', true)->firstOrFail();
 
         $this->buildEndpoint(params: ['event' => $event->id, 'ticket_type' => $ticket_type->id, 'include' => 'event']);
 
@@ -121,9 +121,9 @@ class TicketTypeShowTest extends ApiRouteTestCase
 
     public function test_ticket_types_view_call_with_cart_items_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $event = Event::has('reservedTickets')->first();
-        $ticket_type = $event->ticketTypes()->where('active', true)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $event = Event::has('reservedTickets')->firstOrFail();
+        $ticket_type = $event->ticketTypes()->where('active', true)->firstOrFail();
 
         $this->buildEndpoint(params: ['event' => $event->id, 'ticket_type' => $ticket_type->id, 'include' => 'cartItems']);
 

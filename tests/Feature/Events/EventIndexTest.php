@@ -32,7 +32,7 @@ class EventIndexTest extends ApiRouteTestCase
 
         $this->assertGreaterThan($active_event_count, $event_count);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $user->givePermissionTo('events.viewPending');
 
         $response = $this->actingAs($user)->get($this->endpoint);
@@ -48,7 +48,7 @@ class EventIndexTest extends ApiRouteTestCase
 
         $this->assertGreaterThan($existing_event_count, $event_count);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $user->givePermissionTo('events.viewDeleted');
 
         $response = $this->actingAs($user)->get($this->endpoint);
@@ -65,7 +65,7 @@ class EventIndexTest extends ApiRouteTestCase
         $this->assertGreaterThan($existing_event_count, $event_count);
 
         // No permission for events.viewDeleted
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         // Matches existing event count, not trashed
@@ -81,7 +81,7 @@ class EventIndexTest extends ApiRouteTestCase
 
         $this->assertLessThan($event_count, $trashed_event_count);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $user->givePermissionTo('events.viewDeleted');
 
         $response = $this->actingAs($user)->get($this->endpoint);
@@ -97,7 +97,7 @@ class EventIndexTest extends ApiRouteTestCase
 
         $this->assertGreaterThan($event_count, $all_event_count);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200)->assertJsonPath('meta.total', $all_event_count);

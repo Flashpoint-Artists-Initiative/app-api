@@ -18,7 +18,7 @@ class MeUpdateTest extends ApiRouteTestCase
 
     public function test_me_update_call_with_valid_data_returns_a_successful_response(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $data = $user->toArray();
 
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
@@ -35,7 +35,7 @@ class MeUpdateTest extends ApiRouteTestCase
 
     public function test_me_update_call_with_invalid_data_returns_a_validation_error(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
 
         // Bad legal_name
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
@@ -79,7 +79,7 @@ class MeUpdateTest extends ApiRouteTestCase
 
     public function test_me_update_call_changing_email_resets_email_verification(): void
     {
-        $user = User::whereNot('email_verified_at', null)->first();
+        $user = User::whereNot('email_verified_at', null)->firstOrFail();
 
         $this->assertTrue($user->hasVerifiedEmail());
 
@@ -96,7 +96,7 @@ class MeUpdateTest extends ApiRouteTestCase
 
     public function test_me_update_call_changing_email_sends_new_verification_email(): void
     {
-        $user = User::whereNot('email_verified_at', null)->first();
+        $user = User::whereNot('email_verified_at', null)->firstOrFail();
 
         $this->assertTrue($user->hasVerifiedEmail());
 
@@ -121,7 +121,7 @@ class MeUpdateTest extends ApiRouteTestCase
 
     public function test_me_update_call_changing_password_hashes_correctly(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $newPassword = 'new_password';
         $oldHash = $user->password;
 

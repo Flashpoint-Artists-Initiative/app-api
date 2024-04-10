@@ -20,8 +20,8 @@ class TicketTransferTest extends TestCase
 
     public function test_second_completion(): void
     {
-        $transfer = TicketTransfer::first();
-        $ticket = $transfer->purchasedTickets->first();
+        $transfer = TicketTransfer::firstOrFail();
+        $ticket = $transfer->purchasedTickets->firstOrFail();
         $firstUser = $ticket->user;
         $secondUser = User::factory()->create(['email' => $transfer->recipient_email]);
 
@@ -50,15 +50,15 @@ class TicketTransferTest extends TestCase
 
     public function test_recipient_relation(): void
     {
-        $transfer = TicketTransfer::first();
+        $transfer = TicketTransfer::firstOrFail();
         $recipient = User::factory()->create(['email' => $transfer->recipient_email]);
 
-        $this->assertEquals($transfer->recipient->id, $recipient->id);
+        $this->assertEquals($transfer->recipient?->id, $recipient->id);
     }
 
     public function test_update_fails(): void
     {
-        $transfer = TicketTransfer::first();
+        $transfer = TicketTransfer::firstOrFail();
         $email = $transfer->recipient_email;
         $newEmail = 'newEmail@test.com';
 

@@ -8,9 +8,11 @@ use App\Http\Controllers\OrionController;
 use App\Http\Requests\TicketTransferCreateRequest;
 use App\Http\Resources\TicketTransferResource;
 use App\Models\Ticketing\TicketTransfer;
+use App\Models\User;
 use App\Policies\MeTicketTransferPolicy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Routing\Route;
 use Orion\Http\Requests\Request;
 
 /**
@@ -45,16 +47,22 @@ class TicketTransfersController extends OrionController
     {
         $query = parent::buildIndexFetchQuery($request, $requestedRelations);
 
-        $method = $request->route()->getActionMethod();
+        $route = $request->route();
+        $user = auth()->user();
+
+        abort_unless($route instanceof Route, 400, 'Invalid Request');
+        abort_unless($user instanceof User, 400, 'Invalid Request');
+
+        $method = $route->getActionMethod();
 
         if ($method === 'received') {
-            $query->where('recipient_user_id', auth()->user()->id)
-                ->orWhere(function (Builder $innerQuery) {
+            $query->where('recipient_user_id', $user->id)
+                ->orWhere(function (Builder $innerQuery) use ($user) {
                     $innerQuery->whereNull('recipient_user_id')
-                        ->where('recipient_email', auth()->user()->email);
+                        ->where('recipient_email', $user->email);
                 });
         } else {
-            $query->where('user_id', auth()->user()->id);
+            $query->where('user_id', $user->id);
         }
 
         return $query;

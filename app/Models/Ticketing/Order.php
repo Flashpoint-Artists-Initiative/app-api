@@ -16,6 +16,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
+/**
+ * @property-read User $user
+ * @property-read Event $event
+ * @property-read Cart $cart
+ */
 #[ObservedBy(OrderObserver::class)]
 class Order extends Model implements ContractsAuditable
 {

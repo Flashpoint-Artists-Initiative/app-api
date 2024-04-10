@@ -23,7 +23,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->event = Event::has('ticketTypes')->where('active', true)->inRandomOrder()->first();
+        $this->event = Event::has('ticketTypes')->where('active', true)->inRandomOrder()->firstOrFail();
         $this->routeParams = ['event' => $this->event->id];
         $this->buildEndpoint();
     }
@@ -46,7 +46,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
 
         $this->assertGreaterThan($active_ticket_type_count, $ticket_type_count);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $user->givePermissionTo('ticketTypes.viewPending');
 
         $response = $this->actingAs($user)->get($this->endpoint);
@@ -65,7 +65,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
 
         $this->assertGreaterThan($existing_ticket_type_count, $ticket_type_count);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $user->givePermissionTo('ticketTypes.viewDeleted');
 
         $response = $this->actingAs($user)->get($this->endpoint);
@@ -85,7 +85,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
         $this->assertGreaterThan($existing_ticket_type_count, $ticket_type_count);
 
         // No permission for events.viewDeleted
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);
@@ -102,7 +102,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
 
         $this->assertLessThan($ticket_type_count, $trashed_ticket_type_count);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $user->givePermissionTo('ticketTypes.viewDeleted');
 
         $response = $this->actingAs($user)->get($this->endpoint);
@@ -121,7 +121,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
 
         $this->assertGreaterThan($ticket_type_count, $all_ticket_type_count);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);

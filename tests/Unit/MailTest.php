@@ -18,7 +18,7 @@ class MailTest extends TestCase
 
     public function test_order_completed_mail_content(): void
     {
-        $order = Order::first();
+        $order = Order::firstOrFail();
         $mail = new OrderCompletedMail($order);
 
         $mail->assertSeeInOrderInHtml([

@@ -33,7 +33,7 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
     {
         parent::setUp();
 
-        auth()->login(User::first());
+        auth()->login(User::firstOrFail());
 
         $content = file_get_contents(storage_path('testing/stripe_checkout_completed_event.json'));
 
@@ -48,7 +48,7 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
         /** @var CartService $cartService */
         $cartService = app()->make(CartService::class);
 
-        $ticketType = TicketType::query()->available()->first();
+        $ticketType = TicketType::query()->available()->firstOrFail();
 
         $cart = $cartService->createCartAndItems([
             [
@@ -71,12 +71,12 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
 
     public function test_stripe_webhook_call_without_cart_returns_error(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $carts = Cart::where('user_id', $user->id)->get();
 
         $this->assertCount(1, $carts);
 
-        $carts->first()->deleteQuietly();
+        $carts->firstOrFail()->deleteQuietly();
 
         $response = $this->actingAs($user)->postJson($this->endpoint, $this->eventData);
 
@@ -85,7 +85,7 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
 
     public function test_stripe_webhook_call_with_cart_returns_success(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $purchasedTicketCount = $user->PurchasedTickets()->count();
 
         $this->assertEquals(0, $purchasedTicketCount);
@@ -94,12 +94,13 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
 
         $response->assertStatus(200);
 
-        $this->assertEquals(1, User::first()->PurchasedTickets()->count());
+        $this->assertEquals(1, User::firstOrFail()->PurchasedTickets()->count());
     }
 
     public function test_stripe_webhook_call_with_incorrect_checkout_id_returns_error(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
+        /** @var Cart $cart */
         $cart = $user->activeCart;
         $cart->stripe_checkout_id = 'wrong';
         $cart->saveQuietly();
@@ -111,7 +112,7 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
 
     public function test_stripe_webhook_call_with_incomplete_session_returns_error(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
 
         $this->session->status = 'incomplete';
 
@@ -122,7 +123,7 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
 
     public function test_stripe_webhook_call_with_unpaid_session_returns_error(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
 
         $this->session->payment_status = 'unpaid';
 
@@ -133,7 +134,7 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
 
     public function test_stripe_webhook_call_with_existing_order_returns_error(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
 
         Order::create([
             'user_email' => $user->email,

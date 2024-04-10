@@ -24,7 +24,7 @@ class OrdersIndexTest extends ApiRouteTestCase
 
     public function test_orders_index_call_without_permission_returns_error(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $this->assertFalse($user->can('orders.viewAny'));
 
@@ -36,7 +36,7 @@ class OrdersIndexTest extends ApiRouteTestCase
     public function test_orders_index_call_with_permission_returns_success(): void
     {
         $count = Order::count();
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $this->assertTrue($user->can('orders.viewAny'));
 

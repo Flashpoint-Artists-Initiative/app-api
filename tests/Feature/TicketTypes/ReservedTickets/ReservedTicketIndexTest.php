@@ -21,7 +21,7 @@ class ReservedTicketIndexTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->ticketType = TicketType::has('reservedTickets')->active()->first();
+        $this->ticketType = TicketType::has('reservedTickets')->active()->firstOrFail();
 
         $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id]);
     }
@@ -38,7 +38,7 @@ class ReservedTicketIndexTest extends ApiRouteTestCase
         $reservedTicketCount = $this->ticketType->reservedTickets()->count();
         $this->assertGreaterThan(0, $reservedTicketCount);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $user->givePermissionTo('ticketTypes.view');
         $user->givePermissionTo('reservedTickets.viewAny');
 
@@ -48,7 +48,7 @@ class ReservedTicketIndexTest extends ApiRouteTestCase
 
     public function test_reserved_ticket_index_call_without_permission_returns_error(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(403);

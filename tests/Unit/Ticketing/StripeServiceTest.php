@@ -41,6 +41,9 @@ class StripeServiceTest extends TestCase
     public function test_expired_expired_cart_session(): void
     {
         $session = $this->stripeService->checkout->sessions->all(['status' => 'expired', 'limit' => 1])->first();
+
+        $this->assertNotNull($session);
+
         $cart = new Cart();
         $cart->stripe_checkout_id = $session->id;
 

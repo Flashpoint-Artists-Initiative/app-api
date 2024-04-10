@@ -17,7 +17,7 @@ class EventCreateTest extends ApiRouteTestCase
 
     public function test_event_create_call_with_valid_data_returns_a_successful_response(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'name' => 'Test Event',
@@ -31,7 +31,7 @@ class EventCreateTest extends ApiRouteTestCase
 
     public function test_event_create_call_with_invalid_data_returns_a_validation_error(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         // Bad email
         $response = $this->actingAs($user)->postJson($this->endpoint, [
@@ -76,7 +76,7 @@ class EventCreateTest extends ApiRouteTestCase
 
     public function test_event_create_call_without_permission_returns_error(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $this->assertFalse($user->can('events.create'));
 

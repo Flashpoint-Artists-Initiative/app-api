@@ -30,7 +30,7 @@ class RequirementIndexTest extends ApiRouteTestCase
 
         $this->addEndpointParams(['with_trashed' => true]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $response = $this->actingAs($user)->get($this->endpoint);
 
         $response->assertStatus(200);
@@ -46,7 +46,7 @@ class RequirementIndexTest extends ApiRouteTestCase
 
         $this->assertLessThan($totalRequirementCount, $requirementCount);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $user->givePermissionTo('requirements.viewDeleted');
 
         $response = $this->actingAs($user)->get($this->endpoint);

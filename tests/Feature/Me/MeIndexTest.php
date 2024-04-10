@@ -22,7 +22,7 @@ class MeIndexTest extends ApiRouteTestCase
 
     public function test_me_index_call_as_user_returns_success(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $response = $this->actingAs($user)->get($this->endpoint);
 
         $response->assertStatus(200)->assertJsonPath('data.id', $user->id);
@@ -31,7 +31,7 @@ class MeIndexTest extends ApiRouteTestCase
     public function test_me_index_call_with_includes_returns_success(): void
     {
         // reservedTickets
-        $user = User::has('reservedTickets')->first();
+        $user = User::has('reservedTickets')->firstOrFail();
         $this->buildEndpoint(params: ['include' => 'reservedTickets']);
 
         $response = $this->actingAs($user)->get($this->endpoint);
@@ -40,7 +40,7 @@ class MeIndexTest extends ApiRouteTestCase
         $this->assertEquals($user->reservedTickets->count(), $response->baseResponse->original->reservedTickets->count());
 
         // purchasedTickets
-        $user = User::has('purchasedTickets')->first();
+        $user = User::has('purchasedTickets')->firstOrFail();
         $this->buildEndpoint(params: ['include' => 'purchasedTickets']);
 
         $response = $this->actingAs($user)->get($this->endpoint);
@@ -49,7 +49,7 @@ class MeIndexTest extends ApiRouteTestCase
         $this->assertEquals($user->purchasedTickets->count(), $response->baseResponse->original->purchasedTickets->count());
 
         // orders
-        $user = User::has('orders')->first();
+        $user = User::has('orders')->firstOrFail();
         $this->buildEndpoint(params: ['include' => 'orders']);
 
         $response = $this->actingAs($user)->get($this->endpoint);
@@ -58,7 +58,7 @@ class MeIndexTest extends ApiRouteTestCase
         $this->assertEquals($user->orders->count(), $response->baseResponse->original->orders->count());
 
         // waivers
-        $user = User::has('waivers')->first();
+        $user = User::has('waivers')->firstOrFail();
         $this->buildEndpoint(params: ['include' => 'waivers']);
 
         $response = $this->actingAs($user)->get($this->endpoint);

@@ -23,7 +23,7 @@ class MeTicketsTest extends ApiRouteTestCase
     public function test_me_tickets_call_as_user_returns_success(): void
     {
         // Purchased Tickets
-        $user = User::has('purchasedTickets')->first();
+        $user = User::has('purchasedTickets')->firstOrFail();
         $purchasedTicketsCount = $user->purchasedTickets->count();
         $response = $this->actingAs($user)->get($this->endpoint);
 
@@ -31,7 +31,7 @@ class MeTicketsTest extends ApiRouteTestCase
         $this->assertEquals($purchasedTicketsCount, $response->baseResponse->original['data']['purchasedTickets']->count());
 
         // Reserved Tickets
-        $user = User::has('reservedTickets')->first();
+        $user = User::has('reservedTickets')->firstOrFail();
         $reservedTicketsCount = $user->reservedTickets->count();
         $response = $this->actingAs($user)->get($this->endpoint);
 

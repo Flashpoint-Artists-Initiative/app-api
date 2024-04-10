@@ -23,7 +23,7 @@ class MeTicketsQrTest extends ApiRouteTestCase
 
     public function test_me_tickets_qr_call_as_user_returns_success(): void
     {
-        $user = User::has('purchasedTickets')->first();
+        $user = User::has('purchasedTickets')->firstOrFail();
         $response = $this->actingAs($user)->get($this->endpoint);
 
         $response->assertStatus(200);
@@ -31,8 +31,8 @@ class MeTicketsQrTest extends ApiRouteTestCase
 
     public function test_me_tickets_qr_call_with_event_id_returns_success(): void
     {
-        $user = User::has('purchasedTickets')->first();
-        $ticket = $user->purchasedTickets->first();
+        $user = User::has('purchasedTickets')->firstOrFail();
+        $ticket = $user->purchasedTickets->firstOrFail();
         $eventId = $ticket->ticketType->event_id;
 
         $this->addEndpointParams(['event_id' => $eventId]);
@@ -44,10 +44,10 @@ class MeTicketsQrTest extends ApiRouteTestCase
 
     public function test_me_tickets_qr_call_with_invalid_event_id_returns_error(): void
     {
-        $user = User::has('purchasedTickets')->first();
-        $ticket = $user->purchasedTickets->first();
+        $user = User::has('purchasedTickets')->firstOrFail();
+        $ticket = $user->purchasedTickets->firstOrFail();
         $eventId = $ticket->ticketType->event_id;
-        $otherEventId = Event::where('id', '!=', $eventId)->doesntHave('purchasedTickets')->first()->id;
+        $otherEventId = Event::where('id', '!=', $eventId)->doesntHave('purchasedTickets')->firstOrFail()->id;
 
         // non-int event_id
         $this->addEndpointParams(['event_id' => 'abc']);

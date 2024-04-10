@@ -25,12 +25,12 @@ enum RolesEnum: string
 
     public function model(): Role
     {
-        return Role::firstWhere('name', $this->value);
+        return Role::where('name', $this->value)->firstOrFail();
     }
 
     public static function fromId(int $id): static
     {
-        $role = Role::find($id);
+        $role = Role::findOrFail($id);
 
         return self::from($role->name);
     }

@@ -23,7 +23,7 @@ class TicketTransferIndexTest extends ApiRouteTestCase
 
     public function test_ticket_transfer_admin_index_call_without_permission_returns_success(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
@@ -32,7 +32,7 @@ class TicketTransferIndexTest extends ApiRouteTestCase
 
     public function test_ticket_transfer_admin_index_call_with_permission_returns_success(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 

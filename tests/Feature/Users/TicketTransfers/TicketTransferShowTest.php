@@ -22,10 +22,10 @@ class TicketTransferShowTest extends ApiRouteTestCase
     {
         parent::setUp();
 
-        $this->user = User::has('ticketTransfers')->first();
+        $this->user = User::has('ticketTransfers')->firstOrFail();
         $this->routeParams = [
             'user' => $this->user->id,
-            'ticket_transfer' => $this->user->ticketTransfers->first()->id,
+            'ticket_transfer' => $this->user->ticketTransfers->firstOrFail()->id,
         ];
 
         $this->buildEndpoint();
@@ -40,7 +40,7 @@ class TicketTransferShowTest extends ApiRouteTestCase
 
     public function test_ticket_transfer_show_call_without_permission_returns_error(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
@@ -49,8 +49,8 @@ class TicketTransferShowTest extends ApiRouteTestCase
 
     public function test_ticket_transfer_show_call_with_permission_returns_success(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $ticketTransfer = $this->user->ticketTransfers->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $ticketTransfer = $this->user->ticketTransfers->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 

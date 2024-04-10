@@ -20,17 +20,17 @@ class TeamUpdateTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $event = Event::has('teams')->inRandomOrder()->first();
+        $event = Event::has('teams')->inRandomOrder()->firstOrFail();
         $this->routeParams = [
             'event' => $event->id,
-            'team' => $event->teams()->inRandomOrder()->first()->id,
+            'team' => $event->teams()->inRandomOrder()->firstOrFail()->id,
         ];
         $this->buildEndpoint();
     }
 
     public function test_team_update_call_with_valid_data_returns_a_successful_response(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'name' => 'Test Team Update',
@@ -44,7 +44,7 @@ class TeamUpdateTest extends ApiRouteTestCase
 
     public function test_team_update_call_with_invalid_data_returns_a_validation_error(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         // Bad name
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
@@ -70,7 +70,7 @@ class TeamUpdateTest extends ApiRouteTestCase
 
     public function test_team_update_call_without_permission_returns_error(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $this->assertFalse($user->can('teams.update'));
 

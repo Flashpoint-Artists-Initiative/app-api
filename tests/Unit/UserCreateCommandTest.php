@@ -26,7 +26,7 @@ class UserCreateCommandTest extends TestCase
 
         $this->assertGreaterThan($count, User::count());
 
-        $user = User::latest('id')->first();
+        $user = User::latest('id')->firstOrFail();
         $this->assertEquals($user->email, 'test@test-example.com');
         $this->assertTrue($user->hasRole('admin'));
     }
@@ -56,7 +56,7 @@ class UserCreateCommandTest extends TestCase
             ->assertSuccessful()
             ->run();
 
-        $user = User::latest('id')->first();
+        $user = User::latest('id')->firstOrFail();
         $this->assertEquals($user->email, 'test@test-example.com');
         $this->assertTrue($user->hasRole('admin'));
     }

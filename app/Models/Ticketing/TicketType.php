@@ -21,6 +21,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  * @property ?string $cart_items_quantity
  * @property bool $available
  * @property bool $on_sale
+ * @property-read Event $event
  */
 class TicketType extends Model implements ContractsAuditable
 {

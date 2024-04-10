@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property-read Cart $cart
+ * @property-read TicketType $ticketType
+ */
 #[ObservedBy(CartItemObserver::class)]
 class CartItem extends Model
 {

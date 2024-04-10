@@ -24,7 +24,7 @@ class CheckoutIndexTest extends ApiRouteTestCase
 
     public function test_cart_index_call_without_cart_returns_error(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $response = $this->actingAs($user)->get($this->endpoint);
 
         $response->assertStatus(404);
@@ -32,7 +32,7 @@ class CheckoutIndexTest extends ApiRouteTestCase
 
     public function test_cart_index_call_with_cart_returns_success(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $this->createCart($user);
 
         $response = $this->actingAs($user)->get($this->endpoint);
@@ -42,7 +42,7 @@ class CheckoutIndexTest extends ApiRouteTestCase
 
     public function test_cart_index_call_with_multiple_carts_returns_single_cart(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $this->createCart($user);
         $this->createCart($user);
 
@@ -53,10 +53,10 @@ class CheckoutIndexTest extends ApiRouteTestCase
 
     public function test_cart_index_call_with_multiple_unexpired_carts_returns_success(): void
     {
-        $user = User::doesntHave('carts')->first();
+        $user = User::doesntHave('carts')->firstOrFail();
 
         $this->createCart($user);
-        $cart = $user->carts()->first();
+        $cart = $user->carts()->firstOrFail();
         $this->travel(1)->minute();
 
         $secondCart = Cart::create(['user_id' => $user->id]);
@@ -76,7 +76,7 @@ class CheckoutIndexTest extends ApiRouteTestCase
 
     public function test_cart_index_call_with_expired_cart_returns_error(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $this->createCart($user);
 
         $this->travel(1)->hour();
@@ -88,7 +88,7 @@ class CheckoutIndexTest extends ApiRouteTestCase
 
     protected function createCart(User $user): void
     {
-        $ticketType = TicketType::query()->available()->first();
+        $ticketType = TicketType::query()->available()->firstOrFail();
         $this->actingAs($user)->postJson(route('api.checkout.store'), [
             'tickets' => [
                 [

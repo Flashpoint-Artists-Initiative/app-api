@@ -21,7 +21,7 @@ class TicketsIndexTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->user = User::has('purchasedTickets')->has('reservedTickets')->first();
+        $this->user = User::has('purchasedTickets')->has('reservedTickets')->firstOrFail();
         $this->routeParams = ['user' => $this->user->id];
         $this->buildEndpoint();
     }
@@ -50,7 +50,7 @@ class TicketsIndexTest extends ApiRouteTestCase
 
     public function test_user_tickets_index_call_with_permission_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $this->assertTrue($user->can('users.view'));
         $this->assertNotEquals($this->routeParams['user'], $user->id);

@@ -19,8 +19,8 @@ class UsersUpdateTest extends ApiRouteTestCase
 
     public function test_users_update_call_with_valid_data_returns_a_successful_response(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $model = User::find($this->routeParams['user']);
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $model = User::findOrFail($this->routeParams['user']);
 
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'legal_name' => fake()->name(),
@@ -36,7 +36,7 @@ class UsersUpdateTest extends ApiRouteTestCase
 
     public function test_users_update_call_with_invalid_data_returns_a_validation_error(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         // Bad legal_name
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
@@ -99,7 +99,7 @@ class UsersUpdateTest extends ApiRouteTestCase
 
     public function test_users_update_call_as_self_succeeds(): void
     {
-        $user = User::find(1);
+        $user = User::findOrFail(1);
 
         $this->assertFalse($user->can('users.update'));
 
@@ -114,7 +114,7 @@ class UsersUpdateTest extends ApiRouteTestCase
 
     public function test_users_update_call_changing_email_resets_email_verification(): void
     {
-        $user = User::find(2);
+        $user = User::findorfail(2);
         $this->buildEndpoint(params: ['user' => 2]);
 
         $this->assertTrue($user->hasVerifiedEmail());
@@ -132,7 +132,7 @@ class UsersUpdateTest extends ApiRouteTestCase
 
     public function test_users_update_call_changing_email_sends_new_verification_email(): void
     {
-        $user = User::find(2);
+        $user = User::findorfail(2);
         $this->buildEndpoint(params: ['user' => 2]);
 
         $this->assertTrue($user->hasVerifiedEmail());
@@ -158,7 +158,7 @@ class UsersUpdateTest extends ApiRouteTestCase
 
     public function test_users_update_call_changing_password_hashes_correctly(): void
     {
-        $user = User::find(1);
+        $user = User::findOrFail(1);
         $newPassword = 'new_password';
         $oldHash = $user->password;
 

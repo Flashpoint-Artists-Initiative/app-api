@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  * @property bool $has_active_transfer
+ * @property-read TicketType $ticketType
+ * @property-read User $user
  *
  * @phpstan-require-implements TicketInterface
  */

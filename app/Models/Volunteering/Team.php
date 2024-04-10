@@ -21,6 +21,7 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 /**
  * @property int $total_num_spots
  * @property float $percent_filled
+ * @property-read Event $event
  */
 class Team extends Model implements ContractsAuditable
 {

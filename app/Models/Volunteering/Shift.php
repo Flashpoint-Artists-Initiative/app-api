@@ -22,6 +22,9 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
  * @property string $end_datetime
  * @property int $volunteers_count
  * @property float $percent_filled
+ * @property int $num_spots
+ * @property-read ShiftType $shiftType
+ * @property-read Team $team
  */
 class Shift extends Model implements ContractsAuditable
 {

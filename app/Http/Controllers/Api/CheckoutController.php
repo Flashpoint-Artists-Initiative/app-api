@@ -86,9 +86,13 @@ class CheckoutController extends Controller
         return response()->json(status: 204);
     }
 
+    /**
+     * @phpstan-assert Cart $cart
+     * @phpstan-assert string $cart->stripe_checkout_id
+     */
     protected function validateCart(?Cart $cart): void
     {
-        if (is_null($cart)) {
+        if (is_null($cart) || is_null($cart->stripe_checkout_id)) {
             abort_if($this->cartService->cartWasExpired(), 404, 'Your checkout session expired');
             abort(404, 'No checkout session found');
         }

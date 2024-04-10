@@ -20,6 +20,7 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 /**
  * @property Event $event
  * @property int $ticketCount
+ * @property-read User $user
  */
 #[ObservedBy(TicketTransferObserver::class)]
 class TicketTransfer extends Model implements ContractsAuditable
@@ -90,10 +91,13 @@ class TicketTransfer extends Model implements ContractsAuditable
         return Attribute::make(
             get: function (mixed $value, array $attributes) {
                 if ($this->purchasedTickets->count() > 0) {
-                    return $this->purchasedTickets->first()->event;
+                    $ticket = $this->purchasedTickets->first();
                 } else {
-                    return $this->reservedTickets->first()->event;
+                    $ticket = $this->reservedTickets->first();
                 }
+
+                /** @var PurchasedTicket|ReservedTicket $ticket */
+                return $ticket->event;
             }
         );
     }
@@ -122,7 +126,7 @@ class TicketTransfer extends Model implements ContractsAuditable
      * @param  int[]  $purchasedTicketIds
      * @param  int[]  $reservedTicketIds
      */
-    public static function createTransfer(int $userId, string $email, ?array $purchasedTicketIds = [], ?array $reservedTicketIds = []): TicketTransfer
+    public static function createTransfer(int $userId, string $email, array $purchasedTicketIds = [], array $reservedTicketIds = []): TicketTransfer
     {
         $transfer = TicketTransfer::create([
             'user_id' => $userId,
@@ -139,7 +143,7 @@ class TicketTransfer extends Model implements ContractsAuditable
 
         $transfer->load(['reservedTickets', 'purchasedTickets']);
 
-        $user = User::find($userId);
+        $user = User::findOrFail($userId);
         $user->notify(new TicketTransferNotification($transfer));
 
         return $transfer;

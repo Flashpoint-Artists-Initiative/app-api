@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
+/**
+ * @property-read ReservedTicket $reservedTicket
+ */
 class PurchasedTicket extends Model implements ContractsAuditable, TicketInterface
 {
     use Auditable, HasFactory, HasTicketType;

@@ -26,10 +26,10 @@ class RequirementShowTest extends ApiRouteTestCase
 
     public function test_requirement_show_call_without_permission_returns_requirement(): void
     {
-        $requirement = Requirement::first();
+        $requirement = Requirement::firstOrFail();
         $this->addEndpointParams(['shift_requirement' => $requirement->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $response = $this->actingAs($user)->get($this->endpoint);
 
         $response->assertStatus(200);
@@ -37,10 +37,10 @@ class RequirementShowTest extends ApiRouteTestCase
 
     public function test_requirement_show_call_without_permission_does_not_return_trashed_requirement(): void
     {
-        $requirement = Requirement::onlyTrashed()->first();
+        $requirement = Requirement::onlyTrashed()->firstOrFail();
         $this->addEndpointParams(['shift_requirement' => $requirement->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $response = $this->actingAs($user)->get($this->endpoint);
 
         $response->assertStatus(404);
@@ -48,10 +48,10 @@ class RequirementShowTest extends ApiRouteTestCase
 
     public function test_requirement_show_call_as_admin_returns_trashed_requirement(): void
     {
-        $requirement = Requirement::onlyTrashed()->first();
+        $requirement = Requirement::onlyTrashed()->firstOrFail();
         $this->addEndpointParams(['shift_requirement' => $requirement->id, 'with_trashed' => true]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 

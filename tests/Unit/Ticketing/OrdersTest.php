@@ -18,7 +18,7 @@ class OrdersTest extends TestCase
 
     public function test_user_relation(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $order = $this->createOrder($user);
 
         $this->assertEquals($order->user->id, $user->id);
@@ -26,19 +26,19 @@ class OrdersTest extends TestCase
 
     public function test_user_orders_relation(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $order = $this->createOrder($user);
 
         $orders = $user->orders()->get();
 
         $this->assertCount(1, $orders);
 
-        $this->assertEquals($order->id, $orders->first()->id);
+        $this->assertEquals($order->id, $orders->firstOrFail()->id);
     }
 
     public function test_event_relation(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $order = $this->createOrder($user);
 
         $this->assertEquals(1, $order->event->id);
@@ -46,7 +46,7 @@ class OrdersTest extends TestCase
 
     public function test_cart_relation(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $cart = Cart::create(['user_id' => $user->id]);
         $order = $this->createOrder($user, $cart);
 

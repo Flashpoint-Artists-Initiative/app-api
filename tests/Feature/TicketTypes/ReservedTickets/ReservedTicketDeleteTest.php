@@ -25,7 +25,7 @@ class ReservedTicketDeleteTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->ticketType = TicketType::has('reservedTickets')->active()->first();
+        $this->ticketType = TicketType::has('reservedTickets')->active()->firstOrFail();
         $this->reservedTicket = ReservedTicket::factory()->for($this->ticketType)->create();
 
         $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
@@ -49,7 +49,7 @@ class ReservedTicketDeleteTest extends ApiRouteTestCase
 
     public function test_ticket_type_delete_call_without_permission_fails(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -58,7 +58,7 @@ class ReservedTicketDeleteTest extends ApiRouteTestCase
 
     public function test_ticket_type_delete_call_as_box_office_succeeds(): void
     {
-        $user = User::role(RolesEnum::BoxOffice)->first();
+        $user = User::role(RolesEnum::BoxOffice)->firstOrFail();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -67,9 +67,9 @@ class ReservedTicketDeleteTest extends ApiRouteTestCase
 
     public function test_ticket_type_delete_call_as_box_office_with_purchased_ticket_fails(): void
     {
-        $user = User::role(RolesEnum::BoxOffice)->first();
-        $this->ticketType = TicketType::has('reservedTickets.purchasedTicket')->active()->first();
-        $this->reservedTicket = $this->ticketType->reservedTickets()->has('purchasedTicket')->first();
+        $user = User::role(RolesEnum::BoxOffice)->firstOrFail();
+        $this->ticketType = TicketType::has('reservedTickets.purchasedTicket')->active()->firstOrFail();
+        $this->reservedTicket = $this->ticketType->reservedTickets()->has('purchasedTicket')->firstOrFail();
 
         $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
 

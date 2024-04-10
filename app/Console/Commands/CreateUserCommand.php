@@ -61,7 +61,7 @@ class CreateUserCommand extends Command implements PromptsForMissingInput
             $user->email_verified_at = now();
             $user->save();
         } catch (UniqueConstraintViolationException $e) {
-            $this->error($e->getPrevious()->getMessage());
+            $this->error($e->getPrevious()?->getMessage() ?? 'Unknown Error');
 
             return 2;
         }
@@ -113,7 +113,7 @@ class CreateUserCommand extends Command implements PromptsForMissingInput
     }
 
     /**
-     * @return array<int, string[]>
+     * @return array<int, array<mixed>>
      */
     protected function buildTable(): array
     {

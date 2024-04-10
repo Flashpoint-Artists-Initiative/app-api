@@ -18,8 +18,8 @@ class CompletedWaiversTest extends TestCase
 
     public function test_relations(): void
     {
-        $user = User::first();
-        $waiver = Waiver::first();
+        $user = User::firstOrFail();
+        $waiver = Waiver::firstOrFail();
         $completedWaiver = CompletedWaiver::create(['user_id' => $user->id, 'waiver_id' => $waiver->id]);
 
         $this->assertEquals($completedWaiver->user->id, $user->id);

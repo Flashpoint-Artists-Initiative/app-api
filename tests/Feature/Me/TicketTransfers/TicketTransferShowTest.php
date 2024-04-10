@@ -21,9 +21,9 @@ class TicketTransferShowTest extends ApiRouteTestCase
     {
         parent::setUp();
 
-        $this->user = User::has('ticketTransfers')->first();
+        $this->user = User::has('ticketTransfers')->firstOrFail();
         $this->routeParams = [
-            'ticket_transfer' => $this->user->ticketTransfers->first()->id,
+            'ticket_transfer' => $this->user->ticketTransfers->firstOrFail()->id,
         ];
 
         $this->buildEndpoint();
@@ -38,7 +38,7 @@ class TicketTransferShowTest extends ApiRouteTestCase
 
     public function test_me_ticket_transfer_show_call_while_logged_in_returns_success(): void
     {
-        $ticketTransfer = $this->user->ticketTransfers->first();
+        $ticketTransfer = $this->user->ticketTransfers->firstOrFail();
 
         $response = $this->actingAs($this->user)->get($this->endpoint);
 

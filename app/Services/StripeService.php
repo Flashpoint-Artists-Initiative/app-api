@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\CartItem;
+use App\Models\User;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\InvalidRequestException;
@@ -43,13 +44,15 @@ class StripeService
     public function createCheckoutFromCart(Cart $cart): Session
     {
         $client_reference_id = sprintf('Event: %s - User: %d - Cart: %d', $cart->event->name, $cart->user_id, $cart->id);
+        $user = auth()->user();
+        abort_unless($user instanceof User, 400, 'User not found');
 
         $checkout_session = $this->stripeClient->checkout->sessions->create([
             'redirect_on_completion' => 'never',
             'payment_method_configuration' => config('services.stripe.payment_method_configuration'),
             'mode' => 'payment',
             'ui_mode' => 'embedded',
-            'customer_email' => auth()->user()->email,
+            'customer_email' => $user->email,
             'client_reference_id' => $client_reference_id,
             'customer_creation' => 'if_required',
             'line_items' => $this->buildLineItems($cart),

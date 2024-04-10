@@ -21,6 +21,7 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
  * @property bool $is_expired
  * @property Event $event
  * @property int $quantity
+ * @property-read User $user
  */
 #[ObservedBy(CartObserver::class)]
 class Cart extends Model implements ContractsAuditable
@@ -65,7 +66,7 @@ class Cart extends Model implements ContractsAuditable
     {
         return Attribute::make(
             get: function (mixed $value, array $attributes) {
-                return $this->items->first()->ticketType->event;
+                return $this->items->firstOrFail()->ticketType->event;
             });
     }
 

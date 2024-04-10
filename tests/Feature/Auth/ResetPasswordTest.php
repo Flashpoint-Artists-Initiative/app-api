@@ -86,7 +86,7 @@ class ResetPasswordTest extends ApiRouteTestCase
             'email' => 'test@example.com',
             'password' => Hash::make('oldpassword'),
         ]);
-        $token = Password::createToken(User::first());
+        $token = Password::createToken(User::firstOrFail());
 
         $response = $this->postJson($this->endpoint, [
             'email' => 'not_a_user@example.com',
@@ -110,7 +110,7 @@ class ResetPasswordTest extends ApiRouteTestCase
             'password' => Hash::make('oldpassword'),
         ]);
 
-        $token = Password::createToken(User::first());
+        $token = Password::createToken(User::firstOrFail());
 
         $response = $this->postJson($this->endpoint, [
             'email' => 'test-two@example.com',
@@ -124,7 +124,7 @@ class ResetPasswordTest extends ApiRouteTestCase
 
     public function test_reset_password_call_while_logged_in_returns_an_error(): void
     {
-        $user = User::find(1);
+        $user = User::findOrFail(1);
         $response = $this->actingAs($user)->postJson($this->endpoint, ['email' => $user->email]);
 
         $response->assertStatus(400);

@@ -21,15 +21,15 @@ class WaiverUpdateTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $event = Event::has('waivers')->first();
-        $waiver = $event->waivers->first();
+        $event = Event::has('waivers')->firstOrFail();
+        $waiver = $event->waivers->firstOrFail();
 
         $this->addEndpointParams(['event' => $event->id, 'waiver' => $waiver->id]);
     }
 
     public function test_waiver_update_call_with_valid_data_returns_a_successful_response(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'title' => 'Test Waiver Update',
@@ -41,7 +41,7 @@ class WaiverUpdateTest extends ApiRouteTestCase
 
     public function test_waiver_update_call_with_invalid_data_returns_a_validation_error(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         // Bad title
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
@@ -68,7 +68,7 @@ class WaiverUpdateTest extends ApiRouteTestCase
     public function test_waiver_update_call_without_permission_returns_error(): void
     {
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $this->assertFalse($user->can('waivers.update'));
 
@@ -92,7 +92,7 @@ class WaiverUpdateTest extends ApiRouteTestCase
 
     public function test_waiver_update_call_with_completed_waivers_returns_error(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         CompletedWaiver::create(['user_id' => $user->id, 'waiver_id' => 1]);
 

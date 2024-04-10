@@ -46,7 +46,11 @@ class TicketTransferCreateRequest extends FormRequest
 
     public function getTransferUser(): User
     {
-        return auth()->user();
+        $user = auth()->user();
+
+        abort_unless($user instanceof User, 400, 'Invalid request');
+
+        return $user;
     }
 
     public function withValidator(Validator $validator): void

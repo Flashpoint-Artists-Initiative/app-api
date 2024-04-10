@@ -53,7 +53,7 @@ class RolesEnumTest extends TestCase
 
     public function test_get_roles_enum_from_model_matches_name(): void
     {
-        $role = Role::first();
+        $role = Role::firstOrFail();
         $case = RolesEnum::fromModel($role);
 
         $this->assertEquals($case->value, $role->name);

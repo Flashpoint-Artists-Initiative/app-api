@@ -23,7 +23,7 @@ class TeamIndexTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->event = Event::has('teams')->where('active', true)->inRandomOrder()->first();
+        $this->event = Event::has('teams')->where('active', true)->inRandomOrder()->firstOrFail();
         $this->routeParams = ['event' => $this->event->id];
         $this->buildEndpoint();
     }
@@ -39,7 +39,7 @@ class TeamIndexTest extends ApiRouteTestCase
     {
         $teamCount = Team::active()->event($this->event->id)->count();
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $response = $this->actingAs($user)->get($this->endpoint);
 
         $response->assertStatus(200);
@@ -53,7 +53,7 @@ class TeamIndexTest extends ApiRouteTestCase
 
         $this->assertGreaterThan($activeTeamCount, $teamCount);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $user->givePermissionTo('teams.viewPending');
 
         $response = $this->actingAs($user)->get($this->endpoint);
@@ -70,7 +70,7 @@ class TeamIndexTest extends ApiRouteTestCase
 
         $this->assertGreaterThan($existingTeamCount, $teamCount);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $user->givePermissionTo('teams.viewDeleted');
 
         $response = $this->actingAs($user)->get($this->endpoint);
@@ -88,7 +88,7 @@ class TeamIndexTest extends ApiRouteTestCase
         $this->assertGreaterThan($existingTeamCount, $teamCount);
 
         // No permission for teams.viewDeleted
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);
@@ -105,7 +105,7 @@ class TeamIndexTest extends ApiRouteTestCase
 
         $this->assertLessThan($teamCount, $trashedTeamCount);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $user->givePermissionTo('teams.viewDeleted');
 
         $response = $this->actingAs($user)->get($this->endpoint);
@@ -122,7 +122,7 @@ class TeamIndexTest extends ApiRouteTestCase
 
         $this->assertGreaterThan($team_count, $all_team_count);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);
@@ -131,10 +131,10 @@ class TeamIndexTest extends ApiRouteTestCase
 
     public function test_team_index_for_inactive_event_returns_error(): void
     {
-        $event = Event::where('active', false)->has('teams')->first();
+        $event = Event::where('active', false)->has('teams')->firstOrFail();
         $this->addEndpointParams(['event' => $event->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(403);
@@ -142,10 +142,10 @@ class TeamIndexTest extends ApiRouteTestCase
 
     public function test_team_index_for_inactive_event_as_admin_returns_success(): void
     {
-        $event = Event::where('active', false)->has('teams')->first();
+        $event = Event::where('active', false)->has('teams')->firstOrFail();
         $this->addEndpointParams(['event' => $event->id]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);
