@@ -21,8 +21,8 @@ class ShiftRequirementDetachTest extends ApiRouteTestCase
 
     public function test_shift_requirement_detach_call_returns_a_successful_response(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $shiftType = ShiftType::find(1);
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $shiftType = ShiftType::findOrFail(1);
         $shiftType->requirements()->attach(1);
         $shiftType->refresh();
         $this->assertCount(1, $shiftType->requirements);
@@ -39,8 +39,8 @@ class ShiftRequirementDetachTest extends ApiRouteTestCase
 
     public function test_shift_requirement_detach_call_for_inactive_team_returns_success(): void
     {
-        $team = Team::where('active', true)->has('shiftTypes')->first();
-        $shiftType = $team->shiftTypes->first();
+        $team = Team::where('active', true)->has('shiftTypes')->firstOrFail();
+        $shiftType = $team->shiftTypes->firstOrFail();
 
         $shiftType->requirements()->attach(1);
         $shiftType->refresh();
@@ -48,7 +48,7 @@ class ShiftRequirementDetachTest extends ApiRouteTestCase
 
         $this->addEndpointParams(['shift_type' => $shiftType->id]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->deleteJson($this->endpoint, [
             'resources' => [1],
@@ -62,9 +62,9 @@ class ShiftRequirementDetachTest extends ApiRouteTestCase
 
     public function test_shift_requirement_detach_call_for_inactive_event_returns_error(): void
     {
-        $event = Event::where('active', false)->has('teams.shiftTypes')->first();
-        $team = $event->teams()->where('active', true)->has('shiftTypes')->first();
-        $shiftType = $team->shiftTypes->first();
+        $event = Event::where('active', false)->has('teams.shiftTypes')->firstOrFail();
+        $team = $event->teams()->where('active', true)->has('shiftTypes')->firstOrFail();
+        $shiftType = $team->shiftTypes->firstOrFail();
 
         $shiftType->requirements()->attach(1);
         $shiftType->refresh();
@@ -72,7 +72,7 @@ class ShiftRequirementDetachTest extends ApiRouteTestCase
 
         $this->addEndpointParams(['shift_type' => $shiftType->id]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->deleteJson($this->endpoint, [
             'resources' => [1],

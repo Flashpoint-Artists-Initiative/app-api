@@ -40,7 +40,7 @@ class UsersHistoryTest extends ApiRouteTestCase
 
     public function test_users_history_call_with_permission_is_successful(): void
     {
-        $admin = User::role(RolesEnum::Admin)->first();
+        $admin = User::role(RolesEnum::Admin)->firstOrFail();
 
         $this->assertTrue($admin->can('users.history'));
         $this->assertNotEquals($this->routeParams['user'], $admin->id);
@@ -52,7 +52,7 @@ class UsersHistoryTest extends ApiRouteTestCase
 
     public function test_users_history_call_to_own_id_without_permission_returns_error(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $this->assertFalse($user->can('users.history'));
 

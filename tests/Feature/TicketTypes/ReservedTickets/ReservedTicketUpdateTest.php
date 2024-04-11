@@ -26,7 +26,7 @@ class ReservedTicketUpdateTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->ticketType = TicketType::has('reservedTickets.purchasedTicket')->active()->first();
+        $this->ticketType = TicketType::has('reservedTickets.purchasedTicket')->active()->firstOrFail();
         $this->reservedTicket = ReservedTicket::factory()->for($this->ticketType)->create();
 
         $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
@@ -34,8 +34,8 @@ class ReservedTicketUpdateTest extends ApiRouteTestCase
 
     public function test_reserved_ticket_update_call_with_valid_data_returns_a_successful_response(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $this->reservedTicket = $this->ticketType->reservedTickets()->doesntHave('purchasedTicket')->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $this->reservedTicket = $this->ticketType->reservedTickets()->doesntHave('purchasedTicket')->firstOrFail();
 
         $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
 
@@ -51,8 +51,8 @@ class ReservedTicketUpdateTest extends ApiRouteTestCase
     // I'm not sure that's unexpected behavior, so this might be an unneeded test
     // public function test_reserved_ticket_update_call_for_zero_price_type_creates_a_purchased_ticket(): void
     // {
-    //     $user = User::role(RolesEnum::Admin)->first();
-    //     $this->ticketType = TicketType::where('price', 0)->first();
+    //     $user = User::role(RolesEnum::Admin)->firstOrFail();
+    //     $this->ticketType = TicketType::where('price', 0)->firstOrFail();
     //     $this->reservedTicket = ReservedTicket::factory()->for($this->ticketType)->create(['email' => 'not-a-user@example.com']);
     //     $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
 
@@ -68,8 +68,8 @@ class ReservedTicketUpdateTest extends ApiRouteTestCase
 
     public function test_reserved_ticket_update_call_with_purchased_ticket_returns_an_error(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $this->ticketType = TicketType::where('price', 0)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $this->ticketType = TicketType::where('price', 0)->firstOrFail();
         $this->reservedTicket = ReservedTicket::factory()->for($this->ticketType)->create(['email' => 'not-a-user@example.com']);
         $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
 
@@ -83,8 +83,8 @@ class ReservedTicketUpdateTest extends ApiRouteTestCase
 
     public function test_reserved_ticket_update_call_with_matching_email_returns_a_successful_response(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $this->reservedTicket = $this->ticketType->reservedTickets()->doesntHave('purchasedTicket')->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $this->reservedTicket = $this->ticketType->reservedTickets()->doesntHave('purchasedTicket')->firstOrFail();
 
         $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
 
@@ -99,7 +99,7 @@ class ReservedTicketUpdateTest extends ApiRouteTestCase
 
     public function test_reserved_ticket_update_call_with_invalid_data_returns_a_validation_error(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
         $this->assertNull(User::where('email', 'notauser@example.com')->first());
 
         // Bad email
@@ -119,7 +119,7 @@ class ReservedTicketUpdateTest extends ApiRouteTestCase
 
     public function test_reserved_ticket_update_call_without_permission_returns_error(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $this->assertFalse($user->can('ticketTypes.update'));
 

@@ -16,6 +16,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
+/**
+ * @property-read User $user
+ * @property-read Event $event
+ * @property-read Cart $cart
+ */
 #[ObservedBy(OrderObserver::class)]
 class Order extends Model implements ContractsAuditable
 {
@@ -38,21 +43,33 @@ class Order extends Model implements ContractsAuditable
         'ticket_data' => 'array',
     ];
 
+    /**
+     * @return BelongsTo<User, Order>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo<Event, Order>
+     */
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
     }
 
+    /**
+     * @return BelongsTo<Cart, Order>
+     */
     public function cart(): BelongsTo
     {
         return $this->belongsTo(Cart::class);
     }
 
+    /**
+     * @return Collection<int, TicketType>
+     */
     public function ticketTypes(): Collection
     {
         return once(function () {
@@ -62,6 +79,9 @@ class Order extends Model implements ContractsAuditable
         });
     }
 
+    /**
+     * @param  Builder<Order>  $query
+     */
     public function scopeStripeCheckoutId(Builder $query, string $sessionId): void
     {
         $query->where('stripe_checkout_id', $sessionId);

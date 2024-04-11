@@ -8,6 +8,9 @@ use Orion\Http\Requests\Request;
 
 class CompletedWaiverRequest extends Request
 {
+    /**
+     * @return array<string, string[]>
+     */
     public function storeRules(): array
     {
         return [

@@ -13,7 +13,7 @@ abstract class OrionController extends BaseController
         return config('orion.default_pagination_limit', 50);
     }
 
-    public function maxLimit(): ?int
+    public function maxLimit(): int
     {
         return config('orion.default_pagination_max_limit', 200);
     }

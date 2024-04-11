@@ -20,7 +20,7 @@ class EventShowTest extends ApiRouteTestCase
 
     public function test_event_show_call_while_not_logged_in_returns_active_event(): void
     {
-        $event = Event::where('active', true)->first();
+        $event = Event::where('active', true)->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id]);
 
         $response = $this->get($this->endpoint);
@@ -30,7 +30,7 @@ class EventShowTest extends ApiRouteTestCase
 
     public function test_event_show_call_while_not_logged_in_does_not_return_pending_event(): void
     {
-        $event = Event::where('active', false)->first();
+        $event = Event::where('active', false)->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id]);
 
         $response = $this->get($this->endpoint);
@@ -40,7 +40,7 @@ class EventShowTest extends ApiRouteTestCase
 
     public function test_event_show_call_while_not_logged_in_does_not_return_trashed_event(): void
     {
-        $event = Event::where('active', true)->onlyTrashed()->first();
+        $event = Event::where('active', true)->onlyTrashed()->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id, 'with_trashed' => true]);
 
         $response = $this->get($this->endpoint);
@@ -50,10 +50,10 @@ class EventShowTest extends ApiRouteTestCase
 
     public function test_event_show_call_as_admin_returns_pending_event(): void
     {
-        $event = Event::where('active', false)->first();
+        $event = Event::where('active', false)->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
@@ -62,10 +62,10 @@ class EventShowTest extends ApiRouteTestCase
 
     public function test_event_show_call_as_admin_returns_trashed_event(): void
     {
-        $event = Event::where('active', true)->onlyTrashed()->first();
+        $event = Event::where('active', true)->onlyTrashed()->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id, 'with_trashed' => true]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
@@ -74,8 +74,8 @@ class EventShowTest extends ApiRouteTestCase
 
     public function test_events_view_call_with_ticket_types_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $event = Event::has('ticketTypes')->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $event = Event::has('ticketTypes')->firstOrFail();
 
         $this->buildEndpoint(params: ['event' => $event->id, 'include' => 'ticketTypes']);
 
@@ -86,8 +86,8 @@ class EventShowTest extends ApiRouteTestCase
 
     public function test_events_view_call_with_purchased_tickets_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $event = Event::has('purchasedTickets')->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $event = Event::has('purchasedTickets')->firstOrFail();
 
         $this->buildEndpoint(params: ['event' => $event->id, 'include' => 'purchasedTickets']);
 
@@ -98,8 +98,8 @@ class EventShowTest extends ApiRouteTestCase
 
     public function test_events_view_call_with_reserved_tickets_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $event = Event::has('reservedTickets')->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $event = Event::has('reservedTickets')->firstOrFail();
 
         $this->buildEndpoint(params: ['event' => $event->id, 'include' => 'reservedTickets']);
 
@@ -110,8 +110,8 @@ class EventShowTest extends ApiRouteTestCase
 
     public function test_events_view_call_with_shift_types_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $event = Event::has('shiftTypes')->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $event = Event::has('shiftTypes')->firstOrFail();
 
         $this->buildEndpoint(params: ['event' => $event->id, 'include' => 'shiftTypes']);
 

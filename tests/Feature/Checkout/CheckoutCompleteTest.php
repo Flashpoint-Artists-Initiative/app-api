@@ -28,9 +28,13 @@ class CheckoutCompleteTest extends ApiRouteTestCase
     {
         parent::setUp();
 
-        auth()->login(User::first());
+        auth()->login(User::firstOrFail());
 
-        $data = json_decode(file_get_contents(storage_path('testing/stripe_checkout_completed_event.json')), true);
+        $content = file_get_contents(storage_path('testing/stripe_checkout_completed_event.json'));
+
+        $this->assertNotFalse($content);
+
+        $data = json_decode($content, true);
 
         $event = Event::constructFrom($data);
         /** @phpstan-ignore-next-line */
@@ -39,10 +43,13 @@ class CheckoutCompleteTest extends ApiRouteTestCase
         /** @var CartService $cartService */
         $cartService = app()->make(CartService::class);
 
-        $ticketType = TicketType::query()->available()->first();
+        /** @var User $user */
+        $user = auth()->user();
+
+        $ticketType = TicketType::query()->available()->firstOrFail();
         $reservedTicket = ReservedTicket::create([
             'ticket_type_id' => $ticketType->id,
-            'user_id' => auth()->user()->id,
+            'user_id' => $user->id,
         ]);
 
         $cart = $cartService->createCartAndItems([
@@ -57,7 +64,9 @@ class CheckoutCompleteTest extends ApiRouteTestCase
         $cart->setStripeCheckoutIdAndSave($this->session->id);
 
         $this->partialMock(StripeService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('getCheckoutSession')->andReturn($this->session);
+            /** @var \Mockery\Expectation $receive */
+            $receive = $mock->shouldReceive('getCheckoutSession');
+            $receive->andReturn($this->session);
         });
 
     }
@@ -75,12 +84,12 @@ class CheckoutCompleteTest extends ApiRouteTestCase
 
     public function test_checkout_complete_call_without_cart_returns_error(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $carts = Cart::where('user_id', $user->id)->get();
 
         $this->assertCount(1, $carts);
 
-        $carts->first()->deleteQuietly();
+        $carts->firstOrFail()->deleteQuietly();
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'session_id' => $this->session->id,
@@ -91,7 +100,7 @@ class CheckoutCompleteTest extends ApiRouteTestCase
 
     public function test_checkout_complete_call_with_cart_returns_success(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $purchasedTicketCount = $user->PurchasedTickets()->count();
 
         $this->assertEquals(0, $purchasedTicketCount);
@@ -107,7 +116,8 @@ class CheckoutCompleteTest extends ApiRouteTestCase
 
     public function test_checkout_complete_call_with_incorrect_checkout_id_returns_error(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
+        /** @var Cart $cart */
         $cart = $user->activeCart;
         $cart->stripe_checkout_id = 'wrong';
         $cart->saveQuietly();
@@ -121,7 +131,7 @@ class CheckoutCompleteTest extends ApiRouteTestCase
 
     public function test_checkout_complete_call_with_incomplete_session_returns_error(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
 
         $this->session->status = 'incomplete';
 
@@ -134,7 +144,7 @@ class CheckoutCompleteTest extends ApiRouteTestCase
 
     public function test_checkout_complete_call_with_unpaid_session_returns_error(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
 
         $this->session->payment_status = 'unpaid';
 
@@ -147,7 +157,7 @@ class CheckoutCompleteTest extends ApiRouteTestCase
 
     public function test_checkout_complete_call_with_existing_order_returns_error(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
 
         Order::create([
             'user_email' => $user->email,

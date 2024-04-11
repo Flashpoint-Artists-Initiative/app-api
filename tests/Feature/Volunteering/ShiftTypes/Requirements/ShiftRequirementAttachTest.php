@@ -21,8 +21,8 @@ class ShiftRequirementAttachTest extends ApiRouteTestCase
 
     public function test_shift_requirement_attach_call_returns_a_successful_response(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $preAttach = ShiftType::find(1);
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $preAttach = ShiftType::findOrFail(1);
         $this->assertCount(0, $preAttach->requirements);
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
@@ -31,20 +31,20 @@ class ShiftRequirementAttachTest extends ApiRouteTestCase
 
         $response->assertStatus(200);
 
-        $postAttach = ShiftType::find(1);
+        $postAttach = ShiftType::findOrFail(1);
         $this->assertCount(1, $postAttach->requirements);
     }
 
     public function test_shift_requirement_attach_call_for_inactive_team_returns_success(): void
     {
-        $team = Team::where('active', true)->has('shiftTypes')->first();
-        $shiftType = $team->shiftTypes->first();
+        $team = Team::where('active', true)->has('shiftTypes')->firstOrFail();
+        $shiftType = $team->shiftTypes->firstOrFail();
 
         $this->assertCount(0, $shiftType->requirements);
 
         $this->addEndpointParams(['shift_type' => $shiftType->id]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'resources' => [1],
@@ -58,15 +58,15 @@ class ShiftRequirementAttachTest extends ApiRouteTestCase
 
     public function test_shift_requirement_attach_call_for_inactive_event_returns_error(): void
     {
-        $event = Event::where('active', false)->has('teams.shiftTypes')->first();
-        $team = $event->teams()->where('active', true)->has('shiftTypes')->first();
-        $shiftType = $team->shiftTypes->first();
+        $event = Event::where('active', false)->has('teams.shiftTypes')->firstOrFail();
+        $team = $event->teams()->where('active', true)->has('shiftTypes')->firstOrFail();
+        $shiftType = $team->shiftTypes->firstOrFail();
 
         $this->assertCount(0, $shiftType->requirements);
 
         $this->addEndpointParams(['shift_type' => $shiftType->id]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'resources' => [1],

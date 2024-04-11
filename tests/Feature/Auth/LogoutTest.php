@@ -15,7 +15,7 @@ class LogoutTest extends ApiRouteTestCase
 
     public function test_logging_out_invalidates_auth_token(): void
     {
-        $user = User::find(1);
+        $user = User::findOrFail(1);
 
         // Set user JWT token
         auth()->login($user);

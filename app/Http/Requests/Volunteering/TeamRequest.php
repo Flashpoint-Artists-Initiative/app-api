@@ -8,6 +8,9 @@ use Orion\Http\Requests\Request;
 
 class TeamRequest extends Request
 {
+    /**
+     * @return array<string, string[]>
+     */
     public function storeRules(): array
     {
         return [
@@ -18,6 +21,9 @@ class TeamRequest extends Request
         ];
     }
 
+    /**
+     * @return array<string, string[]>
+     */
     public function updateRules(): array
     {
         return [

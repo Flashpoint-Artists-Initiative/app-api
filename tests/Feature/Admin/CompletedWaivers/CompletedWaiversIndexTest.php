@@ -24,7 +24,7 @@ class CompletedWaiversIndexTest extends ApiRouteTestCase
 
     public function test_completed_waivers_index_call_without_permission_returns_error(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $this->assertFalse($user->can('users.viewAny'));
 
@@ -36,7 +36,7 @@ class CompletedWaiversIndexTest extends ApiRouteTestCase
     public function test_completed_waivers_index_call_with_permission_returns_success(): void
     {
         $count = CompletedWaiver::count();
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 

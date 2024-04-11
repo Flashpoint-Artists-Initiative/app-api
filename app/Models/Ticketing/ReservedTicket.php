@@ -6,7 +6,8 @@ namespace App\Models\Ticketing;
 
 use App\Models\Concerns\HasTicketType;
 use App\Models\Concerns\TicketInterface;
-use App\Models\User;
+use App\Observers\ReservedTicketObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,6 +20,7 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
  * @property bool $is_purchased
  * @property bool $can_be_purchased
  */
+#[ObservedBy(ReservedTicketObserver::class)]
 class ReservedTicket extends Model implements ContractsAuditable, TicketInterface
 {
     use Auditable, HasFactory, HasTicketType;
@@ -36,46 +38,9 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
         'expiration_date' => 'datetime',
     ];
 
-    protected static function booted(): void
-    {
-        static::saving(function (ReservedTicket $reservedTicket) {
-            // Check submitted email for a matching user, and if found assign to user_id
-            if ($reservedTicket->isDirty('email')) {
-                $user_id = User::where('email', $reservedTicket->email)->value('id');
-
-                if ($user_id) {
-                    $reservedTicket->user_id = $user_id;
-                }
-            }
-        });
-
-        static::saved(function (ReservedTicket $reservedTicket) {
-            // If the reserved ticket type has a price of 0, automatically create a purchased ticket when possible
-            if ($reservedTicket->user_id
-                && $reservedTicket->ticketType->price === 0
-                && $reservedTicket->can_be_purchased
-            ) {
-                $purchasedTicket = new PurchasedTicket();
-                $purchasedTicket->ticket_type_id = $reservedTicket->ticket_type_id;
-                $purchasedTicket->user_id = $reservedTicket->user_id;
-                $purchasedTicket->reserved_ticket_id = $reservedTicket->id;
-                $purchasedTicket->save();
-            }
-        });
-
-        static::updating(function (ReservedTicket $reservedTicket) {
-            if ($reservedTicket->is_purchased) {
-                return false;
-            }
-        });
-
-        static::deleting(function (ReservedTicket $reservedTicket) {
-            if ($reservedTicket->is_purchased) {
-                return false;
-            }
-        });
-    }
-
+    /**
+     * @return HasOne<PurchasedTicket>
+     */
     public function purchasedTicket(): HasOne
     {
         return $this->hasOne(PurchasedTicket::class);
@@ -87,6 +52,8 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
      * - no purchased ticket
      * - Either: There's no expiration_date set on the reservedTicket AND the ticketType is still on sale
      * - Or: There is an expiration_date set on the reservedTicket AND it's not expired
+     *
+     * @param  Builder<ReservedTicket>  $query
      */
     public function scopeCanBePurchased(Builder $query): void
     {
@@ -104,6 +71,9 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
         });
     }
 
+    /**
+     * @return Attribute<bool, void>
+     */
     public function isPurchased(): Attribute
     {
         return Attribute::make(
@@ -113,6 +83,9 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
         );
     }
 
+    /**
+     * @return Attribute<bool, void>
+     */
     public function canBePurchased(): Attribute
     {
         return Attribute::make(

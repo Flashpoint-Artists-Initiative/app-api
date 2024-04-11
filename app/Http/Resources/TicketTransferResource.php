@@ -16,6 +16,7 @@ class TicketTransferResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        /** @var array<mixed> $array */
         $array = parent::toArray($request);
 
         return array_merge($array, [

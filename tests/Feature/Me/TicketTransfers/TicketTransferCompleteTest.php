@@ -23,7 +23,7 @@ class TicketTransferCompleteTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->transfer = TicketTransfer::first();
+        $this->transfer = TicketTransfer::firstOrFail();
         $this->user = User::factory()->create(['email' => $this->transfer->recipient_email]);
         $this->routeParams = [
             'ticket_transfer' => $this->transfer->id,
@@ -41,7 +41,7 @@ class TicketTransferCompleteTest extends ApiRouteTestCase
     public function test_me_ticket_transfer_complete_call_while_logged_in_succeeds(): void
     {
         $response = $this->actingAs($this->user)->post($this->endpoint);
-        $ticket = $this->transfer->purchasedTickets->first();
+        $ticket = $this->transfer->purchasedTickets->firstOrFail();
 
         $this->assertNotEquals($this->user->id, $ticket->user_id);
 
@@ -54,7 +54,7 @@ class TicketTransferCompleteTest extends ApiRouteTestCase
 
     public function test_me_ticket_transfer_complete_call_for_completed_transfer_fails(): void
     {
-        $ticket = $this->transfer->purchasedTickets->first();
+        $ticket = $this->transfer->purchasedTickets->firstOrFail();
 
         $this->transfer->completed = true;
         $this->transfer->saveQuietly();
@@ -70,8 +70,8 @@ class TicketTransferCompleteTest extends ApiRouteTestCase
 
     public function test_me_ticket_transfer_complete_call_for_invalid_transfer_fails(): void
     {
-        $transfer = TicketTransfer::where('recipient_email', '!=', $this->user->email)->first();
-        $ticket = $transfer->purchasedTickets->first();
+        $transfer = TicketTransfer::where('recipient_email', '!=', $this->user->email)->firstOrFail();
+        $ticket = $transfer->purchasedTickets->firstOrFail();
         $this->buildEndpoint(params: ['ticket_transfer' => $transfer->id]);
 
         $this->assertNotEquals($this->user->email, $transfer->recipient_email);

@@ -35,6 +35,9 @@ class CartService
         return $carts->first();
     }
 
+    /**
+     * @return Collection<int, Cart>
+     */
     public function getAllUnexpiredCarts(?User $user = null): Collection
     {
         $user = $this->ensureUser($user);
@@ -54,11 +57,17 @@ class CartService
 
     protected function ensureUser(?User $user = null): User
     {
-        return $user ?? auth()->user();
+        $user = $user ?? auth()->user();
+
+        abort_unless($user instanceof User, 400, 'User not found');
+
+        return $user;
     }
 
     /**
      * @codeCoverageIgnore
+     *
+     * @param  Collection<int, Cart>  $carts
      */
     protected function assertSingleCart(Collection $carts): void
     {
@@ -67,9 +76,16 @@ class CartService
         }
     }
 
+    /**
+     * @param  array<array{id:int, quantity:int}>  $tickets
+     * @param  int[]  $reserved
+     */
     public function createCartAndItems(array $tickets = [], array $reserved = []): Cart
     {
-        $cart = Cart::create(['user_id' => auth()->user()->id]);
+        $user = auth()->user();
+        abort_unless($user instanceof User, 400, 'User not found');
+
+        $cart = Cart::create(['user_id' => $user->id]);
 
         foreach ($tickets as $row) {
             CartItem::create([
@@ -79,7 +95,7 @@ class CartService
             ]);
         }
 
-        $reservedTickets = auth()->user()->reservedTickets;
+        $reservedTickets = $user->reservedTickets;
         foreach ($reserved as $reservedId) {
             if ($reservedTicket = $reservedTickets->find($reservedId)) {
                 CartItem::create([
@@ -96,6 +112,9 @@ class CartService
 
     /**
      * Expire all carts except the newest.
+     *
+     * @param  Collection<int, Cart>  $carts
+     * @return Collection<int, Cart>
      */
     public function expireExtraCarts(Collection $carts): Collection
     {
@@ -135,7 +154,7 @@ class CartService
 
     public function getEventIdFromCart(Cart $cart): int
     {
-        $item = $cart->items->first();
+        $item = $cart->items->firstOrFail();
 
         return $item->ticketType->event_id;
     }

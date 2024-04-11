@@ -23,7 +23,7 @@ class UsersIndexTest extends ApiRouteTestCase
 
     public function test_users_index_call_without_permission_returns_error(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $this->assertFalse($user->can('users.viewAny'));
 
@@ -35,7 +35,7 @@ class UsersIndexTest extends ApiRouteTestCase
     public function test_users_index_call_with_permission_returns_success(): void
     {
         $user_count = User::count();
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 

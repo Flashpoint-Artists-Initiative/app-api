@@ -41,7 +41,7 @@ class CreateUserCommand extends Command implements PromptsForMissingInput
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         if (! $this->option('confirm')) {
             $this->table(['Field', 'Input'], $this->buildTable());
@@ -61,7 +61,7 @@ class CreateUserCommand extends Command implements PromptsForMissingInput
             $user->email_verified_at = now();
             $user->save();
         } catch (UniqueConstraintViolationException $e) {
-            $this->error($e->getPrevious()->getMessage());
+            $this->error($e->getPrevious()?->getMessage() ?? 'Unknown Error');
 
             return 2;
         }
@@ -79,7 +79,10 @@ class CreateUserCommand extends Command implements PromptsForMissingInput
         return 0;
     }
 
-    protected function promptForMissingArgumentsUsing()
+    /**
+     * @return array<string, string|string[]>
+     */
+    protected function promptForMissingArgumentsUsing(): array
     {
         return [
             'legal_name' => 'Legal Name',
@@ -95,6 +98,9 @@ class CreateUserCommand extends Command implements PromptsForMissingInput
         $input->setOption('role', select('Role', $this->getRolesSelectOptions()));
     }
 
+    /**
+     * @return array<string, string>
+     */
     protected function getRolesSelectOptions(): array
     {
         $output = ['none' => 'None'];
@@ -106,6 +112,9 @@ class CreateUserCommand extends Command implements PromptsForMissingInput
         return $output;
     }
 
+    /**
+     * @return array<int, array<mixed>>
+     */
     protected function buildTable(): array
     {
         $arguments = $this->arguments();

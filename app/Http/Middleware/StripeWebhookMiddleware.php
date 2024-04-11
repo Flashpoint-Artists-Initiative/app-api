@@ -25,6 +25,8 @@ class StripeWebhookMiddleware
         $signature = $request->header('Stripe-Signature');
         $secret = config('services.stripe.webhook_secret');
 
+        abort_if(is_null($signature), 400, 'Invalid request');
+
         $event = Webhook::constructEvent($request->getContent(), $signature, $secret);
         $request->merge(['event' => $event]);
 

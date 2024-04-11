@@ -14,12 +14,6 @@ class ShiftSignupRequest extends FormRequest
 {
     public function __construct(protected VolunteerService $volunteerService)
     {
-
-    }
-
-    public function rules(): array
-    {
-        return [];
     }
 
     public function withValidator(Validator $validator): void

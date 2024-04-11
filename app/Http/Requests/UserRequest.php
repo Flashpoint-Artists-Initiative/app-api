@@ -9,6 +9,9 @@ use Orion\Http\Requests\Request;
 
 class UserRequest extends Request
 {
+    /**
+     * @return array<string, string[]>
+     */
     public function commonRules(): array
     {
         return [
@@ -20,6 +23,9 @@ class UserRequest extends Request
         ];
     }
 
+    /**
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
     public function storeRules(): array
     {
         $request = new RegisterRequest();

@@ -8,12 +8,15 @@ use Illuminate\Support\Facades\Cache;
 
 class LockdownService
 {
+    /**
+     * @return string[]
+     */
     public static function lockdownTypes(): array
     {
         return ['site', 'ticket', 'volunteer'];
     }
 
-    public function setLockdown(string $type, bool $status)
+    public function setLockdown(string $type, bool $status): void
     {
         abort_unless(in_array($type, static::lockdownTypes()), 422);
 
@@ -33,6 +36,9 @@ class LockdownService
         return Cache::get($this->keyName($type), false);
     }
 
+    /**
+     * @return array<string, bool>
+     */
     public function getLockdownStatus(): array
     {
         $output = [];

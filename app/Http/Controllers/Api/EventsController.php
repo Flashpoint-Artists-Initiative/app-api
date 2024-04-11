@@ -21,26 +21,41 @@ class EventsController extends OrionController
         parent::__construct();
     }
 
+    /**
+     * @return string[]
+     */
     public function includes(): array
     {
         return ['purchasedTickets', 'purchasedTickets.user',  'reservedTickets', 'reservedTickets.user', 'ticketTypes', 'ticketTypes.*', 'shiftTypes'];
     }
 
+    /**
+     * @return string[]
+     */
     public function aggregates(): array
     {
         return ['purchasedTickets', 'reservedTickets', 'ticketTypes', 'ticketTypes.*'];
     }
 
+    /**
+     * @return string[]
+     */
     public function filterableBy(): array
     {
         return ['active', 'start_date', 'end_date', 'name'];
     }
 
+    /**
+     * @return string[]
+     */
     public function sortableBy(): array
     {
         return ['start_date', 'end_date', 'active', 'name', 'location', 'created_at', 'updated_at'];
     }
 
+    /**
+     * @return string[]
+     */
     public function searchableBy(): array
     {
         return ['start_date', 'end_date', 'name', 'description', 'location', 'created_at', 'updated_at'];
@@ -48,6 +63,9 @@ class EventsController extends OrionController
 
     /**
      * Builds Eloquent query for fetching entities in index method.
+     *
+     * @param  string[]  $requestedRelations
+     * @return Builder<Event>
      */
     protected function buildIndexFetchQuery(Request $request, array $requestedRelations): Builder
     {
@@ -70,6 +88,10 @@ class EventsController extends OrionController
         return $query;
     }
 
+    /**
+     * @param  string[]  $requestedRelations
+     * @return Builder<Event>
+     */
     protected function buildShowFetchQuery(Request $request, array $requestedRelations): Builder
     {
         $query = parent::buildShowFetchQuery($request, $requestedRelations);

@@ -21,7 +21,7 @@ class ShiftSignupCancelTest extends ApiRouteTestCase
     public function test_shift_cancel_call_returns_a_successful_response(): void
     {
         $user = User::factory()->create();
-        $preSignup = Shift::find(1);
+        $preSignup = Shift::findOrFail(1);
         $this->assertCount(0, $preSignup->volunteers);
 
         $preSignup->volunteers()->attach($user);
@@ -30,14 +30,14 @@ class ShiftSignupCancelTest extends ApiRouteTestCase
 
         $response->assertStatus(204);
 
-        $postSignup = Shift::find(1);
+        $postSignup = Shift::findOrFail(1);
         $this->assertCount(0, $postSignup->volunteers);
     }
 
     public function test_shift_cancel_call_for_invalid_shift_returns_a_successful_response(): void
     {
         $user = User::factory()->create();
-        $preSignup = Shift::find(1);
+        $preSignup = Shift::findOrFail(1);
         $this->assertCount(0, $preSignup->volunteers);
 
         $response = $this->actingAs($user)->delete($this->endpoint);
@@ -47,8 +47,8 @@ class ShiftSignupCancelTest extends ApiRouteTestCase
 
     public function test_shift_cancel_call_for_inactive_team_returns_error(): void
     {
-        $team = Team::where('active', false)->has('shifts')->first();
-        $shift = $team->shifts->first();
+        $team = Team::where('active', false)->has('shifts')->firstOrFail();
+        $shift = $team->shifts->firstOrFail();
 
         $this->addEndpointParams(['shift' => $shift->id]);
 
@@ -62,9 +62,9 @@ class ShiftSignupCancelTest extends ApiRouteTestCase
 
     public function test_shift_cancel_call_for_inactive_event_returns_error(): void
     {
-        $event = Event::where('active', false)->has('teams.shifts')->first();
-        $team = $event->teams()->where('active', true)->has('shifts')->first();
-        $shift = $team->shifts->first();
+        $event = Event::where('active', false)->has('teams.shifts')->firstOrFail();
+        $team = $event->teams()->where('active', true)->has('shifts')->firstOrFail();
+        $shift = $team->shifts->firstOrFail();
 
         $this->addEndpointParams(['shift' => $shift->id]);
 

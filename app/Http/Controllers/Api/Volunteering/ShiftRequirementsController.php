@@ -17,6 +17,7 @@ class ShiftRequirementsController extends OrionRelationsController
 
     protected $policy = ShiftRequirementPolicy::class;
 
+    /** @var class-string */
     protected $parentPolicy = ShiftTypePolicy::class;
 
     public function __construct()

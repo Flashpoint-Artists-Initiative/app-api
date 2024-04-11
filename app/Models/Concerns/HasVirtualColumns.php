@@ -6,6 +6,9 @@ namespace App\Models\Concerns;
 
 trait HasVirtualColumns
 {
+    /**
+     * @param  array<string, bool>  $options
+     */
     public function save(array $options = [])
     {
         if (property_exists($this, 'virtualColumns')) {

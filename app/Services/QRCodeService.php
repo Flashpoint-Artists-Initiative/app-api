@@ -22,6 +22,13 @@ class QRCodeService
     {
         $content = ['user_id' => $userId, 'event_id' => $eventId];
 
-        return json_encode($content);
+        /**
+         * It's impossible for json_encode to fail with the parameter types, a TypeError would be thrown instead
+         *
+         * @var string $json
+         */
+        $json = json_encode($content);
+
+        return $json;
     }
 }

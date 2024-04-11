@@ -17,19 +17,26 @@ class PurchasedTicketsController extends OrionRelationsController
 
     protected $relation = 'purchasedTickets';
 
+    /**
+     * @return string[]
+     */
     public function includes(): array
     {
         return ['ticketType', 'user', 'event', 'reservedTicket'];
     }
 
+    /**
+     * @param  string[]  $requestedRelations
+     * @return Relation<\App\Models\Ticketing\PurchasedTicket>
+     */
     protected function buildIndexFetchQuery(Request $request, Model $event, array $requestedRelations): Relation
     {
         $relation = parent::buildIndexFetchQuery($request, $event, $requestedRelations);
-        /** @var ?User $user */
+        /** @var User $user */
         $user = auth()->user();
 
         // Hide tickets that don't belong to the user if they don't have permission to view all of them
-        if (! $user || ! $user->can('purchasedTickets.viewAny')) {
+        if (! $user->can('purchasedTickets.viewAny')) {
             $relation->getQuery()->where('user_id', $user->id);
         }
 

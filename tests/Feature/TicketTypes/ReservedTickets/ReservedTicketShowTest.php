@@ -26,8 +26,8 @@ class ReservedTicketShowTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->ticketType = TicketType::has('purchasedTickets')->active()->first();
-        $this->reservedTicket = $this->ticketType->reservedTickets()->has('purchasedTicket')->first();
+        $this->ticketType = TicketType::has('purchasedTickets')->active()->firstOrFail();
+        $this->reservedTicket = $this->ticketType->reservedTickets()->has('purchasedTicket')->firstOrFail();
         $this->routeParams = ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id];
         $this->buildEndpoint();
     }
@@ -41,7 +41,7 @@ class ReservedTicketShowTest extends ApiRouteTestCase
 
     public function test_reserved_ticket_show_call_with_permission_returns_success(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
@@ -50,7 +50,7 @@ class ReservedTicketShowTest extends ApiRouteTestCase
 
     public function test_reserved_tickets_view_call_with_purchased_ticket_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $this->addEndpointParams(['include' => 'purchasedTicket']);
 
@@ -61,7 +61,7 @@ class ReservedTicketShowTest extends ApiRouteTestCase
 
     public function test_reserved_tickets_view_call_with_event_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
         $this->addEndpointParams(['include' => 'event']);
 
         $response = $this->actingAs($user)->get($this->endpoint);
@@ -71,7 +71,7 @@ class ReservedTicketShowTest extends ApiRouteTestCase
 
     public function test_reserved_tickets_view_call_with_user_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
         $this->addEndpointParams(['include' => 'user']);
 
         $response = $this->actingAs($user)->get($this->endpoint);

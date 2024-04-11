@@ -11,6 +11,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
+/**
+ * @property-read Waiver $waiver
+ * @property-read User $user
+ */
 class CompletedWaiver extends Model implements ContractsAuditable
 {
     use Auditable, HasFactory;
@@ -26,11 +30,17 @@ class CompletedWaiver extends Model implements ContractsAuditable
         'form_data' => 'array',
     ];
 
+    /**
+     * @return BelongsTo<Waiver, CompletedWaiver>
+     */
     public function waiver(): BelongsTo
     {
         return $this->belongsTo(Waiver::class);
     }
 
+    /**
+     * @return BelongsTo<User, CompletedWaiver>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

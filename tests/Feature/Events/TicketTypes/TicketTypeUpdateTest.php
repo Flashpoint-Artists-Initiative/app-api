@@ -21,17 +21,17 @@ class TicketTypeUpdateTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $event = Event::has('ticketTypes')->inRandomOrder()->first();
+        $event = Event::has('ticketTypes')->inRandomOrder()->firstOrFail();
         $this->routeParams = [
             'event' => $event->id,
-            'ticket_type' => $event->ticketTypes()->inRandomOrder()->first()->id,
+            'ticket_type' => $event->ticketTypes()->inRandomOrder()->firstOrFail()->id,
         ];
         $this->buildEndpoint();
     }
 
     public function test_ticket_type_update_call_with_valid_data_returns_a_successful_response(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'name' => 'General Sale Ticket',
@@ -48,9 +48,9 @@ class TicketTypeUpdateTest extends ApiRouteTestCase
 
     public function test_ticket_type_update_call_with_price_and_purchased_tickets_returns_an_error(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $event = Event::has('ticketTypes.purchasedTickets')->inRandomOrder()->first();
-        $ticketType = $event->ticketTypes()->has('purchasedTickets')->inRandomOrder()->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $event = Event::has('ticketTypes.purchasedTickets')->inRandomOrder()->firstOrFail();
+        $ticketType = $event->ticketTypes()->has('purchasedTickets')->inRandomOrder()->firstOrFail();
 
         $this->routeParams = [
             'event' => $event->id,
@@ -67,12 +67,12 @@ class TicketTypeUpdateTest extends ApiRouteTestCase
 
     public function test_ticket_type_update_call_with_price_and_without_purchased_tickets_returns_a_successful_response(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $event = Event::has('ticketTypes')->inRandomOrder()->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $event = Event::has('ticketTypes')->inRandomOrder()->firstOrFail();
 
         $this->routeParams = [
             'event' => $event->id,
-            'ticket_type' => $event->ticketTypes()->doesntHave('purchasedTickets')->inRandomOrder()->first()->id,
+            'ticket_type' => $event->ticketTypes()->doesntHave('purchasedTickets')->inRandomOrder()->firstOrFail()->id,
         ];
         $this->buildEndpoint();
 
@@ -85,7 +85,7 @@ class TicketTypeUpdateTest extends ApiRouteTestCase
 
     public function test_ticket_type_update_call_with_invalid_data_returns_a_validation_error(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         // Bad name
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
@@ -119,7 +119,7 @@ class TicketTypeUpdateTest extends ApiRouteTestCase
     public function test_ticket_type_update_call_without_permission_returns_error(): void
     {
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $this->assertFalse($user->can('ticketTypes.update'));
 

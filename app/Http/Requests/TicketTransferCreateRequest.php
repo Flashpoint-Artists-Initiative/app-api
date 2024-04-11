@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Models\Ticketing\PurchasedTicket;
+use App\Models\Ticketing\ReservedTicket;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
@@ -44,7 +46,11 @@ class TicketTransferCreateRequest extends FormRequest
 
     public function getTransferUser(): User
     {
-        return auth()->user();
+        $user = auth()->user();
+
+        abort_unless($user instanceof User, 400, 'Invalid request');
+
+        return $user;
     }
 
     public function withValidator(Validator $validator): void
@@ -64,6 +70,7 @@ class TicketTransferCreateRequest extends FormRequest
             // Validate each reserved ticket
             foreach ($this->input('reserved_tickets', []) as $key => $id) {
                 $success = true;
+                /** @var ?ReservedTicket $matchingTicket */
                 $matchingTicket = $user->reservedTickets->find($id);
 
                 if (is_null($matchingTicket)) {
@@ -100,6 +107,7 @@ class TicketTransferCreateRequest extends FormRequest
             // Validate each purchased ticket
             foreach ($this->input('purchased_tickets', []) as $key => $id) {
                 $success = true;
+                /** @var ?PurchasedTicket $matchingTicket */
                 $matchingTicket = $user->purchasedTickets->find($id);
 
                 if (is_null($matchingTicket)) {

@@ -46,7 +46,7 @@ class TicketTypeScopesTest extends TestCase
 
     public function test_event_scope_returns_correct_models(): void
     {
-        $event = Event::has('ticketTypes')->with('ticketTypes')->first();
+        $event = Event::has('ticketTypes')->with('ticketTypes')->firstOrFail();
         $ticketTypes = TicketType::query()->event($event->id)->get();
 
         foreach ($ticketTypes as $type) {

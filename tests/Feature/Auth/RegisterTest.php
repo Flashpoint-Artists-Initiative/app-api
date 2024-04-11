@@ -53,7 +53,7 @@ class RegisterTest extends ApiRouteTestCase
 
     public function test_registering_when_logged_in_returns_error(): void
     {
-        $user = User::find(1);
+        $user = User::findOrFail(1);
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'legal_name' => 'Test User',

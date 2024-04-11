@@ -28,8 +28,8 @@ class PurchasedTicketShowTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->ticketType = TicketType::has('purchasedTickets')->active()->first();
-        $this->purchasedTicket = $this->ticketType->purchasedTickets()->first();
+        $this->ticketType = TicketType::has('purchasedTickets')->active()->firstOrFail();
+        $this->purchasedTicket = $this->ticketType->purchasedTickets()->firstOrFail();
         $this->ticketUser = $this->purchasedTicket->user;
 
         $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'purchased_ticket' => $this->purchasedTicket->id]);
@@ -60,7 +60,7 @@ class PurchasedTicketShowTest extends ApiRouteTestCase
 
     public function test_purchased_ticket_view_call_with_permission_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $this->assertTrue($user->can('purchasedTickets.view'));
         $this->assertNotEquals($this->ticketUser->id, $user->id);
@@ -81,7 +81,7 @@ class PurchasedTicketShowTest extends ApiRouteTestCase
 
     public function test_purchased_ticket_view_call_with_event_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $this->buildEndpoint(params: [
             'ticket_type' => $this->ticketType->id,
@@ -96,7 +96,7 @@ class PurchasedTicketShowTest extends ApiRouteTestCase
 
     public function test_purchased_ticket_view_call_with_user_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $this->buildEndpoint(params: [
             'ticket_type' => $this->ticketType->id,
@@ -110,8 +110,8 @@ class PurchasedTicketShowTest extends ApiRouteTestCase
 
     public function test_purchased_ticket_view_call_with_reserved_ticket_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $this->purchasedTicket = $this->ticketType->purchasedTickets()->has('reservedTicket')->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $this->purchasedTicket = $this->ticketType->purchasedTickets()->has('reservedTicket')->firstOrFail();
         $this->buildEndpoint(params: [
             'ticket_type' => $this->ticketType->id,
             'purchased_ticket' => $this->purchasedTicket->id,

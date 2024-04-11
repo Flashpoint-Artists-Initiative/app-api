@@ -4,7 +4,7 @@ use App\Http\Controllers\Api\Admin\AuditController;
 use App\Http\Controllers\Api\Admin\CompletedWaiversController;
 use App\Http\Controllers\Api\Admin\OrdersController;
 use App\Http\Controllers\Api\Admin\TicketTransfersController;
-use App\Http\Controllers\LockdownController;
+use App\Http\Controllers\Api\LockdownController;
 use App\Services\LockdownService;
 use Illuminate\Support\Facades\Route;
 use Orion\Facades\Orion;

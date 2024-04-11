@@ -22,11 +22,17 @@ class Waiver extends Model implements ContractsAuditable
         'minor_waiver',
     ];
 
+    /**
+     * @return BelongsTo<Event, Waiver>
+     */
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
     }
 
+    /**
+     * @return HasMany<CompletedWaiver>
+     */
     public function completedWaivers(): HasMany
     {
         return $this->hasMany(CompletedWaiver::class);

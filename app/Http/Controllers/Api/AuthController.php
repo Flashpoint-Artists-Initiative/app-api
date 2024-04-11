@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
-use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
@@ -17,14 +16,12 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\Response;
-use Knuckles\Scribe\Attributes\ResponseFromApiResource;
 use Knuckles\Scribe\Attributes\Unauthenticated;
 
 #[Group('Authentication Management')]
@@ -60,7 +57,6 @@ class AuthController extends Controller
         /** @var User $user */
         $user = auth()->user();
 
-        /** @var Collection $collection */
         $collection = $user->getAllPermissions();
 
         $permissions = $collection->map(fn ($p) => $p->name);
@@ -72,19 +68,6 @@ class AuthController extends Controller
             'expires_in' => $this->guard->factory()->getTTL() * 60,
             'permissions' => $permissions,
         ]);
-    }
-
-    /**
-     * Get current user
-     *
-     * Return the currently logged in User
-     */
-    #[ResponseFromApiResource(UserResource::class, User::class)]
-    public function userAction(Request $request): UserResource
-    {
-        $request->user()->load('roles');
-
-        return new UserResource($request->user());
     }
 
     /**
@@ -201,7 +184,10 @@ class AuthController extends Controller
      */
     public function verifyEmailAction(EmailVerificationRequest $request): JsonResponse
     {
-        if ($request->user()->hasVerifiedEmail()) {
+        /** @var User */
+        $user = $request->user();
+
+        if ($user->hasVerifiedEmail()) {
             return response()->json(['message' => 'Email already verified'], 400);
         }
 
@@ -217,11 +203,14 @@ class AuthController extends Controller
      */
     public function resendVerificationEmailAction(Request $request): JsonResponse
     {
-        if ($request->user()->hasVerifiedEmail()) {
+        /** @var User */
+        $user = $request->user();
+
+        if ($user->hasVerifiedEmail()) {
             return response()->json(['message' => 'Email already verified'], 400);
         }
 
-        $request->user()->sendEmailVerificationNotification();
+        $user->sendEmailVerificationNotification();
 
         return response()->json(['message' => 'Email verification link sent.'], 202);
     }

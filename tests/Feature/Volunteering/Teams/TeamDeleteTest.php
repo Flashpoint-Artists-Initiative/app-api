@@ -19,8 +19,8 @@ class TeamDeleteTest extends ApiRouteTestCase
 
     public function test_team_delete_call_while_not_logged_in_fails(): void
     {
-        $event = Event::has('teams')->first();
-        $ticketType = $event->teams->first();
+        $event = Event::has('teams')->firstOrFail();
+        $ticketType = $event->teams->firstOrFail();
 
         $this->buildEndpoint(params: ['event' => $event->id, 'team' => $ticketType->id]);
 
@@ -31,8 +31,8 @@ class TeamDeleteTest extends ApiRouteTestCase
 
     public function test_team_force_delete_call_while_not_logged_in_fails(): void
     {
-        $event = Event::has('teams')->first();
-        $ticketType = $event->teams->first();
+        $event = Event::has('teams')->firstOrFail();
+        $ticketType = $event->teams->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id, 'team' => $ticketType->id, 'force' => true]);
 
         $response = $this->delete($this->endpoint);
@@ -42,11 +42,11 @@ class TeamDeleteTest extends ApiRouteTestCase
 
     public function test_team_delete_call_without_permission_fails(): void
     {
-        $event = Event::has('teams')->first();
-        $ticketType = $event->teams->first();
+        $event = Event::has('teams')->firstOrFail();
+        $ticketType = $event->teams->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id, 'team' => $ticketType->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -55,11 +55,11 @@ class TeamDeleteTest extends ApiRouteTestCase
 
     public function test_team_force_delete_call_as_event_manager_fails(): void
     {
-        $event = Event::has('teams')->first();
-        $ticketType = $event->teams->first();
+        $event = Event::has('teams')->firstOrFail();
+        $ticketType = $event->teams->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id, 'team' => $ticketType->id, 'force' => true]);
 
-        $user = User::role(RolesEnum::EventManager)->first();
+        $user = User::role(RolesEnum::EventManager)->firstOrFail();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -68,13 +68,13 @@ class TeamDeleteTest extends ApiRouteTestCase
 
     public function test_team_force_delete_call_of_trashed_event_as_event_manager_fails(): void
     {
-        $event = Event::has('teams')->first();
-        $ticketType = $event->teams->first();
+        $event = Event::has('teams')->firstOrFail();
+        $ticketType = $event->teams->firstOrFail();
         $ticketType->delete();
 
         $this->buildEndpoint(params: ['event' => $event->id, 'team' => $ticketType->id, 'force' => true]);
 
-        $user = User::role(RolesEnum::EventManager)->first();
+        $user = User::role(RolesEnum::EventManager)->firstOrFail();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -83,12 +83,12 @@ class TeamDeleteTest extends ApiRouteTestCase
 
     public function test_team_delete_call_as_admin_succeeds(): void
     {
-        $event = Event::has('teams')->first();
-        $ticketType = $event->teams->first();
+        $event = Event::has('teams')->firstOrFail();
+        $ticketType = $event->teams->firstOrFail();
 
         $this->buildEndpoint(params: ['event' => $event->id, 'team' => $ticketType->id]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -97,12 +97,12 @@ class TeamDeleteTest extends ApiRouteTestCase
 
     public function test_team_force_delete_call_as_admin_succeeds(): void
     {
-        $event = Event::has('teams')->first();
-        $ticketType = $event->teams->first();
+        $event = Event::has('teams')->firstOrFail();
+        $ticketType = $event->teams->firstOrFail();
 
         $this->buildEndpoint(params: ['event' => $event->id, 'team' => $ticketType->id, 'force' => true]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -111,13 +111,13 @@ class TeamDeleteTest extends ApiRouteTestCase
 
     public function test_team_force_delete_call_of_trashed_event_as_admin_succeeds(): void
     {
-        $event = Event::has('teams')->first();
-        $ticketType = $event->teams->first();
+        $event = Event::has('teams')->firstOrFail();
+        $ticketType = $event->teams->firstOrFail();
         $ticketType->delete();
 
         $this->buildEndpoint(params: ['event' => $event->id, 'team' => $ticketType->id, 'force' => true]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -126,13 +126,13 @@ class TeamDeleteTest extends ApiRouteTestCase
 
     public function test_team_delete_restore_call_as_admin_succeeds(): void
     {
-        $event = Event::has('teams')->first();
-        $ticketType = $event->teams->first();
+        $event = Event::has('teams')->firstOrFail();
+        $ticketType = $event->teams->firstOrFail();
         $ticketType->delete();
 
         $this->buildEndpoint(name: 'api.events.teams.restore', params: ['event' => $event->id, 'team' => $ticketType->id, 'force' => true]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->post($this->endpoint);
 

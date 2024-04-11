@@ -24,7 +24,7 @@ class ShiftIndexTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->shiftType = ShiftType::has('shifts')->first();
+        $this->shiftType = ShiftType::has('shifts')->firstOrFail();
         $this->routeParams = ['shift_type' => $this->shiftType->id];
         $this->buildEndpoint();
     }
@@ -38,15 +38,15 @@ class ShiftIndexTest extends ApiRouteTestCase
 
     public function test_shift_index_call_for_active_event_and_team_returns_success(): void
     {
-        $event = Event::where('active', true)->has('teams')->first();
-        $team = $event->teams()->where('active', true)->has('shiftTypes')->first();
-        $shiftType = $team->shiftTypes()->first();
+        $event = Event::where('active', true)->has('teams')->firstOrFail();
+        $team = $event->teams()->where('active', true)->has('shiftTypes')->firstOrFail();
+        $shiftType = $team->shiftTypes()->firstOrFail();
 
         $this->addEndpointParams(['shift_type' => $shiftType->id]);
 
         $shiftCount = Shift::where('shift_type_id', $shiftType->id)->count();
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);
@@ -55,13 +55,13 @@ class ShiftIndexTest extends ApiRouteTestCase
 
     public function test_shift_index_call_for_active_event_and_inactive_team_returns_failure(): void
     {
-        $event = Event::where('active', true)->has('teams')->first();
-        $team = $event->teams()->where('active', false)->has('shiftTypes')->first();
-        $shiftType = $team->shiftTypes()->first();
+        $event = Event::where('active', true)->has('teams')->firstOrFail();
+        $team = $event->teams()->where('active', false)->has('shiftTypes')->firstOrFail();
+        $shiftType = $team->shiftTypes()->firstOrFail();
 
         $this->addEndpointParams(['shift_type' => $shiftType->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(403);
@@ -69,13 +69,13 @@ class ShiftIndexTest extends ApiRouteTestCase
 
     public function test_shift_index_call_for_inactive_event_and_active_team_returns_failure(): void
     {
-        $event = Event::where('active', false)->has('teams')->first();
-        $team = $event->teams()->where('active', true)->has('shiftTypes')->first();
-        $shiftType = $team->shiftTypes()->first();
+        $event = Event::where('active', false)->has('teams')->firstOrFail();
+        $team = $event->teams()->where('active', true)->has('shiftTypes')->firstOrFail();
+        $shiftType = $team->shiftTypes()->firstOrFail();
 
         $this->addEndpointParams(['shift_type' => $shiftType->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(403);
@@ -83,13 +83,13 @@ class ShiftIndexTest extends ApiRouteTestCase
 
     public function test_shift_index_call_for_inactive_event_and_team_returns_failure(): void
     {
-        $event = Event::where('active', false)->has('teams')->first();
-        $team = $event->teams()->where('active', false)->has('shiftTypes')->first();
-        $shiftType = $team->shiftTypes()->first();
+        $event = Event::where('active', false)->has('teams')->firstOrFail();
+        $team = $event->teams()->where('active', false)->has('shiftTypes')->firstOrFail();
+        $shiftType = $team->shiftTypes()->firstOrFail();
 
         $this->addEndpointParams(['shift_type' => $shiftType->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(403);
@@ -97,13 +97,13 @@ class ShiftIndexTest extends ApiRouteTestCase
 
     public function test_shift_index_call_for_inactive_event_and_team_as_admin_returns_success(): void
     {
-        $event = Event::where('active', false)->has('teams')->first();
-        $team = $event->teams()->where('active', false)->has('shiftTypes')->first();
-        $shiftType = $team->shiftTypes()->first();
+        $event = Event::where('active', false)->has('teams')->firstOrFail();
+        $team = $event->teams()->where('active', false)->has('shiftTypes')->firstOrFail();
+        $shiftType = $team->shiftTypes()->firstOrFail();
 
         $this->addEndpointParams(['shift_type' => $shiftType->id]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);

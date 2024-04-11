@@ -20,6 +20,9 @@ class ReservedTicketsController extends OrionRelationsController
         parent::__construct();
     }
 
+    /**
+     * @return string[]
+     */
     public function includes(): array
     {
         return ['ticketType', 'user', 'event', 'purchasedTicket'];

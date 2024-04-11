@@ -41,7 +41,7 @@ class UsersShowTest extends ApiRouteTestCase
 
     public function test_users_view_call_with_permission_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $this->assertTrue($user->can('users.view'));
         $this->assertNotEquals($this->routeParams['user'], $user->id);
@@ -53,7 +53,7 @@ class UsersShowTest extends ApiRouteTestCase
 
     public function test_users_view_call_to_own_id_without_permission_is_successful(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $this->assertFalse($user->can('users.view'));
 
@@ -67,7 +67,7 @@ class UsersShowTest extends ApiRouteTestCase
 
     public function test_users_view_call_with_roles_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $this->buildEndpoint(params: ['user' => $user->id, 'include' => 'roles']);
 
@@ -78,7 +78,7 @@ class UsersShowTest extends ApiRouteTestCase
 
     public function test_users_view_call_with_permissions_is_successful(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $this->buildEndpoint(params: ['user' => $user->id, 'include' => 'permissions']);
 
@@ -89,7 +89,7 @@ class UsersShowTest extends ApiRouteTestCase
 
     public function test_users_view_call_with_purchased_tickets_is_successful(): void
     {
-        $user = User::has('purchasedTickets')->first();
+        $user = User::has('purchasedTickets')->firstOrFail();
 
         $this->buildEndpoint(params: ['user' => $user->id, 'include' => 'purchasedTickets']);
 
@@ -100,7 +100,7 @@ class UsersShowTest extends ApiRouteTestCase
 
     public function test_users_view_call_with_reserved_tickets_is_successful(): void
     {
-        $user = User::has('reservedTickets')->first();
+        $user = User::has('reservedTickets')->firstOrFail();
 
         $this->buildEndpoint(params: ['user' => $user->id, 'include' => 'reservedTickets']);
 

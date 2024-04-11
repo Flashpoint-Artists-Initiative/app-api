@@ -20,9 +20,9 @@ class TicketTransferDeleteTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->user = User::has('ticketTransfers')->first();
+        $this->user = User::has('ticketTransfers')->firstOrFail();
         $this->routeParams = [
-            'ticket_transfer' => $this->user->ticketTransfers->first()->id,
+            'ticket_transfer' => $this->user->ticketTransfers->firstOrFail()->id,
         ];
         $this->buildEndpoint();
     }
@@ -43,7 +43,7 @@ class TicketTransferDeleteTest extends ApiRouteTestCase
 
     public function test_me_ticket_transfer_delete_call_for_completed_transfer_fails(): void
     {
-        $transfer = $this->user->ticketTransfers->first();
+        $transfer = $this->user->ticketTransfers->firstOrFail();
         $transfer->completed = true;
         $transfer->saveQuietly();
 

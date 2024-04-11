@@ -24,8 +24,8 @@ class ShiftTypeShowTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $team = Team::has('shiftTypes')->first();
-        $this->shiftType = $team->shiftTypes()->first();
+        $team = Team::has('shiftTypes')->firstOrFail();
+        $this->shiftType = $team->shiftTypes()->firstOrFail();
         $this->buildEndpoint(params: ['team' => $team->id, 'shift_type' => $this->shiftType->id]);
     }
 
@@ -38,12 +38,12 @@ class ShiftTypeShowTest extends ApiRouteTestCase
 
     public function test_shift_type_show_call_with_active_event_and_team_returns_success(): void
     {
-        $event = Event::where('active', true)->has('teams')->first();
-        $team = $event->teams()->where('active', true)->has('shiftTypes')->first();
-        $shiftType = $team->shiftTypes()->first();
+        $event = Event::where('active', true)->has('teams')->firstOrFail();
+        $team = $event->teams()->where('active', true)->has('shiftTypes')->firstOrFail();
+        $shiftType = $team->shiftTypes()->firstOrFail();
         $this->addEndpointParams(['team' => $team->id, 'shift_type' => $shiftType->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
@@ -52,12 +52,12 @@ class ShiftTypeShowTest extends ApiRouteTestCase
 
     public function test_shift_type_show_call_with_active_event_and_inactive_team_returns_error(): void
     {
-        $event = Event::where('active', true)->has('teams')->first();
-        $team = $event->teams()->where('active', false)->has('shiftTypes')->first();
-        $shiftType = $team->shiftTypes()->first();
+        $event = Event::where('active', true)->has('teams')->firstOrFail();
+        $team = $event->teams()->where('active', false)->has('shiftTypes')->firstOrFail();
+        $shiftType = $team->shiftTypes()->firstOrFail();
         $this->addEndpointParams(['team' => $team->id, 'shift_type' => $shiftType->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
@@ -66,12 +66,12 @@ class ShiftTypeShowTest extends ApiRouteTestCase
 
     public function test_shift_type_show_call_with_inactive_event_and_active_team_returns_error(): void
     {
-        $event = Event::where('active', false)->has('teams')->first();
-        $team = $event->teams()->where('active', true)->has('shiftTypes')->first();
-        $shiftType = $team->shiftTypes()->first();
+        $event = Event::where('active', false)->has('teams')->firstOrFail();
+        $team = $event->teams()->where('active', true)->has('shiftTypes')->firstOrFail();
+        $shiftType = $team->shiftTypes()->firstOrFail();
         $this->addEndpointParams(['team' => $team->id, 'shift_type' => $shiftType->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
@@ -80,12 +80,12 @@ class ShiftTypeShowTest extends ApiRouteTestCase
 
     public function test_shift_type_show_call_with_inactive_event_and_team_returns_error(): void
     {
-        $event = Event::where('active', false)->has('teams')->first();
-        $team = $event->teams()->where('active', false)->has('shiftTypes')->first();
-        $shiftType = $team->shiftTypes()->first();
+        $event = Event::where('active', false)->has('teams')->firstOrFail();
+        $team = $event->teams()->where('active', false)->has('shiftTypes')->firstOrFail();
+        $shiftType = $team->shiftTypes()->firstOrFail();
         $this->addEndpointParams(['team' => $team->id, 'shift_type' => $shiftType->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
@@ -94,12 +94,12 @@ class ShiftTypeShowTest extends ApiRouteTestCase
 
     public function test_shift_type_show_call_with_inactive_event_and_team_as_admin_returns_success(): void
     {
-        $event = Event::where('active', false)->has('teams')->first();
-        $team = $event->teams()->where('active', false)->has('shiftTypes')->first();
-        $shiftType = $team->shiftTypes()->first();
+        $event = Event::where('active', false)->has('teams')->firstOrFail();
+        $team = $event->teams()->where('active', false)->has('shiftTypes')->firstOrFail();
+        $shiftType = $team->shiftTypes()->firstOrFail();
         $this->addEndpointParams(['team' => $team->id, 'shift_type' => $shiftType->id]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 

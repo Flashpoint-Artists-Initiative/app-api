@@ -30,7 +30,7 @@ class VerifyEmailTest extends ApiRouteTestCase
             'password' => 'password',
         ]);
 
-        $user = User::first();
+        $user = User::firstOrFail();
 
         /** @var \Illuminate\Mail\Transport\ArrayTransport */
         $emailTransport = app('mailer')->getSymfonyTransport();
@@ -56,7 +56,7 @@ class VerifyEmailTest extends ApiRouteTestCase
             'password' => 'password',
         ]);
 
-        $user = User::first();
+        $user = User::firstOrFail();
 
         $this->assertFalse($user->hasVerifiedEmail());
 
@@ -65,7 +65,10 @@ class VerifyEmailTest extends ApiRouteTestCase
         $url = $verificationEmail->toMail($user)->actionUrl;
         $parts = parse_url($url);
 
-        $relativeUrl = "{$parts['path']}?{$parts['query']}";
+        $path = $parts['path'] ?? '';
+        $query = $parts['query'] ?? '';
+
+        $relativeUrl = "$path?$query";
 
         $response = $this->actingAs($user)->get($relativeUrl);
 
@@ -89,7 +92,7 @@ class VerifyEmailTest extends ApiRouteTestCase
             'password' => 'password',
         ]);
 
-        $user = User::first();
+        $user = User::firstOrFail();
 
         $this->assertFalse($user->hasVerifiedEmail());
 
@@ -98,7 +101,10 @@ class VerifyEmailTest extends ApiRouteTestCase
         $url = $verificationEmail->toMail($user)->actionUrl;
         $parts = parse_url($url);
 
-        $relativeUrl = "{$parts['path']}?{$parts['query']}";
+        $path = $parts['path'] ?? '';
+        $query = $parts['query'] ?? '';
+
+        $relativeUrl = "$path?$query";
 
         // First request
         $this->actingAs($user)->get($relativeUrl);
@@ -116,7 +122,7 @@ class VerifyEmailTest extends ApiRouteTestCase
             'password' => 'password',
         ]);
 
-        $user = User::first();
+        $user = User::firstOrFail();
 
         $params = ['id' => 1, 'hash' => 'abcdef'];
         $relativeUrl = route('verification.verify', $params, false);

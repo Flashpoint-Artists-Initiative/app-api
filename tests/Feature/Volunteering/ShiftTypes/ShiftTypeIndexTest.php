@@ -23,7 +23,7 @@ class ShiftTypeIndexTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->team = Team::has('shiftTypes')->inRandomOrder()->first();
+        $this->team = Team::has('shiftTypes')->inRandomOrder()->firstOrFail();
         $this->routeParams = ['team' => $this->team->id];
         $this->buildEndpoint();
     }
@@ -37,12 +37,12 @@ class ShiftTypeIndexTest extends ApiRouteTestCase
 
     public function test_shift_type_index_call_for_active_event_and_team_returns_success(): void
     {
-        $event = Event::where('active', true)->has('teams')->first();
-        $team = $event->teams()->where('active', true)->has('shiftTypes')->first();
+        $event = Event::where('active', true)->has('teams')->firstOrFail();
+        $team = $event->teams()->where('active', true)->has('shiftTypes')->firstOrFail();
         $shiftTypeCount = $team->shiftTypes()->count();
         $this->addEndpointParams(['team' => $team->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);
@@ -51,11 +51,11 @@ class ShiftTypeIndexTest extends ApiRouteTestCase
 
     public function test_shift_type_index_call_for_active_event_and_inactive_team_returns_error(): void
     {
-        $event = Event::where('active', true)->has('teams')->first();
-        $team = $event->teams()->where('active', false)->has('shiftTypes')->first();
+        $event = Event::where('active', true)->has('teams')->firstOrFail();
+        $team = $event->teams()->where('active', false)->has('shiftTypes')->firstOrFail();
         $this->addEndpointParams(['team' => $team->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(403);
@@ -63,11 +63,11 @@ class ShiftTypeIndexTest extends ApiRouteTestCase
 
     public function test_shift_type_index_call_for_inactive_event_and_active_team_returns_error(): void
     {
-        $event = Event::where('active', false)->has('teams')->first();
-        $team = $event->teams()->where('active', true)->has('shiftTypes')->first();
+        $event = Event::where('active', false)->has('teams')->firstOrFail();
+        $team = $event->teams()->where('active', true)->has('shiftTypes')->firstOrFail();
         $this->addEndpointParams(['team' => $team->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(403);
@@ -75,11 +75,11 @@ class ShiftTypeIndexTest extends ApiRouteTestCase
 
     public function test_shift_type_index_call_for_inactive_event_and_team_returns_error(): void
     {
-        $event = Event::where('active', false)->has('teams')->first();
-        $team = $event->teams()->where('active', false)->has('shiftTypes')->first();
+        $event = Event::where('active', false)->has('teams')->firstOrFail();
+        $team = $event->teams()->where('active', false)->has('shiftTypes')->firstOrFail();
         $this->addEndpointParams(['team' => $team->id]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);
@@ -87,11 +87,11 @@ class ShiftTypeIndexTest extends ApiRouteTestCase
 
     public function test_shift_type_index_call_for_inactive_event_and_team_as_admin_returns_success(): void
     {
-        $event = Event::where('active', false)->has('teams')->first();
-        $team = $event->teams()->where('active', false)->has('shiftTypes')->first();
+        $event = Event::where('active', false)->has('teams')->firstOrFail();
+        $team = $event->teams()->where('active', false)->has('shiftTypes')->firstOrFail();
         $this->addEndpointParams(['team' => $team->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(403);

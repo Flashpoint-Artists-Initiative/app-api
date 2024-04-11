@@ -19,8 +19,8 @@ class TeamShowTest extends ApiRouteTestCase
 
     public function test_team_show_call_while_not_logged_in_returns_error(): void
     {
-        $event = Event::has('teams')->where('active', true)->first();
-        $team = $event->teams()->where('active', true)->first();
+        $event = Event::has('teams')->where('active', true)->firstOrFail();
+        $team = $event->teams()->where('active', true)->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id, 'team' => $team->id]);
 
         $response = $this->get($this->endpoint);
@@ -30,11 +30,11 @@ class TeamShowTest extends ApiRouteTestCase
 
     public function test_team_show_call_without_permission_returns_active_team(): void
     {
-        $event = Event::has('teams')->where('active', true)->first();
-        $team = $event->teams()->where('active', true)->first();
+        $event = Event::has('teams')->where('active', true)->firstOrFail();
+        $team = $event->teams()->where('active', true)->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id, 'team' => $team->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $response = $this->actingAs($user)->get($this->endpoint);
 
         $response->assertStatus(200)->assertJsonPath('data.id', $team->id);
@@ -42,11 +42,11 @@ class TeamShowTest extends ApiRouteTestCase
 
     public function test_team_show_call_without_permission_does_not_return_pending_team(): void
     {
-        $event = Event::has('teams')->where('active', true)->first();
-        $team = $event->teams()->where('active', false)->first();
+        $event = Event::has('teams')->where('active', true)->firstOrFail();
+        $team = $event->teams()->where('active', false)->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id, 'team' => $team->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $response = $this->actingAs($user)->get($this->endpoint);
 
         $response->assertStatus(403);
@@ -54,11 +54,11 @@ class TeamShowTest extends ApiRouteTestCase
 
     public function test_team_show_call_without_permission_does_not_return_trashed_team(): void
     {
-        $event = Event::has('teams')->where('active', true)->first();
-        $team = $event->teams()->where('active', true)->onlyTrashed()->first();
+        $event = Event::has('teams')->where('active', true)->firstOrFail();
+        $team = $event->teams()->where('active', true)->onlyTrashed()->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id, 'team' => $team->id, 'with_trashed' => true]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
         $response = $this->actingAs($user)->get($this->endpoint);
 
         $response->assertStatus(404);
@@ -66,11 +66,11 @@ class TeamShowTest extends ApiRouteTestCase
 
     public function test_team_show_call_as_admin_returns_pending_team(): void
     {
-        $event = Event::has('teams')->where('active', true)->first();
-        $team = $event->teams()->where('active', false)->first();
+        $event = Event::has('teams')->where('active', true)->firstOrFail();
+        $team = $event->teams()->where('active', false)->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id, 'team' => $team->id]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
@@ -79,11 +79,11 @@ class TeamShowTest extends ApiRouteTestCase
 
     public function test_team_show_call_as_admin_returns_trashed_team(): void
     {
-        $event = Event::has('teams')->where('active', true)->first();
-        $team = $event->teams()->where('active', true)->onlyTrashed()->first();
+        $event = Event::has('teams')->where('active', true)->firstOrFail();
+        $team = $event->teams()->where('active', true)->onlyTrashed()->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id, 'team' => $team->id, 'with_trashed' => true]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
@@ -92,11 +92,11 @@ class TeamShowTest extends ApiRouteTestCase
 
     public function test_team_show_for_inactive_event_returns_error(): void
     {
-        $event = Event::where('active', false)->has('teams')->first();
-        $team = $event->teams()->where('active', true)->first();
+        $event = Event::where('active', false)->has('teams')->firstOrFail();
+        $team = $event->teams()->where('active', true)->firstOrFail();
         $this->addEndpointParams(['event' => $event->id, 'team' => $team->id]);
 
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(403);
@@ -104,11 +104,11 @@ class TeamShowTest extends ApiRouteTestCase
 
     public function test_team_show_for_inactive_event_as_admin_returns_success(): void
     {
-        $event = Event::where('active', false)->has('teams')->first();
-        $team = $event->teams()->where('active', true)->first();
+        $event = Event::where('active', false)->has('teams')->firstOrFail();
+        $team = $event->teams()->where('active', true)->firstOrFail();
         $this->addEndpointParams(['event' => $event->id, 'team' => $team->id]);
 
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);

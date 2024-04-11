@@ -7,19 +7,22 @@ namespace App\Models\Ticketing;
 use App\Models\Event;
 use App\Models\User;
 use App\Notifications\TicketTransferNotification;
+use App\Observers\TicketTransferObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Support\Collection;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
 /**
  * @property Event $event
  * @property int $ticketCount
+ * @property-read User $user
  */
+#[ObservedBy(TicketTransferObserver::class)]
 class TicketTransfer extends Model implements ContractsAuditable
 {
     use Auditable, HasFactory;
@@ -30,31 +33,47 @@ class TicketTransfer extends Model implements ContractsAuditable
         'completed',
     ];
 
+    /** @var string[] */
     protected $with = [
         'purchasedTickets.ticketType',
         'reservedTickets.ticketType',
     ];
 
+    /**
+     * @return MorphToMany<PurchasedTicket>
+     */
     public function purchasedTickets(): MorphToMany
     {
         return $this->morphedByMany(PurchasedTicket::class, 'ticket', 'ticket_transfer_items');
     }
 
+    /**
+     * @return MorphToMany<ReservedTicket>
+     */
     public function reservedTickets(): MorphToMany
     {
         return $this->morphedByMany(ReservedTicket::class, 'ticket', 'ticket_transfer_items');
     }
 
+    /**
+     * @return BelongsTo<User, TicketTransfer>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo<User, TicketTransfer>
+     */
     public function recipient(): BelongsTo
     {
         return $this->belongsTo(User::class, 'recipient_email', 'email');
     }
 
+    /**
+     * @return Attribute<int, void>
+     */
     public function ticketCount(): Attribute
     {
         return Attribute::make(
@@ -64,15 +83,21 @@ class TicketTransfer extends Model implements ContractsAuditable
         );
     }
 
+    /**
+     * @return Attribute<Event, void>
+     */
     public function event(): Attribute
     {
         return Attribute::make(
             get: function (mixed $value, array $attributes) {
                 if ($this->purchasedTickets->count() > 0) {
-                    return $this->purchasedTickets->first()->event;
+                    $ticket = $this->purchasedTickets->first();
                 } else {
-                    return $this->reservedTickets->first()->event;
+                    $ticket = $this->reservedTickets->first();
                 }
+
+                /** @var PurchasedTicket|ReservedTicket $ticket */
+                return $ticket->event;
             }
         );
     }
@@ -88,7 +113,6 @@ class TicketTransfer extends Model implements ContractsAuditable
 
         $user = User::where('email', $this->recipient_email)->firstOrFail();
 
-        /** @var Collection $tickets */
         $tickets = $this->purchasedTickets->concat($this->reservedTickets);
 
         $tickets->each(fn ($ticket) => $ticket->update(['user_id' => $user->id]));
@@ -98,7 +122,11 @@ class TicketTransfer extends Model implements ContractsAuditable
         return $this;
     }
 
-    public static function createTransfer(int $userId, string $email, ?array $purchasedTicketIds = [], ?array $reservedTicketIds = []): TicketTransfer
+    /**
+     * @param  int[]  $purchasedTicketIds
+     * @param  int[]  $reservedTicketIds
+     */
+    public static function createTransfer(int $userId, string $email, array $purchasedTicketIds = [], array $reservedTicketIds = []): TicketTransfer
     {
         $transfer = TicketTransfer::create([
             'user_id' => $userId,
@@ -115,7 +143,7 @@ class TicketTransfer extends Model implements ContractsAuditable
 
         $transfer->load(['reservedTickets', 'purchasedTickets']);
 
-        $user = User::find($userId);
+        $user = User::findOrFail($userId);
         $user->notify(new TicketTransferNotification($transfer));
 
         return $transfer;

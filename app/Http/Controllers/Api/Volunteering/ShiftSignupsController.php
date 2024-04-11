@@ -18,6 +18,7 @@ class ShiftSignupsController extends OrionRelationsController
 
     protected $relation = 'volunteers';
 
+    /** @var class-string */
     protected $parentPolicy = ShiftPolicy::class;
 
     public function __construct()

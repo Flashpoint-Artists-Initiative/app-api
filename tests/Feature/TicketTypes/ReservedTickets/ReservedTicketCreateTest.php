@@ -20,7 +20,7 @@ class ReservedTicketCreateTest extends ApiRouteTestCase
 
     public function test_reserved_ticket_create_call_with_valid_data_returns_a_successful_response(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $this->assertNull(User::where('email', 'notauser@example.com')->first());
 
@@ -34,8 +34,8 @@ class ReservedTicketCreateTest extends ApiRouteTestCase
 
     public function test_reserved_ticket_create_call_for_zero_price_type_creates_a_purchased_ticket(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $ticketType = TicketType::where('price', 0)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $ticketType = TicketType::where('price', 0)->firstOrFail();
         $this->buildEndpoint(params: ['ticket_type' => $ticketType->id]);
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
@@ -49,7 +49,7 @@ class ReservedTicketCreateTest extends ApiRouteTestCase
 
     public function test_reserved_ticket_create_call_with_matching_email_returns_a_successful_response(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => $user->email,
@@ -60,7 +60,7 @@ class ReservedTicketCreateTest extends ApiRouteTestCase
 
     public function test_reserved_ticket_create_call_with_invalid_data_returns_a_validation_error(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
         $this->assertNull(User::where('email', 'notauser@example.com')->first());
 
         // Bad email
@@ -82,7 +82,7 @@ class ReservedTicketCreateTest extends ApiRouteTestCase
 
     public function test_reserved_ticket_create_call_without_permission_returns_error(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $this->assertFalse($user->can('reservedTickets.create'));
 

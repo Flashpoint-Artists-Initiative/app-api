@@ -9,6 +9,7 @@ use App\Http\Resources\AuditResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use OwenIt\Auditing\Models\Audit;
 
 class UsersController extends OrionController
@@ -17,6 +18,9 @@ class UsersController extends OrionController
 
     protected $resource = UserResource::class;
 
+    /**
+     * @return string[]
+     */
     public function includes(): array
     {
         return [
@@ -31,22 +35,31 @@ class UsersController extends OrionController
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function filterableBy(): array
     {
         return ['legal_name', 'preferred_name', 'display_name', 'email', 'birthday', 'created_at', 'updated_at', 'deleted_at', 'email_verified_at'];
     }
 
+    /**
+     * @return string[]
+     */
     public function sortableBy(): array
     {
         return ['legal_name', 'preferred_name', 'display_name', 'email', 'birthday', 'created_at', 'updated_at', 'deleted_at', 'email_verified_at'];
     }
 
+    /**
+     * @return string[]
+     */
     public function searchableBy(): array
     {
         return ['legal_name', 'preferred_name', 'display_name', 'email', 'birthday'];
     }
 
-    public function historyAction(Request $request, User $user)
+    public function historyAction(Request $request, User $user): AnonymousResourceCollection
     {
         $this->authorize('history', [$user]);
 

@@ -8,6 +8,9 @@ use Orion\Http\Requests\Request;
 
 class ShiftTypeRequest extends Request
 {
+    /**
+     * @return array<string, string[]>
+     */
     public function storeRules(): array
     {
         return [
@@ -18,6 +21,9 @@ class ShiftTypeRequest extends Request
         ];
     }
 
+    /**
+     * @return array<string, string[]>
+     */
     public function updateRules(): array
     {
         return [

@@ -27,6 +27,10 @@ class RequirementsController extends OrionController
         parent::__construct();
     }
 
+    /**
+     * @param  string[]  $requestedRelations
+     * @return Builder<Requirement>
+     */
     protected function buildIndexFetchQuery(Request $request, array $requestedRelations): Builder
     {
         $query = parent::buildIndexFetchQuery($request, $requestedRelations);
@@ -42,6 +46,10 @@ class RequirementsController extends OrionController
         return $query;
     }
 
+    /**
+     * @param  string[]  $requestedRelations
+     * @return Builder<Requirement>
+     */
     protected function buildShowFetchQuery(Request $request, array $requestedRelations): Builder
     {
         $query = parent::buildShowFetchQuery($request, $requestedRelations);

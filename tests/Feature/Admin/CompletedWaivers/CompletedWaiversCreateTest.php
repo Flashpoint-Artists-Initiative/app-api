@@ -17,11 +17,11 @@ class CompletedWaiversCreateTest extends ApiRouteTestCase
 
     public function test_completed_waivers_create_call_with_valid_data_returns_a_successful_response(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
-            'waiver_id' => Waiver::first()->id,
-            'user_id' => User::doesntHave('roles')->first()->id,
+            'waiver_id' => Waiver::firstOrFail()->id,
+            'user_id' => User::doesntHave('roles')->firstOrFail()->id,
             'form_data' => json_encode(['a' => 1, 'b' => 2]),
             'paper_completion' => false,
         ]);
@@ -31,10 +31,10 @@ class CompletedWaiversCreateTest extends ApiRouteTestCase
 
     public function test_completed_waivers_create_call_with_invalid_data_returns_a_validation_error(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
-        $waiverId = Waiver::first()->id;
-        $userId = User::doesntHave('roles')->first()->id;
+        $waiverId = Waiver::firstOrFail()->id;
+        $userId = User::doesntHave('roles')->firstOrFail()->id;
         $formData = json_encode(['a' => 1, 'b' => 2]);
 
         // Bad waiver_id - not an int
@@ -100,13 +100,13 @@ class CompletedWaiversCreateTest extends ApiRouteTestCase
 
     public function test_completed_waivers_create_call_without_permission_returns_error(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $this->assertFalse($user->can('completedWaivers.create'));
 
         $response = $this->actingAs($user)->postJson($this->endpoint, [
-            'waiver_id' => Waiver::first()->id,
-            'user_id' => User::doesntHave('roles')->first()->id,
+            'waiver_id' => Waiver::firstOrFail()->id,
+            'user_id' => User::doesntHave('roles')->firstOrFail()->id,
             'form_data' => json_encode(['a' => 1, 'b' => 2]),
             'paper_completion' => false,
         ]);
@@ -117,8 +117,8 @@ class CompletedWaiversCreateTest extends ApiRouteTestCase
     public function test_completed_waivers_create_call_not_logged_in_returns_error(): void
     {
         $response = $this->postJson($this->endpoint, [
-            'waiver_id' => Waiver::first()->id,
-            'user_id' => User::doesntHave('roles')->first()->id,
+            'waiver_id' => Waiver::firstOrFail()->id,
+            'user_id' => User::doesntHave('roles')->firstOrFail()->id,
             'form_data' => json_encode(['a' => 1, 'b' => 2]),
             'paper_completion' => false,
         ]);

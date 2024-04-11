@@ -23,15 +23,15 @@ class ShiftUpdateTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $shiftType = ShiftType::has('shifts')->first();
-        $this->shift = $shiftType->shifts()->first();
+        $shiftType = ShiftType::has('shifts')->firstOrFail();
+        $this->shift = $shiftType->shifts()->firstOrFail();
         $this->routeParams = ['shift_type' => $shiftType->id, 'shift' => $this->shift->id];
         $this->buildEndpoint();
     }
 
     public function test_shift_update_call_with_valid_data_returns_a_successful_response(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'start_offset' => fake()->numberBetween(0, 10000),
@@ -45,7 +45,7 @@ class ShiftUpdateTest extends ApiRouteTestCase
 
     public function test_shift_update_call_with_invalid_data_returns_a_validation_error(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         // Bad start_offset
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
@@ -78,7 +78,7 @@ class ShiftUpdateTest extends ApiRouteTestCase
 
     public function test_shift_update_call_without_permission_returns_error(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'start_offset' => 1000,

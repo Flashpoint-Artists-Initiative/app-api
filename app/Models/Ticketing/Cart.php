@@ -6,6 +6,8 @@ namespace App\Models\Ticketing;
 
 use App\Models\Event;
 use App\Models\User;
+use App\Observers\CartObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,7 +21,9 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
  * @property bool $is_expired
  * @property Event $event
  * @property int $quantity
+ * @property-read User $user
  */
+#[ObservedBy(CartObserver::class)]
 class Cart extends Model implements ContractsAuditable
 {
     use Auditable, HasFactory;
@@ -32,28 +36,43 @@ class Cart extends Model implements ContractsAuditable
         'expiration_date' => 'datetime',
     ];
 
+    /**
+     * @var string[]
+     */
     protected $with = [
         'items.ticketType',
     ];
 
+    /**
+     * @return HasMany<CartItem>
+     */
     public function items(): HasMany
     {
         return $this->hasMany(CartItem::class);
     }
 
+    /**
+     * @return BelongsTo<User, Cart>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return Attribute<Event, void>
+     */
     public function event(): Attribute
     {
         return Attribute::make(
             get: function (mixed $value, array $attributes) {
-                return $this->items->first()->ticketType->event;
+                return $this->items->firstOrFail()->ticketType->event;
             });
     }
 
+    /**
+     * @return Attribute<int, void>
+     */
     public function quantity(): Attribute
     {
         return Attribute::make(
@@ -62,6 +81,9 @@ class Cart extends Model implements ContractsAuditable
             });
     }
 
+    /**
+     * @return Attribute<bool, void>
+     */
     public function isExpired(): Attribute
     {
         return Attribute::make(
@@ -78,11 +100,17 @@ class Cart extends Model implements ContractsAuditable
         $this->saveQuietly();
     }
 
+    /**
+     * @param  Builder<Cart>  $query
+     */
     public function scopeNotExpired(Builder $query): void
     {
         $query->where('expiration_date', '>', now());
     }
 
+    /**
+     * @param  Builder<Cart>  $query
+     */
     public function scopeStripeCheckoutId(Builder $query, string $id): void
     {
         $query->where('stripe_checkout_id', $id);

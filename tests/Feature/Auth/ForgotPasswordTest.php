@@ -81,7 +81,7 @@ class ForgotPasswordTest extends ApiRouteTestCase
 
     public function test_forgot_password_call_while_logged_in_returns_an_error(): void
     {
-        $user = User::find(1);
+        $user = User::findOrFail(1);
         $response = $this->actingAs($user)->postJson($this->endpoint, ['email' => $user->email]);
 
         $response->assertStatus(400);

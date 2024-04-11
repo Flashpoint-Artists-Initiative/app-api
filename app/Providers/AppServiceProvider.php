@@ -72,7 +72,7 @@ class AppServiceProvider extends ServiceProvider
         ]);
     }
 
-    protected function registerStripeClient()
+    protected function registerStripeClient(): void
     {
         $this->app->singleton(StripeClient::class, function ($app) {
             $config = $app['config']->get('services.stripe');

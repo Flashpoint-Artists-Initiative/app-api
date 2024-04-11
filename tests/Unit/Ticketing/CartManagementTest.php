@@ -18,7 +18,7 @@ class CartManagementTest extends TestCase
 
     public function test_cart_user_relation(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $cart = Cart::create(['user_id' => $user->id]);
 
         $this->assertEquals($user->id, $cart->user->id);
@@ -26,7 +26,7 @@ class CartManagementTest extends TestCase
 
     public function test_cart_update_fails(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $cart = Cart::create(['user_id' => $user->id]);
 
         $cart->stripe_checkout_id = 'whatever';
@@ -35,7 +35,7 @@ class CartManagementTest extends TestCase
 
     public function test_cart_item_update_fails(): void
     {
-        $user = User::first();
+        $user = User::firstOrFail();
         $cart = Cart::create(['user_id' => $user->id]);
         $cartItem = CartItem::create(['cart_id' => $cart->id, 'ticket_type_id' => 1, 'quantity' => 1]);
 

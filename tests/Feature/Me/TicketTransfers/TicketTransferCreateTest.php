@@ -28,7 +28,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->user = User::doesntHave('purchasedTickets')->doesntHave('reservedTickets')->first();
+        $this->user = User::doesntHave('purchasedTickets')->doesntHave('reservedTickets')->firstOrFail();
         $this->purchasedTicket = PurchasedTicket::factory()->for($this->user)->create();
         $this->reservedTicket = ReservedTicket::factory()->for($this->user)->create();
     }
@@ -37,8 +37,8 @@ class TicketTransferCreateTest extends ApiRouteTestCase
     {
         $response = $this->actingAs($this->user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
-            'purchased_tickets' => [$this->user->purchasedTickets->first()->id],
-            'reserved_tickets' => [$this->user->reservedTickets()->doesntHave('purchasedTicket')->first()->id],
+            'purchased_tickets' => [$this->user->purchasedTickets->firstOrFail()->id],
+            'reserved_tickets' => [$this->user->reservedTickets()->doesntHave('purchasedTicket')->firstOrFail()->id],
         ]);
 
         $response->assertStatus(201);
@@ -46,8 +46,8 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
     public function test_me_ticket_transfer_create_call_with_invalid_data_returns_a_validation_error(): void
     {
-        $purchasedTicketId = $this->user->purchasedTickets->first()->id;
-        $reservedTicketId = $this->user->reservedTickets()->doesntHave('purchasedTicket')->first()->id;
+        $purchasedTicketId = $this->user->purchasedTickets->firstOrFail()->id;
+        $reservedTicketId = $this->user->reservedTickets()->doesntHave('purchasedTicket')->firstOrFail()->id;
 
         // No data
         $response = $this->actingAs($this->user)->postJson($this->endpoint, [
@@ -141,7 +141,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
     {
         $response = $this->postJson($this->endpoint, [
             'email' => 'test@test.com',
-            'purchased_tickets' => [$this->user->purchasedTickets->first()->id],
+            'purchased_tickets' => [$this->user->purchasedTickets->firstOrFail()->id],
         ]);
 
         $response->assertStatus(401);
@@ -151,11 +151,11 @@ class TicketTransferCreateTest extends ApiRouteTestCase
     {
         $nonTransferableTicket = PurchasedTicket::create([
             'user_id' => $this->user->id,
-            'ticket_type_id' => TicketType::where('transferable', false)->first()->id,
+            'ticket_type_id' => TicketType::where('transferable', false)->firstOrFail()->id,
         ]);
         $otherUsersTicket = PurchasedTicket::create([
             'user_id' => $this->user->id + 1,
-            'ticket_type_id' => TicketType::query()->available()->first()->id,
+            'ticket_type_id' => TicketType::query()->available()->firstOrFail()->id,
         ]);
 
         $response = $this->actingAs($this->user)->postJson($this->endpoint, [
@@ -175,19 +175,19 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
     public function test_me_ticket_transfer_create_call_with_bad_reserved_ticket_data_returns_validation_error(): void
     {
-        $admin = User::role(RolesEnum::Admin)->first();
+        $admin = User::role(RolesEnum::Admin)->firstOrFail();
 
         $nonTransferableTicket = ReservedTicket::create([
             'user_id' => $this->user->id,
-            'ticket_type_id' => TicketType::where('transferable', false)->first()->id,
+            'ticket_type_id' => TicketType::where('transferable', false)->firstOrFail()->id,
         ]);
         $unpurchaseableTicket = ReservedTicket::create([
             'user_id' => $this->user->id,
-            'ticket_type_id' => TicketType::where('sale_end_date', '<=', now())->first()->id,
+            'ticket_type_id' => TicketType::where('sale_end_date', '<=', now())->firstOrFail()->id,
         ]);
         $withPurchasedTicket = ReservedTicket::create([
             'user_id' => $this->user->id,
-            'ticket_type_id' => TicketType::query()->available()->first()->id,
+            'ticket_type_id' => TicketType::query()->available()->firstOrFail()->id,
         ]);
         // Associated purchasedTicket for $withPurchasedTicket
         PurchasedTicket::create([
@@ -197,7 +197,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         ]);
         $otherUsersTicket = ReservedTicket::create([
             'user_id' => $this->user->id + 1,
-            'ticket_type_id' => TicketType::query()->available()->first()->id,
+            'ticket_type_id' => TicketType::query()->available()->firstOrFail()->id,
         ]);
 
         $response = $this->actingAs($this->user)->postJson($this->endpoint, [
@@ -233,22 +233,22 @@ class TicketTransferCreateTest extends ApiRouteTestCase
     {
         $response = $this->actingAs($this->user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
-            'purchased_tickets' => [$this->user->purchasedTickets->first()->id],
-            'reserved_tickets' => [$this->user->reservedTickets()->doesntHave('purchasedTicket')->first()->id],
+            'purchased_tickets' => [$this->user->purchasedTickets->firstOrFail()->id],
+            'reserved_tickets' => [$this->user->reservedTickets()->doesntHave('purchasedTicket')->firstOrFail()->id],
         ]);
 
         $response->assertStatus(201);
 
         $response = $this->actingAs($this->user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
-            'purchased_tickets' => [$this->user->purchasedTickets->first()->id],
+            'purchased_tickets' => [$this->user->purchasedTickets->firstOrFail()->id],
         ]);
 
         $response->assertStatus(422);
 
         $response = $this->actingAs($this->user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
-            'reserved_tickets' => [$this->user->reservedTickets()->doesntHave('purchasedTicket')->first()->id],
+            'reserved_tickets' => [$this->user->reservedTickets()->doesntHave('purchasedTicket')->firstOrFail()->id],
         ]);
 
         $response->assertStatus(422);

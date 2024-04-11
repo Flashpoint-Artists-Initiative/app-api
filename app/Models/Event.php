@@ -38,36 +38,57 @@ class Event extends Model implements ContractsAuditable
         'end_date' => 'date:Y/m/d',
     ];
 
+    /**
+     * @return HasMany<TicketType>
+     */
     public function ticketTypes(): HasMany
     {
         return $this->hasMany(TicketType::class);
     }
 
+    /**
+     * @return HasManyThrough<PurchasedTicket>
+     */
     public function purchasedTickets(): HasManyThrough
     {
         return $this->hasManyThrough(PurchasedTicket::class, TicketType::class);
     }
 
+    /**
+     * @return HasManyThrough<ReservedTicket>
+     */
     public function reservedTickets(): HasManyThrough
     {
         return $this->hasManyThrough(ReservedTicket::class, TicketType::class);
     }
 
+    /**
+     * @return HasMany<Waiver>
+     */
     public function waivers(): HasMany
     {
         return $this->hasMany(Waiver::class);
     }
 
+    /**
+     * @return HasMany<Team>
+     */
     public function teams(): HasMany
     {
         return $this->hasMany(Team::class);
     }
 
+    /**
+     * @return HasManyThrough<ShiftType>
+     */
     public function shiftTypes(): HasManyThrough
     {
         return $this->hasManyThrough(ShiftType::class, Team::class);
     }
 
+    /**
+     * @return Attribute<string, string>
+     */
     public function startDate(): Attribute
     {
         return Attribute::make(
@@ -76,6 +97,9 @@ class Event extends Model implements ContractsAuditable
         );
     }
 
+    /**
+     * @return Attribute<string, string>
+     */
     public function endDate(): Attribute
     {
         return Attribute::make(

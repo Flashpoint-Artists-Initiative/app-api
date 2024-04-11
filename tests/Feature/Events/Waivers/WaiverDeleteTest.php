@@ -20,8 +20,8 @@ class WaiverDeleteTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $event = Event::has('waivers')->first();
-        $waiver = $event->waivers->first();
+        $event = Event::has('waivers')->firstOrFail();
+        $waiver = $event->waivers->firstOrFail();
 
         $this->addEndpointParams(['event' => $event->id, 'waiver' => $waiver->id]);
     }
@@ -35,7 +35,7 @@ class WaiverDeleteTest extends ApiRouteTestCase
 
     public function test_waiver_delete_call_without_permission_fails(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -44,7 +44,7 @@ class WaiverDeleteTest extends ApiRouteTestCase
 
     public function test_waiver_delete_call_as_admin_succeeds(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 

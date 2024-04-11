@@ -17,8 +17,8 @@ class ReservedTicketEventsTest extends TestCase
 
     public function test_update_reserved_ticket_with_purchased_ticket_fails(): void
     {
-        $user = User::first();
-        $reservedTicket = ReservedTicket::has('purchasedTicket')->first();
+        $user = User::firstOrFail();
+        $reservedTicket = ReservedTicket::has('purchasedTicket')->firstOrFail();
 
         $reservedTicket->expiration_date = now()->addMinute();
         $success = $reservedTicket->save();
@@ -28,8 +28,8 @@ class ReservedTicketEventsTest extends TestCase
 
     public function test_update_reserved_ticket_without_purchased_ticket_succeeds(): void
     {
-        $user = User::first();
-        $reservedTicket = ReservedTicket::doesntHave('purchasedTicket')->first();
+        $user = User::firstOrFail();
+        $reservedTicket = ReservedTicket::doesntHave('purchasedTicket')->firstOrFail();
 
         $reservedTicket->expiration_date = now()->addMinute();
         $success = $reservedTicket->save();
@@ -39,8 +39,8 @@ class ReservedTicketEventsTest extends TestCase
 
     public function test_delete_reserved_ticket_with_purchased_ticket_fails(): void
     {
-        $user = User::first();
-        $reservedTicket = ReservedTicket::has('purchasedTicket')->first();
+        $user = User::firstOrFail();
+        $reservedTicket = ReservedTicket::has('purchasedTicket')->firstOrFail();
 
         $reservedTicket->delete();
 
@@ -49,8 +49,8 @@ class ReservedTicketEventsTest extends TestCase
 
     public function test_delete_reserved_ticket_without_purchased_ticket_succeeds(): void
     {
-        $user = User::first();
-        $reservedTicket = ReservedTicket::doesntHave('purchasedTicket')->first();
+        $user = User::firstOrFail();
+        $reservedTicket = ReservedTicket::doesntHave('purchasedTicket')->firstOrFail();
 
         $reservedTicket->delete();
 

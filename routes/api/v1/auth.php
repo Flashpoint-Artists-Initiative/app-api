@@ -18,12 +18,8 @@ Route::controller(AuthController::class)->prefix('auth')->group(function () {
 
     Route::post('/logout', 'logoutAction')->middleware(['auth'])->name('logout');
 
-    Route::middleware(['auth', 'token.refresh'])->group(function () {
-        Route::get('/user', 'userAction')->name('auth.user');
-
-        Route::prefix('email')->group(function () {
-            Route::get('/verify/{id}/{hash}', 'verifyEmailAction')->middleware(['signed'])->name('verification.verify');
-            Route::post('/resend-verification', 'resendVerificationEmailAction')->middleware(['throttle:6,1'])->name('verification.send');
-        });
+    Route::middleware(['auth', 'token.refresh'])->prefix('email')->group(function () {
+        Route::get('/verify/{id}/{hash}', 'verifyEmailAction')->middleware(['signed'])->name('verification.verify');
+        Route::post('/resend-verification', 'resendVerificationEmailAction')->middleware(['throttle:6,1'])->name('verification.send');
     });
 });

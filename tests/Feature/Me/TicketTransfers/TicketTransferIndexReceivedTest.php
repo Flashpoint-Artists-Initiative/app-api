@@ -20,7 +20,7 @@ class TicketTransferIndexReceivedTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->user = User::has('ticketTransfers')->first();
+        $this->user = User::has('ticketTransfers')->firstOrFail();
     }
 
     public function test_me_ticket_transfer_index_received_call_while_not_logged_in_returns_error(): void

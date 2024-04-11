@@ -43,13 +43,15 @@ class UserResource extends JsonResource
         ];
     }
 
+    /**
+     * @return MissingValue|Collection<int, \Spatie\Permission\Models\Permission>
+     */
     protected function formatPermissions(): Collection|MissingValue
     {
         if (! $this->relationLoaded('permissions')) {
             return new MissingValue();
         }
 
-        /** @var Collection $collection */
         $collection = $this->getAllPermissions();
 
         return $collection->map(fn ($p) => $p->name);

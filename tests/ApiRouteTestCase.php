@@ -15,11 +15,13 @@ abstract class ApiRouteTestCase extends TestCase
 
     public string $routeName;
 
+    /** @var array<string, string|int|bool> */
     public array $routeParams = [];
 
     public string $endpoint;
 
-    public $connectionsToTransact = ['testing'];
+    /** @var string[] */
+    public array $connectionsToTransact = ['testing'];
 
     public function setUp(): void
     {
@@ -28,6 +30,9 @@ abstract class ApiRouteTestCase extends TestCase
         $this->buildEndpoint();
     }
 
+    /**
+     * @param  array<string, string|int|bool>  $params
+     */
     public function buildEndpoint(?string $name = null, ?array $params = null): void
     {
         if (empty($name)) {
@@ -43,6 +48,9 @@ abstract class ApiRouteTestCase extends TestCase
         }
     }
 
+    /**
+     * @param  array<string, string|int|bool>  $params
+     */
     public function addEndpointParams(array $params): void
     {
         $this->routeParams = array_merge($this->routeParams, $params);

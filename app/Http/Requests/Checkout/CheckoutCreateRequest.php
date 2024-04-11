@@ -79,6 +79,7 @@ class CheckoutCreateRequest extends FormRequest
 
             // Ensure each ticket type is available to purchase
             foreach ($this->input('tickets') as $key => $values) {
+                /** @var TicketType $ticketType */
                 $ticketType = $ticketTypes->find($values['id']);
 
                 if (! $ticketType->hasAvailable($values['quantity'])) {

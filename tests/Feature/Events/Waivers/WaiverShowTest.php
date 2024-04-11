@@ -21,15 +21,15 @@ class WaiverShowTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->event = Event::has('waivers')->first();
-        $waiver = $this->event->waivers->first();
+        $this->event = Event::has('waivers')->firstOrFail();
+        $waiver = $this->event->waivers->firstOrFail();
 
         $this->addEndpointParams(['event' => $this->event->id, 'waiver' => $waiver->id]);
     }
 
     public function test_waiver_show_call_while_not_logged_in_returns_success(): void
     {
-        $waiver = Waiver::where('event_id', $this->event->id)->first();
+        $waiver = Waiver::where('event_id', $this->event->id)->firstOrFail();
 
         $response = $this->get($this->endpoint);
 

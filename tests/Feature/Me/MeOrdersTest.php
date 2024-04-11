@@ -22,7 +22,7 @@ class MeOrdersTest extends ApiRouteTestCase
 
     public function test_me_orders_call_as_user_returns_success(): void
     {
-        $user = User::has('orders')->first();
+        $user = User::has('orders')->firstOrFail();
         $orderCount = $user->orders->count();
         $response = $this->actingAs($user)->get($this->endpoint);
 

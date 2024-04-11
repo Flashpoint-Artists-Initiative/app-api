@@ -15,7 +15,7 @@ abstract class OrionRelationsController extends BaseController
         return config('orion.default_pagination_limit', 50);
     }
 
-    public function maxLimit(): ?int
+    public function maxLimit(): int
     {
         return config('orion.default_pagination_max_limit', 200);
     }
@@ -33,24 +33,24 @@ abstract class OrionRelationsController extends BaseController
      * $this->relation typically coincides with the name of the permission to check access on.
      * If this isn't the case, simply overload the function in the child policy class
      */
-    protected function beforeAttach(Request $request, Model $parentEntity)
+    protected function beforeAttach(Request $request, Model $parentEntity): void
     {
         $this->authorize('attach', [$parentEntity, $this->relation]);
     }
 
-    protected function beforeDetach(Request $request, Model $parentEntity)
+    protected function beforeDetach(Request $request, Model $parentEntity): void
     {
         $this->authorize('detach', [$parentEntity, $this->relation]);
     }
 
-    protected function beforeSync(Request $request, Model $parentEntity)
+    protected function beforeSync(Request $request, Model $parentEntity): void
     {
         $this->authorize('attach', [$parentEntity, $this->relation]);
         $this->authorize('detach', [$parentEntity, $this->relation]);
     }
 
     // Uncomment this when we have a relation that uses it
-    // protected function beforeToggle(Request $request, Model $parentEntity)
+    // protected function beforeToggle(Request $request, Model $parentEntity): void
     // {
     //     $this->authorize('attach', [$parentEntity, $this->relation]);
     //     $this->authorize('detach', [$parentEntity, $this->relation]);
@@ -61,12 +61,12 @@ abstract class OrionRelationsController extends BaseController
      *
      * These work the same way as the Many to Many above
      */
-    // protected function beforeAssociate(Request $request, Model $parentEntity, Model $entity)
+    // protected function beforeAssociate(Request $request, Model $parentEntity, Model $entity): void
     // {
 
     // }
 
-    // protected function beforeDissociate(Request $request, Model $parentEntity, Model $entity)
+    // protected function beforeDissociate(Request $request, Model $parentEntity, Model $entity): void
     // {
 
     // }

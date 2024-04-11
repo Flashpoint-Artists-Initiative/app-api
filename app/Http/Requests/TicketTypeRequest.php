@@ -8,10 +8,13 @@ use Orion\Http\Requests\Request;
 
 class TicketTypeRequest extends Request
 {
+    /**
+     * @return array<string, string[]>
+     */
     public function commonRules(): array
     {
         return [
-            'name' => 'string',
+            'name' => ['string'],
             'sale_start_date' => ['date'],
             'sale_end_date' => ['date'],
             'quantity' => ['integer', 'gte:0', 'nullable'],
@@ -21,6 +24,9 @@ class TicketTypeRequest extends Request
         ];
     }
 
+    /**
+     * @return array<string, string[]>
+     */
     public function storeRules(): array
     {
         return [

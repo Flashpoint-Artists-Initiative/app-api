@@ -26,7 +26,7 @@ class TicketTransferDeleteTest extends ApiRouteTestCase
 
     public function test_ticket_transfer_admin_delete_call_without_permission_fails(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -35,7 +35,7 @@ class TicketTransferDeleteTest extends ApiRouteTestCase
 
     public function test_ticket_transfer_admin_delete_call_as_admin_succeeds(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->delete($this->endpoint);
 
@@ -44,8 +44,8 @@ class TicketTransferDeleteTest extends ApiRouteTestCase
 
     public function test_ticket_transfer_admin_delete_call_for_completed_transfer_fails(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
-        $transfer = TicketTransfer::where('completed', false)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
+        $transfer = TicketTransfer::where('completed', false)->firstOrFail();
         $transfer->completed = true;
         $transfer->saveQuietly();
 

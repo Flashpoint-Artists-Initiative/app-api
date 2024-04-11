@@ -21,7 +21,7 @@ class TicketTransferIndexTest extends ApiRouteTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->user = User::has('ticketTransfers')->first();
+        $this->user = User::has('ticketTransfers')->firstOrFail();
         $this->routeParams['user'] = $this->user->id;
         $this->buildEndpoint();
     }
@@ -35,7 +35,7 @@ class TicketTransferIndexTest extends ApiRouteTestCase
 
     public function test_ticket_transfer_index_call_without_permission_returns_success(): void
     {
-        $user = User::doesntHave('roles')->first();
+        $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
@@ -44,7 +44,7 @@ class TicketTransferIndexTest extends ApiRouteTestCase
 
     public function test_ticket_transfer_index_call_with_permission_returns_success(): void
     {
-        $user = User::role(RolesEnum::Admin)->first();
+        $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
 

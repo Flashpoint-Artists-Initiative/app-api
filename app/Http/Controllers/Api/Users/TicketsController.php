@@ -8,10 +8,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\User;
+use Illuminate\Support\Collection;
 
 class TicketsController extends Controller
 {
-    public function indexAction(User $user)
+    /**
+     * @return array{data: array{purchasedTickets: Collection<int, PurchasedTicket>, reservedTickets: Collection<int, ReservedTicket>}}
+     */
+    public function indexAction(User $user): array
     {
         $this->authorize('view', $user);
 
