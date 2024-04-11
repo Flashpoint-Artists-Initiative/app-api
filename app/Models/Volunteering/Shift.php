@@ -111,6 +111,7 @@ class Shift extends Model implements ContractsAuditable
                 // Null-safe accessor for when a shiftType is deleted,
                 // it returns the model including sum(num_spots) for the child shifts
                 // TODO: Add events to delete child shifts, solving this problem
+                /** @phpstan-ignore-next-line */
                 return $numSpots ?? $this->shiftType?->num_spots;
             }
         );
