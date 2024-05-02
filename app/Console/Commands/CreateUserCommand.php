@@ -56,7 +56,7 @@ class CreateUserCommand extends Command implements PromptsForMissingInput
                 'preferred_name' => ! empty($this->option('preferred_name')) ? $this->option('preferred_name') : null,
                 'email' => $this->argument('email'),
                 'birthday' => $this->argument('birthday'),
-                'password' => $this->argument('legal_name'),
+                'password' => $this->argument('password'),
             ]);
             $user->email_verified_at = now();
             $user->save();
