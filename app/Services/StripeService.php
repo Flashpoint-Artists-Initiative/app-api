@@ -7,16 +7,20 @@ namespace App\Services;
 use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\CartItem;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\InvalidRequestException;
 use Stripe\StripeClient;
+use Stripe\TaxRate;
 
 /**
  * @mixin StripeClient
  */
 class StripeService
 {
+    const TAX_RATE_CACHE_PREFIX = 'stripe.tax-rate.';
+
     public function __construct(public StripeClient $stripeClient)
     {
     }
@@ -123,5 +127,35 @@ class StripeService
     {
         abort_if($session->status !== 'complete', 422, 'Session has not been completed');
         abort_if($session->payment_status !== 'paid', 422, 'Session payment is not complete');
+    }
+
+    /**
+     * Pull and cache tax rate data from the Stripe API
+     */
+    public function getTaxRate(string $taxRateId): TaxRate
+    {
+        return Cache::remember(
+            self::TAX_RATE_CACHE_PREFIX . $taxRateId,
+            now()->addDay(),
+            function () use ($taxRateId) {
+                return $this->stripeClient->taxRates->retrieve($taxRateId);
+            });
+    }
+
+    /**
+     * @return array<string,float> The tax rate description => it's percentage value (0-100)
+     */
+    public function getTaxRatePercentages(): array
+    {
+        $rates = $this->getTaxRatesArray();
+
+        $output = [];
+
+        foreach ($rates as $rate) {
+            $stripeObj = $this->getTaxRate($rate);
+            $output[$stripeObj->description] = $stripeObj->percentage;
+        }
+
+        return $output;
     }
 }

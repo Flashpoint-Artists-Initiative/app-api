@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Admin\AuditController;
 use App\Http\Controllers\Api\Admin\CompletedWaiversController;
+use App\Http\Controllers\Api\Admin\MetricsController;
 use App\Http\Controllers\Api\Admin\OrdersController;
 use App\Http\Controllers\Api\Admin\TicketTransfersController;
 use App\Http\Controllers\Api\LockdownController;
@@ -20,8 +21,14 @@ Route::middleware(['auth', 'token.refresh'])->prefix('admin')->as('api.admin.')-
     Orion::resource('audits', AuditController::class)->only(['index', 'show', 'search']);
     Orion::resource('ticket-transfers', TicketTransfersController::class)->only(['index', 'show', 'search', 'destroy']);
 
-    //Lockdown Routes
+    // Lockdown Routes
     Route::get('lockdown', [LockdownController::class, 'getLockdownStatus'])->whereIn('type', LockdownService::lockdownTypes())->name('lockdown.status');
     Route::post('lockdown/{type}', [LockdownController::class, 'enableLockdown'])->whereIn('type', LockdownService::lockdownTypes())->name('lockdown.enable');
     Route::delete('lockdown/{type}', [LockdownController::class, 'disableLockdown'])->whereIn('type', LockdownService::lockdownTypes())->name('lockdown.disable');
+
+    // Metrics Routes
+    Route::group(['prefix' => 'metrics', 'as' => 'metrics.', 'controller' => MetricsController::class], function () {
+        Route::get('sales-data', 'salesDataAction')->name('salesData');
+        Route::get('ticket-data', 'ticketDataAction')->name('ticketData');
+    });
 });

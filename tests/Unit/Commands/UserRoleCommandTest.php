@@ -12,6 +12,8 @@ class UserRoleCommandTest extends TestCase
 {
     use LazilyRefreshDatabase;
 
+    // public bool $seed = true;
+
     public function test_user_role_with_provided_input_returns_success(): void
     {
         $user = User::factory()->create();
@@ -48,7 +50,7 @@ class UserRoleCommandTest extends TestCase
 
     public function test_user_role_with_invalid_user_returns_one(): void
     {
-        $result = $this->artisan('user:role 123 admin');
+        $result = $this->artisan('user:role 999999 admin');
 
         $this->assertIsNotInt($result);
         $result->assertExitCode(1);

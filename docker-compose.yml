@@ -1,5 +1,3 @@
-version: "3.5"
-
 services:
   app:
     image: bref/php-83-fpm-dev:2
@@ -19,6 +17,7 @@ services:
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       XDG_CONFIG_HOME: /tmp
       MYSQL_ATTR_SSL_CA: ''
+      MAIL_HOST: mailpit
   mysql:
     image: mysql:8.1
     command: --tls-version='TLSv1.2'
@@ -27,7 +26,7 @@ services:
       - ./.dev-db:/var/lib/mysql
       - ./.docker:/docker-entrypoint-initdb.d
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE} 
+      MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}

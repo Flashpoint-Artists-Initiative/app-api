@@ -52,4 +52,12 @@ class StripeServiceTest extends TestCase
 
         $this->assertTrue(true);
     }
+
+    public function test_get_tax_rate_percentages(): void
+    {
+        $percentages = $this->stripeService->getTaxRatePercentages();
+
+        $this->assertIsArray($percentages);
+        $this->assertNotEmpty($percentages);
+    }
 }

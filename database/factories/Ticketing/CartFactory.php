@@ -19,6 +19,7 @@ class CartFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
+            'expiration_date' => fake()->dateTimeThisCentury(now()->addDay()),
         ];
     }
 }

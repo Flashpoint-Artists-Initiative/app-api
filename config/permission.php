@@ -210,6 +210,7 @@ return [
                 'shiftSignups.*',
                 'audits.*',
                 'lockdown.*',
+                'metrics.*',
             ],
             RolesEnum::EventManager->value => [
                 'events.viewAny',
@@ -380,6 +381,10 @@ return [
             'lockdown.set',
             'lockdown.bypass',
             'lockdown.*',
+
+            'metrics.salesData',
+            'metrics.ticketData',
+            'metrics.*',
         ],
     ],
 ];

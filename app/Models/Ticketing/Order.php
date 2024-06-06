@@ -7,6 +7,7 @@ namespace App\Models\Ticketing;
 use App\Models\Event;
 use App\Models\User;
 use App\Observers\OrderObserver;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -20,6 +21,7 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
  * @property-read User $user
  * @property-read Event $event
  * @property-read Cart $cart
+ * @property Carbon $created_at
  */
 #[ObservedBy(OrderObserver::class)]
 class Order extends Model implements ContractsAuditable

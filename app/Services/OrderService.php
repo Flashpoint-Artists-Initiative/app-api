@@ -6,6 +6,8 @@ namespace App\Services;
 
 use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\Order;
+use App\Models\Ticketing\TicketType;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Stripe\Checkout\Session;
 
@@ -73,5 +75,116 @@ class OrderService
             'reserved_ticket_id',
             'quantity',
         ])->toArray();
+    }
+
+    /**
+     * Gets various stats and totals for either the given event or everything
+     *
+     * @return array<string, mixed>
+     */
+    public function getSalesData(int $eventId): array
+    {
+        $orders = Order::where('event_id', $eventId)->get();
+
+        $taxesOwed = $orders->sum('amount_tax') / 100;
+
+        return [
+            'totals' => [
+                'gross_profit' => $orders->sum('amount_total') / 100,
+                'net_profit' => $orders->sum('amount_subtotal') / 100,
+                'taxes_collected' => $taxesOwed,
+                'tickets_sold' => $orders->sum('quantity'),
+                'orders_count' => $orders->count(),
+            ],
+            'tax_breakdown' => $this->splitTaxAmount($taxesOwed),
+            'ticket_breakdown' => $this->getTicketTypeSaleDataFromOrders($orders),
+            'sales_histogram' => $this->getHistoryDataFromOrders($orders),
+        ];
+    }
+
+    /**
+     * Separates the given amount in dollars into it's separate tax amounts
+     *
+     * @return array<string, float> The rate description => The subdivided amount
+     */
+    public function splitTaxAmount(float $amount): array
+    {
+        $taxRates = $this->stripeService->getTaxRatePercentages();
+        $percentageTotal = array_sum($taxRates);
+        $dividedAmount = $amount / $percentageTotal;
+
+        $output = [];
+
+        foreach ($taxRates as $description => $percentage) {
+            $output[$description] = round($dividedAmount * $percentage, 2);
+        }
+
+        return $output;
+    }
+
+    /**
+     * Separates a collection of Orders into sale data broken down by ticket type
+     * Includes ticket type name and id for reference and linking
+     *
+     * @param  Collection<int, Order>  $orders
+     * @return array<int, array<string, mixed>> Sale data for each ticket type
+     */
+    protected function getTicketTypeSaleDataFromOrders(Collection $orders): array
+    {
+        $quantites = [];
+
+        foreach ($orders as $order) {
+            foreach ($order->ticket_data as $item) {
+                if (! array_key_exists($item['ticket_type_id'], $quantites)) {
+                    $quantites[$item['ticket_type_id']] = 0;
+                }
+
+                $quantites[$item['ticket_type_id']] += $item['quantity'];
+            }
+        }
+
+        $ticketTypes = TicketType::whereIn('id', array_keys($quantites))->get();
+        $output = [];
+
+        foreach ($ticketTypes as $type) {
+            $output[] = [
+                'id' => $type->id,
+                'name' => $type->name,
+                'quantity' => $quantites[$type->id],
+                'profit' => $type->price * $quantites[$type->id] / 100,
+            ];
+        }
+
+        return $output;
+    }
+
+    /**
+     * Separates a collection of Orders into historical data broken down by date
+     *
+     * @param  Collection<int, Order>  $orders
+     * @return array<int, array<string, int|string>> Sale data for each ticket type
+     */
+    protected function getHistoryDataFromOrders(Collection $orders): array
+    {
+        $output = [];
+
+        foreach ($orders as $order) {
+            $createdAt = $order->created_at->format('n/j/y');
+
+            if (! array_key_exists($createdAt, $output)) {
+                $output[$createdAt] = [
+                    'date' => $createdAt,
+                    'orders' => 0,
+                    'tickets' => 0,
+                ];
+            }
+
+            $output[$createdAt]['orders']++;
+            $output[$createdAt]['tickets'] += $order->quantity;
+        }
+
+        uksort($output, fn ($a, $b) => new Carbon($a) > new Carbon($b) ? 1 : -1);
+
+        return array_values($output);
     }
 }
