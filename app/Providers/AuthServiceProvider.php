@@ -33,19 +33,29 @@ class AuthServiceProvider extends ServiceProvider
     {
         // TODO: Update this URL
         ResetPassword::createUrlUsing(function (User $user, string $token) {
-            return 'https://example.com/reset-password?token=' . $token;
+            $host = config('app.url');
+
+            return "$host/reset-password?token=" . $token;
         });
 
         // TODO: Update this URL
         VerifyEmail::createUrlUsing(function ($notifiable) {
-            return URL::temporarySignedRoute(
+            $id = $notifiable->getKey();
+            $hash = sha1($notifiable->getEmailForVerification());
+            $url = URL::temporarySignedRoute(
                 'verification.verify',
                 Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
                 [
-                    'id' => $notifiable->getKey(),
-                    'hash' => sha1($notifiable->getEmailForVerification()),
+                    'id' => $id,
+                    'hash' => $hash,
                 ]
             );
+
+            $queryString = parse_url($url, PHP_URL_QUERY);
+            $host = config('app.url');
+            $path = preg_replace(['/\{id\}/', '/\{hash\}/'], [$id, $hash], config('mail.verifyEmailPath'));
+
+            return "{$host}{$path}?$queryString";
         });
 
         // Allow public access to the API docs in non-local environments
