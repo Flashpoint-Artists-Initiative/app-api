@@ -33,6 +33,14 @@ class TicketTypesController extends OrionRelationsController
     }
 
     /**
+     * @return string[]
+     */
+    public function filterableBy(): array
+    {
+        return ['id'];
+    }
+
+    /**
      * @param  string[]  $requestedRelations
      * @return Relation<\App\Models\Ticketing\TicketType>
      */

@@ -228,7 +228,7 @@ class AuthController extends Controller
         // $this->limiter->increment($request);
 
         throw ValidationException::withMessages([
-            'email' => [trans('auth.failed')],
+            'password' => [trans('auth.failed')],
         ]);
     }
 }

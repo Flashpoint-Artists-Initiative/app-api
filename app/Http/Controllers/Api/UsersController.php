@@ -48,7 +48,7 @@ class UsersController extends OrionController
      */
     public function sortableBy(): array
     {
-        return ['legal_name', 'preferred_name', 'display_name', 'email', 'birthday', 'created_at', 'updated_at', 'deleted_at', 'email_verified_at'];
+        return ['id', 'legal_name', 'preferred_name', 'display_name', 'email', 'birthday', 'created_at', 'updated_at', 'deleted_at', 'email_verified_at'];
     }
 
     /**

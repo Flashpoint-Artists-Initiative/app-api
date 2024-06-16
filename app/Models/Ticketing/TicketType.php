@@ -35,12 +35,16 @@ class TicketType extends Model implements ContractsAuditable
         'quantity',
         'price',
         'active',
+        'transferrable',
+        'addon',
     ];
 
     protected $casts = [
         'sale_start_date' => 'datetime',
         'sale_end_date' => 'datetime',
         'active' => 'boolean',
+        'transferrable' => 'boolean',
+        'addon' => 'boolean',
     ];
 
     /** @var string[] */

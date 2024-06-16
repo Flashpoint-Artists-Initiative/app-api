@@ -10,4 +10,26 @@ use App\Models\Ticketing\Order;
 class OrdersController extends OrionController
 {
     protected $model = Order::class;
+
+    /**
+     * @return string[]
+     */
+    public function filterableBy(): array
+    {
+        return [
+            'user_id',
+            'event_id',
+            'cart_id',
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function sortableBy(): array
+    {
+        return [
+            'created_at',
+        ];
+    }
 }
