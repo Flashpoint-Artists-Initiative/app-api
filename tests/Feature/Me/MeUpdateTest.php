@@ -23,19 +23,18 @@ class MeUpdateTest extends ApiRouteTestCase
         $data = $user->toArray();
 
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
-            'legal_name' => fake()->name() . "1",
+            'legal_name' => fake()->name() . '1',
             'preferred_name' => fake()->userName(),
             'email' => fake()->safeEmail(),
             'birthday' => fake()->date(),
         ]);
 
-        $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => 
-            $json->where('data.id', $data['id'])
-                ->whereNot('data.legal_name', $data['legal_name'])
-                ->whereNot('data.preferred_name', $data['preferred_name'])
-                ->whereNot('data.email', $data['email'])
-                ->whereNot('data.birthday', $data['birthday'])
-            );
+        $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->where('data.id', $data['id'])
+            ->whereNot('data.legal_name', $data['legal_name'])
+            ->whereNot('data.preferred_name', $data['preferred_name'])
+            ->whereNot('data.email', $data['email'])
+            ->whereNot('data.birthday', $data['birthday'])
+        );
     }
 
     public function test_me_update_call_with_invalid_data_returns_a_validation_error(): void

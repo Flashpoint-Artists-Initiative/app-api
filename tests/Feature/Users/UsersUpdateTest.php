@@ -30,13 +30,12 @@ class UsersUpdateTest extends ApiRouteTestCase
             'birthday' => fake()->date(),
         ]);
 
-        $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => 
-            $json->where('data.id', $model->id)
-                ->whereNot('data.legal_name', $model->legal_name)
-                ->whereNot('data.preferred_name', $model->preferred_name)
-                ->whereNot('data.email', $model->email)
-                ->whereNot('data.birthday', $model->birthday)
-            );
+        $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->where('data.id', $model->id)
+            ->whereNot('data.legal_name', $model->legal_name)
+            ->whereNot('data.preferred_name', $model->preferred_name)
+            ->whereNot('data.email', $model->email)
+            ->whereNot('data.birthday', $model->birthday)
+        );
     }
 
     public function test_users_update_call_with_invalid_data_returns_a_validation_error(): void

@@ -6,8 +6,8 @@ namespace Tests\Feature\Users\Tickets;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
-use Tests\ApiRouteTestCase;
 use Illuminate\Http\JsonResponse;
+use Tests\ApiRouteTestCase;
 
 class TicketsIndexTest extends ApiRouteTestCase
 {

@@ -8,8 +8,8 @@ use App\Enums\RolesEnum;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use Carbon\Carbon;
-use Tests\ApiRouteTestCase;
 use Illuminate\Http\JsonResponse;
+use Tests\ApiRouteTestCase;
 
 class ReservedTicketCreateTest extends ApiRouteTestCase
 {

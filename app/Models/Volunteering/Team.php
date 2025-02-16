@@ -35,7 +35,6 @@ class Team extends Model implements ContractsAuditable
         'active',
     ];
 
-
     protected $withCount = [
         'volunteers',
     ];

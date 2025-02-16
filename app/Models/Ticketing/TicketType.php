@@ -181,6 +181,7 @@ class TicketType extends Model implements ContractsAuditable
      * Overloaded method to eager load a sum aggregate
      *
      * @return Builder<Model>
+     *
      * @phpstan-ignore method.childReturnType
      */
     public function newQueryWithoutScopes(): Builder

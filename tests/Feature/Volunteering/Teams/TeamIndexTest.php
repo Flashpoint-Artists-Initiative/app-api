@@ -8,7 +8,6 @@ use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Volunteering\Team;
-use Illuminate\Http\JsonResponse;
 use Tests\ApiRouteTestCase;
 
 class TeamIndexTest extends ApiRouteTestCase

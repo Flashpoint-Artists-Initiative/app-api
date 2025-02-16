@@ -23,7 +23,7 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
  * @property int $quantity
  * @property-read User $user
  * @property string $stripe_checkout_id
- * 
+ *
  * @method Builder<static> notExpired()
  */
 #[ObservedBy(CartObserver::class)]
