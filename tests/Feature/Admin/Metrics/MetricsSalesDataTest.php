@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Admin\Orders;
+namespace Tests\Feature\Admin\Metrics;
 
 use App\Enums\RolesEnum;
 use App\Models\Ticketing\Order;
