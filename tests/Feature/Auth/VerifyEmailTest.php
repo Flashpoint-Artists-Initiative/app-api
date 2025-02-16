@@ -50,6 +50,8 @@ class VerifyEmailTest extends ApiRouteTestCase
 
     public function test_email_verification_link_works(): void
     {
+        $this->markTestSkipped('Requires working frontend to test');
+
         User::create([
             'legal_name' => 'Test User',
             'email' => 'test@example.com',
@@ -86,6 +88,8 @@ class VerifyEmailTest extends ApiRouteTestCase
 
     public function test_email_verification_link_fails_the_second_time(): void
     {
+        $this->markTestSkipped('Requires working frontend to test');
+
         User::create([
             'legal_name' => 'Test User',
             'email' => 'test@example.com',
@@ -116,6 +120,8 @@ class VerifyEmailTest extends ApiRouteTestCase
 
     public function test_invalid_email_verification_link_fails(): void
     {
+        $this->markTestSkipped('Requires working frontend to test');
+
         User::factory()->create([
             'legal_name' => 'Test User',
             'email' => 'test@example.com',

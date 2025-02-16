@@ -54,6 +54,11 @@ class UserResource extends JsonResource
 
         $collection = $this->getAllPermissions();
 
-        return $collection->map(fn ($p) => $p->name);
+        $permissions = $collection->map(fn ($p) => $p->name);
+        foreach (config('permission.implement.defaultPermissions') as $value) {
+            $permissions->push($value);
+        }
+
+        return $permissions;
     }
 }

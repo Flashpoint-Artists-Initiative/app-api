@@ -43,7 +43,7 @@ class TicketType extends Model implements ContractsAuditable
         'sale_start_date' => 'datetime',
         'sale_end_date' => 'datetime',
         'active' => 'boolean',
-        'transferrable' => 'boolean',
+        'transferable' => 'boolean',
         'addon' => 'boolean',
     ];
 

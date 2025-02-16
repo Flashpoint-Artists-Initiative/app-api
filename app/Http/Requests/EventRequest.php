@@ -15,8 +15,8 @@ class EventRequest extends Request
     {
         return [
             'name' => ['string'],
-            'start_date' => ['date'],
-            'end_date' => ['date'],
+            'start_date' => ['date', 'before_or_equal:end_date'],
+            'end_date' => ['date', 'after_or_equal:start_date'],
             'contact_email' => ['email'],
             'active' => ['boolean', 'nullable'],
             'location' => ['string', 'nullable'],
@@ -30,8 +30,8 @@ class EventRequest extends Request
     {
         return [
             'name' => ['required'],
-            'start_date' => ['required', 'date'],
-            'end_date' => ['required', 'date'],
+            'start_date' => ['required', 'date', 'before_or_equal:end_date'],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'contact_email' => ['required', 'email'],
         ];
     }

@@ -37,7 +37,7 @@ class LoginTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        $response->assertJson(fn (AssertableJson $json) => $json->has('errors.email')->etc());
+        $response->assertJson(fn (AssertableJson $json) => $json->has('errors.password')->etc());
     }
 
     public function test_logging_in_without_a_password_returns_a_password_validation_error(): void

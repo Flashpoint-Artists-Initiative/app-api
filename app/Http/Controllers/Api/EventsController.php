@@ -50,7 +50,7 @@ class EventsController extends OrionController
      */
     public function sortableBy(): array
     {
-        return ['start_date', 'end_date', 'active', 'name', 'location', 'created_at', 'updated_at'];
+        return ['id', 'start_date', 'end_date', 'active', 'name', 'location', 'created_at', 'updated_at'];
     }
 
     /**
@@ -58,7 +58,7 @@ class EventsController extends OrionController
      */
     public function searchableBy(): array
     {
-        return ['start_date', 'end_date', 'name', 'description', 'location', 'created_at', 'updated_at'];
+        return ['id', 'start_date', 'end_date', 'name', 'description', 'location', 'created_at', 'updated_at'];
     }
 
     /**

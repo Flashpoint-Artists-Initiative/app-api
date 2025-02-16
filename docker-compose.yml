@@ -1,6 +1,6 @@
 services:
   app:
-    image: bref/php-83-fpm-dev:2
+    image: 'bref/${APP_IMAGE_PREFIX}php-83-fpm-dev:2'
     ports: [ '8000:8000' ]
     user: nobody
     volumes:
@@ -23,7 +23,7 @@ services:
     command: --tls-version='TLSv1.2'
     ports: [ '${DB_PORT}:3306' ]
     volumes:
-      - ./.dev-db:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
       - ./.docker:/docker-entrypoint-initdb.d
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
@@ -35,7 +35,7 @@ services:
     container_name: mailpit
     restart: always
     volumes:
-      - ./.dev-mailpit:/data
+      - mailpit-data:/data
     ports:
       - 8025:8025
       - 1025:1025
@@ -44,3 +44,6 @@ services:
       MP_DATA_FILE: /data/mailpit.db
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
+volumes:
+  mysql-data:
+  mailpit-data:

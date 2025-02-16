@@ -245,6 +245,12 @@ return [
             //Super Admin automatically has all permissions, see AuthServiceProvider
             RolesEnum::SuperAdmin->value => [],
         ],
+        // List of permissions every user can do, to pass to the front end
+        'defaultPermissions' => [
+            'me.*',
+            'events.view',
+            'waivers.view',
+        ],
         // All permissions that will be checked need to be defined here
         'permissions' => [
             'users.viewAny',
