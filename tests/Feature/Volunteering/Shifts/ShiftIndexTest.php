@@ -50,7 +50,7 @@ class ShiftIndexTest extends ApiRouteTestCase
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);
-        $this->assertEquals($shiftCount, $response->baseResponse->original->count());
+        $response->assertJsonCount($shiftCount, 'data');
     }
 
     public function test_shift_index_call_for_active_event_and_inactive_team_returns_failure(): void

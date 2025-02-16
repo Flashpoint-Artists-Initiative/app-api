@@ -85,8 +85,7 @@ class CheckoutController extends Controller
     }
 
     /**
-     * @phpstan-assert Cart $cart
-     * @phpstan-assert string $cart->stripe_checkout_id
+     * @phpstan-assert Cart&object{stripe_checkout_id: string} $cart
      */
     protected function validateCart(?Cart $cart): void
     {

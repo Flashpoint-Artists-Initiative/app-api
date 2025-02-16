@@ -27,15 +27,13 @@ class MeTicketsTest extends ApiRouteTestCase
         $purchasedTicketsCount = $user->purchasedTickets->count();
         $response = $this->actingAs($user)->get($this->endpoint);
 
-        $response->assertStatus(200);
-        $this->assertEquals($purchasedTicketsCount, $response->baseResponse->original['data']['purchasedTickets']->count());
+        $response->assertStatus(200)->assertJsonCount($purchasedTicketsCount, 'data.purchasedTickets');
 
         // Reserved Tickets
         $user = User::has('reservedTickets')->firstOrFail();
         $reservedTicketsCount = $user->reservedTickets->count();
         $response = $this->actingAs($user)->get($this->endpoint);
 
-        $response->assertStatus(200);
-        $this->assertEquals($reservedTicketsCount, $response->baseResponse->original['data']['reservedTickets']->count());
+        $response->assertStatus(200)->assertJsonCount($reservedTicketsCount, 'data.reservedTickets');
     }
 }

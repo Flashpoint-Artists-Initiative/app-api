@@ -7,6 +7,7 @@ namespace Tests\Feature\Users\Tickets;
 use App\Enums\RolesEnum;
 use App\Models\User;
 use Tests\ApiRouteTestCase;
+use Illuminate\Http\JsonResponse;
 
 class TicketsIndexTest extends ApiRouteTestCase
 {
@@ -35,6 +36,7 @@ class TicketsIndexTest extends ApiRouteTestCase
 
     public function test_user_tickets_index_call_without_permission_returns_error(): void
     {
+        /** @var User $user */
         $user = User::factory()->create([
             'email' => 'newuser@example.com',
             'password' => 'password',
@@ -67,6 +69,8 @@ class TicketsIndexTest extends ApiRouteTestCase
         $response = $this->actingAs($this->user)->get($this->endpoint);
 
         $response->assertStatus(200);
-        $this->assertEquals($this->user->purchasedTickets, $response->baseResponse->original['data']['purchasedTickets']);
+        /** @var JsonResponse $baseResponse */
+        $baseResponse = $response->baseResponse;
+        $this->assertEquals($this->user->purchasedTickets, $baseResponse->original['data']['purchasedTickets']);
     }
 }

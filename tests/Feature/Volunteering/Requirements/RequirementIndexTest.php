@@ -34,7 +34,7 @@ class RequirementIndexTest extends ApiRouteTestCase
         $response = $this->actingAs($user)->get($this->endpoint);
 
         $response->assertStatus(200);
-        $this->assertEquals($requirementCount, $response->baseResponse->original->count());
+        $response->assertJsonCount($requirementCount, 'data');
     }
 
     public function test_requirement_index_call_with_permission_returns_trashed_types(): void
@@ -51,6 +51,6 @@ class RequirementIndexTest extends ApiRouteTestCase
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);
-        $this->assertEquals($totalRequirementCount, $response->baseResponse->original->count());
+        $response->assertJsonCount($totalRequirementCount, 'data');
     }
 }

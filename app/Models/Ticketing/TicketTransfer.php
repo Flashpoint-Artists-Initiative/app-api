@@ -33,14 +33,13 @@ class TicketTransfer extends Model implements ContractsAuditable
         'completed',
     ];
 
-    /** @var string[] */
     protected $with = [
         'purchasedTickets.ticketType',
         'reservedTickets.ticketType',
     ];
 
     /**
-     * @return MorphToMany<PurchasedTicket>
+     * @return MorphToMany<PurchasedTicket, $this>
      */
     public function purchasedTickets(): MorphToMany
     {
@@ -48,7 +47,7 @@ class TicketTransfer extends Model implements ContractsAuditable
     }
 
     /**
-     * @return MorphToMany<ReservedTicket>
+     * @return MorphToMany<ReservedTicket, $this>
      */
     public function reservedTickets(): MorphToMany
     {
@@ -56,7 +55,7 @@ class TicketTransfer extends Model implements ContractsAuditable
     }
 
     /**
-     * @return BelongsTo<User, TicketTransfer>
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {
@@ -64,7 +63,7 @@ class TicketTransfer extends Model implements ContractsAuditable
     }
 
     /**
-     * @return BelongsTo<User, TicketTransfer>
+     * @return BelongsTo<User, $this>
      */
     public function recipient(): BelongsTo
     {

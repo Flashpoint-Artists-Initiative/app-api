@@ -9,6 +9,7 @@ use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use Carbon\Carbon;
 use Tests\ApiRouteTestCase;
+use Illuminate\Http\JsonResponse;
 
 class ReservedTicketCreateTest extends ApiRouteTestCase
 {
@@ -44,7 +45,10 @@ class ReservedTicketCreateTest extends ApiRouteTestCase
         ]);
 
         $response->assertStatus(201);
-        $this->assertModelExists($response->baseResponse->original->purchasedTicket);
+
+        /** @var JsonResponse $baseResponse */
+        $baseResponse = $response->baseResponse;
+        $this->assertModelExists($baseResponse->original->purchasedTicket);
     }
 
     public function test_reserved_ticket_create_call_with_matching_email_returns_a_successful_response(): void

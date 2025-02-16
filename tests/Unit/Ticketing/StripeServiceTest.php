@@ -50,14 +50,13 @@ class StripeServiceTest extends TestCase
         $this->assertNotEmpty($cart->stripe_checkout_id);
         $this->stripeService->expireCheckoutFromCart($cart);
 
-        $this->assertTrue(true);
+        // If we got here, the test passed
     }
 
     public function test_get_tax_rate_percentages(): void
     {
         $percentages = $this->stripeService->getTaxRatePercentages();
 
-        $this->assertIsArray($percentages);
         $this->assertNotEmpty($percentages);
     }
 }

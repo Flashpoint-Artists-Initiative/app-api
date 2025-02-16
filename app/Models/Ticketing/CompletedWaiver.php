@@ -31,7 +31,7 @@ class CompletedWaiver extends Model implements ContractsAuditable
     ];
 
     /**
-     * @return BelongsTo<Waiver, CompletedWaiver>
+     * @return BelongsTo<Waiver, $this>
      */
     public function waiver(): BelongsTo
     {
@@ -39,7 +39,7 @@ class CompletedWaiver extends Model implements ContractsAuditable
     }
 
     /**
-     * @return BelongsTo<User, CompletedWaiver>
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {

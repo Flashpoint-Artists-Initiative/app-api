@@ -7,6 +7,7 @@ namespace Tests\Feature\Users;
 use App\Enums\RolesEnum;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\ApiRouteTestCase;
 
 class UsersUpdateTest extends ApiRouteTestCase
@@ -29,9 +30,13 @@ class UsersUpdateTest extends ApiRouteTestCase
             'birthday' => fake()->date(),
         ]);
 
-        $response->assertStatus(200)->assertJsonPath('data.id', $model->id);
-
-        $this->assertNotEquals($model->toArray(), $response->baseResponse->original->toArray());
+        $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => 
+            $json->where('data.id', $model->id)
+                ->whereNot('data.legal_name', $model->legal_name)
+                ->whereNot('data.preferred_name', $model->preferred_name)
+                ->whereNot('data.email', $model->email)
+                ->whereNot('data.birthday', $model->birthday)
+            );
     }
 
     public function test_users_update_call_with_invalid_data_returns_a_validation_error(): void
@@ -68,6 +73,7 @@ class UsersUpdateTest extends ApiRouteTestCase
 
     public function test_users_update_call_without_permission_returns_error(): void
     {
+        /** @var User $user */
         $user = User::factory()->create([
             'email' => 'newuser@example.com',
         ]);
@@ -109,7 +115,7 @@ class UsersUpdateTest extends ApiRouteTestCase
 
         $response->assertStatus(200)->assertJsonPath('data.id', $user->id);
 
-        $this->assertNotEquals($user->toArray(), $response->baseResponse->original->toArray());
+        $response->assertJsonPath('data.legal_name', 'New Name');
     }
 
     public function test_users_update_call_changing_email_resets_email_verification(): void

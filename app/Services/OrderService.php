@@ -33,7 +33,7 @@ class OrderService
     }
 
     /**
-     * @return array<string, string|int>
+     * @return array<string, string|int|null>
      */
     protected function mapDataFromSession(Session $session): array
     {

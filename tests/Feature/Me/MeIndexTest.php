@@ -36,8 +36,7 @@ class MeIndexTest extends ApiRouteTestCase
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
-        $response->assertStatus(200);
-        $this->assertEquals($user->reservedTickets->count(), $response->baseResponse->original->reservedTickets->count());
+        $response->assertStatus(200)->assertJsonCount($user->reservedTickets->count(), 'data.reserved_tickets');
 
         // purchasedTickets
         $user = User::has('purchasedTickets')->firstOrFail();
@@ -45,8 +44,7 @@ class MeIndexTest extends ApiRouteTestCase
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
-        $response->assertStatus(200);
-        $this->assertEquals($user->purchasedTickets->count(), $response->baseResponse->original->purchasedTickets->count());
+        $response->assertStatus(200)->assertJsonCount($user->purchasedTickets->count(), 'data.purchased_tickets');
 
         // orders
         $user = User::has('orders')->firstOrFail();
@@ -54,8 +52,7 @@ class MeIndexTest extends ApiRouteTestCase
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
-        $response->assertStatus(200);
-        $this->assertEquals($user->orders->count(), $response->baseResponse->original->orders->count());
+        $response->assertStatus(200)->assertJsonCount($user->orders->count(), 'data.orders');
 
         // waivers
         $user = User::has('waivers')->firstOrFail();
@@ -63,7 +60,6 @@ class MeIndexTest extends ApiRouteTestCase
 
         $response = $this->actingAs($user)->get($this->endpoint);
 
-        $response->assertStatus(200);
-        $this->assertEquals($user->waivers->count(), $response->baseResponse->original->waivers->count());
+        $response->assertStatus(200)->assertJsonCount($user->waivers->count(), 'data.waivers');
     }
 }

@@ -40,7 +40,7 @@ class Event extends Model implements ContractsAuditable
     ];
 
     /**
-     * @return HasMany<TicketType>
+     * @return HasMany<TicketType, $this>
      */
     public function ticketTypes(): HasMany
     {
@@ -48,7 +48,7 @@ class Event extends Model implements ContractsAuditable
     }
 
     /**
-     * @return HasManyThrough<PurchasedTicket>
+     * @return HasManyThrough<PurchasedTicket, TicketType, $this>
      */
     public function purchasedTickets(): HasManyThrough
     {
@@ -56,7 +56,7 @@ class Event extends Model implements ContractsAuditable
     }
 
     /**
-     * @return HasManyThrough<ReservedTicket>
+     * @return HasManyThrough<ReservedTicket, TicketType, $this>
      */
     public function reservedTickets(): HasManyThrough
     {
@@ -64,7 +64,7 @@ class Event extends Model implements ContractsAuditable
     }
 
     /**
-     * @return HasMany<Waiver>
+     * @return HasMany<Waiver, $this>
      */
     public function waivers(): HasMany
     {
@@ -72,7 +72,7 @@ class Event extends Model implements ContractsAuditable
     }
 
     /**
-     * @return HasMany<Team>
+     * @return HasMany<Team, $this>
      */
     public function teams(): HasMany
     {
@@ -80,7 +80,7 @@ class Event extends Model implements ContractsAuditable
     }
 
     /**
-     * @return HasManyThrough<ShiftType>
+     * @return HasManyThrough<ShiftType, Team, $this>
      */
     public function shiftTypes(): HasManyThrough
     {

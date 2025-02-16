@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 trait HasTicketType
 {
     /**
-     * @return MorphToMany<TicketTransfer>
+     * @return MorphToMany<TicketTransfer, $this>
      */
     public function transfers(): MorphToMany
     {
@@ -54,7 +54,7 @@ trait HasTicketType
     }
 
     /**
-     * @return HasOneThrough<Event>
+     * @return HasOneThrough<Event, TicketType, $this>
      */
     public function event(): HasOneThrough
     {

@@ -35,13 +35,13 @@ class Team extends Model implements ContractsAuditable
         'active',
     ];
 
-    /** @var string[] */
+
     protected $withCount = [
         'volunteers',
     ];
 
     /**
-     * @return BelongsTo<Event, Team>
+     * @return BelongsTo<Event, $this>
      */
     public function event(): BelongsTo
     {
@@ -49,7 +49,7 @@ class Team extends Model implements ContractsAuditable
     }
 
     /**
-     * @return HasMany<ShiftType>
+     * @return HasMany<ShiftType, $this>
      */
     public function shiftTypes(): HasMany
     {
@@ -57,7 +57,7 @@ class Team extends Model implements ContractsAuditable
     }
 
     /**
-     * @return HasManyThrough<Shift>
+     * @return HasManyThrough<Shift, ShiftType, $this>
      */
     public function shifts(): HasManyThrough
     {
@@ -65,7 +65,7 @@ class Team extends Model implements ContractsAuditable
     }
 
     /**
-     * @return BelongsToMany<User>
+     * @return BelongsToMany<User, $this>
      */
     public function volunteers(): BelongsToMany
     {

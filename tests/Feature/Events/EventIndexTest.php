@@ -21,8 +21,7 @@ class EventIndexTest extends ApiRouteTestCase
 
         $response = $this->get($this->endpoint);
 
-        $response->assertStatus(200);
-        $this->assertEquals($event_count, $response->baseResponse->original->count());
+        $response->assertStatus(200)->assertJsonCount($event_count, 'data');
     }
 
     public function test_event_index_call_with_permission_returns_pending_events(): void

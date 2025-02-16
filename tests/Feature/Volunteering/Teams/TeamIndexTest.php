@@ -8,6 +8,7 @@ use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Volunteering\Team;
+use Illuminate\Http\JsonResponse;
 use Tests\ApiRouteTestCase;
 
 class TeamIndexTest extends ApiRouteTestCase
@@ -43,7 +44,7 @@ class TeamIndexTest extends ApiRouteTestCase
         $response = $this->actingAs($user)->get($this->endpoint);
 
         $response->assertStatus(200);
-        $this->assertEquals($teamCount, $response->baseResponse->original->count());
+        $response->assertJsonCount($teamCount, 'data');
     }
 
     public function test_team_index_call_with_permission_returns_pending_types(): void
@@ -58,7 +59,7 @@ class TeamIndexTest extends ApiRouteTestCase
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);
-        $this->assertEquals($teamCount, $response->baseResponse->original->count());
+        $response->assertJsonCount($teamCount, 'data');
     }
 
     public function test_team_index_call_with_permission_returns_trashed_types(): void
@@ -75,7 +76,7 @@ class TeamIndexTest extends ApiRouteTestCase
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);
-        $this->assertEquals($teamCount, $response->baseResponse->original->count());
+        $response->assertJsonCount($teamCount, 'data');
     }
 
     public function test_team_index_call_without_permission_ignores_trashed_types(): void
@@ -93,7 +94,7 @@ class TeamIndexTest extends ApiRouteTestCase
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);
         // Matches existing event count, not trashed
-        $this->assertEquals($existingTeamCount, $response->baseResponse->original->count());
+        $response->assertJsonCount($existingTeamCount, 'data');
     }
 
     public function test_team_index_call_with_only_trashed_returns_correct_types(): void
@@ -110,7 +111,7 @@ class TeamIndexTest extends ApiRouteTestCase
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);
-        $this->assertEquals($trashedTeamCount, $response->baseResponse->original->count());
+        $response->assertJsonCount($trashedTeamCount, 'data');
     }
 
     public function test_team_index_call_as_admin_returns_all_types(): void
@@ -126,7 +127,7 @@ class TeamIndexTest extends ApiRouteTestCase
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);
-        $this->assertEquals($all_team_count, $response->baseResponse->original->count());
+        $response->assertJsonCount($all_team_count, 'data');
     }
 
     public function test_team_index_for_inactive_event_returns_error(): void

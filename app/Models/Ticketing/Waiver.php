@@ -23,7 +23,7 @@ class Waiver extends Model implements ContractsAuditable
     ];
 
     /**
-     * @return BelongsTo<Event, Waiver>
+     * @return BelongsTo<Event, $this>
      */
     public function event(): BelongsTo
     {
@@ -31,7 +31,7 @@ class Waiver extends Model implements ContractsAuditable
     }
 
     /**
-     * @return HasMany<CompletedWaiver>
+     * @return HasMany<CompletedWaiver, $this>
      */
     public function completedWaivers(): HasMany
     {

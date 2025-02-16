@@ -25,7 +25,7 @@ class QRCodeService
         /**
          * It's impossible for json_encode to fail with the parameter types, a TypeError would be thrown instead
          *
-         * @var string $json
+         * @var non-empty-string $json
          */
         $json = json_encode($content);
 

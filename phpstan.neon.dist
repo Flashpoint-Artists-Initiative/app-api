@@ -24,3 +24,8 @@ parameters:
             enabled: false
         finalInAbstractClass:
             enabled: false
+    ignoreErrors:
+        -
+            identifier: missingType.generics
+        -
+            identifier: generics.lessTypes

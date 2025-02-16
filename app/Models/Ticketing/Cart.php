@@ -22,6 +22,9 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
  * @property Event $event
  * @property int $quantity
  * @property-read User $user
+ * @property string $stripe_checkout_id
+ * 
+ * @method Builder<static> notExpired()
  */
 #[ObservedBy(CartObserver::class)]
 class Cart extends Model implements ContractsAuditable
@@ -36,15 +39,12 @@ class Cart extends Model implements ContractsAuditable
         'expiration_date' => 'datetime',
     ];
 
-    /**
-     * @var string[]
-     */
     protected $with = [
         'items.ticketType',
     ];
 
     /**
-     * @return HasMany<CartItem>
+     * @return HasMany<CartItem, $this>
      */
     public function items(): HasMany
     {
@@ -52,7 +52,7 @@ class Cart extends Model implements ContractsAuditable
     }
 
     /**
-     * @return BelongsTo<User, Cart>
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {

@@ -37,8 +37,6 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
      */
     protected $fillable = [
         'legal_name',
@@ -50,8 +48,6 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
 
     /**
      * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -96,7 +92,7 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
     }
 
     /**
-     * @return HasMany<PurchasedTicket>
+     * @return HasMany<PurchasedTicket, $this>
      */
     public function purchasedTickets(): HasMany
     {
@@ -104,7 +100,7 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
     }
 
     /**
-     * @return HasMany<ReservedTicket>
+     * @return HasMany<ReservedTicket, $this>
      */
     public function reservedTickets(): HasMany
     {
@@ -112,7 +108,7 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
     }
 
     /**
-     * @return HasMany<ReservedTicket>
+     * @return HasMany<ReservedTicket, $this>
      */
     public function availableReservedTickets(): HasMany
     {
@@ -121,7 +117,7 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
     }
 
     /**
-     * @return HasMany<Order>
+     * @return HasMany<Order, $this>
      */
     public function orders(): HasMany
     {
@@ -129,7 +125,7 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
     }
 
     /**
-     * @return HasMany<Cart>
+     * @return HasMany<Cart, $this>
      */
     public function carts(): HasMany
     {
@@ -137,7 +133,7 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
     }
 
     /**
-     * @return HasOne<Cart>
+     * @return HasOne<Cart, $this>
      */
     public function activeCart(): HasOne
     {
@@ -146,7 +142,7 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
     }
 
     /**
-     * @return HasMany<CompletedWaiver>
+     * @return HasMany<CompletedWaiver, $this>
      */
     public function waivers(): HasMany
     {
@@ -154,7 +150,7 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
     }
 
     /**
-     * @return HasMany<TicketTransfer>
+     * @return HasMany<TicketTransfer, $this>
      */
     public function ticketTransfers(): HasMany
     {
@@ -162,7 +158,7 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
     }
 
     /**
-     * @return BelongsToMany<Shift>
+     * @return BelongsToMany<Shift, $this>
      */
     public function shifts(): BelongsToMany
     {

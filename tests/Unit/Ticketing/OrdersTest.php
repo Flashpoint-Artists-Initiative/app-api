@@ -58,7 +58,7 @@ class OrdersTest extends TestCase
         return Order::create([
             'user_id' => $user->id,
             'event_id' => 1,
-            'cart_id' => $cart?->id ?? 1,
+            'cart_id' => $cart->id ?? 1,
             'quantity' => 1,
             'user_email' => 'test@example.com',
             'amount_subtotal' => 100,

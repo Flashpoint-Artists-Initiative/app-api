@@ -47,7 +47,6 @@ class TicketType extends Model implements ContractsAuditable
         'addon' => 'boolean',
     ];
 
-    /** @var string[] */
     protected $withCount = [
         'purchasedTickets',
         'unsoldReservedTickets',
@@ -68,7 +67,7 @@ class TicketType extends Model implements ContractsAuditable
     }
 
     /**
-     * @return BelongsTo<Event, TicketType>
+     * @return BelongsTo<Event, $this>
      */
     public function event(): BelongsTo
     {
@@ -76,7 +75,7 @@ class TicketType extends Model implements ContractsAuditable
     }
 
     /**
-     * @return HasMany<PurchasedTicket>
+     * @return HasMany<PurchasedTicket, $this>
      */
     public function purchasedTickets(): HasMany
     {
@@ -84,7 +83,7 @@ class TicketType extends Model implements ContractsAuditable
     }
 
     /**
-     * @return HasMany<ReservedTicket>
+     * @return HasMany<ReservedTicket, $this>
      */
     public function reservedTickets(): HasMany
     {
@@ -92,7 +91,7 @@ class TicketType extends Model implements ContractsAuditable
     }
 
     /**
-     * @return HasMany<ReservedTicket>
+     * @return HasMany<ReservedTicket, $this>
      */
     public function unsoldReservedTickets(): HasMany
     {
@@ -101,7 +100,7 @@ class TicketType extends Model implements ContractsAuditable
     }
 
     /**
-     * @return HasMany<CartItem>
+     * @return HasMany<CartItem, $this>
      */
     public function cartItems(): HasMany
     {
@@ -109,12 +108,12 @@ class TicketType extends Model implements ContractsAuditable
     }
 
     /**
-     * @return HasMany<CartItem>
+     * @return HasMany<CartItem, $this>
      */
     public function activeCartItems(): HasMany
     {
         return $this->hasMany(CartItem::class)
-            ->whereHas('cart', fn ($query) => $query->notExpired());
+            ->whereHas('cart', fn ($query) => $query->notExpired()); /** @phpstan-ignore method.notFound */
     }
 
     /**
@@ -182,9 +181,11 @@ class TicketType extends Model implements ContractsAuditable
      * Overloaded method to eager load a sum aggregate
      *
      * @return Builder<Model>
+     * @phpstan-ignore method.childReturnType
      */
     public function newQueryWithoutScopes(): Builder
     {
+        /** @var Builder<Model> $query */
         $query = parent::newQueryWithoutScopes();
 
         return $query->withSum('activeCartItems as cart_items_quantity', 'quantity');

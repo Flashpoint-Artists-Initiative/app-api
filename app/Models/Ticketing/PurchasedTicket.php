@@ -27,7 +27,7 @@ class PurchasedTicket extends Model implements ContractsAuditable, TicketInterfa
     ];
 
     /**
-     * @return BelongsTo<ReservedTicket, PurchasedTicket>
+     * @return BelongsTo<ReservedTicket, $this>
      */
     public function reservedTicket(): BelongsTo
     {

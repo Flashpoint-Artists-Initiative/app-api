@@ -34,8 +34,7 @@ class TicketTypeIndexTest extends ApiRouteTestCase
 
         $response = $this->get($this->endpoint);
 
-        $response->assertStatus(200);
-        $this->assertEquals($ticketTypeCount, $response->baseResponse->original->count());
+        $response->assertStatus(200)->assertJsonCount($ticketTypeCount, 'data');
     }
 
     public function test_ticket_type_index_call_with_permission_returns_pending_types(): void
@@ -50,15 +49,13 @@ class TicketTypeIndexTest extends ApiRouteTestCase
         $user->givePermissionTo('ticketTypes.viewPending');
 
         $response = $this->actingAs($user)->get($this->endpoint);
-        $response->assertStatus(200);
-        $this->assertEquals($ticket_type_count, $response->baseResponse->original->count());
+        $response->assertStatus(200)->assertJsonCount($ticket_type_count, 'data');
     }
 
     public function test_ticket_type_index_call_with_permission_returns_trashed_types(): void
     {
         $this->addEndpointParams(['with_trashed' => true]);
 
-        /** @phpstan-ignore-next-line */
         TicketType::factory()->for($this->event)->trashed()->count(3)->create();
         $existing_ticket_type_count = TicketType::where('active', true)->event($this->event->id)->count();
         $ticket_type_count = TicketType::where('active', true)->event($this->event->id)->withTrashed()->count();
@@ -69,15 +66,13 @@ class TicketTypeIndexTest extends ApiRouteTestCase
         $user->givePermissionTo('ticketTypes.viewDeleted');
 
         $response = $this->actingAs($user)->get($this->endpoint);
-        $response->assertStatus(200);
-        $this->assertEquals($ticket_type_count, $response->baseResponse->original->count());
+        $response->assertStatus(200)->assertJsonCount($ticket_type_count, 'data');
     }
 
     public function test_ticket_type_index_call_without_permission_ignores_trashed_types(): void
     {
         $this->addEndpointParams(['with_trashed' => true]);
 
-        /** @phpstan-ignore-next-line */
         TicketType::factory()->for($this->event)->trashed()->count(3)->create();
         $existing_ticket_type_count = TicketType::where('active', true)->event($this->event->id)->count();
         $ticket_type_count = TicketType::where('active', true)->event($this->event->id)->withTrashed()->count();
@@ -88,9 +83,8 @@ class TicketTypeIndexTest extends ApiRouteTestCase
         $user = User::doesntHave('roles')->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
-        $response->assertStatus(200);
         // Matches existing event count, not trashed
-        $this->assertEquals($existing_ticket_type_count, $response->baseResponse->original->count());
+        $response->assertStatus(200)->assertJsonCount($existing_ticket_type_count, 'data');
     }
 
     public function test_ticket_type_index_call_with_only_trashed_returns_correct_types(): void
@@ -106,15 +100,13 @@ class TicketTypeIndexTest extends ApiRouteTestCase
         $user->givePermissionTo('ticketTypes.viewDeleted');
 
         $response = $this->actingAs($user)->get($this->endpoint);
-        $response->assertStatus(200);
-        $this->assertEquals($trashed_ticket_type_count, $response->baseResponse->original->count());
+        $response->assertStatus(200)->assertJsonCount($trashed_ticket_type_count, 'data');
     }
 
     public function test_ticket_type_index_call_as_admin_returns_all_types(): void
     {
         $this->addEndpointParams(['with_trashed' => true]);
 
-        /** @phpstan-ignore-next-line */
         TicketType::factory()->for($this->event)->trashed()->count(3)->create();
         $ticket_type_count = TicketType::where('event_id', $this->event->id)->count();
         $all_ticket_type_count = TicketType::withTrashed()->event($this->event->id)->count();
@@ -124,7 +116,6 @@ class TicketTypeIndexTest extends ApiRouteTestCase
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $response = $this->actingAs($user)->get($this->endpoint);
-        $response->assertStatus(200);
-        $this->assertEquals($all_ticket_type_count, $response->baseResponse->original->count());
+        $response->assertStatus(200)->assertJsonCount($all_ticket_type_count, 'data');
     }
 }

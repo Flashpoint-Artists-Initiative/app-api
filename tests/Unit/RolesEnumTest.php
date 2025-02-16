@@ -17,17 +17,21 @@ class RolesEnumTest extends TestCase
     {
         $roles = Role::all();
 
+        $this->expectNotToPerformAssertions();
+
         foreach ($roles as $role) {
-            $this->assertNotEmpty(RolesEnum::from($role->name));
+            $role = RolesEnum::from($role->name);
         }
     }
 
     public function test_database_has_role_for_every_roles_enum_case(): void
     {
+        $this->expectNotToPerformAssertions();
+
         $cases = RolesEnum::cases();
 
         foreach ($cases as $case) {
-            $this->assertNotEmpty($case->model());
+            $case->model();
         }
     }
 

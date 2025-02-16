@@ -21,7 +21,6 @@ class WaiverIndexTest extends ApiRouteTestCase
 
         $response = $this->get($this->endpoint);
 
-        $response->assertStatus(200);
-        $this->assertEquals($waiverCount, $response->baseResponse->original->count());
+        $response->assertStatus(200)->assertJsonCount($waiverCount, 'data');
     }
 }

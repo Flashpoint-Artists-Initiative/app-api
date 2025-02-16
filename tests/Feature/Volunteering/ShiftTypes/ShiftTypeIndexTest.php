@@ -46,7 +46,7 @@ class ShiftTypeIndexTest extends ApiRouteTestCase
 
         $response = $this->actingAs($user)->get($this->endpoint);
         $response->assertStatus(200);
-        $this->assertEquals($shiftTypeCount, $response->baseResponse->original->count());
+        $response->assertJsonCount($shiftTypeCount, 'data');
     }
 
     public function test_shift_type_index_call_for_active_event_and_inactive_team_returns_error(): void

@@ -39,7 +39,7 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
     ];
 
     /**
-     * @return HasOne<PurchasedTicket>
+     * @return HasOne<PurchasedTicket, $this>
      */
     public function purchasedTicket(): HasOne
     {

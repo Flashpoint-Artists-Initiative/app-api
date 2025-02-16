@@ -37,19 +37,17 @@ class Shift extends Model implements ContractsAuditable
         'num_spots',
     ];
 
-    /** @var string[] */
     protected $with = [
         'shiftType',
         'team',
     ];
 
-    /** @var string[] */
     protected $withCount = [
         'volunteers',
     ];
 
     /**
-     * @return BelongsTo<ShiftType, Shift>
+     * @return BelongsTo<ShiftType, $this>
      */
     public function shiftType(): BelongsTo
     {
@@ -57,7 +55,7 @@ class Shift extends Model implements ContractsAuditable
     }
 
     /**
-     * @return BelongsToMany<User>
+     * @return BelongsToMany<User, $this>
      */
     public function volunteers(): BelongsToMany
     {
@@ -70,7 +68,7 @@ class Shift extends Model implements ContractsAuditable
     // }
 
     /**
-     * @return HasOneThrough<Team>
+     * @return HasOneThrough<Team, ShiftType, $this>
      */
     public function team(): HasOneThrough
     {

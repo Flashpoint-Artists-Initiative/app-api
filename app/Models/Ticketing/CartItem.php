@@ -27,7 +27,7 @@ class CartItem extends Model
     ];
 
     /**
-     * @return BelongsTo<Cart, CartItem>
+     * @return BelongsTo<Cart, $this>
      */
     public function cart(): BelongsTo
     {
@@ -35,7 +35,7 @@ class CartItem extends Model
     }
 
     /**
-     * @return BelongsTo<TicketType, CartItem>
+     * @return BelongsTo<TicketType, $this>
      */
     public function ticketType(): BelongsTo
     {

@@ -46,7 +46,7 @@ class Order extends Model implements ContractsAuditable
     ];
 
     /**
-     * @return BelongsTo<User, Order>
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {
@@ -54,7 +54,7 @@ class Order extends Model implements ContractsAuditable
     }
 
     /**
-     * @return BelongsTo<Event, Order>
+     * @return BelongsTo<Event, $this>
      */
     public function event(): BelongsTo
     {
@@ -62,7 +62,7 @@ class Order extends Model implements ContractsAuditable
     }
 
     /**
-     * @return BelongsTo<Cart, Order>
+     * @return BelongsTo<Cart, $this>
      */
     public function cart(): BelongsTo
     {

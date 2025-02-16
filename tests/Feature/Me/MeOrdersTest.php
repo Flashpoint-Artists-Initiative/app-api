@@ -26,7 +26,6 @@ class MeOrdersTest extends ApiRouteTestCase
         $orderCount = $user->orders->count();
         $response = $this->actingAs($user)->get($this->endpoint);
 
-        $response->assertStatus(200);
-        $this->assertEquals($orderCount, $response->baseResponse->original->count());
+        $response->assertStatus(200)->assertJsonCount($orderCount, 'data');
     }
 }

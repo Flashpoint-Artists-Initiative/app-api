@@ -35,8 +35,7 @@ class PurchasedTicketIndexTest extends ApiRouteTestCase
         $this->buildEndpoint(params: ['ticket_type' => $ticketType->id]);
 
         $response = $this->actingAs($user)->get($this->endpoint);
-        $response->assertStatus(200);
-        $this->assertEquals($userPurchasedTicketsCount, $response->baseResponse->original->count());
+        $response->assertStatus(200)->assertJsonCount($userPurchasedTicketsCount, 'data');
     }
 
     public function test_purchased_ticket_index_call_with_permission_returns_success(): void
@@ -50,8 +49,6 @@ class PurchasedTicketIndexTest extends ApiRouteTestCase
         $user->givePermissionTo('purchasedTickets.viewAny');
 
         $response = $this->actingAs($user)->get($this->endpoint);
-        $response->assertStatus(200);
-
-        $this->assertEquals($purchasedTicketsCount, $response->baseResponse->original->count());
+        $response->assertStatus(200)->assertJsonCount($purchasedTicketsCount, 'data');
     }
 }

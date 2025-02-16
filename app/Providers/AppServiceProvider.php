@@ -48,6 +48,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Add localhost to the whitelisted stripe webhook ips when testing or local
         if ($this->app->isLocal() || $this->app->runningUnitTests()) {
+            // @phpstan-ignore-next-line
             config(['services.stripe.webhook_ips.WEBHOOKS.100' => env('STRIPE_LOCAL_WEBHOOK_IP', '127.0.0.1')]);
         }
 
