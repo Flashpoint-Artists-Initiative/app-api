@@ -52,6 +52,7 @@ class VerifyEmailTest extends ApiRouteTestCase
     {
         $this->markTestSkipped('Requires working frontend to test');
 
+        // @phpstan-ignore-next-line Remove when test nolonger skipped
         User::create([
             'legal_name' => 'Test User',
             'email' => 'test@example.com',
@@ -90,6 +91,7 @@ class VerifyEmailTest extends ApiRouteTestCase
     {
         $this->markTestSkipped('Requires working frontend to test');
 
+        // @phpstan-ignore-next-line Remove when test nolonger skipped
         User::create([
             'legal_name' => 'Test User',
             'email' => 'test@example.com',
@@ -122,6 +124,7 @@ class VerifyEmailTest extends ApiRouteTestCase
     {
         $this->markTestSkipped('Requires working frontend to test');
 
+        // @phpstan-ignore-next-line Remove when test nolonger skipped
         User::factory()->create([
             'legal_name' => 'Test User',
             'email' => 'test@example.com',
