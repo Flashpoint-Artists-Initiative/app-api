@@ -17,8 +17,7 @@ class StripeWebhookController extends Controller
 {
     public function __construct(
         protected CheckoutService $checkoutService,
-    ) {
-    }
+    ) {}
 
     public function webhookAction(StripeWebhookRequest $request): JsonResponse
     {

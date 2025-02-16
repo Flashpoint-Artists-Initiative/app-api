@@ -17,7 +17,7 @@ class TicketTransferIndexReceivedTest extends ApiRouteTestCase
 
     public User $user;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->user = User::has('ticketTransfers')->firstOrFail();

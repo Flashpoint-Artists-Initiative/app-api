@@ -17,7 +17,7 @@ class ShiftTypeUpdateTest extends ApiRouteTestCase
 
     public array $routeParams = ['team' => 1, 'shift_type' => 1];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $team = Team::has('shiftTypes')->inRandomOrder()->firstOrFail();
@@ -53,21 +53,21 @@ class ShiftTypeUpdateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad description
+        // Bad description
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'description' => null,
         ]);
 
         $response->assertStatus(422);
 
-        //Bad length
+        // Bad length
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'length' => 'bad length',
         ]);
 
         $response->assertStatus(422);
 
-        //Bad num_spots
+        // Bad num_spots
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'length' => 'bad num_spots',
         ]);

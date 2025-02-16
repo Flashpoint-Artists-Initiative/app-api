@@ -17,7 +17,7 @@ class ShiftDeleteTest extends ApiRouteTestCase
 
     public array $routeParams = ['shift_type' => 1, 'shift' => 1];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $shiftType = ShiftType::has('shifts')->firstOrFail();

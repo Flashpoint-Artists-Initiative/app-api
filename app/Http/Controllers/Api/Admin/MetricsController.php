@@ -15,8 +15,7 @@ class MetricsController extends Controller
     public function __construct(
         protected OrderService $orderService,
         protected MetricsService $metricsService
-    ) {
-    }
+    ) {}
 
     public function salesDataAction(MetricsRequest $request): JsonResponse
     {

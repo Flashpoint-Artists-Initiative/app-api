@@ -10,9 +10,7 @@ use Illuminate\Http\Request;
 
 class SetAcceptHeaderJson
 {
-    public function __construct(public ResponseFactory $factory)
-    {
-    }
+    public function __construct(public ResponseFactory $factory) {}
 
     public function handle(Request $request, Closure $next): mixed
     {

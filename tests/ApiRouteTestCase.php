@@ -23,7 +23,7 @@ abstract class ApiRouteTestCase extends TestCase
     /** @var string[] */
     public array $connectionsToTransact = ['testing'];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -41,7 +41,7 @@ class TicketTransferNotification extends Notification
         $eventName = $this->ticketTransfer->event->name;
         $ticketString = Str::plural('Ticket', $this->ticketTransfer->ticketCount);
 
-        $message = (new MailMessage())
+        $message = (new MailMessage)
             ->subject($eventName . ': Pending Ticket Transfer')
             ->line('You have a pending ticket transfer for ' . $eventName)
             ->action('Click Here to Accept your ' . $ticketString, url('/'))

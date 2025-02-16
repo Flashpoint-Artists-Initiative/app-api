@@ -77,7 +77,7 @@ class CompletedWaiversCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad form_data
+        // Bad form_data
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'waiver_id' => $waiverId,
             'user_id' => $userId,
@@ -87,7 +87,7 @@ class CompletedWaiversCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad paper_completion
+        // Bad paper_completion
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'waiver_id' => $waiverId,
             'user_id' => $userId,

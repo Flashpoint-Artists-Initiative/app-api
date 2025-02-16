@@ -32,7 +32,7 @@ class ReservedTicketObserver
         && $reservedTicket->ticketType->price === 0
         && $reservedTicket->can_be_purchased
         ) {
-            $purchasedTicket = new PurchasedTicket();
+            $purchasedTicket = new PurchasedTicket;
             $purchasedTicket->ticket_type_id = $reservedTicket->ticket_type_id;
             $purchasedTicket->user_id = $reservedTicket->user_id;
             $purchasedTicket->reserved_ticket_id = $reservedTicket->id;

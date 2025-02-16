@@ -18,7 +18,7 @@ class TicketTypeUpdateTest extends ApiRouteTestCase
 
     public array $routeParams = ['event' => 1, 'ticket_type' => 1];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $event = Event::has('ticketTypes')->inRandomOrder()->firstOrFail();
@@ -94,21 +94,21 @@ class TicketTypeUpdateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad sale_start_date
+        // Bad sale_start_date
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'sale_start_date' => 'bad_date',
         ]);
 
         $response->assertStatus(422);
 
-        //Bad end_date
+        // Bad end_date
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'sale_end_date' => 'bad_date',
         ]);
 
         $response->assertStatus(422);
 
-        //Bad description
+        // Bad description
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'description' => null,
         ]);

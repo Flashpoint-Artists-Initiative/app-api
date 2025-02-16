@@ -40,14 +40,14 @@ class RequirementUpdateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad icon
+        // Bad icon
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'icon' => null,
         ]);
 
         $response->assertStatus(422);
 
-        //Bad description
+        // Bad description
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'description' => null,
         ]);

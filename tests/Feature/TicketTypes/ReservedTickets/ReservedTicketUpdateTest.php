@@ -23,7 +23,7 @@ class ReservedTicketUpdateTest extends ApiRouteTestCase
 
     protected ReservedTicket $reservedTicket;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->ticketType = TicketType::has('reservedTickets.purchasedTicket')->active()->firstOrFail();
@@ -109,7 +109,7 @@ class ReservedTicketUpdateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad expiration_date
+        // Bad expiration_date
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'expiration_date' => 'bad date',
         ]);

@@ -12,9 +12,7 @@ use Illuminate\Validation\Validator;
 
 class ShiftSignupRequest extends FormRequest
 {
-    public function __construct(protected VolunteerService $volunteerService)
-    {
-    }
+    public function __construct(protected VolunteerService $volunteerService) {}
 
     public function withValidator(Validator $validator): void
     {

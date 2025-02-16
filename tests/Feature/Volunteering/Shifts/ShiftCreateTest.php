@@ -52,7 +52,7 @@ class ShiftCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad multiplier
+        // Bad multiplier
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'start_offset' => fake()->numberBetween(0, 10000),
             'multiplier' => 'string',
@@ -62,7 +62,7 @@ class ShiftCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad length
+        // Bad length
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'start_offset' => fake()->numberBetween(0, 10000),
             'multiplier' => fake()->numberBetween(1, 3),
@@ -72,7 +72,7 @@ class ShiftCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad num_spots
+        // Bad num_spots
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'start_offset' => fake()->numberBetween(0, 10000),
             'multiplier' => fake()->numberBetween(1, 3),

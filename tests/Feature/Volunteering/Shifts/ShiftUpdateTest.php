@@ -20,7 +20,7 @@ class ShiftUpdateTest extends ApiRouteTestCase
 
     public Shift $shift;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $shiftType = ShiftType::has('shifts')->firstOrFail();
@@ -54,21 +54,21 @@ class ShiftUpdateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad multiplier
+        // Bad multiplier
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'multiplier' => -1,
         ]);
 
         $response->assertStatus(422);
 
-        //Bad length
+        // Bad length
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'length' => 'string',
         ]);
 
         $response->assertStatus(422);
 
-        //Bad num_spots
+        // Bad num_spots
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'num_spots' => 'string',
         ]);

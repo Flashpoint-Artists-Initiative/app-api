@@ -55,7 +55,7 @@ class UserSeeder extends Seeder
                     'password' => 'boxoffice',
                 ])->assignRole(RolesEnum::BoxOffice);
             } catch (UniqueConstraintViolationException $e) {
-                //Catch this exception so we can seed data locally as much as we want
+                // Catch this exception so we can seed data locally as much as we want
             }
         }
     }

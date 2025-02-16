@@ -17,7 +17,7 @@ class TeamUpdateTest extends ApiRouteTestCase
 
     public array $routeParams = ['event' => 1, 'team' => 1];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $event = Event::has('teams')->inRandomOrder()->firstOrFail();
@@ -53,14 +53,14 @@ class TeamUpdateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad description
+        // Bad description
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'description' => null,
         ]);
 
         $response->assertStatus(422);
 
-        //Bad email
+        // Bad email
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'email' => 'bad email',
         ]);

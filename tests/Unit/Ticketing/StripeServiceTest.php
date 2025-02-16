@@ -44,7 +44,7 @@ class StripeServiceTest extends TestCase
 
         $this->assertNotNull($session);
 
-        $cart = new Cart();
+        $cart = new Cart;
         $cart->stripe_checkout_id = $session->id;
 
         $this->assertNotEmpty($cart->stripe_checkout_id);

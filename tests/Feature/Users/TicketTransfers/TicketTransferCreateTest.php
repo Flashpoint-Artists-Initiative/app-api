@@ -25,7 +25,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
     public PurchasedTicket $purchasedTicket;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->user = User::factory()->create();
@@ -58,7 +58,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad email
+        // Bad email
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'bad_email',
             'purchased_tickets' => [$this->purchasedTicket->id],
@@ -67,7 +67,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad purchased_tickets
+        // Bad purchased_tickets
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
             'purchased_tickets' => 'one',
@@ -76,7 +76,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad reserved_tickets
+        // Bad reserved_tickets
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
             'purchased_tickets' => [$this->purchasedTicket->id],
@@ -85,7 +85,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad purchased_tickets.id - not an int
+        // Bad purchased_tickets.id - not an int
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
             'purchased_tickets' => ['one'],
@@ -94,7 +94,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad purchased_tickets.id - invalid
+        // Bad purchased_tickets.id - invalid
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
             'purchased_tickets' => [1000],
@@ -103,7 +103,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad purchased_tickets.id - duplicate
+        // Bad purchased_tickets.id - duplicate
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
             'purchased_tickets' => [$this->purchasedTicket->id, $this->purchasedTicket->id],
@@ -112,7 +112,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad reserved_tickets.id - not an int
+        // Bad reserved_tickets.id - not an int
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
             'purchased_tickets' => [$this->purchasedTicket->id],
@@ -121,7 +121,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad reserved_tickets.id - invalid
+        // Bad reserved_tickets.id - invalid
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
             'purchased_tickets' => [$this->purchasedTicket->id],
@@ -130,7 +130,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad reserved_tickets.id - duplicate
+        // Bad reserved_tickets.id - duplicate
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
             'purchased_tickets' => [$this->purchasedTicket->id],
@@ -142,7 +142,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         // Change the endpoint to the admin user, then try using the same ticket ids
         $this->buildEndpoint(params: ['user' => $user->id]);
 
-        //Bad purchased_tickets
+        // Bad purchased_tickets
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
             'purchased_tickets' => [$this->purchasedTicket->id],
@@ -150,7 +150,7 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad reserved_tickets
+        // Bad reserved_tickets
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'test@test.com',
             'reserved_tickets' => [$this->reservedTicket->id],

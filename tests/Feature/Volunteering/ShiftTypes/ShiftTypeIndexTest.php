@@ -20,7 +20,7 @@ class ShiftTypeIndexTest extends ApiRouteTestCase
 
     protected Team $team;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->team = Team::has('shiftTypes')->inRandomOrder()->firstOrFail();

@@ -18,7 +18,7 @@ class WaiverShowTest extends ApiRouteTestCase
 
     public Event $event;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->event = Event::has('waivers')->firstOrFail();

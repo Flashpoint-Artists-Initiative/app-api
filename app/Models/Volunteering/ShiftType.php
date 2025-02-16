@@ -56,7 +56,7 @@ class ShiftType extends Model implements ContractsAuditable
             'id', // Foreign Key for team
             'id', // Foreign Key for event
             'team_id', // Local key for shiftType
-            'event_id' //Local key for team
+            'event_id' // Local key for team
         );
     }
 

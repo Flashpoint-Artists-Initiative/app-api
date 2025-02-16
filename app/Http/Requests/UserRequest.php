@@ -28,7 +28,7 @@ class UserRequest extends Request
      */
     public function storeRules(): array
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
 
         return $request->rules();
     }

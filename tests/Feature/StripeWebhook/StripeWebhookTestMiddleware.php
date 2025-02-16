@@ -11,10 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class StripeWebhookTestMiddleware
 {
-    public function __construct(public Event $event)
-    {
-
-    }
+    public function __construct(public Event $event) {}
 
     /**
      * Verify that the request is coming from the stripe API

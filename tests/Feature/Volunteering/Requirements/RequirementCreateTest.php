@@ -40,7 +40,7 @@ class RequirementCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad icon
+        // Bad icon
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'name' => fake()->word(),
             'icon' => null,
@@ -49,7 +49,7 @@ class RequirementCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad description
+        // Bad description
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'name' => fake()->word(),
             'icon' => fake()->word(),

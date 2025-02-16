@@ -29,7 +29,7 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
     /** @var array<mixed> */
     public array $eventData;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

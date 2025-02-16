@@ -48,7 +48,7 @@ class WaiverCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad content
+        // Bad content
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'title' => 'Test Waiver',
             'content' => ['test content'],
@@ -56,7 +56,7 @@ class WaiverCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Missing title
+        // Missing title
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'title' => null,
             'content' => 'test content',
@@ -64,7 +64,7 @@ class WaiverCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Missing content
+        // Missing content
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'title' => 'Test Waiver',
             'content' => null,
@@ -72,7 +72,7 @@ class WaiverCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad minor_waiver
+        // Bad minor_waiver
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'title' => 'Test Waiver',
             'content' => 'test content',

@@ -21,16 +21,16 @@ class MetricsTicketDataTest extends ApiRouteTestCase
 
     public array $routeParams = ['event_id' => 1];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->partialMock(StripeService::class, function (MockInterface $mock) {
-            $taxRate = new TaxRate();
+            $taxRate = new TaxRate;
             $taxRate->description = 'Sales Tax';
             $taxRate->percentage = 7;
 
-            $taxRateTwo = new TaxRate();
+            $taxRateTwo = new TaxRate;
             $taxRateTwo->description = 'Stripe Fee';
             $taxRateTwo->percentage = 2.9;
 

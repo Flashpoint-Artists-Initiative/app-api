@@ -11,7 +11,7 @@ class QRCodeService
 {
     public function buildQrCode(string $content): ?string
     {
-        $options = new SvgWithLogoOptions();
+        $options = new SvgWithLogoOptions;
 
         $out = (new QRCode($options))->render($content);
 

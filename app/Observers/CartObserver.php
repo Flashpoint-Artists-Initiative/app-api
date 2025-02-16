@@ -9,10 +9,7 @@ use App\Services\StripeService;
 
 class CartObserver
 {
-    public function __construct(protected StripeService $stripeService)
-    {
-
-    }
+    public function __construct(protected StripeService $stripeService) {}
 
     public function creating(Cart $cart): bool
     {

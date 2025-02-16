@@ -71,7 +71,7 @@ class ReservedTicketCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad expiration_date
+        // Bad expiration_date
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'email' => 'notauser@example.com',
             'expiration_date' => 'bad date',

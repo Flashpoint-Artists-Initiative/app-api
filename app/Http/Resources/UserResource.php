@@ -32,7 +32,7 @@ class UserResource extends JsonResource
             'email_verified' => $this->email_verified_at != null,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'deleted_at' => $this->deleted_at ?? new MissingValue(),
+            'deleted_at' => $this->deleted_at ?? new MissingValue,
             'roles' => RoleResource::collection($this->whenLoaded('roles')),
             'permissions' => $this->formatPermissions(),
             'purchased_tickets' => PurchasedTicketResource::collection($this->whenLoaded('purchasedTickets')),
@@ -49,7 +49,7 @@ class UserResource extends JsonResource
     protected function formatPermissions(): Collection|MissingValue
     {
         if (! $this->relationLoaded('permissions')) {
-            return new MissingValue();
+            return new MissingValue;
         }
 
         $collection = $this->getAllPermissions();

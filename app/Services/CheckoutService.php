@@ -12,8 +12,7 @@ class CheckoutService
         protected StripeService $stripeService,
         protected CartService $cartService,
         protected OrderService $orderService,
-    ) {
-    }
+    ) {}
 
     public function resolveCompletedCheckoutSession(Session $session): void
     {

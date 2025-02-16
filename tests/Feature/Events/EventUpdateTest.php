@@ -45,7 +45,7 @@ class EventUpdateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad start_date
+        // Bad start_date
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'name' => 'Test Event',
             'start_date' => 'bad_date',
@@ -55,7 +55,7 @@ class EventUpdateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad end_date
+        // Bad end_date
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'name' => 'Test Event',
             'start_date' => new Carbon('-1 week'),
@@ -65,7 +65,7 @@ class EventUpdateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad name
+        // Bad name
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'name' => null,
             'start_date' => 'bad_date',

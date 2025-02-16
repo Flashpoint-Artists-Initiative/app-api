@@ -68,7 +68,7 @@ class UsersCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad birthday
+        // Bad birthday
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'legal_name' => fake()->name(),
             'email' => fake()->safeEmail(),
@@ -78,7 +78,7 @@ class UsersCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad password
+        // Bad password
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'legal_name' => fake()->name(),
             'email' => fake()->safeEmail(),

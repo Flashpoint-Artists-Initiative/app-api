@@ -25,7 +25,7 @@ class PurchasedTicketShowTest extends ApiRouteTestCase
 
     protected User $ticketUser;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->ticketType = TicketType::has('purchasedTickets')->active()->firstOrFail();

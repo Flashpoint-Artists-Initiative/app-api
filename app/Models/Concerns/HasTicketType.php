@@ -65,7 +65,7 @@ trait HasTicketType
             'id', // Foreign Key for ticketType
             'id', // Foreign Key for Event
             'ticket_type_id', // Local key for purchasedTicket
-            'event_id' //Local key for ticketType
+            'event_id' // Local key for ticketType
         );
     }
 

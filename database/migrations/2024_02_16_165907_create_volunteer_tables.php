@@ -30,7 +30,7 @@ return new class extends Migration
             $table->unsignedInteger('team_id');
             $table->string('title');
             $table->text('description');
-            $table->unsignedInteger('length'); //minutes
+            $table->unsignedInteger('length'); // minutes
             $table->unsignedInteger('num_spots');
         });
 
@@ -38,7 +38,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->unsignedInteger('shift_type_id');
-            $table->unsignedInteger('start_offset'); //minutes
+            $table->unsignedInteger('start_offset'); // minutes
             $table->boolean('multiplier')->nullable();
             $table->unsignedInteger('length')->nullable();
             $table->unsignedInteger('num_spots')->nullable();

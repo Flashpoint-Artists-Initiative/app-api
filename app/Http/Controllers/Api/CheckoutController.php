@@ -22,9 +22,7 @@ class CheckoutController extends Controller
         protected StripeService $stripeService,
         protected CartService $cartService,
         protected CheckoutService $checkoutService,
-    ) {
-
-    }
+    ) {}
 
     /**
      * Return a user's cart

@@ -18,7 +18,7 @@ class ReservedTicketIndexTest extends ApiRouteTestCase
 
     protected TicketType $ticketType;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->ticketType = TicketType::has('reservedTickets')->active()->firstOrFail();

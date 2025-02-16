@@ -33,9 +33,7 @@ class AuthController extends Controller
      * @param  \PHPOpenSourceSaver\JWTAuth\JWTGuard  $guard
      * @return void
      */
-    public function __construct(protected Guard $guard)
-    {
-    }
+    public function __construct(protected Guard $guard) {}
 
     /**
      * Login

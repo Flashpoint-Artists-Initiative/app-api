@@ -16,7 +16,7 @@ class LockdownMiddleware
 
     public function __construct()
     {
-        $this->lockdownService = new LockdownService();
+        $this->lockdownService = new LockdownService;
     }
 
     /**

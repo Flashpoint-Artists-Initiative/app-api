@@ -44,7 +44,7 @@ class TeamCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad description
+        // Bad description
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'name' => 'Test Team',
             'description' => null,
@@ -54,7 +54,7 @@ class TeamCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad email
+        // Bad email
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'name' => 'Test Team',
             'description' => fake()->paragraph(),
@@ -64,7 +64,7 @@ class TeamCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad active
+        // Bad active
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'name' => 'Test Team',
             'description' => fake()->paragraph(),

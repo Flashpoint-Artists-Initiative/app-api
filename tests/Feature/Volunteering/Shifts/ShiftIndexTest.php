@@ -21,7 +21,7 @@ class ShiftIndexTest extends ApiRouteTestCase
 
     public ShiftType $shiftType;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->shiftType = ShiftType::has('shifts')->firstOrFail();

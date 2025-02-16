@@ -17,7 +17,7 @@ class WaiverDeleteTest extends ApiRouteTestCase
 
     public array $routeParams = ['event' => 1, 'waiver' => 1];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $event = Event::has('waivers')->firstOrFail();

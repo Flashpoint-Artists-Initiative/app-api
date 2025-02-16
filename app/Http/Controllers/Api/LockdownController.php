@@ -11,9 +11,7 @@ use Illuminate\Http\Request;
 
 class LockdownController extends Controller
 {
-    public function __construct(protected LockdownService $lockdownService)
-    {
-    }
+    public function __construct(protected LockdownService $lockdownService) {}
 
     public function enableLockdown(Request $request): JsonResponse
     {

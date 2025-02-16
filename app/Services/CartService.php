@@ -13,9 +13,7 @@ use Illuminate\Support\Collection;
 
 class CartService
 {
-    public function __construct(protected StripeService $stripeService)
-    {
-    }
+    public function __construct(protected StripeService $stripeService) {}
 
     protected static bool $cartWasExpired = false;
 

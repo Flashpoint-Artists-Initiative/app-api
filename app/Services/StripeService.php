@@ -21,9 +21,7 @@ class StripeService
 {
     const TAX_RATE_CACHE_PREFIX = 'stripe.tax-rate.';
 
-    public function __construct(public StripeClient $stripeClient)
-    {
-    }
+    public function __construct(public StripeClient $stripeClient) {}
 
     // These magic methods redirect all calls to the $stripeClient
     public function __get(mixed $name): mixed

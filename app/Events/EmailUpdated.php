@@ -17,6 +17,5 @@ class EmailUpdated extends Registered
      */
     public function __construct(
         public $user,
-    ) {
-    }
+    ) {}
 }

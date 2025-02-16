@@ -20,7 +20,7 @@ class ShiftShowTest extends ApiRouteTestCase
 
     protected Shift $shift;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $shiftType = ShiftType::has('shifts')->firstOrFail();

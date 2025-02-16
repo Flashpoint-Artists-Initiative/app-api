@@ -21,7 +21,7 @@ class ShiftTypeShowTest extends ApiRouteTestCase
 
     protected ShiftType $shiftType;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $team = Team::has('shiftTypes')->firstOrFail();

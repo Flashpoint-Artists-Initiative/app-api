@@ -12,9 +12,7 @@ use Illuminate\Http\Response;
 
 class TicketsController extends Controller
 {
-    public function __construct(protected QRCodeService $qrCodeService)
-    {
-    }
+    public function __construct(protected QRCodeService $qrCodeService) {}
 
     public function qrAction(QrRequest $request, ?int $eventId = null): Response
     {

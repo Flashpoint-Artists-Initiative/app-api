@@ -14,6 +14,4 @@ use Illuminate\Database\Eloquent\Model;
  * @property Event $event
  * @property TicketType $ticketType
  */
-interface TicketInterface
-{
-}
+interface TicketInterface {}

@@ -44,7 +44,7 @@ class ShiftTypeCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad description
+        // Bad description
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'title' => 'Test Shift Type',
             'description' => null,
@@ -54,7 +54,7 @@ class ShiftTypeCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad length
+        // Bad length
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'title' => 'Test Shift Type',
             'description' => fake()->paragraph(),
@@ -64,7 +64,7 @@ class ShiftTypeCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad num_spots
+        // Bad num_spots
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'title' => 'Test Shift Type',
             'description' => fake()->paragraph(),

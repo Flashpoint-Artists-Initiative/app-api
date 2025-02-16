@@ -50,7 +50,7 @@ class TicketTypeCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad sale_start_date
+        // Bad sale_start_date
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'name' => 'General Sale Ticket',
             'description' => 'Description',
@@ -62,7 +62,7 @@ class TicketTypeCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad sale_end_date
+        // Bad sale_end_date
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'name' => 'General Sale Ticket',
             'description' => 'Description',
@@ -74,7 +74,7 @@ class TicketTypeCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad description
+        // Bad description
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'name' => 'General Sale Ticket',
             'description' => [],
@@ -86,7 +86,7 @@ class TicketTypeCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad quantity
+        // Bad quantity
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'name' => 'General Sale Ticket',
             'description' => [],
@@ -98,7 +98,7 @@ class TicketTypeCreateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad price
+        // Bad price
         $response = $this->actingAs($user)->postJson($this->endpoint, [
             'name' => 'General Sale Ticket',
             'description' => [],

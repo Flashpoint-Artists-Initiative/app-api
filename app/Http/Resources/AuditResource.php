@@ -25,7 +25,7 @@ class AuditResource extends JsonResource
     {
         /** @var array<mixed> */
         $array = parent::toArray($request);
-        $array['user_name'] = $this->user_id ? $this->user->display_name : new MissingValue();
+        $array['user_name'] = $this->user_id ? $this->user->display_name : new MissingValue;
         $array['modified'] = $this->getModified();
 
         unset($array['user'], $array['user_type'], $array['old_values'], $array['new_values']);

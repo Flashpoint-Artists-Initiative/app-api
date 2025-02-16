@@ -63,8 +63,8 @@ class VerifyEmailTest extends ApiRouteTestCase
 
         $this->assertFalse($user->hasVerifiedEmail());
 
-        //Manually generate the verification URL
-        $verificationEmail = new VerifyEmail();
+        // Manually generate the verification URL
+        $verificationEmail = new VerifyEmail;
         $url = $verificationEmail->toMail($user)->actionUrl;
         $parts = parse_url($url);
 
@@ -77,7 +77,7 @@ class VerifyEmailTest extends ApiRouteTestCase
 
         $response->assertStatus(202);
 
-        //Update the user model
+        // Update the user model
         $user->refresh();
 
         $this->assertTrue($user->hasVerifiedEmail());
@@ -102,8 +102,8 @@ class VerifyEmailTest extends ApiRouteTestCase
 
         $this->assertFalse($user->hasVerifiedEmail());
 
-        //Manually generate the verification URL
-        $verificationEmail = new VerifyEmail();
+        // Manually generate the verification URL
+        $verificationEmail = new VerifyEmail;
         $url = $verificationEmail->toMail($user)->actionUrl;
         $parts = parse_url($url);
 
@@ -114,7 +114,7 @@ class VerifyEmailTest extends ApiRouteTestCase
 
         // First request
         $this->actingAs($user)->get($relativeUrl);
-        //Second request
+        // Second request
         $response = $this->actingAs($user)->get($relativeUrl);
 
         $response->assertStatus(400);

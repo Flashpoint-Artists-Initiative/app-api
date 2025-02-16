@@ -55,7 +55,7 @@ class MeUpdateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad birthday
+        // Bad birthday
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'legal_name' => fake()->name(),
             'email' => fake()->safeEmail(),

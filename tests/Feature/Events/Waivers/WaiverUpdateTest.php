@@ -18,7 +18,7 @@ class WaiverUpdateTest extends ApiRouteTestCase
 
     public array $routeParams = ['event' => 1, 'waiver' => 1];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $event = Event::has('waivers')->firstOrFail();
@@ -50,14 +50,14 @@ class WaiverUpdateTest extends ApiRouteTestCase
 
         $response->assertStatus(422);
 
-        //Bad content
+        // Bad content
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'content' => null,
         ]);
 
         $response->assertStatus(422);
 
-        //Bad minor_waiver
+        // Bad minor_waiver
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'minor_waiver' => 'sure',
         ]);

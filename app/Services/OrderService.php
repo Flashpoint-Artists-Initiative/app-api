@@ -13,9 +13,7 @@ use Stripe\Checkout\Session;
 
 class OrderService
 {
-    public function __construct(protected StripeService $stripeService)
-    {
-    }
+    public function __construct(protected StripeService $stripeService) {}
 
     public function assertSessionDoesntHaveOrder(string $sessionId): void
     {
