@@ -11,6 +11,7 @@ use App\Models\Ticketing\Waiver;
 use App\Models\Volunteering\ShiftType;
 use App\Models\Volunteering\Team;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +21,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
+/**
+ * @property float $dollarsPerVote
+ * @property bool $votingEnabled
+ */
 class Event extends Model implements ContractsAuditable
 {
     use Auditable, HasFactory, SoftDeletes;
@@ -31,12 +36,18 @@ class Event extends Model implements ContractsAuditable
         'end_date',
         'contact_email',
         'active',
+        'settings',
     ];
 
     protected $casts = [
         'start_date' => 'date:Y/m/d',
         'end_date' => 'date:Y/m/d',
         'active' => 'boolean',
+        'settings' => AsArrayObject::class,
+    ];
+
+    protected $attributes = [
+        'settings' => '{}',
     ];
 
     /**
@@ -106,6 +117,20 @@ class Event extends Model implements ContractsAuditable
         return Attribute::make(
             get: fn (mixed $value, array $attributes) => $attributes['end_date'],
             set: fn (string $value) => Carbon::parse($value)->format('Y-m-d'),
+        );
+    }
+
+    public function dollarsPerVote(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => $this->settings['dollars_per_vote'] ?? 1.0,
+        );
+    }
+
+    public function votingEnabled(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => $this->settings['voting_enabled'] ?? false,
         );
     }
 }

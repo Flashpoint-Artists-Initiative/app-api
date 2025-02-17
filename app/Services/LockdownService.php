@@ -13,7 +13,7 @@ class LockdownService
      */
     public static function lockdownTypes(): array
     {
-        return ['site', 'ticket', 'volunteer'];
+        return ['site', 'ticket', 'volunteer', 'grants'];
     }
 
     public function setLockdown(string $type, bool $status): void

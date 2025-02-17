@@ -211,6 +211,7 @@ return [
                 'audits.*',
                 'lockdown.*',
                 'metrics.*',
+                'artProjects.*',
             ],
             RolesEnum::EventManager->value => [
                 'events.viewAny',
@@ -242,6 +243,16 @@ return [
                 'ticketTransfers.*',
                 'orders.*',
             ],
+            RolesEnum::ArtGrantReviewer->value => [
+                'artProjects.viewAny',
+                'artProjects.view',
+                'artProjects.viewPending',
+                'artProjects.viewDeleted',
+                'artProjects.create',
+                'artProjects.update',
+                'artProjects.delete',
+                'artProjects.restore',
+            ],
             // Super Admin automatically has all permissions, see AuthServiceProvider
             RolesEnum::SuperAdmin->value => [],
         ],
@@ -250,6 +261,7 @@ return [
             'me.*',
             'events.view',
             'waivers.view',
+            'artProjects.vote',
         ],
         // All permissions that will be checked need to be defined here
         'permissions' => [
@@ -391,6 +403,18 @@ return [
             'metrics.salesData',
             'metrics.ticketData',
             'metrics.*',
+
+            'artProjects.viewAny',
+            'artProjects.view',
+            'artProjects.viewPending',
+            'artProjects.viewDeleted',
+            'artProjects.create',
+            'artProjects.update',
+            'artProjects.delete',
+            'artProjects.restore',
+            'artProjects.forceDelete',
+            'artProjects.vote',
+            'artProjects.*',
         ],
     ],
 ];

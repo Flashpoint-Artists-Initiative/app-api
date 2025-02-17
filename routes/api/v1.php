@@ -12,6 +12,7 @@ Route::group([], base_path('routes/api/v1/checkout.php'));
 Route::group([], base_path('routes/api/v1/me.php'));
 Route::group([], base_path('routes/api/v1/admin.php'));
 Route::group([], base_path('routes/api/v1/volunteer.php'));
+Route::group([], base_path('routes/api/v1/grants.php'));
 
 Route::middleware([StripeWebhookMiddleware::class])->post('/stripe', [StripeWebhookController::class, 'webhookAction'])->name('api.stripe-webhook');
 
