@@ -6,6 +6,7 @@ namespace Tests\Unit\Models\Grants;
 
 use App\Models\Grants\ArtProject;
 use App\Models\Grants\ProjectImage;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ProjectImageTest extends TestCase
@@ -13,7 +14,8 @@ class ProjectImageTest extends TestCase
     /**
      * Test that a ProjectImage can be created.
      */
-    public function test_project_image_can_be_created(): void
+    #[Test]
+    public function project_image_can_be_created(): void
     {
         /** @var ArtProject $artProject */
         $artProject = ArtProject::factory()->create();
@@ -34,7 +36,8 @@ class ProjectImageTest extends TestCase
     /**
      * Test the relationship between ProjectImage and ArtProject.
      */
-    public function test_project_image_belongs_to_project(): void
+    #[Test]
+    public function project_image_belongs_to_project(): void
     {
         /** @var ArtProject $artProject */
         $artProject = ArtProject::factory()->create();

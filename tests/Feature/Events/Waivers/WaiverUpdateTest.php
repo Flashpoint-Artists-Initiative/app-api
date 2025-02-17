@@ -8,6 +8,7 @@ use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\Ticketing\CompletedWaiver;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class WaiverUpdateTest extends ApiRouteTestCase
@@ -27,7 +28,8 @@ class WaiverUpdateTest extends ApiRouteTestCase
         $this->addEndpointParams(['event' => $event->id, 'waiver' => $waiver->id]);
     }
 
-    public function test_waiver_update_call_with_valid_data_returns_a_successful_response(): void
+    #[Test]
+    public function waiver_update_call_with_valid_data_returns_a_successful_response(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -39,7 +41,8 @@ class WaiverUpdateTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_waiver_update_call_with_invalid_data_returns_a_validation_error(): void
+    #[Test]
+    public function waiver_update_call_with_invalid_data_returns_a_validation_error(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -65,7 +68,8 @@ class WaiverUpdateTest extends ApiRouteTestCase
         $response->assertStatus(422);
     }
 
-    public function test_waiver_update_call_without_permission_returns_error(): void
+    #[Test]
+    public function waiver_update_call_without_permission_returns_error(): void
     {
 
         $user = User::doesntHave('roles')->firstOrFail();
@@ -80,7 +84,8 @@ class WaiverUpdateTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_waiver_update_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function waiver_update_call_not_logged_in_returns_error(): void
     {
         $response = $this->patchJson($this->endpoint, [
             'title' => 'Test Waiver Update',
@@ -90,7 +95,8 @@ class WaiverUpdateTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_waiver_update_call_with_completed_waivers_returns_error(): void
+    #[Test]
+    public function waiver_update_call_with_completed_waivers_returns_error(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 

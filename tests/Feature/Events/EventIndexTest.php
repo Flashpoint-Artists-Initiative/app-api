@@ -7,6 +7,7 @@ namespace Tests\Feature\Events;
 use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class EventIndexTest extends ApiRouteTestCase
@@ -15,7 +16,8 @@ class EventIndexTest extends ApiRouteTestCase
 
     public string $routeName = 'api.events.index';
 
-    public function test_event_index_call_while_not_logged_in_returns_only_active_untrashed_events(): void
+    #[Test]
+    public function event_index_call_while_not_logged_in_returns_only_active_untrashed_events(): void
     {
         $event_count = Event::where('active', true)->withoutTrashed()->count();
 
@@ -24,7 +26,8 @@ class EventIndexTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJsonCount($event_count, 'data');
     }
 
-    public function test_event_index_call_with_permission_returns_pending_events(): void
+    #[Test]
+    public function event_index_call_with_permission_returns_pending_events(): void
     {
         $active_event_count = Event::where('active', true)->withoutTrashed()->count();
         $event_count = Event::withoutTrashed()->count();
@@ -38,7 +41,8 @@ class EventIndexTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJsonPath('meta.total', $event_count);
     }
 
-    public function test_event_index_call_with_permission_returns_trashed_events(): void
+    #[Test]
+    public function event_index_call_with_permission_returns_trashed_events(): void
     {
         $this->buildEndpoint(params: ['with_trashed' => true]);
 
@@ -54,7 +58,8 @@ class EventIndexTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJsonPath('meta.total', $event_count);
     }
 
-    public function test_event_index_call_without_permission_ignores_trashed_events(): void
+    #[Test]
+    public function event_index_call_without_permission_ignores_trashed_events(): void
     {
         $this->buildEndpoint(params: ['with_trashed' => true]);
 
@@ -71,7 +76,8 @@ class EventIndexTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJsonPath('meta.total', $existing_event_count);
     }
 
-    public function test_event_index_call_with_only_trashed_returns_correct_events(): void
+    #[Test]
+    public function event_index_call_with_only_trashed_returns_correct_events(): void
     {
         $this->buildEndpoint(params: ['only_trashed' => true]);
 
@@ -87,7 +93,8 @@ class EventIndexTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJsonPath('meta.total', $trashed_event_count);
     }
 
-    public function test_event_index_call_as_admin_returns_all_events(): void
+    #[Test]
+    public function event_index_call_as_admin_returns_all_events(): void
     {
         $this->buildEndpoint(params: ['with_trashed' => true]);
 

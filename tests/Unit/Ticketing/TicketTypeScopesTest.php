@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Ticketing\TicketType;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class TicketTypeScopesTest extends TestCase
@@ -16,7 +17,8 @@ class TicketTypeScopesTest extends TestCase
 
     public bool $seed = true;
 
-    public function test_active_scope_returns_correct_models(): void
+    #[Test]
+    public function active_scope_returns_correct_models(): void
     {
         $ticketTypes = TicketType::active()->get();
 
@@ -25,7 +27,8 @@ class TicketTypeScopesTest extends TestCase
         }
     }
 
-    public function test_on_sale_scope_returns_correct_models(): void
+    #[Test]
+    public function on_sale_scope_returns_correct_models(): void
     {
         $ticketTypes = TicketType::query()->onSale()->get();
 
@@ -35,7 +38,8 @@ class TicketTypeScopesTest extends TestCase
         }
     }
 
-    public function test_has_quantity_scope_returns_correct_models(): void
+    #[Test]
+    public function has_quantity_scope_returns_correct_models(): void
     {
         $ticketTypes = TicketType::hasQuantity()->get();
 
@@ -44,7 +48,8 @@ class TicketTypeScopesTest extends TestCase
         }
     }
 
-    public function test_event_scope_returns_correct_models(): void
+    #[Test]
+    public function event_scope_returns_correct_models(): void
     {
         $event = Event::has('ticketTypes')->with('ticketTypes')->firstOrFail();
         $ticketTypes = TicketType::query()->event($event->id)->get();

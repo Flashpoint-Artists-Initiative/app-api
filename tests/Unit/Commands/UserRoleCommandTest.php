@@ -6,6 +6,7 @@ namespace Tests\Unit\Commands;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class UserRoleCommandTest extends TestCase
@@ -14,7 +15,8 @@ class UserRoleCommandTest extends TestCase
 
     // public bool $seed = true;
 
-    public function test_user_role_with_provided_input_returns_success(): void
+    #[Test]
+    public function user_role_with_provided_input_returns_success(): void
     {
         $user = User::factory()->create();
 
@@ -31,7 +33,8 @@ class UserRoleCommandTest extends TestCase
         $this->assertTrue($user->hasRole('admin'));
     }
 
-    public function test_user_role_delete_with_provided_input_returns_success(): void
+    #[Test]
+    public function user_role_delete_with_provided_input_returns_success(): void
     {
         $user = User::factory()->create();
         $user->assignRole('admin');
@@ -48,7 +51,8 @@ class UserRoleCommandTest extends TestCase
         $this->assertEmpty($user->roles);
     }
 
-    public function test_user_role_with_invalid_user_returns_one(): void
+    #[Test]
+    public function user_role_with_invalid_user_returns_one(): void
     {
         $result = $this->artisan('user:role 999999 admin');
 
@@ -56,7 +60,8 @@ class UserRoleCommandTest extends TestCase
         $result->assertExitCode(1);
     }
 
-    public function test_user_role_with_invalid_role_returns_two(): void
+    #[Test]
+    public function user_role_with_invalid_role_returns_two(): void
     {
         $user = User::factory()->create();
 

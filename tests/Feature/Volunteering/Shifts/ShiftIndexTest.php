@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Models\User;
 use App\Models\Volunteering\Shift;
 use App\Models\Volunteering\ShiftType;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class ShiftIndexTest extends ApiRouteTestCase
@@ -29,14 +30,16 @@ class ShiftIndexTest extends ApiRouteTestCase
         $this->buildEndpoint();
     }
 
-    public function test_shift_index_call_while_not_logged_in_returns_error(): void
+    #[Test]
+    public function shift_index_call_while_not_logged_in_returns_error(): void
     {
         $response = $this->get($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_shift_index_call_for_active_event_and_team_returns_success(): void
+    #[Test]
+    public function shift_index_call_for_active_event_and_team_returns_success(): void
     {
         $event = Event::where('active', true)->has('teams')->firstOrFail();
         $team = $event->teams()->where('active', true)->has('shiftTypes')->firstOrFail();
@@ -53,7 +56,8 @@ class ShiftIndexTest extends ApiRouteTestCase
         $response->assertJsonCount($shiftCount, 'data');
     }
 
-    public function test_shift_index_call_for_active_event_and_inactive_team_returns_failure(): void
+    #[Test]
+    public function shift_index_call_for_active_event_and_inactive_team_returns_failure(): void
     {
         $event = Event::where('active', true)->has('teams')->firstOrFail();
         $team = $event->teams()->where('active', false)->has('shiftTypes')->firstOrFail();
@@ -67,7 +71,8 @@ class ShiftIndexTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_shift_index_call_for_inactive_event_and_active_team_returns_failure(): void
+    #[Test]
+    public function shift_index_call_for_inactive_event_and_active_team_returns_failure(): void
     {
         $event = Event::where('active', false)->has('teams')->firstOrFail();
         $team = $event->teams()->where('active', true)->has('shiftTypes')->firstOrFail();
@@ -81,7 +86,8 @@ class ShiftIndexTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_shift_index_call_for_inactive_event_and_team_returns_failure(): void
+    #[Test]
+    public function shift_index_call_for_inactive_event_and_team_returns_failure(): void
     {
         $event = Event::where('active', false)->has('teams')->firstOrFail();
         $team = $event->teams()->where('active', false)->has('shiftTypes')->firstOrFail();
@@ -95,7 +101,8 @@ class ShiftIndexTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_shift_index_call_for_inactive_event_and_team_as_admin_returns_success(): void
+    #[Test]
+    public function shift_index_call_for_inactive_event_and_team_as_admin_returns_success(): void
     {
         $event = Event::where('active', false)->has('teams')->firstOrFail();
         $team = $event->teams()->where('active', false)->has('shiftTypes')->firstOrFail();

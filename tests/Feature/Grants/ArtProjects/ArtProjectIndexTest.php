@@ -8,6 +8,7 @@ use App\Enums\ArtProjectStatus;
 use App\Enums\RolesEnum;
 use App\Models\Grants\ArtProject;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class ArtProjectIndexTest extends ApiRouteTestCase
@@ -16,7 +17,8 @@ class ArtProjectIndexTest extends ApiRouteTestCase
 
     public string $routeName = 'api.art-projects.index';
 
-    public function test_art_project_index_call_returns_a_successful_response(): void
+    #[Test]
+    public function art_project_index_call_returns_a_successful_response(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -25,14 +27,16 @@ class ArtProjectIndexTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_art_project_index_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function art_project_index_call_not_logged_in_returns_error(): void
     {
         $response = $this->getJson($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_art_project_index_hides_non_approved_projects_for_users_without_permission(): void
+    #[Test]
+    public function art_project_index_hides_non_approved_projects_for_users_without_permission(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
 
@@ -44,7 +48,8 @@ class ArtProjectIndexTest extends ApiRouteTestCase
         $response->assertJsonFragment(['project_status' => ArtProjectStatus::Approved->value]);
     }
 
-    public function test_art_project_index_hides_soft_deleted_projects_for_users_without_permission(): void
+    #[Test]
+    public function art_project_index_hides_soft_deleted_projects_for_users_without_permission(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
         ArtProject::factory()->create(['project_status' => ArtProjectStatus::Approved, 'deleted_at' => now()]);
@@ -61,7 +66,8 @@ class ArtProjectIndexTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJsonPath('meta.total', $existingProjectCount);
     }
 
-    public function test_art_project_index_shows_soft_deleted_projects_for_users_with_permission(): void
+    #[Test]
+    public function art_project_index_shows_soft_deleted_projects_for_users_with_permission(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
         ArtProject::factory()->create(['deleted_at' => now()]);

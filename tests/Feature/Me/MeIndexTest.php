@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Me;
 
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class MeIndexTest extends ApiRouteTestCase
@@ -13,14 +14,16 @@ class MeIndexTest extends ApiRouteTestCase
 
     public string $routeName = 'api.me.index';
 
-    public function test_me_index_call_while_not_logged_in_returns_error(): void
+    #[Test]
+    public function me_index_call_while_not_logged_in_returns_error(): void
     {
         $response = $this->get($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_me_index_call_as_user_returns_success(): void
+    #[Test]
+    public function me_index_call_as_user_returns_success(): void
     {
         $user = User::firstOrFail();
         $response = $this->actingAs($user)->get($this->endpoint);
@@ -28,7 +31,8 @@ class MeIndexTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJsonPath('data.id', $user->id);
     }
 
-    public function test_me_index_call_with_includes_returns_success(): void
+    #[Test]
+    public function me_index_call_with_includes_returns_success(): void
     {
         // reservedTickets
         $user = User::has('reservedTickets')->firstOrFail();

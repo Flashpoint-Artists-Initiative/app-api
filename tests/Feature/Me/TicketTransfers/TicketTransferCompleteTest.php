@@ -6,6 +6,7 @@ namespace Tests\Feature\Me\TicketTransfers;
 
 use App\Models\Ticketing\TicketTransfer;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class TicketTransferCompleteTest extends ApiRouteTestCase
@@ -31,14 +32,16 @@ class TicketTransferCompleteTest extends ApiRouteTestCase
         $this->buildEndpoint();
     }
 
-    public function test_me_ticket_transfer_complete_call_while_not_logged_in_fails(): void
+    #[Test]
+    public function me_ticket_transfer_complete_call_while_not_logged_in_fails(): void
     {
         $response = $this->post($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_me_ticket_transfer_complete_call_while_logged_in_succeeds(): void
+    #[Test]
+    public function me_ticket_transfer_complete_call_while_logged_in_succeeds(): void
     {
         $response = $this->actingAs($this->user)->post($this->endpoint);
         $ticket = $this->transfer->purchasedTickets->firstOrFail();
@@ -52,7 +55,8 @@ class TicketTransferCompleteTest extends ApiRouteTestCase
         $this->assertEquals($this->user->id, $ticket->user_id);
     }
 
-    public function test_me_ticket_transfer_complete_call_for_completed_transfer_fails(): void
+    #[Test]
+    public function me_ticket_transfer_complete_call_for_completed_transfer_fails(): void
     {
         $ticket = $this->transfer->purchasedTickets->firstOrFail();
 
@@ -68,7 +72,8 @@ class TicketTransferCompleteTest extends ApiRouteTestCase
         $this->assertNotEquals($this->user->id, $ticket->user_id);
     }
 
-    public function test_me_ticket_transfer_complete_call_for_invalid_transfer_fails(): void
+    #[Test]
+    public function me_ticket_transfer_complete_call_for_invalid_transfer_fails(): void
     {
         $transfer = TicketTransfer::where('recipient_email', '!=', $this->user->email)->firstOrFail();
         $ticket = $transfer->purchasedTickets->firstOrFail();

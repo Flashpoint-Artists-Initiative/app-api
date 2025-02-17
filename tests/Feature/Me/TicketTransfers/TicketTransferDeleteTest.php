@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Me\TicketTransfers;
 
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class TicketTransferDeleteTest extends ApiRouteTestCase
@@ -27,21 +28,24 @@ class TicketTransferDeleteTest extends ApiRouteTestCase
         $this->buildEndpoint();
     }
 
-    public function test_me_ticket_transfer_delete_call_while_not_logged_in_fails(): void
+    #[Test]
+    public function me_ticket_transfer_delete_call_while_not_logged_in_fails(): void
     {
         $response = $this->delete($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_me_ticket_transfer_delete_call_while_logged_in_succeeds(): void
+    #[Test]
+    public function me_ticket_transfer_delete_call_while_logged_in_succeeds(): void
     {
         $response = $this->actingAs($this->user)->delete($this->endpoint);
 
         $response->assertStatus(200);
     }
 
-    public function test_me_ticket_transfer_delete_call_for_completed_transfer_fails(): void
+    #[Test]
+    public function me_ticket_transfer_delete_call_for_completed_transfer_fails(): void
     {
         $transfer = $this->user->ticketTransfers->firstOrFail();
         $transfer->completed = true;

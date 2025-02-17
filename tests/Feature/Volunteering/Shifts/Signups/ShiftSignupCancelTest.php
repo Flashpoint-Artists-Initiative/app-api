@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\User;
 use App\Models\Volunteering\Shift;
 use App\Models\Volunteering\Team;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class ShiftSignupCancelTest extends ApiRouteTestCase
@@ -18,7 +19,8 @@ class ShiftSignupCancelTest extends ApiRouteTestCase
 
     public array $routeParams = ['shift' => 1];
 
-    public function test_shift_cancel_call_returns_a_successful_response(): void
+    #[Test]
+    public function shift_cancel_call_returns_a_successful_response(): void
     {
         $user = User::factory()->create();
         $preSignup = Shift::findOrFail(1);
@@ -34,7 +36,8 @@ class ShiftSignupCancelTest extends ApiRouteTestCase
         $this->assertCount(0, $postSignup->volunteers);
     }
 
-    public function test_shift_cancel_call_for_invalid_shift_returns_a_successful_response(): void
+    #[Test]
+    public function shift_cancel_call_for_invalid_shift_returns_a_successful_response(): void
     {
         $user = User::factory()->create();
         $preSignup = Shift::findOrFail(1);
@@ -45,7 +48,8 @@ class ShiftSignupCancelTest extends ApiRouteTestCase
         $response->assertStatus(422);
     }
 
-    public function test_shift_cancel_call_for_inactive_team_returns_error(): void
+    #[Test]
+    public function shift_cancel_call_for_inactive_team_returns_error(): void
     {
         $team = Team::where('active', false)->has('shifts')->firstOrFail();
         $shift = $team->shifts->firstOrFail();
@@ -60,7 +64,8 @@ class ShiftSignupCancelTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_shift_cancel_call_for_inactive_event_returns_error(): void
+    #[Test]
+    public function shift_cancel_call_for_inactive_event_returns_error(): void
     {
         $event = Event::where('active', false)->has('teams.shifts')->firstOrFail();
         $team = $event->teams()->where('active', true)->has('shifts')->firstOrFail();
@@ -76,7 +81,8 @@ class ShiftSignupCancelTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_shift_cancel_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function shift_cancel_call_not_logged_in_returns_error(): void
     {
         $response = $this->delete($this->endpoint);
 

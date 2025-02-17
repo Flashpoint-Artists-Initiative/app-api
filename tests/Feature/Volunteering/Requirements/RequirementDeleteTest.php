@@ -6,6 +6,7 @@ namespace Tests\Feature\Volunteering\Requirements;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class RequirementDeleteTest extends ApiRouteTestCase
@@ -16,14 +17,16 @@ class RequirementDeleteTest extends ApiRouteTestCase
 
     public array $routeParams = ['shift_requirement' => 1];
 
-    public function test_requirement_delete_call_while_not_logged_in_fails(): void
+    #[Test]
+    public function requirement_delete_call_while_not_logged_in_fails(): void
     {
         $response = $this->delete($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_requirement_delete_call_without_permission_fails(): void
+    #[Test]
+    public function requirement_delete_call_without_permission_fails(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
 
@@ -32,7 +35,8 @@ class RequirementDeleteTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_requirement_delete_call_as_admin_succeeds(): void
+    #[Test]
+    public function requirement_delete_call_as_admin_succeeds(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 

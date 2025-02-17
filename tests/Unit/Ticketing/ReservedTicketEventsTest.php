@@ -7,6 +7,7 @@ namespace Tests\Unit\Ticketing;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ReservedTicketEventsTest extends TestCase
@@ -15,7 +16,8 @@ class ReservedTicketEventsTest extends TestCase
 
     public bool $seed = true;
 
-    public function test_update_reserved_ticket_with_purchased_ticket_fails(): void
+    #[Test]
+    public function update_reserved_ticket_with_purchased_ticket_fails(): void
     {
         $user = User::firstOrFail();
         $reservedTicket = ReservedTicket::has('purchasedTicket')->firstOrFail();
@@ -26,7 +28,8 @@ class ReservedTicketEventsTest extends TestCase
         $this->assertFalse($success);
     }
 
-    public function test_update_reserved_ticket_without_purchased_ticket_succeeds(): void
+    #[Test]
+    public function update_reserved_ticket_without_purchased_ticket_succeeds(): void
     {
         $user = User::firstOrFail();
         $reservedTicket = ReservedTicket::doesntHave('purchasedTicket')->firstOrFail();
@@ -37,7 +40,8 @@ class ReservedTicketEventsTest extends TestCase
         $this->assertTrue($success);
     }
 
-    public function test_delete_reserved_ticket_with_purchased_ticket_fails(): void
+    #[Test]
+    public function delete_reserved_ticket_with_purchased_ticket_fails(): void
     {
         $user = User::firstOrFail();
         $reservedTicket = ReservedTicket::has('purchasedTicket')->firstOrFail();
@@ -47,7 +51,8 @@ class ReservedTicketEventsTest extends TestCase
         $this->assertModelExists($reservedTicket);
     }
 
-    public function test_delete_reserved_ticket_without_purchased_ticket_succeeds(): void
+    #[Test]
+    public function delete_reserved_ticket_without_purchased_ticket_succeeds(): void
     {
         $user = User::firstOrFail();
         $reservedTicket = ReservedTicket::doesntHave('purchasedTicket')->firstOrFail();

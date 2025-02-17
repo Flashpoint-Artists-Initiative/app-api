@@ -8,6 +8,7 @@ use App\Mail\OrderCompletedMail;
 use App\Models\Ticketing\Order;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Mail;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class MailTest extends TestCase
@@ -16,7 +17,8 @@ class MailTest extends TestCase
 
     public bool $seed = true;
 
-    public function test_order_completed_mail_content(): void
+    #[Test]
+    public function order_completed_mail_content(): void
     {
         $order = Order::firstOrFail();
         $mail = new OrderCompletedMail($order);
@@ -38,7 +40,8 @@ class MailTest extends TestCase
         ]);
     }
 
-    public function test_order_completed_mail_sending(): void
+    #[Test]
+    public function order_completed_mail_sending(): void
     {
         Mail::fake();
 

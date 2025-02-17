@@ -6,6 +6,7 @@ namespace Tests\Feature\Users\TicketTransfers;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class TicketTransferIndexTest extends ApiRouteTestCase
@@ -26,14 +27,16 @@ class TicketTransferIndexTest extends ApiRouteTestCase
         $this->buildEndpoint();
     }
 
-    public function test_ticket_transfer_index_call_while_not_logged_in_returns_error(): void
+    #[Test]
+    public function ticket_transfer_index_call_while_not_logged_in_returns_error(): void
     {
         $response = $this->get($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_ticket_transfer_index_call_without_permission_returns_success(): void
+    #[Test]
+    public function ticket_transfer_index_call_without_permission_returns_success(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
 
@@ -42,7 +45,8 @@ class TicketTransferIndexTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_ticket_transfer_index_call_with_permission_returns_success(): void
+    #[Test]
+    public function ticket_transfer_index_call_with_permission_returns_success(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 

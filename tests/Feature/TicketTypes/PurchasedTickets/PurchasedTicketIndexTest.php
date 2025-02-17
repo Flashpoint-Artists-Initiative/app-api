@@ -6,6 +6,7 @@ namespace Tests\Feature\TicketTypes\PurchasedTickets;
 
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class PurchasedTicketIndexTest extends ApiRouteTestCase
@@ -16,14 +17,16 @@ class PurchasedTicketIndexTest extends ApiRouteTestCase
 
     public array $routeParams = ['ticket_type' => 1];
 
-    public function test_purchased_ticket_index_call_while_not_logged_in_returns_error(): void
+    #[Test]
+    public function purchased_ticket_index_call_while_not_logged_in_returns_error(): void
     {
         $response = $this->get($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_purchased_ticket_index_call_without_permission_returns_only_that_users_tickets(): void
+    #[Test]
+    public function purchased_ticket_index_call_without_permission_returns_only_that_users_tickets(): void
     {
         $ticketType = TicketType::has('purchasedTickets')->active()->firstOrFail();
         $user = $ticketType->purchasedTickets()->firstOrFail()->user()->firstOrFail();
@@ -38,7 +41,8 @@ class PurchasedTicketIndexTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJsonCount($userPurchasedTicketsCount, 'data');
     }
 
-    public function test_purchased_ticket_index_call_with_permission_returns_success(): void
+    #[Test]
+    public function purchased_ticket_index_call_with_permission_returns_success(): void
     {
         $ticketType = TicketType::has('purchasedTickets')->active()->firstOrFail();
         $purchasedTicketsCount = $ticketType->purchasedTickets()->count();

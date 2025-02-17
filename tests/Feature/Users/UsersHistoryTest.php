@@ -6,6 +6,7 @@ namespace Tests\Feature\Users;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class UsersHistoryTest extends ApiRouteTestCase
@@ -16,14 +17,16 @@ class UsersHistoryTest extends ApiRouteTestCase
 
     public array $routeParams = ['user' => 1];
 
-    public function test_users_history_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function users_history_call_not_logged_in_returns_error(): void
     {
         $response = $this->get($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_users_history_call_without_permission_returns_error(): void
+    #[Test]
+    public function users_history_call_without_permission_returns_error(): void
     {
         $user = User::factory()->create([
             'email' => 'newuser@example.com',
@@ -38,7 +41,8 @@ class UsersHistoryTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_users_history_call_with_permission_is_successful(): void
+    #[Test]
+    public function users_history_call_with_permission_is_successful(): void
     {
         $admin = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -50,7 +54,8 @@ class UsersHistoryTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJsonPath('data.0.user_id', $this->routeParams['user']);
     }
 
-    public function test_users_history_call_to_own_id_without_permission_returns_error(): void
+    #[Test]
+    public function users_history_call_to_own_id_without_permission_returns_error(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
 

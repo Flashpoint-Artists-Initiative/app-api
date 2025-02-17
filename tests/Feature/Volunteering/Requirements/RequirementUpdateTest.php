@@ -6,6 +6,7 @@ namespace Tests\Feature\Volunteering\Requirements;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class RequirementUpdateTest extends ApiRouteTestCase
@@ -16,7 +17,8 @@ class RequirementUpdateTest extends ApiRouteTestCase
 
     public array $routeParams = ['shift_requirement' => 1];
 
-    public function test_requirement_update_call_with_valid_data_returns_a_successful_response(): void
+    #[Test]
+    public function requirement_update_call_with_valid_data_returns_a_successful_response(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -29,7 +31,8 @@ class RequirementUpdateTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_requirement_update_call_with_invalid_data_returns_a_validation_error(): void
+    #[Test]
+    public function requirement_update_call_with_invalid_data_returns_a_validation_error(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -55,7 +58,8 @@ class RequirementUpdateTest extends ApiRouteTestCase
         $response->assertStatus(422);
     }
 
-    public function test_requirement_update_call_without_permission_returns_error(): void
+    #[Test]
+    public function requirement_update_call_without_permission_returns_error(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
 
@@ -66,7 +70,8 @@ class RequirementUpdateTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_requirement_update_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function requirement_update_call_not_logged_in_returns_error(): void
     {
         $response = $this->patchJson($this->endpoint, [
             'name' => 'update',

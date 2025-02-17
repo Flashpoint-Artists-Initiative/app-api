@@ -8,6 +8,7 @@ use App\Enums\RolesEnum;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Testing\Fluent\AssertableJson;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class UsersUpdateTest extends ApiRouteTestCase
@@ -18,7 +19,8 @@ class UsersUpdateTest extends ApiRouteTestCase
 
     public array $routeParams = ['user' => 1];
 
-    public function test_users_update_call_with_valid_data_returns_a_successful_response(): void
+    #[Test]
+    public function users_update_call_with_valid_data_returns_a_successful_response(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
         $model = User::findOrFail($this->routeParams['user']);
@@ -38,7 +40,8 @@ class UsersUpdateTest extends ApiRouteTestCase
         );
     }
 
-    public function test_users_update_call_with_invalid_data_returns_a_validation_error(): void
+    #[Test]
+    public function users_update_call_with_invalid_data_returns_a_validation_error(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -70,7 +73,8 @@ class UsersUpdateTest extends ApiRouteTestCase
         $response->assertStatus(422);
     }
 
-    public function test_users_update_call_without_permission_returns_error(): void
+    #[Test]
+    public function users_update_call_without_permission_returns_error(): void
     {
         /** @var User $user */
         $user = User::factory()->create([
@@ -90,7 +94,8 @@ class UsersUpdateTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_users_update_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function users_update_call_not_logged_in_returns_error(): void
     {
         $response = $this->patchJson($this->endpoint, [
             'legal_name' => fake()->name(),
@@ -102,7 +107,8 @@ class UsersUpdateTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_users_update_call_as_self_succeeds(): void
+    #[Test]
+    public function users_update_call_as_self_succeeds(): void
     {
         $user = User::findOrFail(1);
 
@@ -117,7 +123,8 @@ class UsersUpdateTest extends ApiRouteTestCase
         $response->assertJsonPath('data.legal_name', 'New Name');
     }
 
-    public function test_users_update_call_changing_email_resets_email_verification(): void
+    #[Test]
+    public function users_update_call_changing_email_resets_email_verification(): void
     {
         $user = User::findorfail(2);
         $this->buildEndpoint(params: ['user' => 2]);
@@ -135,7 +142,8 @@ class UsersUpdateTest extends ApiRouteTestCase
         $this->assertFalse($user->hasVerifiedEmail());
     }
 
-    public function test_users_update_call_changing_email_sends_new_verification_email(): void
+    #[Test]
+    public function users_update_call_changing_email_sends_new_verification_email(): void
     {
         $user = User::findorfail(2);
         $this->buildEndpoint(params: ['user' => 2]);
@@ -161,7 +169,8 @@ class UsersUpdateTest extends ApiRouteTestCase
         $this->assertEquals($email->getOriginalMessage()->getTo()[0]->getAddress(), $user->email, 'Email was sent to the correct address');
     }
 
-    public function test_users_update_call_changing_password_hashes_correctly(): void
+    #[Test]
+    public function users_update_call_changing_password_hashes_correctly(): void
     {
         $user = User::findOrFail(1);
         $newPassword = 'new_password';

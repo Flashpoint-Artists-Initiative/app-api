@@ -8,6 +8,7 @@ use App\Enums\ArtProjectStatus;
 use App\Enums\RolesEnum;
 use App\Models\Grants\ArtProject;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class ArtProjectShowTest extends ApiRouteTestCase
@@ -28,7 +29,8 @@ class ArtProjectShowTest extends ApiRouteTestCase
         $this->buildEndpoint(params: ['art_project' => $this->artProject->id]);
     }
 
-    public function test_art_project_show_call_returns_a_successful_response(): void
+    #[Test]
+    public function art_project_show_call_returns_a_successful_response(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
         $artProject = ArtProject::factory()->create();
@@ -38,7 +40,8 @@ class ArtProjectShowTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_art_project_show_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function art_project_show_call_not_logged_in_returns_error(): void
     {
         $artProject = ArtProject::factory()->create();
 
@@ -47,7 +50,8 @@ class ArtProjectShowTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_art_project_show_call_as_admin_returns_trashed_art_project(): void
+    #[Test]
+    public function art_project_show_call_as_admin_returns_trashed_art_project(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
         /** @var ArtProject $artProject */
@@ -59,7 +63,8 @@ class ArtProjectShowTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_art_project_show_call_as_admin_does_not_return_trashed_art_project(): void
+    #[Test]
+    public function art_project_show_call_as_admin_does_not_return_trashed_art_project(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
         /** @var ArtProject $artProject */
@@ -71,7 +76,8 @@ class ArtProjectShowTest extends ApiRouteTestCase
         $response->assertStatus(404);
     }
 
-    public function test_art_project_show_call_as_artist_returns_pending_art_project(): void
+    #[Test]
+    public function art_project_show_call_as_artist_returns_pending_art_project(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
         /** @var ArtProject $artProject */
@@ -86,7 +92,8 @@ class ArtProjectShowTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_art_project_show_call_as_admin_returns_pending_art_project(): void
+    #[Test]
+    public function art_project_show_call_as_admin_returns_pending_art_project(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
         /** @var ArtProject $artProject */
@@ -100,7 +107,8 @@ class ArtProjectShowTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_art_project_show_call_as_non_artist_does_not_return_pending_art_project(): void
+    #[Test]
+    public function art_project_show_call_as_non_artist_does_not_return_pending_art_project(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
         /** @var ArtProject $artProject */

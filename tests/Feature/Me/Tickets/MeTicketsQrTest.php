@@ -6,6 +6,7 @@ namespace Tests\Feature\Me\Tickets;
 
 use App\Models\Event;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class MeTicketsQrTest extends ApiRouteTestCase
@@ -14,14 +15,16 @@ class MeTicketsQrTest extends ApiRouteTestCase
 
     public string $routeName = 'api.me.tickets.qr';
 
-    public function test_me_tickets_qr_call_while_not_logged_in_returns_error(): void
+    #[Test]
+    public function me_tickets_qr_call_while_not_logged_in_returns_error(): void
     {
         $response = $this->get($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_me_tickets_qr_call_as_user_returns_success(): void
+    #[Test]
+    public function me_tickets_qr_call_as_user_returns_success(): void
     {
         $user = User::has('purchasedTickets')->firstOrFail();
         $response = $this->actingAs($user)->get($this->endpoint);
@@ -29,7 +32,8 @@ class MeTicketsQrTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_me_tickets_qr_call_with_event_id_returns_success(): void
+    #[Test]
+    public function me_tickets_qr_call_with_event_id_returns_success(): void
     {
         $user = User::has('purchasedTickets')->firstOrFail();
         $ticket = $user->purchasedTickets->firstOrFail();
@@ -42,7 +46,8 @@ class MeTicketsQrTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_me_tickets_qr_call_with_invalid_event_id_returns_error(): void
+    #[Test]
+    public function me_tickets_qr_call_with_invalid_event_id_returns_error(): void
     {
         $user = User::has('purchasedTickets')->firstOrFail();
         $ticket = $user->purchasedTickets->firstOrFail();

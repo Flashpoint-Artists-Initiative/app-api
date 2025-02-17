@@ -6,6 +6,7 @@ namespace Tests\Feature\Users;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class UsersDeleteTest extends ApiRouteTestCase
@@ -16,7 +17,8 @@ class UsersDeleteTest extends ApiRouteTestCase
 
     public array $routeParams = ['user' => 1];
 
-    public function test_users_delete_call_while_not_logged_in_fails(): void
+    #[Test]
+    public function users_delete_call_while_not_logged_in_fails(): void
     {
         $this->generateUserForDeletion();
 
@@ -25,7 +27,8 @@ class UsersDeleteTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_users_force_delete_call_while_not_logged_in_fails(): void
+    #[Test]
+    public function users_force_delete_call_while_not_logged_in_fails(): void
     {
         $this->generateUserForDeletion(true);
 
@@ -34,7 +37,8 @@ class UsersDeleteTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_users_delete_call_without_permission_fails(): void
+    #[Test]
+    public function users_delete_call_without_permission_fails(): void
     {
         $this->generateUserForDeletion();
 
@@ -47,7 +51,8 @@ class UsersDeleteTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_users_delete_call_as_admin_succeeds(): void
+    #[Test]
+    public function users_delete_call_as_admin_succeeds(): void
     {
         $this->generateUserForDeletion();
 
@@ -58,7 +63,8 @@ class UsersDeleteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_users_force_delete_call_as_admin_succeeds(): void
+    #[Test]
+    public function users_force_delete_call_as_admin_succeeds(): void
     {
         $this->generateUserForDeletion(true);
 
@@ -69,7 +75,8 @@ class UsersDeleteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_users_force_delete_call_of_trashed_users_as_admin_succeeds(): void
+    #[Test]
+    public function users_force_delete_call_of_trashed_users_as_admin_succeeds(): void
     {
         $model = $this->generateUserForDeletion(true);
         $model->delete();
@@ -81,7 +88,8 @@ class UsersDeleteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_users_delete_restore_call_as_admin_succeeds(): void
+    #[Test]
+    public function users_delete_restore_call_as_admin_succeeds(): void
     {
         $model = $this->generateUserForDeletion(true);
         $model->delete();
@@ -94,7 +102,8 @@ class UsersDeleteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_users_delete_call_as_self_succeeds(): void
+    #[Test]
+    public function users_delete_call_as_self_succeeds(): void
     {
         $user = $this->generateUserForDeletion();
 

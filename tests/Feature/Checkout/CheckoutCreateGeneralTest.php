@@ -9,6 +9,7 @@ use App\Models\Ticketing\CartItem;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class CheckoutCreateGeneralTest extends ApiRouteTestCase
@@ -17,7 +18,8 @@ class CheckoutCreateGeneralTest extends ApiRouteTestCase
 
     public bool $seed = true;
 
-    public function test_cart_create_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function cart_create_call_not_logged_in_returns_error(): void
     {
         $response = $this->postJson($this->endpoint, [
             'tickets' => [
@@ -31,7 +33,8 @@ class CheckoutCreateGeneralTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_cart_create_call_with_valid_data_returns_success(): void
+    #[Test]
+    public function cart_create_call_with_valid_data_returns_success(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
         $ticketType = TicketType::query()->available()->firstOrFail();
@@ -48,7 +51,8 @@ class CheckoutCreateGeneralTest extends ApiRouteTestCase
         $response->assertStatus(201);
     }
 
-    public function test_cart_create_call_with_valid_data_twice_returns_new_cart(): void
+    #[Test]
+    public function cart_create_call_with_valid_data_twice_returns_new_cart(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
         $ticketType = TicketType::query()->available()->firstOrFail();
@@ -83,7 +87,8 @@ class CheckoutCreateGeneralTest extends ApiRouteTestCase
         $this->assertCount($cartItemCount + 2, CartItem::all());
     }
 
-    public function test_cart_create_call_with_general_and_reserved_data_returns_success(): void
+    #[Test]
+    public function cart_create_call_with_general_and_reserved_data_returns_success(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
         $ticketType = TicketType::query()->available()->firstOrFail();
@@ -108,7 +113,8 @@ class CheckoutCreateGeneralTest extends ApiRouteTestCase
         $response->assertStatus(201);
     }
 
-    public function test_cart_create_call_with_invalid_data_returns_error(): void
+    #[Test]
+    public function cart_create_call_with_invalid_data_returns_error(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
         $ticketType = TicketType::query()->available()->firstOrFail();

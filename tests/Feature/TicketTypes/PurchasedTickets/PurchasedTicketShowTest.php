@@ -9,6 +9,7 @@ use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use Illuminate\Testing\Fluent\AssertableJson;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class PurchasedTicketShowTest extends ApiRouteTestCase
@@ -35,14 +36,16 @@ class PurchasedTicketShowTest extends ApiRouteTestCase
         $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'purchased_ticket' => $this->purchasedTicket->id]);
     }
 
-    public function test_purchased_ticket_view_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function purchased_ticket_view_call_not_logged_in_returns_error(): void
     {
         $response = $this->get($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_purchased_ticket_view_call_without_permission_returns_error(): void
+    #[Test]
+    public function purchased_ticket_view_call_without_permission_returns_error(): void
     {
         $user = User::factory()->create([
             'email' => 'newuser@example.com',
@@ -58,7 +61,8 @@ class PurchasedTicketShowTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_purchased_ticket_view_call_with_permission_is_successful(): void
+    #[Test]
+    public function purchased_ticket_view_call_with_permission_is_successful(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -70,7 +74,8 @@ class PurchasedTicketShowTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_purchased_ticket_view_call_to_own_id_without_permission_is_successful(): void
+    #[Test]
+    public function purchased_ticket_view_call_to_own_id_without_permission_is_successful(): void
     {
         $this->assertFalse($this->ticketUser->can('purchasedTickets.view'));
 
@@ -79,7 +84,8 @@ class PurchasedTicketShowTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJsonPath('data.user_id', $this->ticketUser->id);
     }
 
-    public function test_purchased_ticket_view_call_with_event_is_successful(): void
+    #[Test]
+    public function purchased_ticket_view_call_with_event_is_successful(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -94,7 +100,8 @@ class PurchasedTicketShowTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->has('data.event'));
     }
 
-    public function test_purchased_ticket_view_call_with_user_is_successful(): void
+    #[Test]
+    public function purchased_ticket_view_call_with_user_is_successful(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -108,7 +115,8 @@ class PurchasedTicketShowTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->has('data.user'));
     }
 
-    public function test_purchased_ticket_view_call_with_reserved_ticket_is_successful(): void
+    #[Test]
+    public function purchased_ticket_view_call_with_reserved_ticket_is_successful(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
         $this->purchasedTicket = $this->ticketType->purchasedTickets()->has('reservedTicket')->firstOrFail();

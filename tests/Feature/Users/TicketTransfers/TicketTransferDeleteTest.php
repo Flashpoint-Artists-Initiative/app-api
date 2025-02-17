@@ -6,6 +6,7 @@ namespace Tests\Feature\Users\TicketTransfers;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class TicketTransferDeleteTest extends ApiRouteTestCase
@@ -29,14 +30,16 @@ class TicketTransferDeleteTest extends ApiRouteTestCase
         $this->buildEndpoint();
     }
 
-    public function test_ticket_transfer_delete_call_while_not_logged_in_fails(): void
+    #[Test]
+    public function ticket_transfer_delete_call_while_not_logged_in_fails(): void
     {
         $response = $this->delete($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_ticket_transfer_delete_call_without_permission_fails(): void
+    #[Test]
+    public function ticket_transfer_delete_call_without_permission_fails(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
 
@@ -47,7 +50,8 @@ class TicketTransferDeleteTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_ticket_transfer_delete_call_as_admin_succeeds(): void
+    #[Test]
+    public function ticket_transfer_delete_call_as_admin_succeeds(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -56,7 +60,8 @@ class TicketTransferDeleteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_ticket_transfer_delete_call_for_completed_transfer_fails(): void
+    #[Test]
+    public function ticket_transfer_delete_call_for_completed_transfer_fails(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
         $transfer = $this->user->ticketTransfers->firstOrFail();

@@ -8,6 +8,7 @@ use App\Models\Ticketing\CompletedWaiver;
 use App\Models\Ticketing\Waiver;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class CompletedWaiversTest extends TestCase
@@ -16,7 +17,8 @@ class CompletedWaiversTest extends TestCase
 
     public bool $seed = true;
 
-    public function test_relations(): void
+    #[Test]
+    public function relations(): void
     {
         $user = User::firstOrFail();
         $waiver = Waiver::firstOrFail();

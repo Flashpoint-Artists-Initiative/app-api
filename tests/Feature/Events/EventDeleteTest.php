@@ -7,6 +7,7 @@ namespace Tests\Feature\Events;
 use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class EventDeleteTest extends ApiRouteTestCase
@@ -17,7 +18,8 @@ class EventDeleteTest extends ApiRouteTestCase
 
     public array $routeParams = ['event' => 1];
 
-    public function test_event_delete_call_while_not_logged_in_fails(): void
+    #[Test]
+    public function event_delete_call_while_not_logged_in_fails(): void
     {
         $event = Event::where('active', true)->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id]);
@@ -27,7 +29,8 @@ class EventDeleteTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_event_force_delete_call_while_not_logged_in_fails(): void
+    #[Test]
+    public function event_force_delete_call_while_not_logged_in_fails(): void
     {
         $event = Event::where('active', true)->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id, 'force' => true]);
@@ -37,7 +40,8 @@ class EventDeleteTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_event_delete_call_without_permission_fails(): void
+    #[Test]
+    public function event_delete_call_without_permission_fails(): void
     {
         $event = Event::where('active', true)->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id]);
@@ -49,7 +53,8 @@ class EventDeleteTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_event_delete_call_as_event_manager_succeeds(): void
+    #[Test]
+    public function event_delete_call_as_event_manager_succeeds(): void
     {
         $event = Event::where('active', false)->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id]);
@@ -61,7 +66,8 @@ class EventDeleteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_event_force_delete_call_as_event_manager_fails(): void
+    #[Test]
+    public function event_force_delete_call_as_event_manager_fails(): void
     {
         $event = Event::where('active', false)->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id, 'force' => true]);
@@ -73,7 +79,8 @@ class EventDeleteTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_event_force_delete_call_of_trashed_event_as_event_manager_fails(): void
+    #[Test]
+    public function event_force_delete_call_of_trashed_event_as_event_manager_fails(): void
     {
         $event = Event::where('active', false)->onlyTrashed()->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id]);
@@ -85,7 +92,8 @@ class EventDeleteTest extends ApiRouteTestCase
         $response->assertStatus(404);
     }
 
-    public function test_event_delete_call_as_admin_succeeds(): void
+    #[Test]
+    public function event_delete_call_as_admin_succeeds(): void
     {
         $event = Event::where('active', true)->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id]);
@@ -97,7 +105,8 @@ class EventDeleteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_event_force_delete_call_as_admin_succeeds(): void
+    #[Test]
+    public function event_force_delete_call_as_admin_succeeds(): void
     {
         $event = Event::where('active', true)->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id, 'force' => true]);
@@ -109,7 +118,8 @@ class EventDeleteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_event_force_delete_call_of_trashed_event_as_admin_succeeds(): void
+    #[Test]
+    public function event_force_delete_call_of_trashed_event_as_admin_succeeds(): void
     {
         $event = Event::where('active', true)->onlyTrashed()->firstOrFail();
         $this->buildEndpoint(params: ['event' => $event->id, 'force' => true]);
@@ -121,7 +131,8 @@ class EventDeleteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_event_delete_restore_call_as_admin_succeeds(): void
+    #[Test]
+    public function event_delete_restore_call_as_admin_succeeds(): void
     {
         $event = Event::where('active', true)->onlyTrashed()->firstOrFail();
         $this->buildEndpoint(name: 'api.events.restore', params: ['event' => $event->id]);

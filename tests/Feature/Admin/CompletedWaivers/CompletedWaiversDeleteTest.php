@@ -6,6 +6,7 @@ namespace Tests\Feature\Admin\CompletedWaivers;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class CompletedWaiversDeleteTest extends ApiRouteTestCase
@@ -16,14 +17,16 @@ class CompletedWaiversDeleteTest extends ApiRouteTestCase
 
     public array $routeParams = ['completed_waiver' => 1];
 
-    public function test_completed_waivers_delete_call_while_not_logged_in_fails(): void
+    #[Test]
+    public function completed_waivers_delete_call_while_not_logged_in_fails(): void
     {
         $response = $this->delete($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_completed_waivers_delete_call_without_permission_fails(): void
+    #[Test]
+    public function completed_waivers_delete_call_without_permission_fails(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
 
@@ -34,7 +37,8 @@ class CompletedWaiversDeleteTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_completed_waivers_delete_call_as_admin_succeeds(): void
+    #[Test]
+    public function completed_waivers_delete_call_as_admin_succeeds(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 

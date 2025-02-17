@@ -6,6 +6,7 @@ namespace Tests\Feature\Events\Waivers;
 
 use App\Models\Event;
 use App\Models\Ticketing\Waiver;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class WaiverShowTest extends ApiRouteTestCase
@@ -27,7 +28,8 @@ class WaiverShowTest extends ApiRouteTestCase
         $this->addEndpointParams(['event' => $this->event->id, 'waiver' => $waiver->id]);
     }
 
-    public function test_waiver_show_call_while_not_logged_in_returns_success(): void
+    #[Test]
+    public function waiver_show_call_while_not_logged_in_returns_success(): void
     {
         $waiver = Waiver::where('event_id', $this->event->id)->firstOrFail();
 

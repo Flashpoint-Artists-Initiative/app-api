@@ -7,6 +7,7 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\URL;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class VerifyEmailTest extends ApiRouteTestCase
@@ -15,14 +16,16 @@ class VerifyEmailTest extends ApiRouteTestCase
 
     public string $routeName = 'verification.send';
 
-    public function test_send_verification_email_endpoint_requires_being_logged_in(): void
+    #[Test]
+    public function send_verification_email_endpoint_requires_being_logged_in(): void
     {
         $response = $this->postJson($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_verification_email_is_sent(): void
+    #[Test]
+    public function verification_email_is_sent(): void
     {
         User::create([
             'legal_name' => 'Test User',
@@ -48,7 +51,8 @@ class VerifyEmailTest extends ApiRouteTestCase
         $this->assertEquals($email->getOriginalMessage()->getTo()[0]->getAddress(), $user->email, 'Email was sent to the correct address');
     }
 
-    public function test_email_verification_link_works(): void
+    #[Test]
+    public function email_verification_link_works(): void
     {
         $this->markTestSkipped('Requires working frontend to test');
 
@@ -87,7 +91,8 @@ class VerifyEmailTest extends ApiRouteTestCase
         $response->assertStatus(400);
     }
 
-    public function test_email_verification_link_fails_the_second_time(): void
+    #[Test]
+    public function email_verification_link_fails_the_second_time(): void
     {
         $this->markTestSkipped('Requires working frontend to test');
 
@@ -120,7 +125,8 @@ class VerifyEmailTest extends ApiRouteTestCase
         $response->assertStatus(400);
     }
 
-    public function test_invalid_email_verification_link_fails(): void
+    #[Test]
+    public function invalid_email_verification_link_fails(): void
     {
         $this->markTestSkipped('Requires working frontend to test');
 

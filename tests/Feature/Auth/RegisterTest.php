@@ -6,6 +6,7 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use Illuminate\Testing\Fluent\AssertableJson;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class RegisterTest extends ApiRouteTestCase
@@ -14,7 +15,8 @@ class RegisterTest extends ApiRouteTestCase
 
     public string $routeName = 'register';
 
-    public function test_registering_with_valid_data_returns_a_successful_response(): void
+    #[Test]
+    public function registering_with_valid_data_returns_a_successful_response(): void
     {
         $response = $this->postJson($this->endpoint, [
             'legal_name' => 'Test User',
@@ -26,7 +28,8 @@ class RegisterTest extends ApiRouteTestCase
         $response->assertStatus(201);
     }
 
-    public function test_registering_without_valid_data_returns_validation_errors(): void
+    #[Test]
+    public function registering_without_valid_data_returns_validation_errors(): void
     {
         $response = $this->postJson($this->endpoint);
 
@@ -36,7 +39,8 @@ class RegisterTest extends ApiRouteTestCase
             });
     }
 
-    public function test_registering_with_existing_email_returns_validation_errors(): void
+    #[Test]
+    public function registering_with_existing_email_returns_validation_errors(): void
     {
         $response = $this->postJson($this->endpoint, [
             'legal_name' => 'Test User',
@@ -51,7 +55,8 @@ class RegisterTest extends ApiRouteTestCase
             });
     }
 
-    public function test_registering_when_logged_in_returns_error(): void
+    #[Test]
+    public function registering_when_logged_in_returns_error(): void
     {
         $user = User::findOrFail(1);
 

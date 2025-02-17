@@ -7,6 +7,7 @@ namespace Tests\Feature\Users\Tickets;
 use App\Enums\RolesEnum;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class TicketsIndexTest extends ApiRouteTestCase
@@ -27,14 +28,16 @@ class TicketsIndexTest extends ApiRouteTestCase
         $this->buildEndpoint();
     }
 
-    public function test_user_tickets_index_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function user_tickets_index_call_not_logged_in_returns_error(): void
     {
         $response = $this->get($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_user_tickets_index_call_without_permission_returns_error(): void
+    #[Test]
+    public function user_tickets_index_call_without_permission_returns_error(): void
     {
         /** @var User $user */
         $user = User::factory()->create([
@@ -50,7 +53,8 @@ class TicketsIndexTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_user_tickets_index_call_with_permission_is_successful(): void
+    #[Test]
+    public function user_tickets_index_call_with_permission_is_successful(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -62,7 +66,8 @@ class TicketsIndexTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_user_tickets_index_call_to_own_id_without_permission_is_successful(): void
+    #[Test]
+    public function user_tickets_index_call_to_own_id_without_permission_is_successful(): void
     {
         $this->assertFalse($this->user->can('users.view'));
 

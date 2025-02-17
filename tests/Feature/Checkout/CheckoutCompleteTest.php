@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Services\CartService;
 use App\Services\StripeService;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\Test;
 use Stripe\Checkout\Session;
 use Stripe\Event;
 use Tests\ApiRouteTestCase;
@@ -71,7 +72,8 @@ class CheckoutCompleteTest extends ApiRouteTestCase
 
     }
 
-    public function test_checkout_complete_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function checkout_complete_call_not_logged_in_returns_error(): void
     {
         auth()->logout();
 
@@ -82,7 +84,8 @@ class CheckoutCompleteTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_checkout_complete_call_without_cart_returns_error(): void
+    #[Test]
+    public function checkout_complete_call_without_cart_returns_error(): void
     {
         $user = User::firstOrFail();
         $carts = Cart::where('user_id', $user->id)->get();
@@ -98,7 +101,8 @@ class CheckoutCompleteTest extends ApiRouteTestCase
         $response->assertStatus(404);
     }
 
-    public function test_checkout_complete_call_with_cart_returns_success(): void
+    #[Test]
+    public function checkout_complete_call_with_cart_returns_success(): void
     {
         $user = User::firstOrFail();
         $purchasedTicketCount = $user->PurchasedTickets()->count();
@@ -114,7 +118,8 @@ class CheckoutCompleteTest extends ApiRouteTestCase
         $this->assertEquals(2, $user->PurchasedTickets()->count());
     }
 
-    public function test_checkout_complete_call_with_incorrect_checkout_id_returns_error(): void
+    #[Test]
+    public function checkout_complete_call_with_incorrect_checkout_id_returns_error(): void
     {
         $user = User::firstOrFail();
         /** @var Cart $cart */
@@ -129,7 +134,8 @@ class CheckoutCompleteTest extends ApiRouteTestCase
         $response->assertStatus(404);
     }
 
-    public function test_checkout_complete_call_with_incomplete_session_returns_error(): void
+    #[Test]
+    public function checkout_complete_call_with_incomplete_session_returns_error(): void
     {
         $user = User::firstOrFail();
 
@@ -142,7 +148,8 @@ class CheckoutCompleteTest extends ApiRouteTestCase
         $response->assertStatus(422);
     }
 
-    public function test_checkout_complete_call_with_unpaid_session_returns_error(): void
+    #[Test]
+    public function checkout_complete_call_with_unpaid_session_returns_error(): void
     {
         $user = User::firstOrFail();
 
@@ -155,7 +162,8 @@ class CheckoutCompleteTest extends ApiRouteTestCase
         $response->assertStatus(422);
     }
 
-    public function test_checkout_complete_call_with_existing_order_returns_error(): void
+    #[Test]
+    public function checkout_complete_call_with_existing_order_returns_error(): void
     {
         $user = User::firstOrFail();
 

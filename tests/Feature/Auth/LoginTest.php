@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Auth;
 
 use Illuminate\Testing\Fluent\AssertableJson;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class LoginTest extends ApiRouteTestCase
@@ -13,7 +14,8 @@ class LoginTest extends ApiRouteTestCase
 
     public string $routeName = 'login';
 
-    public function test_logging_in_returns_a_successful_response(): void
+    #[Test]
+    public function logging_in_returns_a_successful_response(): void
     {
         $response = $this->postJson($this->endpoint, [
             'email' => 'regular@example.com',
@@ -28,7 +30,8 @@ class LoginTest extends ApiRouteTestCase
         });
     }
 
-    public function test_logging_in_with_invalid_credentials_returns_a_failed_response(): void
+    #[Test]
+    public function logging_in_with_invalid_credentials_returns_a_failed_response(): void
     {
         $response = $this->postJson($this->endpoint, [
             'email' => 'wrong@example.com',
@@ -40,7 +43,8 @@ class LoginTest extends ApiRouteTestCase
         $response->assertJson(fn (AssertableJson $json) => $json->has('errors.password')->etc());
     }
 
-    public function test_logging_in_without_a_password_returns_a_password_validation_error(): void
+    #[Test]
+    public function logging_in_without_a_password_returns_a_password_validation_error(): void
     {
         $response = $this->postJson($this->endpoint, [
             'email' => 'regular@example.com',

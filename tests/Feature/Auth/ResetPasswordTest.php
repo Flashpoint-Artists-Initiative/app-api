@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Testing\Fluent\AssertableJson;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class ResetPasswordTest extends ApiRouteTestCase
@@ -18,7 +19,8 @@ class ResetPasswordTest extends ApiRouteTestCase
 
     public string $routeName = 'password.update';
 
-    public function test_reset_password_call_with_valid_data_returns_a_successful_response(): void
+    #[Test]
+    public function reset_password_call_with_valid_data_returns_a_successful_response(): void
     {
         $user = User::factory()->create([
             'email' => 'test@example.com',
@@ -44,7 +46,8 @@ class ResetPasswordTest extends ApiRouteTestCase
         Event::assertDispatched(PasswordReset::class);
     }
 
-    public function test_reset_password_call_with_missing_data_returns_a_validation_error(): void
+    #[Test]
+    public function reset_password_call_with_missing_data_returns_a_validation_error(): void
     {
         $response = $this->postJson($this->endpoint, []);
 
@@ -52,7 +55,8 @@ class ResetPasswordTest extends ApiRouteTestCase
             ->assertJson(fn (AssertableJson $json) => $json->hasAll(['message', 'errors.token', 'errors.password']));
     }
 
-    public function test_reset_password_call_with_invalid_email_returns_a_validation_error(): void
+    #[Test]
+    public function reset_password_call_with_invalid_email_returns_a_validation_error(): void
     {
         $response = $this->postJson($this->endpoint, ['email' => 'invalid_email']);
 
@@ -60,7 +64,8 @@ class ResetPasswordTest extends ApiRouteTestCase
             ->assertJson(fn (AssertableJson $json) => $json->hasAll(['message', 'errors.email']));
     }
 
-    public function test_reset_password_call_with_invalid_password_returns_a_validation_error(): void
+    #[Test]
+    public function reset_password_call_with_invalid_password_returns_a_validation_error(): void
     {
         $response = $this->postJson($this->endpoint, ['password' => 'short']);
 
@@ -68,7 +73,8 @@ class ResetPasswordTest extends ApiRouteTestCase
             ->assertJson(fn (AssertableJson $json) => $json->hasAll(['message', 'errors.password']));
     }
 
-    public function test_reset_password_call_with_invalid_token_returns_a_validation_error(): void
+    #[Test]
+    public function reset_password_call_with_invalid_token_returns_a_validation_error(): void
     {
         $response = $this->postJson($this->endpoint, [
             'email' => 'regular@example.com',
@@ -80,7 +86,8 @@ class ResetPasswordTest extends ApiRouteTestCase
             ->assertJson(fn (AssertableJson $json) => $json->hasAll(['message', 'errors.token']));
     }
 
-    public function test_reset_password_call_without_matching_user_email_returns_an_error(): void
+    #[Test]
+    public function reset_password_call_without_matching_user_email_returns_an_error(): void
     {
         User::factory()->create([
             'email' => 'test@example.com',
@@ -98,7 +105,8 @@ class ResetPasswordTest extends ApiRouteTestCase
             ->assertJson(fn (AssertableJson $json) => $json->hasAll(['message', 'errors.email']));
     }
 
-    public function test_reset_password_call_with_different_user_email_returns_an_error(): void
+    #[Test]
+    public function reset_password_call_with_different_user_email_returns_an_error(): void
     {
         User::factory()->create([
             'email' => 'test@example.com',
@@ -122,7 +130,8 @@ class ResetPasswordTest extends ApiRouteTestCase
             ->assertJson(fn (AssertableJson $json) => $json->hasAll(['message', 'errors.token']));
     }
 
-    public function test_reset_password_call_while_logged_in_returns_an_error(): void
+    #[Test]
+    public function reset_password_call_while_logged_in_returns_an_error(): void
     {
         $user = User::findOrFail(1);
         $response = $this->actingAs($user)->postJson($this->endpoint, ['email' => $user->email]);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Me;
 
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class MeWaiversTest extends ApiRouteTestCase
@@ -13,14 +14,16 @@ class MeWaiversTest extends ApiRouteTestCase
 
     public string $routeName = 'api.me.waivers';
 
-    public function test_me_waivers_call_while_not_logged_in_returns_error(): void
+    #[Test]
+    public function me_waivers_call_while_not_logged_in_returns_error(): void
     {
         $response = $this->get($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_me_waivers_call_as_user_returns_success(): void
+    #[Test]
+    public function me_waivers_call_as_user_returns_success(): void
     {
         $user = User::has('waivers')->firstOrFail();
         $waiverCount = $user->waivers->count();

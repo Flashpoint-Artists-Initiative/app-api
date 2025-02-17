@@ -6,6 +6,7 @@ namespace Tests\Feature\Events\Waivers;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class WaiverCreateTest extends ApiRouteTestCase
@@ -16,7 +17,8 @@ class WaiverCreateTest extends ApiRouteTestCase
 
     public array $routeParams = ['event' => 1];
 
-    public function test_waiver_create_call_with_valid_data_returns_a_successful_response(): void
+    #[Test]
+    public function waiver_create_call_with_valid_data_returns_a_successful_response(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -36,7 +38,8 @@ class WaiverCreateTest extends ApiRouteTestCase
         $response->assertStatus(201);
     }
 
-    public function test_waiver_create_call_with_invalid_data_returns_a_validation_error(): void
+    #[Test]
+    public function waiver_create_call_with_invalid_data_returns_a_validation_error(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -82,7 +85,8 @@ class WaiverCreateTest extends ApiRouteTestCase
         $response->assertStatus(422);
     }
 
-    public function test_waiver_create_call_without_permission_returns_error(): void
+    #[Test]
+    public function waiver_create_call_without_permission_returns_error(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
 
@@ -96,7 +100,8 @@ class WaiverCreateTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_waiver_create_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function waiver_create_call_not_logged_in_returns_error(): void
     {
         $response = $this->postJson($this->endpoint, [
             'title' => 'Test Waiver',

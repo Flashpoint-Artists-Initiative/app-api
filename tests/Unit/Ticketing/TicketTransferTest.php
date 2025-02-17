@@ -10,6 +10,7 @@ use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketTransfer;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class TicketTransferTest extends TestCase
@@ -18,7 +19,8 @@ class TicketTransferTest extends TestCase
 
     public bool $seed = true;
 
-    public function test_second_completion(): void
+    #[Test]
+    public function second_completion(): void
     {
         $transfer = TicketTransfer::firstOrFail();
         $ticket = $transfer->purchasedTickets->firstOrFail();
@@ -48,7 +50,8 @@ class TicketTransferTest extends TestCase
         $this->assertEquals($firstUser->id, $ticket->user_id);
     }
 
-    public function test_recipient_relation(): void
+    #[Test]
+    public function recipient_relation(): void
     {
         $transfer = TicketTransfer::firstOrFail();
         $recipient = User::factory()->create(['email' => $transfer->recipient_email]);
@@ -56,7 +59,8 @@ class TicketTransferTest extends TestCase
         $this->assertEquals($transfer->recipient?->id, $recipient->id);
     }
 
-    public function test_update_fails(): void
+    #[Test]
+    public function update_fails(): void
     {
         $transfer = TicketTransfer::firstOrFail();
         $email = $transfer->recipient_email;
@@ -73,7 +77,8 @@ class TicketTransferTest extends TestCase
         $this->assertNotEquals($transfer->recipient_email, $newEmail);
     }
 
-    public function test_event_attribute(): void
+    #[Test]
+    public function event_attribute(): void
     {
         $transfer = TicketTransfer::factory()->create();
         $reservedTicket = ReservedTicket::factory()->create();

@@ -6,6 +6,7 @@ namespace Tests\Feature\Users\Roles;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class RolesDetachTest extends ApiRouteTestCase
@@ -16,7 +17,8 @@ class RolesDetachTest extends ApiRouteTestCase
 
     public array $routeParams = ['user' => 1];
 
-    public function test_users_roles_detach_call_with_valid_data_returns_a_successful_response(): void
+    #[Test]
+    public function users_roles_detach_call_with_valid_data_returns_a_successful_response(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
         $this->buildEndpoint(params: ['user' => $user->id]);
@@ -34,7 +36,8 @@ class RolesDetachTest extends ApiRouteTestCase
         $this->assertCount(0, $user->roles);
     }
 
-    public function test_users_roles_detach_call_without_permissons_returns_an_error(): void
+    #[Test]
+    public function users_roles_detach_call_without_permissons_returns_an_error(): void
     {
         /** @var User $user */
         $user = User::with('roles')->findOrFail(1);

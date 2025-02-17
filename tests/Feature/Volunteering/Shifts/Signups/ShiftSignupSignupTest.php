@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\User;
 use App\Models\Volunteering\Shift;
 use App\Models\Volunteering\Team;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class ShiftSignupSignupTest extends ApiRouteTestCase
@@ -18,7 +19,8 @@ class ShiftSignupSignupTest extends ApiRouteTestCase
 
     public array $routeParams = ['shift' => 1];
 
-    public function test_shift_signup_call_returns_a_successful_response(): void
+    #[Test]
+    public function shift_signup_call_returns_a_successful_response(): void
     {
         $user = User::factory()->create();
         $preSignup = Shift::findOrFail(1);
@@ -32,7 +34,8 @@ class ShiftSignupSignupTest extends ApiRouteTestCase
         $this->assertCount(1, $postSignup->volunteers);
     }
 
-    public function test_shift_signup_call_for_inactive_team_returns_error(): void
+    #[Test]
+    public function shift_signup_call_for_inactive_team_returns_error(): void
     {
         $team = Team::where('active', false)->has('shifts')->firstOrFail();
         $shift = $team->shifts->firstOrFail();
@@ -45,7 +48,8 @@ class ShiftSignupSignupTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_shift_signup_call_for_inactive_event_returns_error(): void
+    #[Test]
+    public function shift_signup_call_for_inactive_event_returns_error(): void
     {
         $event = Event::where('active', false)->has('teams.shifts')->firstOrFail();
         $team = $event->teams()->where('active', true)->has('shifts')->firstOrFail();
@@ -59,14 +63,16 @@ class ShiftSignupSignupTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_shift_signup_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function shift_signup_call_not_logged_in_returns_error(): void
     {
         $response = $this->postJson($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_shift_signup_call_for_full_shift_returns_error(): void
+    #[Test]
+    public function shift_signup_call_for_full_shift_returns_error(): void
     {
         $user = User::factory()->create();
         $shift = Shift::findOrFail(1);
@@ -81,7 +87,8 @@ class ShiftSignupSignupTest extends ApiRouteTestCase
         $response->assertStatus(422);
     }
 
-    public function test_shift_signup_call_for_double_signup_returns_error(): void
+    #[Test]
+    public function shift_signup_call_for_double_signup_returns_error(): void
     {
         $user = User::factory()->create();
         $shift = Shift::findOrFail(1);
@@ -93,7 +100,8 @@ class ShiftSignupSignupTest extends ApiRouteTestCase
         $response->assertStatus(422);
     }
 
-    public function test_shift_signup_call_for_overlapping_shifts_returns_error(): void
+    #[Test]
+    public function shift_signup_call_for_overlapping_shifts_returns_error(): void
     {
         $user = User::factory()->create();
         $shift = Shift::findOrFail(1);

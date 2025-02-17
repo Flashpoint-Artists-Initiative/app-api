@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
 use Illuminate\Testing\Fluent\AssertableJson;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class TicketTypeShowTest extends ApiRouteTestCase
@@ -19,7 +20,8 @@ class TicketTypeShowTest extends ApiRouteTestCase
 
     public array $routeParams = ['event' => 1, 'ticket_type' => 1];
 
-    public function test_ticket_type_show_call_while_not_logged_in_returns_active_ticket_type(): void
+    #[Test]
+    public function ticket_type_show_call_while_not_logged_in_returns_active_ticket_type(): void
     {
         $event = Event::has('ticketTypes')->where('active', true)->firstOrFail();
         $ticket_type = $event->ticketTypes()->where('active', true)->firstOrFail();
@@ -30,7 +32,8 @@ class TicketTypeShowTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJsonPath('data.id', $ticket_type->id);
     }
 
-    public function test_ticket_type_show_call_while_not_logged_in_does_not_return_pending_ticket_type(): void
+    #[Test]
+    public function ticket_type_show_call_while_not_logged_in_does_not_return_pending_ticket_type(): void
     {
         $event = Event::has('ticketTypes')->where('active', true)->firstOrFail();
         $ticket_type = TicketType::factory()->for($event)->inactive()->create();
@@ -41,7 +44,8 @@ class TicketTypeShowTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_ticket_type_show_call_while_not_logged_in_does_not_return_trashed_ticket_type(): void
+    #[Test]
+    public function ticket_type_show_call_while_not_logged_in_does_not_return_trashed_ticket_type(): void
     {
         $event = Event::has('ticketTypes')->where('active', true)->firstOrFail();
         $ticket_type = TicketType::factory()->for($event)->trashed()->create();
@@ -52,7 +56,8 @@ class TicketTypeShowTest extends ApiRouteTestCase
         $response->assertStatus(404);
     }
 
-    public function test_ticket_type_show_call_as_admin_returns_pending_ticket_type(): void
+    #[Test]
+    public function ticket_type_show_call_as_admin_returns_pending_ticket_type(): void
     {
         $event = Event::has('ticketTypes')->where('active', true)->firstOrFail();
         $ticket_type = TicketType::factory()->for($event)->inactive()->create();
@@ -65,7 +70,8 @@ class TicketTypeShowTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJsonPath('data.id', $ticket_type->id);
     }
 
-    public function test_ticket_type_show_call_as_admin_returns_trashed_ticket_type(): void
+    #[Test]
+    public function ticket_type_show_call_as_admin_returns_trashed_ticket_type(): void
     {
         $event = Event::has('ticketTypes')->where('active', true)->firstOrFail();
         $ticket_type = TicketType::factory()->for($event)->trashed()->create();
@@ -78,7 +84,8 @@ class TicketTypeShowTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJsonPath('data.id', $ticket_type->id);
     }
 
-    public function test_ticket_types_view_call_with_purchased_tickets_is_successful(): void
+    #[Test]
+    public function ticket_types_view_call_with_purchased_tickets_is_successful(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
         $event = Event::has('purchasedTickets')->firstOrFail();
@@ -91,7 +98,8 @@ class TicketTypeShowTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->has('data.purchased_tickets'));
     }
 
-    public function test_ticket_types_view_call_with_reserved_tickets_is_successful(): void
+    #[Test]
+    public function ticket_types_view_call_with_reserved_tickets_is_successful(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
         $event = Event::has('reservedTickets')->firstOrFail();
@@ -104,7 +112,8 @@ class TicketTypeShowTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->has('data.reserved_tickets'));
     }
 
-    public function test_ticket_types_view_call_with_event_is_successful(): void
+    #[Test]
+    public function ticket_types_view_call_with_event_is_successful(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
         $event = Event::has('reservedTickets')->firstOrFail();
@@ -117,7 +126,8 @@ class TicketTypeShowTest extends ApiRouteTestCase
         $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->has('data.event'));
     }
 
-    public function test_ticket_types_view_call_with_cart_items_is_successful(): void
+    #[Test]
+    public function ticket_types_view_call_with_cart_items_is_successful(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
         $event = Event::has('reservedTickets')->firstOrFail();

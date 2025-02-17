@@ -9,6 +9,7 @@ use App\Models\Ticketing\CartItem;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class CheckoutCreateReservedTest extends ApiRouteTestCase
@@ -17,7 +18,8 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
 
     public bool $seed = true;
 
-    public function test_cart_create_reserved_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function cart_create_reserved_call_not_logged_in_returns_error(): void
     {
         $response = $this->postJson($this->endpoint, [
             'reserved' => [
@@ -28,7 +30,8 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_cart_create_reserved_call_with_valid_data_returns_success(): void
+    #[Test]
+    public function cart_create_reserved_call_with_valid_data_returns_success(): void
     {
         $user = User::doesntHave('roles')->has('availableReservedTickets')->firstOrFail();
 
@@ -41,7 +44,8 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         $response->assertStatus(201);
     }
 
-    public function test_cart_create_reserved_call_with_valid_data_twice_returns_new_cart(): void
+    #[Test]
+    public function cart_create_reserved_call_with_valid_data_twice_returns_new_cart(): void
     {
         $user = User::doesntHave('roles')->has('availableReservedTickets')->firstOrFail();
         $cartCount = Cart::count();
@@ -69,7 +73,8 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         $this->assertCount($cartItemCount + 2, CartItem::all());
     }
 
-    public function test_cart_create_reserved_call_with_expiration_date_returns_success(): void
+    #[Test]
+    public function cart_create_reserved_call_with_expiration_date_returns_success(): void
     {
         $user = User::doesntHave('roles')->doesntHave('reservedTickets')->firstOrFail();
 
@@ -90,7 +95,8 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         $response->assertStatus(201);
     }
 
-    public function test_cart_create_reserved_call_without_expiration_date_and_not_on_sale_type_returns_failure(): void
+    #[Test]
+    public function cart_create_reserved_call_without_expiration_date_and_not_on_sale_type_returns_failure(): void
     {
         $user = User::doesntHave('roles')->doesntHave('reservedTickets')->firstOrFail();
 
@@ -110,7 +116,8 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         $response->assertStatus(422);
     }
 
-    public function test_cart_create_reserved_call_without_expiration_date_and_on_sale_type_returns_success(): void
+    #[Test]
+    public function cart_create_reserved_call_without_expiration_date_and_on_sale_type_returns_success(): void
     {
         $user = User::doesntHave('roles')->doesntHave('reservedTickets')->firstOrFail();
 
@@ -130,7 +137,8 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         $response->assertStatus(201);
     }
 
-    public function test_cart_create_reserved_call_with_inactive_type_returns_failure(): void
+    #[Test]
+    public function cart_create_reserved_call_with_inactive_type_returns_failure(): void
     {
         $user = User::doesntHave('roles')->doesntHave('reservedTickets')->firstOrFail();
 
@@ -149,7 +157,8 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         $response->assertStatus(422);
     }
 
-    public function test_cart_create_reserved_call_with_zero_quantity_type_returns_success(): void
+    #[Test]
+    public function cart_create_reserved_call_with_zero_quantity_type_returns_success(): void
     {
         $user = User::doesntHave('roles')->doesntHave('reservedTickets')->firstOrFail();
 
@@ -168,7 +177,8 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
         $response->assertStatus(201);
     }
 
-    public function test_cart_create_reserved_call_with_invalid_data_returns_error(): void
+    #[Test]
+    public function cart_create_reserved_call_with_invalid_data_returns_error(): void
     {
         $user = User::doesntHave('roles')->has('availableReservedTickets')->firstOrFail();
         $availableReservedTicket = $user->availableReservedTickets->firstOrFail();

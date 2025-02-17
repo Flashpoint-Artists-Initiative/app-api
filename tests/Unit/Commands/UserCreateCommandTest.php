@@ -6,6 +6,7 @@ namespace Tests\Unit\Commands;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class UserCreateCommandTest extends TestCase
@@ -14,7 +15,8 @@ class UserCreateCommandTest extends TestCase
 
     public bool $seed = true;
 
-    public function test_user_create_with_provided_input_returns_success(): void
+    #[Test]
+    public function user_create_with_provided_input_returns_success(): void
     {
         $count = User::count();
 
@@ -31,7 +33,8 @@ class UserCreateCommandTest extends TestCase
         $this->assertTrue($user->hasRole('admin'));
     }
 
-    public function test_user_create_command_with_prompts_returns_success(): void
+    #[Test]
+    public function user_create_command_with_prompts_returns_success(): void
     {
 
         $pendingCommand = $this->artisan('user:create');
@@ -61,7 +64,8 @@ class UserCreateCommandTest extends TestCase
         $this->assertTrue($user->hasRole('admin'));
     }
 
-    public function test_user_create_with_provided_input_and_no_confirmation_returns_one(): void
+    #[Test]
+    public function user_create_with_provided_input_and_no_confirmation_returns_one(): void
     {
         $pendingCommand = $this->artisan('user:create "Test User" "test@test-example.com" "1980-01-02", "password" --preferred_name="My Name" --role="admin"');
 
@@ -71,7 +75,8 @@ class UserCreateCommandTest extends TestCase
             ->assertExitCode(1);
     }
 
-    public function test_user_create_with_duplicate_email_returns_two(): void
+    #[Test]
+    public function user_create_with_duplicate_email_returns_two(): void
     {
         User::factory()->create(['email' => 'test@test-example.com']);
 

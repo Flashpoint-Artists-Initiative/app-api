@@ -9,6 +9,7 @@ use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\Grants\ArtProject;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class ArtProjectVoteTest extends ApiRouteTestCase
@@ -39,7 +40,8 @@ class ArtProjectVoteTest extends ApiRouteTestCase
         $this->buildEndpoint(params: ['art_project' => $this->artProject->id]);
     }
 
-    public function test_art_project_vote_call_with_valid_data_returns_a_successful_response(): void
+    #[Test]
+    public function art_project_vote_call_with_valid_data_returns_a_successful_response(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -49,7 +51,8 @@ class ArtProjectVoteTest extends ApiRouteTestCase
         $this->assertTrue($this->artProject->votes->contains($user));
     }
 
-    public function test_art_project_vote_call_without_permission_returns_a_successful_response(): void
+    #[Test]
+    public function art_project_vote_call_without_permission_returns_a_successful_response(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
 
@@ -60,7 +63,8 @@ class ArtProjectVoteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_art_project_vote_call_a_second_time_returns_error(): void
+    #[Test]
+    public function art_project_vote_call_a_second_time_returns_error(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
 
@@ -74,7 +78,8 @@ class ArtProjectVoteTest extends ApiRouteTestCase
         $secondResponse->assertStatus(400);
     }
 
-    public function test_art_project_vote_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function art_project_vote_call_not_logged_in_returns_error(): void
     {
         $response = $this->post($this->endpoint);
 

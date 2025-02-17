@@ -7,6 +7,7 @@ namespace Tests\Feature\Volunteering\Teams;
 use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class TeamDeleteTest extends ApiRouteTestCase
@@ -17,7 +18,8 @@ class TeamDeleteTest extends ApiRouteTestCase
 
     public array $routeParams = ['event' => 1, 'team' => 1];
 
-    public function test_team_delete_call_while_not_logged_in_fails(): void
+    #[Test]
+    public function team_delete_call_while_not_logged_in_fails(): void
     {
         $event = Event::has('teams')->firstOrFail();
         $ticketType = $event->teams->firstOrFail();
@@ -29,7 +31,8 @@ class TeamDeleteTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_team_force_delete_call_while_not_logged_in_fails(): void
+    #[Test]
+    public function team_force_delete_call_while_not_logged_in_fails(): void
     {
         $event = Event::has('teams')->firstOrFail();
         $ticketType = $event->teams->firstOrFail();
@@ -40,7 +43,8 @@ class TeamDeleteTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_team_delete_call_without_permission_fails(): void
+    #[Test]
+    public function team_delete_call_without_permission_fails(): void
     {
         $event = Event::has('teams')->firstOrFail();
         $ticketType = $event->teams->firstOrFail();
@@ -53,7 +57,8 @@ class TeamDeleteTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_team_force_delete_call_as_event_manager_fails(): void
+    #[Test]
+    public function team_force_delete_call_as_event_manager_fails(): void
     {
         $event = Event::has('teams')->firstOrFail();
         $ticketType = $event->teams->firstOrFail();
@@ -66,7 +71,8 @@ class TeamDeleteTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_team_force_delete_call_of_trashed_event_as_event_manager_fails(): void
+    #[Test]
+    public function team_force_delete_call_of_trashed_event_as_event_manager_fails(): void
     {
         $event = Event::has('teams')->firstOrFail();
         $ticketType = $event->teams->firstOrFail();
@@ -81,7 +87,8 @@ class TeamDeleteTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_team_delete_call_as_admin_succeeds(): void
+    #[Test]
+    public function team_delete_call_as_admin_succeeds(): void
     {
         $event = Event::has('teams')->firstOrFail();
         $ticketType = $event->teams->firstOrFail();
@@ -95,7 +102,8 @@ class TeamDeleteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_team_force_delete_call_as_admin_succeeds(): void
+    #[Test]
+    public function team_force_delete_call_as_admin_succeeds(): void
     {
         $event = Event::has('teams')->firstOrFail();
         $ticketType = $event->teams->firstOrFail();
@@ -109,7 +117,8 @@ class TeamDeleteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_team_force_delete_call_of_trashed_event_as_admin_succeeds(): void
+    #[Test]
+    public function team_force_delete_call_of_trashed_event_as_admin_succeeds(): void
     {
         $event = Event::has('teams')->firstOrFail();
         $ticketType = $event->teams->firstOrFail();
@@ -124,7 +133,8 @@ class TeamDeleteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_team_delete_restore_call_as_admin_succeeds(): void
+    #[Test]
+    public function team_delete_restore_call_as_admin_succeeds(): void
     {
         $event = Event::has('teams')->firstOrFail();
         $ticketType = $event->teams->firstOrFail();

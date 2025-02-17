@@ -7,6 +7,7 @@ namespace Tests\Feature\Me;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Testing\Fluent\AssertableJson;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class MeUpdateTest extends ApiRouteTestCase
@@ -17,7 +18,8 @@ class MeUpdateTest extends ApiRouteTestCase
 
     public array $routeParams = ['user' => 1];
 
-    public function test_me_update_call_with_valid_data_returns_a_successful_response(): void
+    #[Test]
+    public function me_update_call_with_valid_data_returns_a_successful_response(): void
     {
         $user = User::firstOrFail();
         $data = $user->toArray();
@@ -37,7 +39,8 @@ class MeUpdateTest extends ApiRouteTestCase
         );
     }
 
-    public function test_me_update_call_with_invalid_data_returns_a_validation_error(): void
+    #[Test]
+    public function me_update_call_with_invalid_data_returns_a_validation_error(): void
     {
         $user = User::firstOrFail();
 
@@ -69,7 +72,8 @@ class MeUpdateTest extends ApiRouteTestCase
         $response->assertStatus(422);
     }
 
-    public function test_me_update_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function me_update_call_not_logged_in_returns_error(): void
     {
         $response = $this->patchJson($this->endpoint, [
             'legal_name' => fake()->name(),
@@ -81,7 +85,8 @@ class MeUpdateTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_me_update_call_changing_email_resets_email_verification(): void
+    #[Test]
+    public function me_update_call_changing_email_resets_email_verification(): void
     {
         $user = User::whereNot('email_verified_at', null)->firstOrFail();
 
@@ -98,7 +103,8 @@ class MeUpdateTest extends ApiRouteTestCase
         $this->assertFalse($user->hasVerifiedEmail());
     }
 
-    public function test_me_update_call_changing_email_sends_new_verification_email(): void
+    #[Test]
+    public function me_update_call_changing_email_sends_new_verification_email(): void
     {
         $user = User::whereNot('email_verified_at', null)->firstOrFail();
 
@@ -123,7 +129,8 @@ class MeUpdateTest extends ApiRouteTestCase
         $this->assertEquals($email->getOriginalMessage()->getTo()[0]->getAddress(), $user->email, 'Email was sent to the correct address');
     }
 
-    public function test_me_update_call_changing_password_hashes_correctly(): void
+    #[Test]
+    public function me_update_call_changing_password_hashes_correctly(): void
     {
         $user = User::firstOrFail();
         $newPassword = 'new_password';

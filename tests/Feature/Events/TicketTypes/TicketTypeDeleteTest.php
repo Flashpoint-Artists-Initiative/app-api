@@ -7,6 +7,7 @@ namespace Tests\Feature\Events\TicketTypes;
 use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class TicketTypeDeleteTest extends ApiRouteTestCase
@@ -17,7 +18,8 @@ class TicketTypeDeleteTest extends ApiRouteTestCase
 
     public array $routeParams = ['event' => 1, 'ticket_type' => 1];
 
-    public function test_ticket_type_delete_call_while_not_logged_in_fails(): void
+    #[Test]
+    public function ticket_type_delete_call_while_not_logged_in_fails(): void
     {
         $event = Event::has('ticketTypes')->firstOrFail();
         $ticketType = $event->ticketTypes->firstOrFail();
@@ -29,7 +31,8 @@ class TicketTypeDeleteTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_ticket_type_force_delete_call_while_not_logged_in_fails(): void
+    #[Test]
+    public function ticket_type_force_delete_call_while_not_logged_in_fails(): void
     {
         $event = Event::has('ticketTypes')->firstOrFail();
         $ticketType = $event->ticketTypes->firstOrFail();
@@ -40,7 +43,8 @@ class TicketTypeDeleteTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_ticket_type_delete_call_without_permission_fails(): void
+    #[Test]
+    public function ticket_type_delete_call_without_permission_fails(): void
     {
         $event = Event::has('ticketTypes')->firstOrFail();
         $ticketType = $event->ticketTypes->firstOrFail();
@@ -53,7 +57,8 @@ class TicketTypeDeleteTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_ticket_type_delete_call_as_event_manager_succeeds(): void
+    #[Test]
+    public function ticket_type_delete_call_as_event_manager_succeeds(): void
     {
         $event = Event::has('ticketTypes')->firstOrFail();
         $ticketType = $event->ticketTypes->firstOrFail();
@@ -66,7 +71,8 @@ class TicketTypeDeleteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_ticket_type_force_delete_call_as_event_manager_fails(): void
+    #[Test]
+    public function ticket_type_force_delete_call_as_event_manager_fails(): void
     {
         $event = Event::has('ticketTypes')->firstOrFail();
         $ticketType = $event->ticketTypes->firstOrFail();
@@ -79,7 +85,8 @@ class TicketTypeDeleteTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_ticket_type_force_delete_call_of_trashed_event_as_event_manager_fails(): void
+    #[Test]
+    public function ticket_type_force_delete_call_of_trashed_event_as_event_manager_fails(): void
     {
         $event = Event::has('ticketTypes')->firstOrFail();
         $ticketType = $event->ticketTypes->firstOrFail();
@@ -94,7 +101,8 @@ class TicketTypeDeleteTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_ticket_type_delete_call_as_admin_succeeds(): void
+    #[Test]
+    public function ticket_type_delete_call_as_admin_succeeds(): void
     {
         $event = Event::has('ticketTypes')->firstOrFail();
         $ticketType = $event->ticketTypes->firstOrFail();
@@ -108,7 +116,8 @@ class TicketTypeDeleteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_ticket_type_force_delete_call_as_admin_succeeds(): void
+    #[Test]
+    public function ticket_type_force_delete_call_as_admin_succeeds(): void
     {
         $event = Event::has('ticketTypes')->firstOrFail();
         $ticketType = $event->ticketTypes->firstOrFail();
@@ -122,7 +131,8 @@ class TicketTypeDeleteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_ticket_type_force_delete_call_of_trashed_event_as_admin_succeeds(): void
+    #[Test]
+    public function ticket_type_force_delete_call_of_trashed_event_as_admin_succeeds(): void
     {
         $event = Event::has('ticketTypes')->firstOrFail();
         $ticketType = $event->ticketTypes->firstOrFail();
@@ -137,7 +147,8 @@ class TicketTypeDeleteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_ticket_type_delete_restore_call_as_admin_succeeds(): void
+    #[Test]
+    public function ticket_type_delete_restore_call_as_admin_succeeds(): void
     {
         $event = Event::has('ticketTypes')->firstOrFail();
         $ticketType = $event->ticketTypes->firstOrFail();

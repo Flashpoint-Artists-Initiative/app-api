@@ -6,6 +6,7 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use Illuminate\Testing\Fluent\AssertableJson;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class ForgotPasswordTest extends ApiRouteTestCase
@@ -14,14 +15,16 @@ class ForgotPasswordTest extends ApiRouteTestCase
 
     public string $routeName = 'password.email';
 
-    public function test_forgot_password_call_with_valid_data_returns_a_successful_response(): void
+    #[Test]
+    public function forgot_password_call_with_valid_data_returns_a_successful_response(): void
     {
         $response = $this->postJson($this->endpoint, ['email' => 'regular@example.com']);
 
         $response->assertStatus(200);
     }
 
-    public function test_forgot_password_email_is_sent(): void
+    #[Test]
+    public function forgot_password_email_is_sent(): void
     {
         $email = 'regular@example.com';
 
@@ -41,7 +44,8 @@ class ForgotPasswordTest extends ApiRouteTestCase
         $this->assertEquals($sentEmail->getOriginalMessage()->getTo()[0]->getAddress(), $email, 'Email was sent to the correct address');
     }
 
-    public function test_multiple_forgot_password_calls_too_fast_returns_an_error_response(): void
+    #[Test]
+    public function multiple_forgot_password_calls_too_fast_returns_an_error_response(): void
     {
         $this->postJson($this->endpoint, ['email' => 'regular@example.com']);
         $response = $this->postJson($this->endpoint, ['email' => 'regular@example.com']);
@@ -51,7 +55,8 @@ class ForgotPasswordTest extends ApiRouteTestCase
             ->assertJsonPath('message', 'Please wait before retrying.');
     }
 
-    public function test_forgot_password_call_with_missing_data_returns_a_validation_error(): void
+    #[Test]
+    public function forgot_password_call_with_missing_data_returns_a_validation_error(): void
     {
         $response = $this->postJson($this->endpoint, []);
 
@@ -59,7 +64,8 @@ class ForgotPasswordTest extends ApiRouteTestCase
             ->assertJson(fn (AssertableJson $json) => $json->hasAll(['message', 'errors.email']));
     }
 
-    public function test_forgot_password_call_with_invalid_email_returns_a_validation_error(): void
+    #[Test]
+    public function forgot_password_call_with_invalid_email_returns_a_validation_error(): void
     {
         $response = $this->postJson($this->endpoint, ['email' => 'invalid_email']);
 
@@ -67,7 +73,8 @@ class ForgotPasswordTest extends ApiRouteTestCase
             ->assertJson(fn (AssertableJson $json) => $json->hasAll(['message', 'errors.email']));
     }
 
-    public function test_forgot_password_call_without_matching_user_email_returns_an_error(): void
+    #[Test]
+    public function forgot_password_call_without_matching_user_email_returns_an_error(): void
     {
         $user = User::where('email', 'not-a-user@example.com')->first();
 
@@ -79,7 +86,8 @@ class ForgotPasswordTest extends ApiRouteTestCase
             ->assertJson(fn (AssertableJson $json) => $json->hasAll(['message', 'errors.email']));
     }
 
-    public function test_forgot_password_call_while_logged_in_returns_an_error(): void
+    #[Test]
+    public function forgot_password_call_while_logged_in_returns_an_error(): void
     {
         $user = User::findOrFail(1);
         $response = $this->actingAs($user)->postJson($this->endpoint, ['email' => $user->email]);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class LogoutTest extends ApiRouteTestCase
@@ -13,7 +14,8 @@ class LogoutTest extends ApiRouteTestCase
 
     public string $routeName = 'logout';
 
-    public function test_logging_out_invalidates_auth_token(): void
+    #[Test]
+    public function logging_out_invalidates_auth_token(): void
     {
         $user = User::findOrFail(1);
 
@@ -29,7 +31,8 @@ class LogoutTest extends ApiRouteTestCase
         $this->assertEmpty(auth()->user());
     }
 
-    public function test_logging_out_requires_being_logged_in(): void
+    #[Test]
+    public function logging_out_requires_being_logged_in(): void
     {
         $response = $this->post($this->endpoint);
 

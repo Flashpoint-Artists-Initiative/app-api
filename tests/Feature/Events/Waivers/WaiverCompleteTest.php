@@ -7,6 +7,7 @@ namespace Tests\Feature\Events\Waivers;
 use App\Enums\RolesEnum;
 use App\Models\Ticketing\CompletedWaiver;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class WaiverCompleteTest extends ApiRouteTestCase
@@ -17,7 +18,8 @@ class WaiverCompleteTest extends ApiRouteTestCase
 
     public array $routeParams = ['event' => 1, 'waiver' => 1];
 
-    public function test_waiver_complete_call_with_valid_data_returns_a_successful_response(): void
+    #[Test]
+    public function waiver_complete_call_with_valid_data_returns_a_successful_response(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -28,7 +30,8 @@ class WaiverCompleteTest extends ApiRouteTestCase
         $response->assertStatus(201);
     }
 
-    public function test_waiver_complete_call_with_invalid_data_returns_a_validation_error(): void
+    #[Test]
+    public function waiver_complete_call_with_invalid_data_returns_a_validation_error(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -40,7 +43,8 @@ class WaiverCompleteTest extends ApiRouteTestCase
         $response->assertStatus(422);
     }
 
-    public function test_waiver_complete_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function waiver_complete_call_not_logged_in_returns_error(): void
     {
         $response = $this->postJson($this->endpoint, [
             'form_data' => '{"test": "123"}',
@@ -49,7 +53,8 @@ class WaiverCompleteTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_waiver_complete_call_with_completed_waivers_returns_error(): void
+    #[Test]
+    public function waiver_complete_call_with_completed_waivers_returns_error(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 

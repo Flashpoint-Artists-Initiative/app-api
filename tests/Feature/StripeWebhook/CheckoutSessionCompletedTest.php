@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Services\CartService;
 use App\Services\StripeService;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\Test;
 use Stripe\Checkout\Session;
 use Stripe\Event;
 use Tests\ApiRouteTestCase;
@@ -69,7 +70,8 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
         $this->app->instance(StripeWebhookMiddleware::class, new StripeWebhookTestMiddleware($this->event));
     }
 
-    public function test_stripe_webhook_call_without_cart_returns_error(): void
+    #[Test]
+    public function stripe_webhook_call_without_cart_returns_error(): void
     {
         $user = User::firstOrFail();
         $carts = Cart::where('user_id', $user->id)->get();
@@ -83,7 +85,8 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
         $response->assertStatus(204);
     }
 
-    public function test_stripe_webhook_call_with_cart_returns_success(): void
+    #[Test]
+    public function stripe_webhook_call_with_cart_returns_success(): void
     {
         $user = User::firstOrFail();
         $purchasedTicketCount = $user->PurchasedTickets()->count();
@@ -97,7 +100,8 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
         $this->assertEquals(1, User::firstOrFail()->PurchasedTickets()->count());
     }
 
-    public function test_stripe_webhook_call_with_incorrect_checkout_id_returns_error(): void
+    #[Test]
+    public function stripe_webhook_call_with_incorrect_checkout_id_returns_error(): void
     {
         $user = User::firstOrFail();
         /** @var Cart $cart */
@@ -110,7 +114,8 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
         $response->assertStatus(204);
     }
 
-    public function test_stripe_webhook_call_with_incomplete_session_returns_error(): void
+    #[Test]
+    public function stripe_webhook_call_with_incomplete_session_returns_error(): void
     {
         $user = User::firstOrFail();
 
@@ -121,7 +126,8 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
         $response->assertStatus(204);
     }
 
-    public function test_stripe_webhook_call_with_unpaid_session_returns_error(): void
+    #[Test]
+    public function stripe_webhook_call_with_unpaid_session_returns_error(): void
     {
         $user = User::firstOrFail();
 
@@ -132,7 +138,8 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
         $response->assertStatus(204);
     }
 
-    public function test_stripe_webhook_call_with_existing_order_returns_error(): void
+    #[Test]
+    public function stripe_webhook_call_with_existing_order_returns_error(): void
     {
         $user = User::firstOrFail();
 

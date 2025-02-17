@@ -8,6 +8,7 @@ use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\Order;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class OrdersTest extends TestCase
@@ -16,7 +17,8 @@ class OrdersTest extends TestCase
 
     public bool $seed = true;
 
-    public function test_user_relation(): void
+    #[Test]
+    public function user_relation(): void
     {
         $user = User::firstOrFail();
         $order = $this->createOrder($user);
@@ -24,7 +26,8 @@ class OrdersTest extends TestCase
         $this->assertEquals($order->user->id, $user->id);
     }
 
-    public function test_user_orders_relation(): void
+    #[Test]
+    public function user_orders_relation(): void
     {
         $user = User::firstOrFail();
         $order = $this->createOrder($user);
@@ -36,7 +39,8 @@ class OrdersTest extends TestCase
         $this->assertEquals($order->id, $orders->firstOrFail()->id);
     }
 
-    public function test_event_relation(): void
+    #[Test]
+    public function event_relation(): void
     {
         $user = User::firstOrFail();
         $order = $this->createOrder($user);
@@ -44,7 +48,8 @@ class OrdersTest extends TestCase
         $this->assertEquals(1, $order->event->id);
     }
 
-    public function test_cart_relation(): void
+    #[Test]
+    public function cart_relation(): void
     {
         $user = User::firstOrFail();
         $cart = Cart::create(['user_id' => $user->id]);

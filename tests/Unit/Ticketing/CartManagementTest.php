@@ -8,6 +8,7 @@ use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\CartItem;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class CartManagementTest extends TestCase
@@ -16,7 +17,8 @@ class CartManagementTest extends TestCase
 
     public bool $seed = true;
 
-    public function test_cart_user_relation(): void
+    #[Test]
+    public function cart_user_relation(): void
     {
         $user = User::firstOrFail();
         $cart = Cart::create(['user_id' => $user->id]);
@@ -24,7 +26,8 @@ class CartManagementTest extends TestCase
         $this->assertEquals($user->id, $cart->user->id);
     }
 
-    public function test_cart_update_fails(): void
+    #[Test]
+    public function cart_update_fails(): void
     {
         $user = User::firstOrFail();
         $cart = Cart::create(['user_id' => $user->id]);
@@ -33,7 +36,8 @@ class CartManagementTest extends TestCase
         $this->assertFalse($cart->save());
     }
 
-    public function test_cart_item_update_fails(): void
+    #[Test]
+    public function cart_item_update_fails(): void
     {
         $user = User::firstOrFail();
         $cart = Cart::create(['user_id' => $user->id]);

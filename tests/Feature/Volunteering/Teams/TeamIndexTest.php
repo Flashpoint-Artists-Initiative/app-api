@@ -8,6 +8,7 @@ use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Volunteering\Team;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class TeamIndexTest extends ApiRouteTestCase
@@ -28,14 +29,16 @@ class TeamIndexTest extends ApiRouteTestCase
         $this->buildEndpoint();
     }
 
-    public function test_team_index_call_while_not_logged_in_returns_error(): void
+    #[Test]
+    public function team_index_call_while_not_logged_in_returns_error(): void
     {
         $response = $this->get($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_team_index_call_without_permission_returns_only_active_teams(): void
+    #[Test]
+    public function team_index_call_without_permission_returns_only_active_teams(): void
     {
         $teamCount = Team::active()->event($this->event->id)->count();
 
@@ -46,7 +49,8 @@ class TeamIndexTest extends ApiRouteTestCase
         $response->assertJsonCount($teamCount, 'data');
     }
 
-    public function test_team_index_call_with_permission_returns_pending_types(): void
+    #[Test]
+    public function team_index_call_with_permission_returns_pending_types(): void
     {
         $activeTeamCount = Team::active()->event($this->event->id)->count();
         $teamCount = Team::query()->event($this->event->id)->count();
@@ -61,7 +65,8 @@ class TeamIndexTest extends ApiRouteTestCase
         $response->assertJsonCount($teamCount, 'data');
     }
 
-    public function test_team_index_call_with_permission_returns_trashed_types(): void
+    #[Test]
+    public function team_index_call_with_permission_returns_trashed_types(): void
     {
         $this->addEndpointParams(['with_trashed' => true]);
 
@@ -78,7 +83,8 @@ class TeamIndexTest extends ApiRouteTestCase
         $response->assertJsonCount($teamCount, 'data');
     }
 
-    public function test_team_index_call_without_permission_ignores_trashed_types(): void
+    #[Test]
+    public function team_index_call_without_permission_ignores_trashed_types(): void
     {
         $this->addEndpointParams(['with_trashed' => true]);
 
@@ -96,7 +102,8 @@ class TeamIndexTest extends ApiRouteTestCase
         $response->assertJsonCount($existingTeamCount, 'data');
     }
 
-    public function test_team_index_call_with_only_trashed_returns_correct_types(): void
+    #[Test]
+    public function team_index_call_with_only_trashed_returns_correct_types(): void
     {
         $this->addEndpointParams(['only_trashed' => true]);
 
@@ -113,7 +120,8 @@ class TeamIndexTest extends ApiRouteTestCase
         $response->assertJsonCount($trashedTeamCount, 'data');
     }
 
-    public function test_team_index_call_as_admin_returns_all_types(): void
+    #[Test]
+    public function team_index_call_as_admin_returns_all_types(): void
     {
         $this->addEndpointParams(['with_trashed' => true]);
 
@@ -129,7 +137,8 @@ class TeamIndexTest extends ApiRouteTestCase
         $response->assertJsonCount($all_team_count, 'data');
     }
 
-    public function test_team_index_for_inactive_event_returns_error(): void
+    #[Test]
+    public function team_index_for_inactive_event_returns_error(): void
     {
         $event = Event::where('active', false)->has('teams')->firstOrFail();
         $this->addEndpointParams(['event' => $event->id]);
@@ -140,7 +149,8 @@ class TeamIndexTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_team_index_for_inactive_event_as_admin_returns_success(): void
+    #[Test]
+    public function team_index_for_inactive_event_as_admin_returns_success(): void
     {
         $event = Event::where('active', false)->has('teams')->firstOrFail();
         $this->addEndpointParams(['event' => $event->id]);

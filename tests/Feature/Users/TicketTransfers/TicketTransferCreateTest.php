@@ -9,6 +9,7 @@ use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class TicketTransferCreateTest extends ApiRouteTestCase
@@ -35,7 +36,8 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         $this->addEndpointParams(['user' => $this->user->id]);
     }
 
-    public function test_ticket_transfer_create_call_with_valid_data_returns_a_successful_response(): void
+    #[Test]
+    public function ticket_transfer_create_call_with_valid_data_returns_a_successful_response(): void
     {
         $admin = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -48,7 +50,8 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         $response->assertStatus(201);
     }
 
-    public function test_ticket_transfer_create_call_with_invalid_data_returns_a_validation_error(): void
+    #[Test]
+    public function ticket_transfer_create_call_with_invalid_data_returns_a_validation_error(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -159,7 +162,8 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         $response->assertStatus(422);
     }
 
-    public function test_ticket_transfer_create_call_without_permission_returns_error(): void
+    #[Test]
+    public function ticket_transfer_create_call_without_permission_returns_error(): void
     {
         $user = User::doesntHave('roles')->where('id', '!=', $this->user->id)->firstOrFail();
 
@@ -174,7 +178,8 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_ticket_transfer_create_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function ticket_transfer_create_call_not_logged_in_returns_error(): void
     {
         $response = $this->postJson($this->endpoint, [
             'email' => 'test@test.com',
@@ -184,7 +189,8 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_ticket_transfer_create_call_with_bad_purchased_ticket_data_returns_validation_error(): void
+    #[Test]
+    public function ticket_transfer_create_call_with_bad_purchased_ticket_data_returns_validation_error(): void
     {
         $nonTransferableTicket = PurchasedTicket::create([
             'user_id' => $this->user->id,
@@ -199,7 +205,8 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         $response->assertStatus(422);
     }
 
-    public function test_ticket_transfer_create_call_with_bad_reserved_ticket_data_returns_validation_error(): void
+    #[Test]
+    public function ticket_transfer_create_call_with_bad_reserved_ticket_data_returns_validation_error(): void
     {
         $admin = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -244,7 +251,8 @@ class TicketTransferCreateTest extends ApiRouteTestCase
         $response->assertStatus(422);
     }
 
-    public function test_ticket_transfer_create_call_with_duplicate_data_returns_validation_error(): void
+    #[Test]
+    public function ticket_transfer_create_call_with_duplicate_data_returns_validation_error(): void
     {
         $admin = User::role(RolesEnum::Admin)->firstOrFail();
 

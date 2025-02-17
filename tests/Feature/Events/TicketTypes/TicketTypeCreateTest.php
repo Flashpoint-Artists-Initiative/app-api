@@ -7,6 +7,7 @@ namespace Tests\Feature\Events\TicketTypes;
 use App\Enums\RolesEnum;
 use App\Models\User;
 use Carbon\Carbon;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class TicketTypeCreateTest extends ApiRouteTestCase
@@ -17,7 +18,8 @@ class TicketTypeCreateTest extends ApiRouteTestCase
 
     public array $routeParams = ['event' => 1];
 
-    public function test_ticket_type_create_call_with_valid_data_returns_a_successful_response(): void
+    #[Test]
+    public function ticket_type_create_call_with_valid_data_returns_a_successful_response(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -34,7 +36,8 @@ class TicketTypeCreateTest extends ApiRouteTestCase
         $response->assertStatus(201);
     }
 
-    public function test_ticket_type_create_call_with_invalid_data_returns_a_validation_error(): void
+    #[Test]
+    public function ticket_type_create_call_with_invalid_data_returns_a_validation_error(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
@@ -111,7 +114,8 @@ class TicketTypeCreateTest extends ApiRouteTestCase
         $response->assertStatus(422);
     }
 
-    public function test_ticket_type_create_call_without_permission_returns_error(): void
+    #[Test]
+    public function ticket_type_create_call_without_permission_returns_error(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
 
@@ -129,7 +133,8 @@ class TicketTypeCreateTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_ticket_type_create_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function ticket_type_create_call_not_logged_in_returns_error(): void
     {
         $response = $this->postJson($this->endpoint, [
             'name' => 'General Sale',

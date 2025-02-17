@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Services\StripeService;
 use Database\Seeders\AccurateOrderSeeder;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\Test;
 use Stripe\TaxRate;
 use Tests\ApiRouteTestCase;
 
@@ -40,14 +41,16 @@ class MetricsTicketDataTest extends ApiRouteTestCase
         });
     }
 
-    public function test_metrics_ticket_data_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function metrics_ticket_data_call_not_logged_in_returns_error(): void
     {
         $response = $this->get($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_metrics_ticket_data_call_without_permission_returns_error(): void
+    #[Test]
+    public function metrics_ticket_data_call_without_permission_returns_error(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
 
@@ -58,7 +61,8 @@ class MetricsTicketDataTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_metrics_ticket_data_call_with_permission_returns_success(): void
+    #[Test]
+    public function metrics_ticket_data_call_with_permission_returns_success(): void
     {
         $this->seed(AccurateOrderSeeder::class);
         $order = Order::oldest()->firstOrFail();  // The oldest order (by created_at) will have the correct event_id

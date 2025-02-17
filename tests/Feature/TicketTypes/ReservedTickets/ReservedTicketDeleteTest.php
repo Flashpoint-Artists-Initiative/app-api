@@ -8,6 +8,7 @@ use App\Enums\RolesEnum;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class ReservedTicketDeleteTest extends ApiRouteTestCase
@@ -31,14 +32,16 @@ class ReservedTicketDeleteTest extends ApiRouteTestCase
         $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
     }
 
-    public function test_ticket_type_delete_call_while_not_logged_in_fails(): void
+    #[Test]
+    public function ticket_type_delete_call_while_not_logged_in_fails(): void
     {
         $response = $this->delete($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_ticket_type_force_delete_call_while_not_logged_in_fails(): void
+    #[Test]
+    public function ticket_type_force_delete_call_while_not_logged_in_fails(): void
     {
         $this->addEndpointParams(['force' => true]);
 
@@ -47,7 +50,8 @@ class ReservedTicketDeleteTest extends ApiRouteTestCase
         $response->assertStatus(401);
     }
 
-    public function test_ticket_type_delete_call_without_permission_fails(): void
+    #[Test]
+    public function ticket_type_delete_call_without_permission_fails(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
 
@@ -56,7 +60,8 @@ class ReservedTicketDeleteTest extends ApiRouteTestCase
         $response->assertStatus(403);
     }
 
-    public function test_ticket_type_delete_call_as_box_office_succeeds(): void
+    #[Test]
+    public function ticket_type_delete_call_as_box_office_succeeds(): void
     {
         $user = User::role(RolesEnum::BoxOffice)->firstOrFail();
 
@@ -65,7 +70,8 @@ class ReservedTicketDeleteTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_ticket_type_delete_call_as_box_office_with_purchased_ticket_fails(): void
+    #[Test]
+    public function ticket_type_delete_call_as_box_office_with_purchased_ticket_fails(): void
     {
         $user = User::role(RolesEnum::BoxOffice)->firstOrFail();
         $this->ticketType = TicketType::has('reservedTickets.purchasedTicket')->active()->firstOrFail();

@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Models\User;
 use App\Models\Volunteering\ShiftType;
 use App\Models\Volunteering\Team;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class ShiftRequirementAttachTest extends ApiRouteTestCase
@@ -19,7 +20,8 @@ class ShiftRequirementAttachTest extends ApiRouteTestCase
 
     public array $routeParams = ['shift_type' => 1];
 
-    public function test_shift_requirement_attach_call_returns_a_successful_response(): void
+    #[Test]
+    public function shift_requirement_attach_call_returns_a_successful_response(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
         $preAttach = ShiftType::findOrFail(1);
@@ -35,7 +37,8 @@ class ShiftRequirementAttachTest extends ApiRouteTestCase
         $this->assertCount(1, $postAttach->requirements);
     }
 
-    public function test_shift_requirement_attach_call_for_inactive_team_returns_success(): void
+    #[Test]
+    public function shift_requirement_attach_call_for_inactive_team_returns_success(): void
     {
         $team = Team::where('active', true)->has('shiftTypes')->firstOrFail();
         $shiftType = $team->shiftTypes->firstOrFail();
@@ -56,7 +59,8 @@ class ShiftRequirementAttachTest extends ApiRouteTestCase
         $this->assertCount(1, $shiftType->requirements);
     }
 
-    public function test_shift_requirement_attach_call_for_inactive_event_returns_error(): void
+    #[Test]
+    public function shift_requirement_attach_call_for_inactive_event_returns_error(): void
     {
         $event = Event::where('active', false)->has('teams.shiftTypes')->firstOrFail();
         $team = $event->teams()->where('active', true)->has('shiftTypes')->firstOrFail();
@@ -78,7 +82,8 @@ class ShiftRequirementAttachTest extends ApiRouteTestCase
         $this->assertCount(1, $shiftType->requirements);
     }
 
-    public function test_shift_requirement_attach_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function shift_requirement_attach_call_not_logged_in_returns_error(): void
     {
         $response = $this->postJson($this->endpoint);
 

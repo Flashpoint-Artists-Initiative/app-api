@@ -10,6 +10,7 @@ use App\Models\Event;
 use App\Models\Grants\ArtProject;
 use App\Models\Grants\ProjectImage;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ArtProjectTest extends TestCase
@@ -17,7 +18,8 @@ class ArtProjectTest extends TestCase
     /**
      * Test that an ArtProject can be created.
      */
-    public function test_art_project_can_be_created(): void
+    #[Test]
+    public function art_project_can_be_created(): void
     {
         $user = User::factory()->create();
         $event = Event::factory()->create();
@@ -48,7 +50,8 @@ class ArtProjectTest extends TestCase
     /**
      * Test the relationship between ArtProject and Event.
      */
-    public function test_art_project_belongs_to_event(): void
+    #[Test]
+    public function art_project_belongs_to_event(): void
     {
         $event = Event::factory()->create();
         /** @var ArtProject $artProject */
@@ -61,7 +64,8 @@ class ArtProjectTest extends TestCase
     /**
      * Test the relationship between ArtProject and User.
      */
-    public function test_art_project_belongs_to_user(): void
+    #[Test]
+    public function art_project_belongs_to_user(): void
     {
         $user = User::factory()->create();
         /** @var ArtProject $artProject */
@@ -74,7 +78,8 @@ class ArtProjectTest extends TestCase
     /**
      * Test the relationship between ArtProject and ProjectImage.
      */
-    public function test_art_project_has_many_images(): void
+    #[Test]
+    public function art_project_has_many_images(): void
     {
         /** @var ArtProject $artProject */
         $artProject = ArtProject::factory()->create();
@@ -86,7 +91,8 @@ class ArtProjectTest extends TestCase
     /**
      * Test the relationship between ArtProject and votes.
      */
-    public function test_art_project_belongs_to_many_votes(): void
+    #[Test]
+    public function art_project_belongs_to_many_votes(): void
     {
         /** @var ArtProject $artProject */
         $artProject = ArtProject::factory()->create();
@@ -99,7 +105,8 @@ class ArtProjectTest extends TestCase
     /**
      * Test the fundedTotal attribute.
      */
-    public function test_funded_total_attribute(): void
+    #[Test]
+    public function funded_total_attribute(): void
     {
         $event = Event::factory()->create([
             'settings->dollars_per_vote' => 10,
@@ -120,7 +127,8 @@ class ArtProjectTest extends TestCase
     /**
      * Test the fundingStatus attribute.
      */
-    public function test_funding_status_attribute(): void
+    #[Test]
+    public function funding_status_attribute(): void
     {
         $event = Event::factory()->create([
             'settings->dollars_per_vote' => 10,
@@ -143,7 +151,8 @@ class ArtProjectTest extends TestCase
     /**
      * Test the vote method.
      */
-    public function test_vote_method(): void
+    #[Test]
+    public function vote_method(): void
     {
         $event = Event::factory()->create([
             'settings->dollars_per_vote' => 10,
@@ -165,7 +174,8 @@ class ArtProjectTest extends TestCase
     /**
      * Test the vote method when voting is closed.
      */
-    public function test_vote_method_when_voting_is_closed(): void
+    #[Test]
+    public function vote_method_when_voting_is_closed(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Grant voting is closed for this event');
@@ -188,7 +198,8 @@ class ArtProjectTest extends TestCase
     /**
      * Test the vote method when project status is not approved.
      */
-    public function test_vote_method_when_status_is_not_approved(): void
+    #[Test]
+    public function vote_method_when_status_is_not_approved(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Only approved projects can be voted on');
@@ -212,7 +223,8 @@ class ArtProjectTest extends TestCase
     /**
      * Test the vote method when user has already voted.
      */
-    public function test_vote_method_when_user_has_already_voted(): void
+    #[Test]
+    public function vote_method_when_user_has_already_voted(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('User has already voted for this project');
@@ -236,7 +248,8 @@ class ArtProjectTest extends TestCase
     /**
      * Test the vote method when project has reached maximum funding.
      */
-    public function test_vote_method_when_project_has_reached_maximum_funding(): void
+    #[Test]
+    public function vote_method_when_project_has_reached_maximum_funding(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Project has already reached maximum funding');

@@ -7,6 +7,7 @@ namespace Tests\Feature\Volunteering\Requirements;
 use App\Enums\RolesEnum;
 use App\Models\User;
 use App\Models\Volunteering\Requirement;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class RequirementShowTest extends ApiRouteTestCase
@@ -17,14 +18,16 @@ class RequirementShowTest extends ApiRouteTestCase
 
     public array $routeParams = ['shift_requirement' => 1];
 
-    public function test_requirement_show_call_while_not_logged_in_returns_error(): void
+    #[Test]
+    public function requirement_show_call_while_not_logged_in_returns_error(): void
     {
         $response = $this->get($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_requirement_show_call_without_permission_returns_requirement(): void
+    #[Test]
+    public function requirement_show_call_without_permission_returns_requirement(): void
     {
         $requirement = Requirement::firstOrFail();
         $this->addEndpointParams(['shift_requirement' => $requirement->id]);
@@ -35,7 +38,8 @@ class RequirementShowTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_requirement_show_call_without_permission_does_not_return_trashed_requirement(): void
+    #[Test]
+    public function requirement_show_call_without_permission_does_not_return_trashed_requirement(): void
     {
         $requirement = Requirement::onlyTrashed()->firstOrFail();
         $this->addEndpointParams(['shift_requirement' => $requirement->id]);
@@ -46,7 +50,8 @@ class RequirementShowTest extends ApiRouteTestCase
         $response->assertStatus(404);
     }
 
-    public function test_requirement_show_call_as_admin_returns_trashed_requirement(): void
+    #[Test]
+    public function requirement_show_call_as_admin_returns_trashed_requirement(): void
     {
         $requirement = Requirement::onlyTrashed()->firstOrFail();
         $this->addEndpointParams(['shift_requirement' => $requirement->id, 'with_trashed' => true]);

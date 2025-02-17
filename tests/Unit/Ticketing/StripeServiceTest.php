@@ -6,6 +6,7 @@ namespace Tests\Unit\Ticketing;
 
 use App\Models\Ticketing\Cart;
 use App\Services\StripeService;
+use PHPUnit\Framework\Attributes\Test;
 use Stripe\Service\Checkout\CheckoutServiceFactory;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tests\TestCase;
@@ -20,25 +21,29 @@ class StripeServiceTest extends TestCase
         $this->stripeService = app()->make(StripeService::class);
     }
 
-    public function test_get_invalid_checkout_session(): void
+    #[Test]
+    public function get_invalid_checkout_session(): void
     {
         $this->expectException(HttpException::class);
         $this->stripeService->getCheckoutSession('bad_id');
     }
 
-    public function test_get_magic_method(): void
+    #[Test]
+    public function get_magic_method(): void
     {
         $checkoutObj = $this->stripeService->checkout;
         $this->assertInstanceOf(CheckoutServiceFactory::class, $checkoutObj);
     }
 
-    public function test_call_magic_method(): void
+    #[Test]
+    public function call_magic_method(): void
     {
         $key = $this->stripeService->getApiKey();
         $this->assertEquals(config('services.stripe.secret'), $key);
     }
 
-    public function test_expired_expired_cart_session(): void
+    #[Test]
+    public function expired_expired_cart_session(): void
     {
         $session = $this->stripeService->checkout->sessions->all(['status' => 'expired', 'limit' => 1])->first();
 
@@ -53,7 +58,8 @@ class StripeServiceTest extends TestCase
         // If we got here, the test passed
     }
 
-    public function test_get_tax_rate_percentages(): void
+    #[Test]
+    public function get_tax_rate_percentages(): void
     {
         $percentages = $this->stripeService->getTaxRatePercentages();
 

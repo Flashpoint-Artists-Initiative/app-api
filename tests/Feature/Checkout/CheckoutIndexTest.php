@@ -7,6 +7,7 @@ namespace Tests\Feature\Checkout;
 use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\ApiRouteTestCase;
 
 class CheckoutIndexTest extends ApiRouteTestCase
@@ -15,14 +16,16 @@ class CheckoutIndexTest extends ApiRouteTestCase
 
     public bool $seed = true;
 
-    public function test_cart_index_call_not_logged_in_returns_error(): void
+    #[Test]
+    public function cart_index_call_not_logged_in_returns_error(): void
     {
         $response = $this->get($this->endpoint);
 
         $response->assertStatus(401);
     }
 
-    public function test_cart_index_call_without_cart_returns_error(): void
+    #[Test]
+    public function cart_index_call_without_cart_returns_error(): void
     {
         $user = User::firstOrFail();
         $response = $this->actingAs($user)->get($this->endpoint);
@@ -30,7 +33,8 @@ class CheckoutIndexTest extends ApiRouteTestCase
         $response->assertStatus(404);
     }
 
-    public function test_cart_index_call_with_cart_returns_success(): void
+    #[Test]
+    public function cart_index_call_with_cart_returns_success(): void
     {
         $user = User::firstOrFail();
         $this->createCart($user);
@@ -40,7 +44,8 @@ class CheckoutIndexTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_cart_index_call_with_multiple_carts_returns_single_cart(): void
+    #[Test]
+    public function cart_index_call_with_multiple_carts_returns_single_cart(): void
     {
         $user = User::firstOrFail();
         $this->createCart($user);
@@ -51,7 +56,8 @@ class CheckoutIndexTest extends ApiRouteTestCase
         $response->assertStatus(200);
     }
 
-    public function test_cart_index_call_with_multiple_unexpired_carts_returns_success(): void
+    #[Test]
+    public function cart_index_call_with_multiple_unexpired_carts_returns_success(): void
     {
         $user = User::doesntHave('carts')->firstOrFail();
 
@@ -74,7 +80,8 @@ class CheckoutIndexTest extends ApiRouteTestCase
         $this->assertEquals(1, $unexpiredCartCount);
     }
 
-    public function test_cart_index_call_with_expired_cart_returns_error(): void
+    #[Test]
+    public function cart_index_call_with_expired_cart_returns_error(): void
     {
         $user = User::firstOrFail();
         $this->createCart($user);
