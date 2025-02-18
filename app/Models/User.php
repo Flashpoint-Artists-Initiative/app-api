@@ -14,6 +14,9 @@ use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketTransfer;
 use App\Models\Volunteering\Shift;
 use Carbon\Carbon;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasName;
+use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,7 +34,7 @@ use Spatie\Permission\Traits\HasRoles;
 /**
  * @property string $display_name
  */
-class User extends Authenticatable implements ContractsAuditable, JWTSubject, MustVerifyEmail
+class User extends Authenticatable implements ContractsAuditable, JWTSubject, MustVerifyEmail, FilamentUser, HasName
 {
     use Auditable, HasFactory, HasRoles, HasVirtualColumns, Notifiable, SoftDeletes;
 
@@ -181,6 +184,26 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
     public function getJWTCustomClaims(): array
     {
         return [];
+    }
+
+    protected function getDefaultGuardName(): string
+    {
+        return 'api';
+    }
+
+    public function getFilamentName(): string
+    {
+        return $this->display_name;
+    }
+    
+    public function canAccessPanel(Panel $panel): bool
+    {
+        $id = $panel->getId();
+        if ($id == 'app') {
+            return true;
+        }
+
+        return $this->can("panelAccess.{$id}"); 
     }
 
     public function hasSignedWaiverForEvent(int $eventId): bool

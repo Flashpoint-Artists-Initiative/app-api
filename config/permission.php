@@ -193,6 +193,7 @@ return [
         // Implement new roles as key = Role Name, values = permission names
         'roles' => [
             RolesEnum::Admin->value => [
+                'panelAccess.admin',
                 'users.*',
                 'events.*',
                 'roles.*',
@@ -214,6 +215,7 @@ return [
                 'artProjects.*',
             ],
             RolesEnum::EventManager->value => [
+                'panelAccess.admin',
                 'events.viewAny',
                 'events.viewPending',
                 'events.create',
@@ -230,6 +232,7 @@ return [
                 'waivers.*',
             ],
             RolesEnum::BoxOffice->value => [
+                'panelAccess.admin',
                 'events.viewPending',
                 'events.viewDeleted',
                 'purchasedTickets.viewAny',
@@ -244,6 +247,7 @@ return [
                 'orders.*',
             ],
             RolesEnum::ArtGrantReviewer->value => [
+                'panelAccess.admin',
                 'artProjects.viewAny',
                 'artProjects.view',
                 'artProjects.viewPending',
@@ -265,6 +269,9 @@ return [
         ],
         // All permissions that will be checked need to be defined here
         'permissions' => [
+            // Special permission to allow access to the admin panel
+            'panelAccess.admin',
+
             'users.viewAny',
             'users.view',
             'users.viewDeleted',
