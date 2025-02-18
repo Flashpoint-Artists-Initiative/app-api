@@ -3,10 +3,12 @@
 namespace App\Providers\Filament;
 
 use App\Filament\AvatarProviders\DiceBearProvider;
+use App\Http\Middleware\RedirectIfNotFilamentAdmin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -53,7 +55,13 @@ class AdminPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->authMiddleware([
-                Authenticate::class,
+                RedirectIfNotFilamentAdmin::class,
+            ])
+            ->navigationItems([
+                NavigationItem::make('Return to Dashboard')
+                    ->url(fn() => route('filament.app.pages.dashboard'))
+                    ->icon('heroicon-o-arrow-left-start-on-rectangle')
+                    ->sort(999)
             ]);
     }
 }

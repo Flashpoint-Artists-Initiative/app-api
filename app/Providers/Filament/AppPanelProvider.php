@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
@@ -7,6 +8,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -33,7 +35,7 @@ class AppPanelProvider extends PanelProvider
             ->emailVerification()
             ->profile(isSimple: false)
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Violet,
             ])
             ->defaultAvatarProvider(DiceBearProvider::class)
             ->authGuard('web')
@@ -60,6 +62,13 @@ class AppPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->navigationItems([
+                NavigationItem::make('Admin Site')
+                    ->url(fn() => route('filament.admin.pages.dashboard'))
+                    ->icon('heroicon-o-wrench-screwdriver')
+                    ->visible(fn(): bool => auth()->user()?->can('panelAccess.admin') ?? false) /** @phpstan-ignore-line */
+                    ->sort(999)
             ]);
     }
 }
