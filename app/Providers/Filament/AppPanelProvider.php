@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Providers\Filament;
 
 use App\Filament\AvatarProviders\DiceBearProvider;
+use App\Filament\Pages\Auth\Register;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -21,16 +22,19 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class AppPanelProvider extends PanelProvider
+class AppPanelProvider extends CommonPanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        return $panel
+        return parent::panel($panel)
             ->default()
             ->id('app')
             ->path('')
+            ->brandLogo(asset('logo-text.svg'))
+            ->favicon(asset('logo.svg'))
+            ->brandLogoHeight('revert-layer')
             ->login()
-            ->registration()
+            ->registration(Register::class)
             ->passwordReset()
             ->emailVerification()
             ->profile(isSimple: false)
@@ -39,12 +43,12 @@ class AppPanelProvider extends PanelProvider
             ])
             ->defaultAvatarProvider(DiceBearProvider::class)
             ->authGuard('web')
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
+            ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\\Filament\\App\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Filament/App/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
@@ -67,7 +71,7 @@ class AppPanelProvider extends PanelProvider
                 NavigationItem::make('Admin Site')
                     ->url(fn() => route('filament.admin.pages.dashboard'))
                     ->icon('heroicon-o-wrench-screwdriver')
-                    ->visible(fn(): bool => auth()->user()?->can('panelAccess.admin') ?? false) /** @phpstan-ignore-line */
+                    ->visible(fn(): bool => auth()->user()?->can('panelAccess.admin') ?? false)
                     ->sort(999)
             ]);
     }
