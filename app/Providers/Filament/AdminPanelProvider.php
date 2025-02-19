@@ -32,6 +32,7 @@ class AdminPanelProvider extends CommonPanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->brandLogo(asset('admin-logo-text.svg'))
             ->defaultAvatarProvider(DiceBearProvider::class)
             ->authGuard('web')
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
