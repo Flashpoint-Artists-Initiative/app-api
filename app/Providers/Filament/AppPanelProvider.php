@@ -20,6 +20,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AppPanelProvider extends CommonPanelProvider
@@ -71,7 +72,7 @@ class AppPanelProvider extends CommonPanelProvider
                 NavigationItem::make('Admin Site')
                     ->url(fn() => route('filament.admin.pages.dashboard'))
                     ->icon('heroicon-o-wrench-screwdriver')
-                    ->visible(fn(): bool => auth()->user()?->can('panelAccess.admin') ?? false)
+                    ->visible(fn(): bool => Auth::user()?->can('panelAccess.admin') ?? false)
                     ->sort(999)
             ]);
     }

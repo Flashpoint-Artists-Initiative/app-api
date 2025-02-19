@@ -28,3 +28,5 @@ yarn-error.log
 phpstan.neon
 coverage.xml
 .scribe
+_ide_helper.php
+_ide_helper_models.php

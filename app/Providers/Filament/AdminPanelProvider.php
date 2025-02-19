@@ -59,7 +59,7 @@ class AdminPanelProvider extends CommonPanelProvider
                 RedirectIfNotFilamentAdmin::class,
             ])
             ->navigationItems([
-                NavigationItem::make('Return to Dashboard')
+                NavigationItem::make('Return to Main Site')
                     ->url(fn() => route('filament.app.pages.dashboard'))
                     ->icon('heroicon-o-arrow-left-start-on-rectangle')
                     ->sort(999)

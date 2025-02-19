@@ -22,6 +22,7 @@
         "tailflow/laravel-orion": "^2"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^3.5",
         "brianium/paratest": "^7.3",
         "ergebnis/phpstan-rules": "^2.6",
         "knuckleswtf/scribe": "^4.26",
