@@ -186,16 +186,25 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
         return [];
     }
 
+    /**
+     * Ensures the same permissions and roles are used for both API and web requests
+     */
     protected function getDefaultGuardName(): string
     {
         return 'api';
     }
 
+    /**
+     * What gets shown in the top right of the Filament panel
+     */
     public function getFilamentName(): string
     {
         return $this->display_name;
     }
     
+    /**
+     * Auth for Filament Panels
+     */
     public function canAccessPanel(Panel $panel): bool
     {
         $id = $panel->getId();
