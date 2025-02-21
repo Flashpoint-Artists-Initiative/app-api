@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Filament\Pages\Auth;
+namespace App\Filament\Traits;
 
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\DatePicker;

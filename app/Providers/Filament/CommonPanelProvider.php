@@ -49,7 +49,8 @@ class CommonPanelProvider extends PanelProvider
             ])
             ->discoverResources(...$this->discoverHelper('Resources'))
             ->discoverPages(...$this->discoverHelper('Pages'))
-            ->discoverWidgets(...$this->discoverHelper('Widgets'));
+            ->discoverWidgets(...$this->discoverHelper('Widgets'))
+            ->discoverClusters(...$this->discoverHelper('Clusters'));
 
         return $this->addDevPlugins($panel);
     }

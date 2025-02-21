@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages\Auth;
 
-use Filament\Forms\Components\Component;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\TextInput;
+use App\Filament\Traits\HasAuthComponents;
 use Filament\Pages\Auth\EditProfile as BaseEditProfile;
 
 class EditProfile extends BaseEditProfile

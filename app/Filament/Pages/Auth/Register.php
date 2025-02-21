@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages\Auth;
 
+use App\Filament\Traits\HasAuthComponents;
 use Filament\Pages\Auth\Register as BaseRegister;
 
 class Register extends BaseRegister

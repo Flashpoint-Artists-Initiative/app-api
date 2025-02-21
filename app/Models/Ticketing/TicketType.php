@@ -28,6 +28,7 @@ class TicketType extends Model implements ContractsAuditable
     use Auditable, HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'event_id',
         'name',
         'description',
         'sale_start_date',
