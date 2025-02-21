@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 
 use Agencetwogether\HooksHelper\HooksHelperPlugin;
 use App\Filament\AvatarProviders\DiceBearProvider;
+use CodeWithDennis\FilamentThemeInspector\FilamentThemeInspectorPlugin;
 use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -74,8 +75,9 @@ class CommonPanelProvider extends PanelProvider
     public function addDevPlugins(Panel $panel): Panel
     {
         return $panel->plugins([ // @phpstan-ignore-line
-            class_exists(HooksHelperPlugin::class) ? HooksHelperPlugin::make() : null,
-            class_exists(FilamentDeveloperLoginsPlugin::class) ? FilamentDeveloperLoginsPlugin::make()
+            class_exists("Agencetwogether\HooksHelper\HooksHelperPlugin") ? HooksHelperPlugin::make() : null,
+            class_exists("CodeWithDennis\FilamentThemeInspector\FilamentThemeInspectorPlugin") ? FilamentThemeInspectorPlugin::make() : null,
+            class_exists("DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin") ? FilamentDeveloperLoginsPlugin::make()
                 ->enabled(app()->environment('local'))
                 ->users([
                     'Admin' => 'admin@example.com',
@@ -86,7 +88,6 @@ class CommonPanelProvider extends PanelProvider
                     'Art Grant Reviewer' => 'artgrants@example.com',
                 ])
              : null,
-
         ]);
     }
 }
