@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Pages\Auth\Register;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Navigation\NavigationItem;
@@ -31,7 +32,7 @@ class AppPanelProvider extends CommonPanelProvider
             ->registration(Register::class)
             ->passwordReset()
             ->emailVerification()
-            ->profile(isSimple: false)
+            ->profile(EditProfile::class, isSimple: false)
             ->colors([
                 'primary' => Color::Violet,
             ])

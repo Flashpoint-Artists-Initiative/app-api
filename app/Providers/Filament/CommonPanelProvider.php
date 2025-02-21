@@ -76,7 +76,7 @@ class CommonPanelProvider extends PanelProvider
     {
         return $panel->plugins([ // @phpstan-ignore-line
             class_exists("Agencetwogether\HooksHelper\HooksHelperPlugin") ? HooksHelperPlugin::make() : null,
-            class_exists("CodeWithDennis\FilamentThemeInspector\FilamentThemeInspectorPlugin") ? FilamentThemeInspectorPlugin::make() : null,
+            // class_exists("CodeWithDennis\FilamentThemeInspector\FilamentThemeInspectorPlugin") ? FilamentThemeInspectorPlugin::make() : null,
             class_exists("DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin") ? FilamentDeveloperLoginsPlugin::make()
                 ->enabled(app()->environment('local'))
                 ->users([

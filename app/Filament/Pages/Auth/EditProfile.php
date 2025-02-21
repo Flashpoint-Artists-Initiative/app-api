@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages\Auth;
 
-use Filament\Pages\Auth\Register as BaseRegister;
+use Filament\Forms\Components\Component;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\TextInput;
+use Filament\Pages\Auth\EditProfile as BaseEditProfile;
 
-class Register extends BaseRegister
+class EditProfile extends BaseEditProfile
 {
     use HasAuthComponents;
     
@@ -26,5 +29,4 @@ class Register extends BaseRegister
             ),
         ];
     }
-
 }
