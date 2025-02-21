@@ -57,6 +57,5 @@ class AppPanelProvider extends CommonPanelProvider
     public function register(): void
     {
         parent::register();
-        FilamentView::registerRenderHook(PanelsRenderHook::AUTH_LOGIN_FORM_BEFORE, fn(): string => "Hello World");
     }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "029ab5aabfd678b6b5e33e57e253636d",
+    "content-hash": "57992ba5c49d14ad3ef91b28ccc5fb8e",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -9525,6 +9525,79 @@
     ],
     "packages-dev": [
         {
+            "name": "agencetwogether/hookshelper",
+            "version": "0.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/agencetwogether/hooksHelper.git",
+                "reference": "5ae5afcdaeaef42822c723323b9dac321c3d2b15"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/agencetwogether/hooksHelper/zipball/5ae5afcdaeaef42822c723323b9dac321c3d2b15",
+                "reference": "5ae5afcdaeaef42822c723323b9dac321c3d2b15",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^3.0",
+                "php": "^8.1",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^7.9",
+                "orchestra/testbench": "^8.0",
+                "pestphp/pest": "^2.1",
+                "pestphp/pest-plugin-arch": "^2.0",
+                "pestphp/pest-plugin-laravel": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Agencetwogether\\HooksHelper\\HooksHelperServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Agencetwogether\\HooksHelper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Max",
+                    "email": "contact@agencetwogether.fr",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Simple plugin to toggle display hooks available in current page.",
+            "homepage": "https://github.com/agencetwogether/hookshelper",
+            "keywords": [
+                "agencetwogether",
+                "filament",
+                "filamentphp",
+                "helper",
+                "hooks",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/agencetwogether/hookshelper/issues",
+                "source": "https://github.com/agencetwogether/hookshelper"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/agencetwogether",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-11-22T22:33:48+00:00"
+        },
+        {
             "name": "barryvdh/laravel-ide-helper",
             "version": "v3.5.4",
             "source": {
@@ -9914,6 +9987,73 @@
                 }
             ],
             "time": "2024-11-12T16:29:46+00:00"
+        },
+        {
+            "name": "dutchcodingcompany/filament-developer-logins",
+            "version": "1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DutchCodingCompany/filament-developer-logins.git",
+                "reference": "feee48936d5cf95b3139df73e3a3d2bf737c13cd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DutchCodingCompany/filament-developer-logins/zipball/feee48936d5cf95b3139df73e3a3d2bf737c13cd",
+                "reference": "feee48936d5cf95b3139df73e3a3d2bf737c13cd",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^3.0",
+                "php": "^8.1",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.8",
+                "larastan/larastan": "^2.9",
+                "nunomaduro/collision": "^7.0|^8.1",
+                "orchestra/testbench": "^8.0|^9.0",
+                "phpunit/phpunit": "^10.0",
+                "spatie/laravel-ray": "^1.26"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "DutchCodingCompany\\FilamentDeveloperLogins\\FilamentDeveloperLoginsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DutchCodingCompany\\FilamentDeveloperLogins\\": "src",
+                    "DutchCodingCompany\\FilamentDeveloperLogins\\Tests\\": "tests",
+                    "DutchCodingCompany\\FilamentDeveloperLogins\\Database\\Factories\\": "database/factories"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bram Raaijmakers",
+                    "email": "b.raaijmakers@protonmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Add buttons to the login page of Filament to login as a specific user.",
+            "homepage": "https://github.com/dutchcodingcompany/filament-developer-logins",
+            "keywords": [
+                "dutchcodingcompany",
+                "filament",
+                "filament-developer-logins",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/dutchcodingcompany/filament-developer-logins/issues",
+                "source": "https://github.com/dutchcodingcompany/filament-developer-logins"
+            },
+            "time": "2025-02-19T19:51:11+00:00"
         },
         {
             "name": "ergebnis/phpstan-rules",
