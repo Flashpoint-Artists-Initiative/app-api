@@ -1,11 +1,11 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources;
 
-use App\Filament\Admin\Resources\TicketTypeResource\Pages;
-use App\Models\Ticketing\TicketType;
+use App\Filament\Admin\Resources\TeamResource\Pages;
+use App\Filament\Admin\Resources\TeamResource\RelationManagers;
+use App\Models\Volunteering\Team;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,15 +14,13 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class TicketTypeResource extends Resource
+class TeamResource extends Resource
 {
-    protected static ?string $model = TicketType::class;
+    protected static ?string $model = Team::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Event Specific';
-
-    protected static ?string $navigationLabel = 'Ticketing';
 
     public static function form(Form $form): Form
     {
@@ -34,24 +32,13 @@ class TicketTypeResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DateTimePicker::make('sale_start_date'),
-                Forms\Components\DateTimePicker::make('sale_end_date'),
-                Forms\Components\TextInput::make('quantity')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                Forms\Components\TextInput::make('price')
-                    ->required()
-                    ->numeric()
-                    ->prefix('$'),
                 Forms\Components\Textarea::make('description')
                     ->required()
                     ->columnSpanFull(),
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->maxLength(255),
                 Forms\Components\Toggle::make('active')
-                    ->required(),
-                Forms\Components\Toggle::make('transferable')
-                    ->required(),
-                Forms\Components\Toggle::make('addon')
                     ->required(),
             ]);
     }
@@ -68,36 +55,22 @@ class TicketTypeResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('sale_start_date')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sale_end_date')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('quantity')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('price')
-                    ->money()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('remaining_ticket_count')
-                    ->numeric()
-                    ->label('Remaining'),
-                Tables\Columns\IconColumn::make('active')
-                    ->boolean(),
-                Tables\Columns\IconColumn::make('transferable')
-                    ->boolean(),
-                Tables\Columns\IconColumn::make('addon')
-                    ->boolean(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('event.name')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\IconColumn::make('active')
+                    ->boolean(),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -106,6 +79,8 @@ class TicketTypeResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }
@@ -120,10 +95,10 @@ class TicketTypeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTicketTypes::route('/'),
-            'create' => Pages\CreateTicketType::route('/create'),
-            'view' => Pages\ViewTicketType::route('/{record}'),
-            'edit' => Pages\EditTicketType::route('/{record}/edit'),
+            'index' => Pages\ListTeams::route('/'),
+            'create' => Pages\CreateTeam::route('/create'),
+            'view' => Pages\ViewTeam::route('/{record}'),
+            'edit' => Pages\EditTeam::route('/{record}/edit'),
         ];
     }
 
@@ -132,7 +107,6 @@ class TicketTypeResource extends Resource
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ])
-            ->where('event_id', session('active_event_id', 0));
+            ]);
     }
 }
