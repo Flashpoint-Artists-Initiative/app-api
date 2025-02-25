@@ -4,25 +4,22 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\TicketTypeResource\Pages;
 
 use App\Filament\Admin\Resources\TicketTypeResource;
-use App\Filament\Traits\HasParentResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListTicketTypes extends ListRecords
 {
-    use HasParentResource;
-
     protected static string $resource = TicketTypeResource::class;
+
+    // @phpstan-ignore-next-line Required by parent class
+    protected $listeners = [
+        'active-event-updated' => '$refresh',
+    ];
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
-                ->url(
-                    fn (): string => static::getParentResource()::getUrl('ticket-types.create', [
-                        'parent' => $this->parent,
-                    ])
-                ),
+            Actions\CreateAction::make(),
         ];
     }
 }

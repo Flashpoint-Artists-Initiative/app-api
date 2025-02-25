@@ -7,6 +7,7 @@ use App\Models\Event;
 use Livewire\Component;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Session;
 
 class EventSelector extends Component
@@ -26,7 +27,13 @@ class EventSelector extends Component
 
     protected function getCurrentEvent(): string
     {
-        return $this->events->get($this->eventId, 'Select An Event');
+        $name = Event::find($this->eventId)->name;
+
+        if (empty($name)) {
+            $name = 'Select an Event';
+        }
+
+        return $name;
     }
 
     public function render(): View
@@ -41,6 +48,7 @@ class EventSelector extends Component
         ]);
     }
 
+    #[On('update-active-event')]
     public function updateEventId(int $eventId): void
     {
         $this->dispatch('active-event-updated', $eventId);

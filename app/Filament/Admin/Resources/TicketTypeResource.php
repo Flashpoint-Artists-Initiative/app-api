@@ -4,38 +4,31 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\TicketTypeResource\Pages;
-use App\Filament\Admin\Resources\TicketTypeResource\Pages\ListTicketTypes;
 use App\Filament\Admin\Resources\TicketTypeResource\RelationManagers;
-
 use App\Models\Ticketing\TicketType;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TicketTypeResource extends Resource
 {
     protected static ?string $model = TicketType::class;
 
-    protected static bool $shouldRegisterNavigation = false;
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static string $parentResource = EventResource::class;
-
-    public static function getRecordTitle(?Model $record): string|Htmlable|null
-    {
-        /** @var TicketType $record */
-        return $record->name;
-    }
+    protected static ?string $navigationGroup = 'Event Specific';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+                Forms\Components\Select::make('event_id')
+                    ->relationship('event', 'name')
+                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -73,6 +66,9 @@ class TicketTypeResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('event.name')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('sale_start_date')
@@ -99,24 +95,15 @@ class TicketTypeResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                //
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make()
-                    ->url(
-                        fn (ListTicketTypes $livewire, Model $record): string => static::$parentResource::getUrl('ticket-types.edit', [
-                            'record' => $record,
-                            'parent' => $livewire->parent,
-                        ])
-                    ),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }
@@ -128,11 +115,22 @@ class TicketTypeResource extends Resource
         ];
     }
 
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListTicketTypes::route('/'),
+            'create' => Pages\CreateTicketType::route('/create'),
+            'view' => Pages\ViewTicketType::route('/{record}'),
+            'edit' => Pages\EditTicketType::route('/{record}/edit'),
+        ];
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ]);
+            ])
+            ->where('event_id', session('active_event_id', 0));
     }
 }

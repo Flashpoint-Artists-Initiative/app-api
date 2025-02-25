@@ -102,14 +102,10 @@ class EventResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Action::make('Manage Ticket Types')
+                Action::make('Select')
                     ->color('success')
                     ->icon('heroicon-m-academic-cap')
-                    ->url(
-                        fn (Event $record): string => static::getUrl('ticket-types.index', [
-                            'parent' => $record->id,
-                        ])
-                    ),
+                    ->dispatch('update-active-event', fn (Event $record) => ['eventId' => $record->id]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
