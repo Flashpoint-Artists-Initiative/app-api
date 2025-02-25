@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Providers\Filament;
@@ -9,7 +10,6 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
-use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
@@ -40,16 +40,15 @@ class AdminPanelProvider extends CommonPanelProvider
             ])
             ->navigationItems([
                 NavigationItem::make('Return to Main Site')
-                    ->url(fn() => route('filament.app.pages.dashboard'))
+                    ->url(fn () => route('filament.app.pages.dashboard'))
                     ->icon('heroicon-o-arrow-left-start-on-rectangle')
-                    ->sort(999)
+                    ->sort(999),
             ]);
     }
 
     public function register(): void
     {
         parent::register();
-        FilamentView::registerRenderHook(PanelsRenderHook::TOPBAR_START, fn(): string => Blade::render('@livewire(\'event-selector\')'));
+        FilamentView::registerRenderHook(PanelsRenderHook::TOPBAR_START, fn (): string => Blade::render('@livewire(\'event-selector\')'));
     }
-
 }

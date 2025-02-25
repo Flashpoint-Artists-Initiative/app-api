@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Filament\Pages\Auth;
@@ -9,7 +10,7 @@ use Filament\Pages\Auth\Register as BaseRegister;
 class Register extends BaseRegister
 {
     use HasAuthComponents;
-    
+
     protected function getForms(): array
     {
         return [
@@ -27,5 +28,4 @@ class Register extends BaseRegister
             ),
         ];
     }
-
 }

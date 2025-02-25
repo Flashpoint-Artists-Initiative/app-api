@@ -1,10 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\UserResource\Pages;
-use App\Filament\Admin\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;

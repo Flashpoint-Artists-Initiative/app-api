@@ -1,16 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
 use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Database\Eloquent\Model;
 
 class RedirectIfNotFilamentAdmin extends Middleware
 {
-
     /**
      * @param  array<string>  $guards
      */
@@ -18,7 +18,7 @@ class RedirectIfNotFilamentAdmin extends Middleware
     {
         $auth = Filament::auth();
 
-        if (!$auth->check()) {
+        if (! $auth->check()) {
             $this->unauthenticated($request, $guards);
 
             return; /** @phpstan-ignore-line */
@@ -31,8 +31,8 @@ class RedirectIfNotFilamentAdmin extends Middleware
 
         $panel = Filament::getCurrentPanel();
 
-        if ($user instanceof FilamentUser && !is_null($panel)) {
-            if (!$user->canAccessPanel($panel)) {
+        if ($user instanceof FilamentUser && ! is_null($panel)) {
+            if (! $user->canAccessPanel($panel)) {
                 return redirect(route('filament.app.pages.dashboard')); /** @phpstan-ignore-line */
             }
         }
@@ -40,6 +40,6 @@ class RedirectIfNotFilamentAdmin extends Middleware
 
     protected function redirectTo($request): ?string
     {
-          return route('filament.app.auth.login');
+        return route('filament.app.auth.login');
     }
 }

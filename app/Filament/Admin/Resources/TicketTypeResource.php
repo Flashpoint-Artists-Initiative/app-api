@@ -1,10 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\TicketTypeResource\Pages;
-use App\Filament\Admin\Resources\TicketTypeResource\RelationManagers;
 use App\Models\Ticketing\TicketType;
 use Filament\Forms;
 use Filament\Forms\Form;

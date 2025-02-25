@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Providers\Filament;
@@ -7,26 +8,25 @@ use Agencetwogether\HooksHelper\HooksHelperPlugin;
 use App\Filament\AvatarProviders\DiceBearProvider;
 use CodeWithDennis\FilamentThemeInspector\FilamentThemeInspectorPlugin;
 use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
+use Filament\Http\Middleware\AuthenticateSession;
+use Filament\Http\Middleware\DisableBladeIconComponents;
+use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Facades\FilamentView;
-use Illuminate\Support\Facades\Blade;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Filament\Http\Middleware\AuthenticateSession;
-use Filament\Http\Middleware\DisableBladeIconComponents;
-use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\View\PanelsRenderHook;
-use Stephenjude\FilamentDebugger\DebuggerPlugin;
 
 class CommonPanelProvider extends PanelProvider
 {
     public string $id;
-    
+
     public function panel(Panel $panel): Panel
     {
         $panel = $panel
@@ -61,6 +61,7 @@ class CommonPanelProvider extends PanelProvider
     public function discoverHelper(string $resource): array
     {
         $uc = ucfirst($this->id);
+
         return [
             'in' => app_path("Filament/{$uc}/{$resource}"),
             'for' => "App\\Filament\\{$uc}\\{$resource}",
@@ -70,7 +71,7 @@ class CommonPanelProvider extends PanelProvider
     public function register(): void
     {
         parent::register();
-        FilamentView::registerRenderHook(PanelsRenderHook::BODY_END, fn(): string => Blade::render("@vite('resources/js/app.js')"));
+        FilamentView::registerRenderHook(PanelsRenderHook::BODY_END, fn (): string => Blade::render("@vite('resources/js/app.js')"));
     }
 
     public function addDevPlugins(Panel $panel): Panel

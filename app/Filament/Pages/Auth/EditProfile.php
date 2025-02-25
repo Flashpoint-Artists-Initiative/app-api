@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Filament\Pages\Auth;
@@ -9,7 +10,7 @@ use Filament\Pages\Auth\EditProfile as BaseEditProfile;
 class EditProfile extends BaseEditProfile
 {
     use HasAuthComponents;
-    
+
     protected function getForms(): array
     {
         return [

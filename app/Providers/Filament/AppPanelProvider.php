@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Providers\Filament;
@@ -9,10 +10,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
-use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Support\Facades\FilamentView;
-use Filament\View\PanelsRenderHook;
 use Filament\Widgets;
 use Illuminate\Support\Facades\Auth;
 
@@ -48,10 +46,10 @@ class AppPanelProvider extends CommonPanelProvider
             ])
             ->navigationItems([
                 NavigationItem::make('Admin Site')
-                    ->url(fn() => route('filament.admin.pages.dashboard'))
+                    ->url(fn () => route('filament.admin.pages.dashboard'))
                     ->icon('heroicon-o-wrench-screwdriver')
-                    ->visible(fn(): bool => Auth::user()?->can('panelAccess.admin') ?? false)
-                    ->sort(999)
+                    ->visible(fn (): bool => Auth::user()?->can('panelAccess.admin') ?? false)
+                    ->sort(999),
             ]);
     }
 

@@ -34,7 +34,7 @@ use Spatie\Permission\Traits\HasRoles;
 /**
  * @property string $display_name
  */
-class User extends Authenticatable implements ContractsAuditable, JWTSubject, MustVerifyEmail, FilamentUser, HasName
+class User extends Authenticatable implements ContractsAuditable, FilamentUser, HasName, JWTSubject, MustVerifyEmail
 {
     use Auditable, HasFactory, HasRoles, HasVirtualColumns, Notifiable, SoftDeletes;
 
@@ -201,7 +201,7 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
     {
         return $this->display_name;
     }
-    
+
     /**
      * Auth for Filament Panels
      */
@@ -212,7 +212,7 @@ class User extends Authenticatable implements ContractsAuditable, JWTSubject, Mu
             return true;
         }
 
-        return $this->can("panelAccess.{$id}"); 
+        return $this->can("panelAccess.{$id}");
     }
 
     public function hasSignedWaiverForEvent(int $eventId): bool

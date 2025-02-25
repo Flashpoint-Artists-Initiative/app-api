@@ -1,14 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Livewire;
 
 use App\Models\Event;
-use Livewire\Component;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Session;
+use Livewire\Component;
 
 class EventSelector extends Component
 {
@@ -19,21 +20,16 @@ class EventSelector extends Component
 
     protected function getEvents(): Collection
     {
-        if (empty($this->events)){
-            $this->events = Event::where('active', true)->orderBy('start_date')->get()->mapWithKeys(fn(Event $item) => [$item['id'] => $item['name']]);
+        if (empty($this->events)) {
+            $this->events = Event::where('active', true)->orderBy('start_date')->get()->mapWithKeys(fn (Event $item) => [$item['id'] => $item['name']]);
         }
+
         return $this->events;
     }
 
     protected function getCurrentEvent(): string
     {
-        $name = Event::find($this->eventId)->name;
-
-        if (empty($name)) {
-            $name = 'Select an Event';
-        }
-
-        return $name;
+        return Event::find($this->eventId)->name ?? 'Select an Event';
     }
 
     public function render(): View

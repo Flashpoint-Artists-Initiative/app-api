@@ -1,21 +1,14 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources;
 
-use App\Filament\Admin\Clusters\Event as ClustersEvent;
 use App\Filament\Admin\Resources\EventResource\Pages;
-use App\Filament\Admin\Resources\EventResource\RelationManagers;
-use App\Filament\Admin\Resources\TicketTypeResource\Pages\CreateTicketType;
-use App\Filament\Admin\Resources\TicketTypeResource\Pages\EditTicketType;
-use App\Filament\Admin\Resources\TicketTypeResource\Pages\ListTicketTypes;
 use App\Models\Event;
-use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Split;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\Page;
 use Filament\Resources\Resource;
@@ -57,7 +50,7 @@ class EventResource extends Resource
                         Forms\Components\DatePicker::make('end_date')
                             ->required(),
                     ])
-                    ->columns(2),
+                        ->columns(2),
                     Section::make([
                         Forms\Components\Toggle::make('active')
                             ->required(),
@@ -130,12 +123,6 @@ class EventResource extends Resource
             'create' => Pages\CreateEvent::route('/create'),
             'view' => Pages\ViewEvent::route('/{record}'),
             'edit' => Pages\EditEvent::route('/{record}/edit'),
-            'teams' => Pages\ManageTeams::route('/{record}/teams'),
-
-            // Ticket Types
-            'ticket-types.index' => ListTicketTypes::route('/{parent}/ticket-types'),
-            'ticket-types.create' => CreateTicketType::route('/{parent}/ticket-types/create'),
-            'ticket-types.edit' => EditTicketType::route('/{parent}/ticket-types/{record}/edit'),
         ];
     }
 
@@ -152,7 +139,6 @@ class EventResource extends Resource
         return $page->generateNavigationItems([
             Pages\ViewEvent::class,
             Pages\EditEvent::class,
-            Pages\ManageTeams::class,
         ]);
     }
 }
