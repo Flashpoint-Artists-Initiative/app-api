@@ -12,14 +12,10 @@ class EventPolicy extends AbstractModelPolicy
     protected string $prefix = 'events';
 
     /**
-     * Allow unathenticated users to view all events
-     *
-     * Filtering for non-active events happens in the EventsController
+     * Pass viewAny back to the parent policy.
+     * This is to make Filament happy.
+     * TODO: Figure out how this affects API access
      */
-    public function viewAny(?User $user): bool
-    {
-        return true;
-    }
 
     /**
      * @param  Event  $event

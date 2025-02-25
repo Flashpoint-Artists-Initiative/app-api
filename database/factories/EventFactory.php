@@ -22,7 +22,6 @@ class EventFactory extends Factory
             'location' => fake()->streetAddress(),
             'start_date' => fake()->dateTimeBetween('-1 week')->format('Y-m-d'),
             'end_date' => fake()->dateTimeBetween('+1 week', '+2 weeks')->format('Y-m-d'),
-            'contact_email' => fake()->safeEmail(),
         ];
     }
 

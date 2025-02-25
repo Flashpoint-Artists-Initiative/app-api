@@ -27,7 +27,6 @@ class EventUpdateTest extends ApiRouteTestCase
             'name' => 'Test Event',
             'start_date' => new Carbon('-1 day'),
             'end_date' => new Carbon('+1 week'),
-            'contact_email' => fake()->safeEmail(),
         ]);
 
         $response->assertStatus(200);
@@ -38,22 +37,11 @@ class EventUpdateTest extends ApiRouteTestCase
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
-        // Bad email
-        $response = $this->actingAs($user)->patchJson($this->endpoint, [
-            'name' => 'Test Event',
-            'start_date' => new Carbon('-1 day'),
-            'end_date' => new Carbon('+1 week'),
-            'contact_email' => 'bad_email',
-        ]);
-
-        $response->assertStatus(422);
-
         // Bad start_date
         $response = $this->actingAs($user)->patchJson($this->endpoint, [
             'name' => 'Test Event',
             'start_date' => 'bad_date',
             'end_date' => new Carbon('+1 week'),
-            'contact_email' => 'test@example.com',
         ]);
 
         $response->assertStatus(422);
@@ -63,7 +51,6 @@ class EventUpdateTest extends ApiRouteTestCase
             'name' => 'Test Event',
             'start_date' => new Carbon('-1 week'),
             'end_date' => 'bad_date',
-            'contact_email' => 'test@example.com',
         ]);
 
         $response->assertStatus(422);
@@ -73,7 +60,6 @@ class EventUpdateTest extends ApiRouteTestCase
             'name' => null,
             'start_date' => 'bad_date',
             'end_date' => new Carbon('+1 week'),
-            'contact_email' => 'test@example.com',
         ]);
 
         $response->assertStatus(422);
@@ -91,7 +77,6 @@ class EventUpdateTest extends ApiRouteTestCase
             'name' => 'Test Event',
             'start_date' => new Carbon('-1 day'),
             'end_date' => new Carbon('+1 week'),
-            'contact_email' => fake()->safeEmail(),
         ]);
 
         $response->assertStatus(403);
@@ -104,7 +89,6 @@ class EventUpdateTest extends ApiRouteTestCase
             'name' => 'Test Event',
             'start_date' => new Carbon('-1 day'),
             'end_date' => new Carbon('+1 week'),
-            'contact_email' => fake()->safeEmail(),
         ]);
 
         $response->assertStatus(401);

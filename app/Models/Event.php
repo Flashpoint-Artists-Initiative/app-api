@@ -34,7 +34,6 @@ class Event extends Model implements ContractsAuditable
         'location',
         'start_date',
         'end_date',
-        'contact_email',
         'active',
         'settings',
     ];

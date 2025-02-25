@@ -10,11 +10,14 @@ use App\Filament\Admin\Resources\TicketTypeResource\Pages\CreateTicketType;
 use App\Filament\Admin\Resources\TicketTypeResource\Pages\EditTicketType;
 use App\Filament\Admin\Resources\TicketTypeResource\Pages\ListTicketTypes;
 use App\Models\Event;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Split;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Resources\Pages\Page;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
@@ -29,6 +32,8 @@ class EventResource extends Resource
     protected static ?string $model = Event::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $recordTitleAttribute = 'name';
 
     public static function getRecordTitle(?Model $record): string|null|Htmlable
     {
@@ -58,17 +63,6 @@ class EventResource extends Resource
                             ->required(),
                     ])->grow(false),
                 ]),
-                // Forms\Components\TextInput::make('contact_email')
-                //     ->email()
-                //     ->required()
-                //     ->maxLength(255),
-                Section::make([
-                    Forms\Components\Repeater::make('ticketTypes')
-                        ->relationship()
-                        ->schema([
-                            TextInput::make('name'),
-                        ]),
-                ]),
             ])
             ->columns(1);
     }
@@ -89,8 +83,6 @@ class EventResource extends Resource
                 Tables\Columns\TextColumn::make('end_date')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('contact_email')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -142,6 +134,7 @@ class EventResource extends Resource
             'create' => Pages\CreateEvent::route('/create'),
             'view' => Pages\ViewEvent::route('/{record}'),
             'edit' => Pages\EditEvent::route('/{record}/edit'),
+            'teams' => Pages\ManageTeams::route('/{record}/teams'),
 
             // Ticket Types
             'ticket-types.index' => ListTicketTypes::route('/{parent}/ticket-types'),
@@ -156,5 +149,14 @@ class EventResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getRecordSubNavigation(Page $page): array
+    {
+        return $page->generateNavigationItems([
+            Pages\ViewEvent::class,
+            Pages\EditEvent::class,
+            Pages\ManageTeams::class,
+        ]);
     }
 }
