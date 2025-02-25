@@ -4,11 +4,15 @@ declare(strict_types=1);
 namespace App\Providers\Filament;
 
 use App\Http\Middleware\RedirectIfNotFilamentAdmin;
+use Blade;
+use Filament\Http\Middleware\Authenticate;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets;
 
 class AdminPanelProvider extends CommonPanelProvider
@@ -32,6 +36,7 @@ class AdminPanelProvider extends CommonPanelProvider
             ])
             ->authMiddleware([
                 RedirectIfNotFilamentAdmin::class,
+                Authenticate::class,
             ])
             ->navigationItems([
                 NavigationItem::make('Return to Main Site')
@@ -40,4 +45,11 @@ class AdminPanelProvider extends CommonPanelProvider
                     ->sort(999)
             ]);
     }
+
+    public function register(): void
+    {
+        parent::register();
+        FilamentView::registerRenderHook(PanelsRenderHook::TOPBAR_START, fn(): string => Blade::render('@livewire(\'event-selector\')'));
+    }
+
 }
