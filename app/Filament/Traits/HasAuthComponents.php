@@ -32,6 +32,10 @@ trait HasAuthComponents
     {
         return DatePicker::make('birthday')
             ->required()
+            ->before('18 years ago today')
+            ->validationMessages([
+                'before' => 'You must be at least 18 years old to create an account.',
+            ])
             ->displayFormat('d/m/Y')
             ->helperText('Used to verify your age while entering the event.');
     }
