@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources;
 
-use App\Filament\Admin\Resources\TeamResource\Pages;
-use App\Filament\Admin\Resources\TeamResource\RelationManagers;
-use App\Models\Volunteering\Team;
+use App\Filament\Admin\Resources\ReservedTicketResource\Pages;
+use App\Filament\Admin\Resources\ReservedTicketResource\RelationManagers;
+use App\Models\Ticketing\ReservedTicket;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,9 +15,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class TeamResource extends Resource
+class ReservedTicketResource extends Resource
 {
-    protected static ?string $model = Team::class;
+    protected static ?string $model = ReservedTicket::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -26,20 +27,25 @@ class TeamResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('event_id')
-                    ->relationship('event', 'name')
+                Forms\Components\Select::make('ticket_type_id')
+                    ->relationship(
+                        name: 'ticketType', 
+                        titleAttribute: 'name',
+                        modifyQueryUsing: fn (Builder $query) => $query->where('event_id', session('active_event_id', 0)),
+                    )
                     ->required(),
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('description')
-                    ->required()
-                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->maxLength(255),
-                Forms\Components\Toggle::make('active')
-                    ->required(),
+                Forms\Components\Select::make('user_id')
+                    ->relationship('user', 'display_name')
+                    ->searchable(['display_name', 'email'])
+                    ->getOptionLabelFromRecordUsing(fn (User $user) => "{$user->display_name} ({$user->email})"),
+                Forms\Components\DateTimePicker::make('expiration_date'),
+                Forms\Components\TextInput::make('note')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('name')
+                    ->maxLength(255),
             ]);
     }
 
@@ -55,22 +61,23 @@ class TeamResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('event.name')
+                Tables\Columns\TextColumn::make('ticketType.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\IconColumn::make('active')
-                    ->boolean(),
+                Tables\Columns\TextColumn::make('user.id')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('expiration_date')
+                    ->dateTime()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('note')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -95,20 +102,16 @@ class TeamResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTeams::route('/'),
-            'create' => Pages\CreateTeam::route('/create'),
-            'view' => Pages\ViewTeam::route('/{record}'),
-            'edit' => Pages\EditTeam::route('/{record}/edit'),
+            'index' => Pages\ListReservedTickets::route('/'),
+            'create' => Pages\CreateReservedTicket::route('/create'),
+            'view' => Pages\ViewReservedTicket::route('/{record}'),
+            'edit' => Pages\EditReservedTicket::route('/{record}/edit'),
         ];
     }
 
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ])
-            ->where('event_id', session('active_event_id', 0));
+            ->whereRelation('ticketType', 'event_id', session('active_event_id', 0));
     }
-    
 }
