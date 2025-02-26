@@ -31,31 +31,16 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // TODO: Update this URL
-        ResetPassword::createUrlUsing(function (User $user, string $token) {
-            $host = config('app.url');
-
-            return "$host/reset-password?token=" . $token;
-        });
-
-        // TODO: Update this URL
+        // Override the default email verification URL with Filament's path
         VerifyEmail::createUrlUsing(function ($notifiable) {
-            $id = $notifiable->getKey();
-            $hash = sha1($notifiable->getEmailForVerification());
-            $url = URL::temporarySignedRoute(
-                'verification.verify',
+            return URL::temporarySignedRoute(
+                'filament.app.auth.email-verification.verify',
                 Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
                 [
-                    'id' => $id,
-                    'hash' => $hash,
+                    'id' => $notifiable->getKey(),
+                    'hash' => sha1($notifiable->getEmailForVerification()),
                 ]
             );
-
-            $queryString = parse_url($url, PHP_URL_QUERY);
-            $host = config('app.url');
-            $path = preg_replace(['/\{id\}/', '/\{hash\}/'], [$id, $hash], config('mail.verifyEmailPath'));
-
-            return "{$host}{$path}?$queryString";
         });
 
         // Allow public access to the API docs in non-local environments
