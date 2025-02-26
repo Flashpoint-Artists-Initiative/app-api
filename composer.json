@@ -10,6 +10,7 @@
         "bref/laravel-bridge": "^2.1",
         "chillerlan/php-qrcode": "^5.0",
         "dedoc/scramble": "0.12.5",
+        "eightcedars/filament-inactivity-guard": "^0.2.0",
         "fakerphp/faker": "^1.23",
         "filament/filament": "^3.2",
         "filament/spatie-laravel-settings-plugin": "^3.2",

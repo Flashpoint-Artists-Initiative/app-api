@@ -8,6 +8,7 @@ use Agencetwogether\HooksHelper\HooksHelperPlugin;
 use App\Filament\AvatarProviders\DiceBearProvider;
 use CodeWithDennis\FilamentThemeInspector\FilamentThemeInspectorPlugin;
 use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
+use EightCedars\FilamentInactivityGuard\FilamentInactivityGuardPlugin;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -50,7 +51,10 @@ class CommonPanelProvider extends PanelProvider
             ->discoverResources(...$this->discoverHelper('Resources'))
             ->discoverPages(...$this->discoverHelper('Pages'))
             ->discoverWidgets(...$this->discoverHelper('Widgets'))
-            ->discoverClusters(...$this->discoverHelper('Clusters'));
+            ->discoverClusters(...$this->discoverHelper('Clusters'))
+            ->plugins([
+                FilamentInactivityGuardPlugin::make(),
+            ]);
 
         return $this->addDevPlugins($panel);
     }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bec870e81f8d0f8771b252fc6171a781",
+    "content-hash": "f754e33fd20c7bc96e8a57c650b3c9fc",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -1627,6 +1627,79 @@
                 }
             ],
             "time": "2024-12-27T00:36:43+00:00"
+        },
+        {
+            "name": "eightcedars/filament-inactivity-guard",
+            "version": "0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eightcedars/filament-inactivity-guard.git",
+                "reference": "324a3e0a6d5174bb35e06f33d21bc98d0c4078c6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eightcedars/filament-inactivity-guard/zipball/324a3e0a6d5174bb35e06f33d21bc98d0c4078c6",
+                "reference": "324a3e0a6d5174bb35e06f33d21bc98d0c4078c6",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^3.0",
+                "livewire/livewire": "^3.5",
+                "php": "^8.1",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^7.9",
+                "orchestra/testbench": "^8.0",
+                "pestphp/pest": "^2.1",
+                "pestphp/pest-plugin-arch": "^2.0",
+                "pestphp/pest-plugin-laravel": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "EightCedars\\FilamentInactivityGuard\\FilamentInactivityGuardServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "EightCedars\\FilamentInactivityGuard\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Emmanuel Nelson",
+                    "email": "opensource@eightcedars.dev",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Filament idle/inactive session guard",
+            "homepage": "https://github.com/eightcedars/filament-inactivity-guard",
+            "keywords": [
+                "eightcedars",
+                "filament auto logout",
+                "filament idle session",
+                "filament inactivity guard",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/eightcedars/filament-inactivity-guard/issues",
+                "source": "https://github.com/eightcedars/filament-inactivity-guard"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/eightcedars",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-01-30T12:23:04+00:00"
         },
         {
             "name": "fakerphp/faker",
