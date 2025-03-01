@@ -1,6 +1,6 @@
 services:
   app:
-    image: 'bref/${APP_IMAGE_PREFIX}php-83-fpm-dev:2'
+    image: 'bref/${APP_IMAGE_PREFIX}php-83-fpm-dev:2.3.18'
     ports: [ '8000:8000' ]
     user: nobody
     volumes:
@@ -9,6 +9,7 @@ services:
       - ./bootstrap/cache:/var/task/bootstrap/cache
     environment:
       HANDLER: public/index.php
+      DOCUMENT_ROOT: public
       DB_HOST: mysql
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}

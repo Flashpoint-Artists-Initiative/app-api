@@ -1,6 +1,6 @@
 <?php
 
-$stripeIps = json_decode(file_get_contents(storage_path('stripeWebhookIPs.json')), true);
+$stripeIps = json_decode(file_get_contents(resource_path('stripeWebhookIPs.json')), true);
 
 return [
 

@@ -191,7 +191,7 @@ class User extends Authenticatable implements ContractsAuditable, FilamentUser, 
      */
     protected function getDefaultGuardName(): string
     {
-        return 'api';
+        return 'web';
     }
 
     /**
