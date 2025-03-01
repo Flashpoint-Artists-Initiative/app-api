@@ -1,6 +1,6 @@
 services:
   app:
-    image: 'bref/${APP_IMAGE_PREFIX}php-83-fpm-dev:2.3.18'
+    image: 'bref/${APP_IMAGE_PREFIX}php-84-fpm-dev:2'
     ports: [ '8000:8000' ]
     user: nobody
     volumes:

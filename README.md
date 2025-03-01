@@ -50,7 +50,7 @@ https://git-scm.com/
 
     $ openssl rsa -in storage/certs/jwt-rsa-4096-private.pem -outform PEM -pubout -out storage/certs/jwt-rsa-4096-public.pem
 
-## 11. Generate API Docs
+## 11. Generate API Docs (Optional)
 
     $ php artisan scribe:generate
 
@@ -63,10 +63,11 @@ https://git-scm.com/
 https://docs.docker.com/
 
 ## 13. Run the app in docker
+If you are on an ARM based system, set `APP_IMAGE_PREFIX="arm-"` in `.env`
 
     $ docker-compose up
 
 # Developer info
 
-See https://laravel.com/docs
+See https://laravel.com/docs and https://filamentphp.com/
 

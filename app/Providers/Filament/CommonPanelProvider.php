@@ -32,8 +32,8 @@ class CommonPanelProvider extends PanelProvider
     {
         $panel = $panel
             ->id($this->id)
-            ->brandLogo(asset('logo-text.svg'))
-            ->favicon(asset('logo.svg'))
+            ->brandLogo(asset('logo-text.svg?v=2'))
+            ->favicon(asset('logo.svg?v=1'))
             ->brandLogoHeight('revert-layer')
             ->defaultAvatarProvider(DiceBearProvider::class)
             ->authGuard('web')

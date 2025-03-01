@@ -5,7 +5,7 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.3",
+        "php": "^8.4",
         "bref/bref": "^2.1",
         "bref/laravel-bridge": "^2.1",
         "chillerlan/php-qrcode": "^5.0",
