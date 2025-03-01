@@ -7,6 +7,7 @@ namespace App\Http\Requests\Checkout;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -97,7 +98,7 @@ class CheckoutCreateRequest extends FormRequest
 
         $validator->after(function (Validator $validator) {
             /** @var User $user */
-            $user = auth()->user();
+            $user = Auth::user();
             $user->load('reservedTickets.ticketType');
 
             // Get valid reserved tickets

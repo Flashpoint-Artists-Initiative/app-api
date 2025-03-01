@@ -7,6 +7,8 @@ namespace App\Models\Ticketing;
 use App\Models\Concerns\HasTicketType;
 use App\Models\Concerns\TicketInterface;
 use App\Observers\ReservedTicketObserver;
+use Auth;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -39,6 +41,11 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
         'expiration_date' => 'datetime',
     ];
 
+    protected function serializeDate(DateTimeInterface $date): string
+    {
+        return $date->format('M jS, Y @ g:i A');
+    }
+
     /**
      * @return HasOne<PurchasedTicket, $this>
      */
@@ -54,6 +61,7 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
 
     /**
      * Query scope that matches all of the following:
+     * - ticketType.event.active is true
      * - ticketType.active is true
      * - no purchased ticket
      * - Either: There's no expiration_date set on the reservedTicket AND the ticketType is still on sale
@@ -63,6 +71,7 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
      */
     public function scopeCanBePurchased(Builder $query): void
     {
+        $query->whereRelation('ticketType.event', 'active', true);
         $query->whereRelation('ticketType', 'active', true);
         $query->whereDoesntHave('purchasedTicket');
         $query->where(function (Builder $query) {
@@ -75,6 +84,16 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
                 $query->where('expiration_date', '>', now());
             });
         });
+    }
+
+    public function scopeEvent(Builder $query, int $eventId): void
+    {
+        $query->whereRelation('ticketType.event', 'id', $eventId);
+    }
+
+    public function scopeCurrentUser(Builder $query): void
+    {
+        $query->where('user_id', Auth::id());
     }
 
     /**
@@ -97,6 +116,7 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
         return Attribute::make(
             get: function (mixed $value, array $attributes) {
                 return $this->ticketType->active &&
+                $this->ticketType->event->active &&
                 ! $this->is_purchased &&
                 (
                     (! is_null($attributes['expiration_date']) && $attributes['expiration_date'] > now()) ||

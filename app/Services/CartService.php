@@ -8,6 +8,7 @@ use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\CartItem;
 use App\Models\Ticketing\PurchasedTicket;
 use App\Models\User;
+use Auth;
 use Exception;
 use Illuminate\Support\Collection;
 
@@ -55,7 +56,7 @@ class CartService
 
     protected function ensureUser(?User $user = null): User
     {
-        $user = $user ?? auth()->user();
+        $user = $user ?? Auth::user();
 
         abort_unless($user instanceof User, 400, 'User not found');
 
@@ -80,7 +81,7 @@ class CartService
      */
     public function createCartAndItems(array $tickets = [], array $reserved = []): Cart
     {
-        $user = auth()->user();
+        $user = Auth::user();
         abort_unless($user instanceof User, 400, 'User not found');
 
         $cart = Cart::create(['user_id' => $user->id]);
