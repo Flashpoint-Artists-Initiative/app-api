@@ -47,7 +47,6 @@ return new class extends Migration
             $table->unsignedInteger('user_id')->nullable();
             $table->dateTime('expiration_date')->nullable();
             $table->string('note')->nullable();
-            $table->string('name')->nullable();
         });
     }
 

@@ -34,7 +34,6 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
         'email',
         'expiration_date',
         'note',
-        'name',
     ];
 
     protected $casts = [
