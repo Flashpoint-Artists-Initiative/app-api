@@ -34,6 +34,7 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('api')
                 ->prefix('api/v1')
                 ->group(base_path('routes/api/v1.php'));
+            Route::group([], base_path('routes/web.php'));
         });
 
         // Web routes happen through Filament, check out app/Providers/Filament/*
