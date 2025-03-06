@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\TeamResource\Pages;
@@ -10,7 +11,7 @@ use Filament\Resources\Pages\ListRecords;
 class ListTeams extends ListRecords
 {
     protected static string $resource = TeamResource::class;
-    
+
     // @phpstan-ignore-next-line Required by parent class
     protected $listeners = [
         'active-event-updated' => '$refresh',

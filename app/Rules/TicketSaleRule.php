@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Rules;
@@ -11,10 +12,11 @@ use Closure;
 use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\ValidationRule;
 
-class TicketSaleRule implements ValidationRule, DataAwareRule
+class TicketSaleRule implements DataAwareRule, ValidationRule
 {
-    /** @var array<string, mixed> $data */
+    /** @var array<string, mixed> */
     protected array $data = [];
+
     /**
      * Run the validation rule.
      *
@@ -30,9 +32,10 @@ class TicketSaleRule implements ValidationRule, DataAwareRule
 
         if ($totalTickets + $totalReserved === 0) {
             $fail('Must purchase at least one ticket');
+
             return;
         }
-        
+
         if (str_contains($attribute, 'tickets')) {
             $this->generalSaleValidation($attribute, $value, $fail);
         }
@@ -51,6 +54,7 @@ class TicketSaleRule implements ValidationRule, DataAwareRule
         $sum = array_sum($this->data['data']['tickets']);
         if ($sum > (int) config('app.cart_max_quantity')) {
             $fail('The total number of tickets in the cart cannot be more than ' . config('app.cart_max_quantity'));
+
             return;
         }
 
@@ -60,6 +64,7 @@ class TicketSaleRule implements ValidationRule, DataAwareRule
 
         if ($ticketType->event_id != session('active_event_id')) {
             $fail('Ticket does not belong to the current event');
+
             return;
         }
 
@@ -77,11 +82,13 @@ class TicketSaleRule implements ValidationRule, DataAwareRule
 
         if (! $reservedTicket->can_be_purchased) {
             $fail('This reserved ticket is not available for purchase');
+
             return;
         }
 
         if ($reservedTicket->ticketType->event_id != session('active_event_id')) {
             $fail('Reserved ticket does not belong to the current event');
+
             return;
         }
 
@@ -90,6 +97,7 @@ class TicketSaleRule implements ValidationRule, DataAwareRule
 
         if ($reservedTicket->user_id != $user->id) {
             $fail('Cannot find matching reserved ticket for this user');
+
             return;
         }
     }
@@ -98,6 +106,7 @@ class TicketSaleRule implements ValidationRule, DataAwareRule
     public function setData(array $data): static
     {
         $this->data = $data;
+
         return $this;
     }
 }

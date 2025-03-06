@@ -1,33 +1,26 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Filament\App\Pages;
 
-use App\Filament\Actions\CreateCartAction;
-use App\Forms\Components\TicketTypeField;
-use App\Models\Event;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Rules\TicketSaleRule;
 use App\Services\CartService;
-use Blade;
-use Filament\Pages\Page;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ViewField;
+use Filament\Forms\Components\Wizard;
+use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
-use Filament\Forms\Components\Wizard;
-use Filament\Actions;
-use Filament\Actions\CreateAction;
-use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\ViewField;
-use Filament\Forms\Components\Wizard\Step;
+use Filament\Pages\Page;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
-use Livewire\Component;
 
 /**
  * @property Form $form
@@ -42,7 +35,12 @@ class PurchaseTickets extends Page implements HasForms
 
     protected static ?string $slug = 'purchase';
 
-    /** @var array<string, mixed> $data */
+    // @phpstan-ignore-next-line Required by parent class
+    protected $listeners = [
+        'active-event-updated' => '$refresh',
+    ];
+
+    /** @var array<string, mixed> */
     public array $data = [];
 
     public function form(Form $form): Form
@@ -60,14 +58,14 @@ class PurchaseTickets extends Page implements HasForms
                             TextInput::make('slug'),
                         ]),
                 ])
-                ->submitAction(new HtmlString(Blade::render(<<<BLADE
+                    ->submitAction(new HtmlString(Blade::render(<<<'BLADE'
                     <x-filament::button
                         type="submit"
                         size="sm"
                     >
                         Submit
                     </x-filament::button>
-                BLADE)))
+                BLADE))),
             ])
             ->statePath('data');
     }
@@ -76,20 +74,20 @@ class PurchaseTickets extends Page implements HasForms
     {
         $tickets = TicketType::query()->event(session('active_event_id'))->available()->get();
         $ticketSchema = $tickets->map(function (TicketType $ticket) {
-            return ViewField::make('tickets.'.$ticket->id)
+            return ViewField::make('tickets.' . $ticket->id)
                 ->model($ticket)
                 ->default(0)
-                ->rules([new TicketSaleRule()])
+                ->rules([new TicketSaleRule])
                 ->hiddenLabel()
                 ->view('forms.components.ticket-type-field');
         });
 
         $reserved = ReservedTicket::query()->currentUser()->event(session('active_event_id'))->canBePurchased()->get();
         $reservedSchema = $reserved->map(function (ReservedTicket $ticket) {
-            return ViewField::make('reserved.'.$ticket->id)
+            return ViewField::make('reserved.' . $ticket->id)
                 ->model($ticket)
                 ->default(0)
-                ->rules([new TicketSaleRule()])
+                ->rules([new TicketSaleRule])
                 ->hiddenLabel()
                 ->view('forms.components.reserved-ticket-field');
         });
@@ -100,7 +98,7 @@ class PurchaseTickets extends Page implements HasForms
                     ->schema($ticketSchema->toArray()),
                 Section::make('Your Reserved Tickets')
                     ->description('These Tickets are reserved for you specifically.')
-                    ->schema($reservedSchema->toArray())
+                    ->schema($reservedSchema->toArray()),
             ];
         } else {
             $schema = $ticketSchema->toArray();
@@ -129,10 +127,9 @@ class PurchaseTickets extends Page implements HasForms
          * $tickets = [
          *    ['id' => $id, 'quantity' => $quantity],
          * ]
-         * 
+         *
          * $reserved = [$id, $id, $id]
          */
-
         $tickets = (new Collection($data['tickets'] ?? []))->map(function ($id, $quantity) {
             return [
                 'id' => $id,
@@ -144,7 +141,6 @@ class PurchaseTickets extends Page implements HasForms
         $cartService->createCartAndItems($tickets, $reserved);
     }
 
- 
     public function mount(): void
     {
         $this->form->fill();
