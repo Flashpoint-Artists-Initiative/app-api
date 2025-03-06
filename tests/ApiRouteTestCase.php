@@ -63,7 +63,7 @@ abstract class ApiRouteTestCase extends TestCase
     public function actingAs(Authenticatable $user, $guard = null)
     {
         /** @var \PHPOpenSourceSaver\JWTAuth\JWTGuard */
-        $auth = auth();
+        $auth = auth('api');
         $token = $auth->login($user);
 
         return parent::actingAs($user, $guard)->withToken($token);

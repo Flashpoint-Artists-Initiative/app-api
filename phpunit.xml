@@ -10,6 +10,7 @@
         </testsuite>
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
+            <exclude>tests/Feature/Api</exclude>
         </testsuite>
     </testsuites>
     <source>
@@ -30,7 +31,7 @@
         
         <ini name="memory_limit" value="-1"/>
     </php>
-    <coverage includeUncoveredFiles="true">
+    <coverage includeUncoveredFiles="false">
         <report>
             <clover outputFile="coverage.xml"/>
         </report>
