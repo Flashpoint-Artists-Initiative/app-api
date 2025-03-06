@@ -23,7 +23,7 @@ class EventIndexTest extends ApiRouteTestCase
 
         $response = $this->get($this->endpoint);
 
-        $response->assertStatus(403);//->assertJsonCount($event_count, 'data');
+        $response->assertStatus(403);
     }
 
     #[Test]
