@@ -29,7 +29,7 @@ class TicketTypeFactory extends Factory
             'description' => fake()->paragraph(),
             'active' => true,
             'transferable' => true,
-            'event_id' => Event::factory()->create()->id,
+            'event_id' => Event::factory()->active()->create()->id,
         ];
     }
 

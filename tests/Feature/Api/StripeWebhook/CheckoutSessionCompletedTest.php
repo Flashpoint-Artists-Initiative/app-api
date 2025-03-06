@@ -68,6 +68,8 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
 
         // Override middleware with test version to add event to request without all the checks
         $this->app->instance(StripeWebhookMiddleware::class, new StripeWebhookTestMiddleware($this->event));
+
+        ini_set('error_log', '/dev/null');
     }
 
     #[Test]

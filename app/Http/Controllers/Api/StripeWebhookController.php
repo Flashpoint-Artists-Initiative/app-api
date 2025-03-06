@@ -35,11 +35,11 @@ class StripeWebhookController extends Controller
         try {
             $this->checkoutService->resolveCompletedCheckoutSession($session);
         } catch (ModelNotFoundException $e) { // When there is no cart found
-            Log::channel('stderr')->info('Stripe webhook failed', ['id' => $session->id, 'exception' => $e]);
+            Log::notice('Stripe webhook failed', ['id' => $session->id, 'exception' => $e]);
 
             return response()->json(status: 204);
         } catch (HttpException $e) { // abort() exceptions
-            Log::channel('stderr')->info('Stripe webhook failed', ['id' => $session->id, 'exception' => $e]);
+            Log::notice('Stripe webhook failed', ['id' => $session->id, 'exception' => $e]);
 
             return response()->json(status: 204);
         }

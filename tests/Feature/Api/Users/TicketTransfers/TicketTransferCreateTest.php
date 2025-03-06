@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Api\Users\TicketTransfers;
+namespace Tests\Feature\Users\TicketTransfers;
 
 use App\Enums\RolesEnum;
 use App\Models\Ticketing\PurchasedTicket;
@@ -258,22 +258,22 @@ class TicketTransferCreateTest extends ApiRouteTestCase
 
         $response = $this->actingAs($admin)->postJson($this->endpoint, [
             'email' => 'test@test.com',
-            'purchased_tickets' => [$this->user->purchasedTickets->firstOrFail()->id],
-            'reserved_tickets' => [$this->user->reservedTickets()->doesntHave('purchasedTicket')->firstOrFail()->id],
+            'purchased_tickets' => [$this->purchasedTicket->id],
+            'reserved_tickets' => [$this->reservedTicket->id],
         ]);
 
         $response->assertStatus(201);
 
         $response = $this->actingAs($admin)->postJson($this->endpoint, [
             'email' => 'test@test.com',
-            'purchased_tickets' => [$this->user->purchasedTickets->firstOrFail()->id],
+            'purchased_tickets' => [$this->purchasedTicket->id],
         ]);
 
         $response->assertStatus(422);
 
         $response = $this->actingAs($admin)->postJson($this->endpoint, [
             'email' => 'test@test.com',
-            'reserved_tickets' => [$this->user->reservedTickets()->doesntHave('purchasedTicket')->firstOrFail()->id],
+            'reserved_tickets' => [$this->reservedTicket->id],
         ]);
 
         $response->assertStatus(422);
