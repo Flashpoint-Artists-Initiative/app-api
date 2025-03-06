@@ -73,6 +73,12 @@ jobs:
           STRIPE_TAX_RATES: ${{ vars.TESTING_STRIPE_TAX_RATES }}
 
       - name: Upload coverage reports to Codecov
+      	if: ${{ !cancelled() }}
         uses: codecov/codecov-action@v3
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      - name: Upload test results to Codecov
+      	if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

@@ -27,6 +27,7 @@ yarn-error.log
 *.swo
 phpstan.neon
 coverage.xml
+junit.xml
 .scribe
 _ide_helper.php
 _ide_helper_models.php
