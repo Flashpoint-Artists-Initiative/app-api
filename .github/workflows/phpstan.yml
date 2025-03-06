@@ -26,8 +26,7 @@ jobs:
           php-version: "8.4"
 
       - name: PHPStan
-        uses: docker://oskarstark/phpstan-ga
-        env:
-          REQUIRE_DEV: true
+        uses: php-actions/phpstan@v3
         with:
-          args: analyse app/
+          path: app/
+          php_version: "8.4"
