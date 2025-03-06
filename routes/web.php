@@ -7,3 +7,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('login-redirect', function () {
     return redirect()->route('filament.app.auth.login');
 })->name('login');
+
+Route::view('privacy-policy', 'pages.privacy-policy')->name('privacy-policy');
+Route::view('terms-of-service', 'pages.terms-of-service')->name('terms-of-service');
