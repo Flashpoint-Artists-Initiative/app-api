@@ -7,12 +7,12 @@ namespace App\Providers\Filament;
 use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Pages\Auth\Register;
 use Filament\Http\Middleware\Authenticate;
+use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
-use Illuminate\Support\Facades\Auth;
 
 class AppPanelProvider extends CommonPanelProvider
 {
@@ -27,7 +27,7 @@ class AppPanelProvider extends CommonPanelProvider
             ->registration(Register::class)
             ->passwordReset()
             ->emailVerification()
-            ->profile(EditProfile::class, isSimple: false)
+            // ->profile(EditProfile::class, isSimple: false)
             ->colors([
                 'primary' => Color::Violet,
             ])
@@ -45,8 +45,15 @@ class AppPanelProvider extends CommonPanelProvider
                 NavigationItem::make('Admin Site')
                     ->url(fn () => route('filament.admin.pages.dashboard'))
                     ->icon('heroicon-o-wrench-screwdriver')
-                    ->visible(fn (): bool => Auth::user()?->can('panelAccess.admin') ?? false)
+                    ->visible(fn (): bool => filament()->auth()->user()?->can('panelAccess.admin') ?? false)
                     ->sort(999),
+            ])
+            ->userMenuItems([
+                'profile' => MenuItem::make()
+                    // @phpstan-ignore argument.type
+                    ->label(fn () => filament()->getUserName(filament()->auth()->user()))
+                    ->url(fn () => route('filament.app.profile'))
+                    ->icon('heroicon-o-user-circle'),
             ]);
     }
 

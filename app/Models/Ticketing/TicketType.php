@@ -158,6 +158,11 @@ class TicketType extends Model implements ContractsAuditable
         $query->whereRelation('event', 'active', true);
     }
 
+    public function scopeCurrentEvent(Builder $query): void
+    {
+        $query->where('event_id', Event::getCurrentEventId());
+    }
+
     /**
      * @param  Builder<TicketType>  $query
      */

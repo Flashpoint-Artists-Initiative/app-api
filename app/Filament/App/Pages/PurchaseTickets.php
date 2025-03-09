@@ -72,7 +72,7 @@ class PurchaseTickets extends Page implements HasForms
 
     protected function buildTicketsStep(): Step
     {
-        $tickets = TicketType::query()->event(session('active_event_id'))->available()->get();
+        $tickets = TicketType::query()->currentEvent()->available()->get();
         $ticketSchema = $tickets->map(function (TicketType $ticket) {
             return ViewField::make('tickets.' . $ticket->id)
                 ->model($ticket)
@@ -82,7 +82,7 @@ class PurchaseTickets extends Page implements HasForms
                 ->view('forms.components.ticket-type-field');
         });
 
-        $reserved = ReservedTicket::query()->currentUser()->event(session('active_event_id'))->canBePurchased()->get();
+        $reserved = ReservedTicket::query()->currentUser()->currentEvent()->canBePurchased()->get();
         $reservedSchema = $reserved->map(function (ReservedTicket $ticket) {
             return ViewField::make('reserved.' . $ticket->id)
                 ->model($ticket)

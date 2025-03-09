@@ -194,4 +194,5 @@ return [
     'cart_max_quantity' => 4,
     'cart_expiration_minutes' => 10,
 
+    'default_event_id' => env('DEFAULT_EVENT_ID', 0),
 ];

@@ -6,8 +6,8 @@ namespace App\Models\Ticketing;
 
 use App\Models\Concerns\HasTicketType;
 use App\Models\Concerns\TicketInterface;
+use App\Models\Event;
 use App\Observers\ReservedTicketObserver;
-use Auth;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Auth;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
@@ -90,6 +91,11 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
         $query->whereRelation('ticketType.event', 'id', $eventId);
     }
 
+    public function scopeCurrentEvent(Builder $query): void
+    {
+        $query->whereRelation('ticketType.event', 'id', Event::getCurrentEventId());
+    }
+
     public function scopeCurrentUser(Builder $query): void
     {
         $query->where('user_id', Auth::id());
@@ -121,6 +127,15 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
                     (! is_null($attributes['expiration_date']) && $attributes['expiration_date'] > now()) ||
                     (is_null($attributes['expiration_date']) && $this->ticketType->on_sale)
                 );
+            }
+        );
+    }
+
+    public function finalExpirationDate(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                return $attributes['expiration_date'] ?? $this->ticketType->sale_end_date;
             }
         );
     }

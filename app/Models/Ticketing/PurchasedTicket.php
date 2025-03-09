@@ -6,9 +6,12 @@ namespace App\Models\Ticketing;
 
 use App\Models\Concerns\HasTicketType;
 use App\Models\Concerns\TicketInterface;
+use App\Models\Event;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
@@ -32,6 +35,16 @@ class PurchasedTicket extends Model implements ContractsAuditable, TicketInterfa
     public function reservedTicket(): BelongsTo
     {
         return $this->belongsTo(ReservedTicket::class);
+    }
+
+    public function scopeCurrentEvent(Builder $query): void
+    {
+        $query->whereRelation('ticketType.event', 'id', Event::getCurrentEventId());
+    }
+
+    public function scopeCurrentUser(Builder $query): void
+    {
+        $query->where('user_id', Auth::id());
     }
 
     public static function createFromCartItem(CartItem $item, ?int $userId = null, ?int $orderId = null): void

@@ -132,4 +132,18 @@ class Event extends Model implements ContractsAuditable
             get: fn (mixed $value, array $attributes) => $this->settings['voting_enabled'] ?? false,
         );
     }
+
+    /**
+     * Returns the current event ID from the session,
+     * otherwise the default set in the config, otherwise 0
+     */
+    public static function getCurrentEventId(): int
+    {
+        return session('active_event_id', config('app.default_event_id'));
+    }
+
+    public static function getCurrentEvent(): ?Event
+    {
+        return Event::find(Event::getCurrentEventId());
+    }
 }

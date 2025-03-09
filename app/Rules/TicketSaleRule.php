@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Rules;
 
+use App\Models\Event;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
@@ -62,7 +63,7 @@ class TicketSaleRule implements DataAwareRule, ValidationRule
         /** @var TicketType $ticketType */
         $ticketType = TicketType::findOrFail($id);
 
-        if ($ticketType->event_id != session('active_event_id')) {
+        if ($ticketType->event_id != Event::getCurrentEventId()) {
             $fail('Ticket does not belong to the current event');
 
             return;
@@ -86,7 +87,7 @@ class TicketSaleRule implements DataAwareRule, ValidationRule
             return;
         }
 
-        if ($reservedTicket->ticketType->event_id != session('active_event_id')) {
+        if ($reservedTicket->ticketType->event_id != Event::getCurrentEventId()) {
             $fail('Reserved ticket does not belong to the current event');
 
             return;

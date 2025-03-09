@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\TeamResource\Pages;
+use App\Models\Event;
 use App\Models\Volunteering\Team;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -108,6 +109,6 @@ class TeamResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ])
-            ->where('event_id', session('active_event_id', 0));
+            ->where('event_id', Event::getCurrentEventId());
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\ReservedTicketResource\Pages;
+use App\Models\Event;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
@@ -59,7 +60,7 @@ class ReservedTicketResource extends Resource
                     ->relationship(
                         name: 'ticketType',
                         titleAttribute: 'name',
-                        modifyQueryUsing: fn (Builder $query) => $query->where('event_id', session('active_event_id', 0)),
+                        modifyQueryUsing: fn (Builder $query) => $query->where('event_id', Event::getCurrentEventId()),
                     )
                     ->required()
                     ->reactive(),
@@ -96,7 +97,7 @@ class ReservedTicketResource extends Resource
                     // ->helperText(fn(?ReservedTicket $record) => sprintf("Ticket type sale end date: %s", $record?->ticketType?->sale_end_date?->format('M jS, Y @ g:i A') ?? ''))
                     ->disabled(fn (?ReservedTicket $record) => $record?->is_purchased),
                 Forms\Components\TextInput::make('note')
-                    ->helperText('Use this for the name of the art project, theme camp, or other special note.')
+                    ->helperText('Use this for the name of the art project, theme camp, or other special note. User will see this.')
                     ->maxLength(255)
                     ->disabled(fn (?ReservedTicket $record) => $record?->is_purchased),
             ])
@@ -206,6 +207,6 @@ class ReservedTicketResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->whereRelation('ticketType', 'event_id', session('active_event_id', 0));
+            ->whereRelation('ticketType', 'event_id', Event::getCurrentEventId());
     }
 }
