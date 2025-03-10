@@ -8,9 +8,9 @@ use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\CartItem;
 use App\Models\Ticketing\PurchasedTicket;
 use App\Models\User;
-use Auth;
 use Exception;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class CartService
 {

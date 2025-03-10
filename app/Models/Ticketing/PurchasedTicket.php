@@ -16,7 +16,7 @@ use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
 /**
- * @property-read ReservedTicket $reservedTicket
+ * @property-read ?ReservedTicket $reservedTicket
  */
 class PurchasedTicket extends Model implements ContractsAuditable, TicketInterface
 {
@@ -35,6 +35,11 @@ class PurchasedTicket extends Model implements ContractsAuditable, TicketInterfa
     public function reservedTicket(): BelongsTo
     {
         return $this->belongsTo(ReservedTicket::class);
+    }
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class);
     }
 
     public function scopeCurrentEvent(Builder $query): void

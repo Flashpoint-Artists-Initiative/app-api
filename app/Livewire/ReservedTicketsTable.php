@@ -13,7 +13,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
-use Illuminate\View\View;
 use Livewire\Component;
 
 class ReservedTicketsTable extends Component implements HasForms, HasTable
@@ -25,9 +24,14 @@ class ReservedTicketsTable extends Component implements HasForms, HasTable
         'active-event-updated' => '$refresh',
     ];
 
-    public function render(): View
+    public function render(): string
     {
-        return view('livewire.reserved-tickets-table');
+        return <<<'HTML'
+        <div class="grid flex-1 auto-cols-fr gap-y-8">
+            <span class="text-3xl font-semibold">Your Reserved Tickets</span>
+            {{  $this->table }}
+        </div>
+        HTML;
     }
 
     public function table(Table $table): Table
