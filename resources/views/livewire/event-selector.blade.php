@@ -1,12 +1,14 @@
-{{-- The blank lines around the dropdown block are important for some reason --}}
+{{-- The blank lines around the outermost block are important for some reason --}}
 @if (filled($events))
 
+<div class="flex items-center">
+        <span class="text-lg px-2">{{ $currentEvent }}</span>
         <x-filament::dropdown
             placement="bottom-start"
         >
             <x-slot name="trigger">
-                <x-filament::button icon="heroicon-o-calendar" color="gray" outlined="false">
-                    {{ $currentEvent }}
+                <x-filament::button icon="heroicon-o-calendar" color="primary" outlined="false">
+                    Change Event
                 </x-filament::button>
             </x-slot>
 
@@ -21,5 +23,6 @@
                 @endforeach
             </x-filament::dropdown.list>
         </x-filament::dropdown>
+</div>
 
 @endif
