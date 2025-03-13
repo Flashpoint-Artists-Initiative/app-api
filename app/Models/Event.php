@@ -139,7 +139,7 @@ class Event extends Model implements ContractsAuditable
      */
     public static function getCurrentEventId(): int
     {
-        return session('active_event_id', config('app.default_event_id'));
+        return session('active_event_id', (int) config('app.default_event_id'));
     }
 
     public static function getCurrentEvent(): ?Event

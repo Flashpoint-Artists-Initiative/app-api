@@ -17,6 +17,7 @@ class Waiver extends Model implements ContractsAuditable
     use Auditable, HasFactory;
 
     protected $fillable = [
+        'event_id',
         'title',
         'content',
         'minor_waiver',

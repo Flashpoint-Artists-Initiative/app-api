@@ -25,4 +25,8 @@
         </x-filament::dropdown>
 </div>
 
+@else
+
+    <div />
+
 @endif
