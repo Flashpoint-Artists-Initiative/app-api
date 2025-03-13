@@ -54,7 +54,7 @@ class CommonPanelProvider extends PanelProvider
             ->discoverClusters(...$this->discoverHelper('Clusters'))
             ->plugins([
                 FilamentInactivityGuardPlugin::make()
-                    ->enabled(!app()->isLocal()),
+                    ->enabled(! app()->isLocal()),
             ]);
 
         return $this->addDevPlugins($panel);

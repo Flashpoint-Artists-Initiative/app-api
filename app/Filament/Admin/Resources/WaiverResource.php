@@ -14,7 +14,6 @@ use Filament\Forms\Components\Split;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -51,11 +50,11 @@ class WaiverResource extends Resource
                             ->required(),
                         Forms\Components\Placeholder::make('created_at')
                             ->content(fn (?Waiver $record): ?string => $record?->created_at?->format('Y-m-d H:i:s'))
-                            ->hidden(fn(string $operation) => $operation === 'create'),
+                            ->hidden(fn (string $operation) => $operation === 'create'),
                         Forms\Components\Placeholder::make('updated_at')
                             ->content(fn (?Waiver $record): ?string => $record?->updated_at?->format('Y-m-d H:i:s'))
-                            ->hidden(fn(string $operation, ?Waiver $record) => $operation === 'create' || $record?->updated_at == $record?->created_at),
-                            ])->grow(false),
+                            ->hidden(fn (string $operation, ?Waiver $record) => $operation === 'create' || $record?->updated_at == $record?->created_at),
+                    ])->grow(false),
                 ]),
             ])->columns(1);
     }
@@ -96,7 +95,7 @@ class WaiverResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\CompletedWaiversRelationManager::class
+            RelationManagers\CompletedWaiversRelationManager::class,
         ];
     }
 

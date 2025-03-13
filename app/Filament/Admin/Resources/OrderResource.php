@@ -6,12 +6,10 @@ namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\OrderResource\Pages;
 use App\Livewire\OrderTicketsTable;
-use App\Models\Event;
 use App\Models\Ticketing\Order;
 use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
 use Filament\Infolists\Components\Fieldset;
-use Filament\Infolists\Components\KeyValueEntry;
 use Filament\Infolists\Components\Livewire;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Split;
@@ -22,8 +20,6 @@ use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\QueryBuilder;
-use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
@@ -130,36 +126,36 @@ class OrderResource extends Resource
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
-                        ->when(
-                            $data['created_after'],
-                            fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
-                        );
+                            ->when(
+                                $data['created_after'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                            );
                     })
                     ->indicateUsing(function (array $data): ?string {
                         if (! $data['created_after']) {
                             return null;
                         }
-                 
+
                         return 'Created after ' . Carbon::parse($data['created_after'])->toFormattedDateString();
                     }),
-                    Filter::make('created_before')
-                        ->form([
-                            DatePicker::make('created_before'),
-                        ])
-                        ->query(function (Builder $query, array $data): Builder {
-                            return $query
+                Filter::make('created_before')
+                    ->form([
+                        DatePicker::make('created_before'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
                             ->when(
                                 $data['created_before'],
                                 fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
-                        })
-                        ->indicateUsing(function (array $data): ?string {
-                            if (! $data['created_before']) {
-                                return null;
-                            }
-                     
-                            return 'Created before ' . Carbon::parse($data['created_before'])->toFormattedDateString();
-                        }),
+                    })
+                    ->indicateUsing(function (array $data): ?string {
+                        if (! $data['created_before']) {
+                            return null;
+                        }
+
+                        return 'Created before ' . Carbon::parse($data['created_before'])->toFormattedDateString();
+                    }),
             ], FiltersLayout::AboveContent)
             ->actions([
                 Tables\Actions\ViewAction::make(),

@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\WaiverResource\RelationManagers;
 
 use App\Filament\Admin\Resources\UserResource;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CompletedWaiversRelationManager extends RelationManager
 {

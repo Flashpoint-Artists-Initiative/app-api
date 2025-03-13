@@ -16,9 +16,10 @@ class ListWaivers extends ListRecords
     public function getTitle(): string
     {
         $event = Event::getCurrentEvent()->name ?? 'Unknown Event';
+
         return "$event - Waivers";
     }
-    
+
     // @phpstan-ignore-next-line Required by parent class
     protected $listeners = [
         'active-event-updated' => '$refresh',

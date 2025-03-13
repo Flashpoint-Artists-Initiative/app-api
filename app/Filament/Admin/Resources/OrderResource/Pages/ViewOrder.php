@@ -7,7 +7,6 @@ namespace App\Filament\Admin\Resources\OrderResource\Pages;
 use App\Filament\Admin\Resources\OrderResource;
 use App\Models\Ticketing\Order;
 use Filament\Actions;
-use Filament\Actions\Action;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
 
