@@ -11,6 +11,8 @@ use App\Models\User;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
@@ -33,10 +35,25 @@ class Waivers extends Page implements HasForms, HasTable
         return $table
             ->query(CompletedWaiver::where('user_id', Auth::id()))
             ->columns([
-                //
+                TextColumn::make('waiver.event.name')
+                    ->label('Event'),
+                    TextColumn::make('waiver.title')
+                        ->label('Waiver'),
             ])
-            ->filters([
-                //
-            ]);
+            ->actions([
+                Action::make('view')
+                    ->label('View')
+                    ->icon('heroicon-o-eye')
+                    ->color('primary')
+                    ->modalContent(fn (CompletedWaiver $record): View => view('filament.app.clusters.user-pages.pages.view-waiver', [
+                        'waiver' => $record->waiver,
+                        'completedWaiver' => $record,
+                    ]))
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Close')
+                    ->modalHeading(fn (CompletedWaiver $record): string => "{$record->waiver->event->name}: {$record->waiver->title}"),
+            ])
+            ->emptyStateHeading('No tickets purchased')
+            ->paginated(false);
     }
 }

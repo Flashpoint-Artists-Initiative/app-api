@@ -25,7 +25,7 @@ class Tickets extends Page
     {
         return $infolist
             ->schema([
-                Livewire::make(PurchasedTicketsTable::class)->key('reserved-tickets-table'),
+                Livewire::make(PurchasedTicketsTable::class)->key('purchased-tickets-table'),
                 Livewire::make(ReservedTicketsTable::class)->key('reserved-tickets-table'),
             ])
             ->state([

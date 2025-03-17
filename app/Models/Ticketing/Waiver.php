@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
+/**
+ * @property-read Event $event
+ */
 class Waiver extends Model implements ContractsAuditable
 {
     use Auditable, HasFactory;
