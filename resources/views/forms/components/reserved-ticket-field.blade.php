@@ -17,7 +17,7 @@
             <div>
                 @if ($getRecord()->expiration_date)
                     <p class="text-sm">
-                        Expires on {{$getRecord()->expiration_date}}
+                        Expires on {{$expirationDate}}
                     </p>
                     
                 @endif

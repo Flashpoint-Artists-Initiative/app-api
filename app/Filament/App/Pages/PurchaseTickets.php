@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Filament\App\Pages;
 
+use App\Models\Event;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
+use App\Models\Ticketing\Waiver;
 use App\Rules\TicketSaleRule;
 use App\Services\CartService;
-use Filament\Forms\Components\RichEditor;
+use Carbon\Carbon;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ViewField;
@@ -19,8 +22,10 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
+use Saade\FilamentAutograph\Forms\Components\SignaturePad;
 
 /**
  * @property Form $form
@@ -43,16 +48,17 @@ class PurchaseTickets extends Page implements HasForms
     /** @var array<string, mixed> */
     public array $data = [];
 
+    protected ?Waiver $waiver;
+
     public function form(Form $form): Form
     {
+        $this->waiver = Event::getCurrentEvent()?->waivers()->first();
+
         return $form
             ->schema([
                 Wizard::make([
                     $this->buildTicketsStep(),
-                    Wizard\Step::make('Waivers')
-                        ->schema([
-                            RichEditor::make('content'),
-                        ]),
+                    $this->buildWaiverStep(),
                     Wizard\Step::make('Purchase')
                         ->schema([
                             TextInput::make('slug'),
@@ -89,7 +95,8 @@ class PurchaseTickets extends Page implements HasForms
                 ->default(0)
                 ->rules([new TicketSaleRule])
                 ->hiddenLabel()
-                ->view('forms.components.reserved-ticket-field');
+                ->view('forms.components.reserved-ticket-field')
+                ->viewData(['expirationDate' => Carbon::parse($ticket->expiration_date)->toDayDateTimeString()]);
         });
 
         if ($reservedSchema->count() > 0) {
@@ -109,20 +116,48 @@ class PurchaseTickets extends Page implements HasForms
             ->afterValidation($this->createCart(...));
     }
 
-    protected function createCart(PurchaseTickets $livewire, CartService $cartService): void
+    protected function buildWaiverStep(): Step
+    {
+        /** @var string $username */
+        $username = Auth::user()?->legal_name;
+
+        return Wizard\Step::make('Waivers')
+            ->schema([
+                Placeholder::make('waiver')
+                    ->content($this->getWaiverContent())
+                    ->label(''),
+                TextInput::make('signature')
+                    ->label("I agree to the terms of the waiver and understand that I am signing this waiver electronically.")
+                    ->helperText("You must enter your full legal name as it's your ID.")
+                    ->required()
+                    ->in([$username])
+                    ->validationMessages([
+                        'in' => 'The entered value must match your legal name, as listed in your profile.',
+                    ])
+                    ->hidden($this->waiver === null),
+            ]);
+    }
+
+    protected function getWaiverContent(): HtmlString
+    {
+        if (! $this->waiver) {
+            return new HtmlString('No waiver is required for this event.');
+        }
+
+        return new HtmlString($this->waiver->content);
+    }
+
+    protected function createCart(CartService $cartService): void
     {
         /**
          * We receive data in this format:
          * $data['tickets'] = [
-         *    `id` => `quantity`
+         *    $id => $quantity
          * ]
          * $data['reserved'] = [
-         *    `id` => `boolean`
+         *    $id => $boolean
          * ]
-         */
-        $data = $livewire->form->getState();
-
-        /**
+         *
          * We need to get the data into this format:
          * $tickets = [
          *    ['id' => $id, 'quantity' => $quantity],
@@ -130,13 +165,13 @@ class PurchaseTickets extends Page implements HasForms
          *
          * $reserved = [$id, $id, $id]
          */
-        $tickets = (new Collection($data['tickets'] ?? []))->map(function ($id, $quantity) {
+        $tickets = (new Collection($this->data['tickets'] ?? []))->map(function ($id, $quantity) {
             return [
                 'id' => $id,
                 'quantity' => $quantity,
             ];
         })->toArray();
-        $reserved = (new Collection($data['reserved'] ?? []))->filter(fn ($value) => $value === true)->keys()->toArray();
+        $reserved = (new Collection($this->data['reserved'] ?? []))->filter(fn ($value) => $value === true)->keys()->toArray();
 
         $cartService->createCartAndItems($tickets, $reserved);
     }
