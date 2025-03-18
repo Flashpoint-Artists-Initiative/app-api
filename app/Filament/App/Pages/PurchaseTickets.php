@@ -25,7 +25,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
-use Saade\FilamentAutograph\Forms\Components\SignaturePad;
 
 /**
  * @property Form $form
@@ -127,7 +126,7 @@ class PurchaseTickets extends Page implements HasForms
                     ->content($this->getWaiverContent())
                     ->label(''),
                 TextInput::make('signature')
-                    ->label("I agree to the terms of the waiver and understand that I am signing this waiver electronically.")
+                    ->label('I agree to the terms of the waiver and understand that I am signing this waiver electronically.')
                     ->helperText("You must enter your full legal name as it's your ID.")
                     ->required()
                     ->in([$username])

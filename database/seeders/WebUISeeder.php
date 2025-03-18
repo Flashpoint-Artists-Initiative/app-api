@@ -29,7 +29,7 @@ class WebUISeeder extends Seeder
         Waiver::factory()->for($event)->minorWaiver()->create();
         CompletedWaiver::factory()->for($waiver)->count(3)->create();
         CompletedWaiver::factory()->for($waiver)->for($user)->create();
-        
+
         $ticketType = TicketType::factory()->for($event)->create();
         TicketType::factory()->for($event)->notTransferable()->create();
         TicketType::factory()->for($event)->inactive()->trashed()->create();

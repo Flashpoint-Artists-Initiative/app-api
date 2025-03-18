@@ -6,8 +6,6 @@ namespace App\Filament\App\Clusters\UserPages\Pages;
 
 use App\Filament\App\Clusters\UserPages;
 use App\Models\Ticketing\CompletedWaiver;
-use App\Models\Ticketing\Waiver;
-use App\Models\User;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
@@ -18,11 +16,10 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Blade;
 
 class Waivers extends Page implements HasForms, HasTable
 {
-    use InteractsWithTable, InteractsWithForms;
+    use InteractsWithForms, InteractsWithTable;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
@@ -37,8 +34,8 @@ class Waivers extends Page implements HasForms, HasTable
             ->columns([
                 TextColumn::make('waiver.event.name')
                     ->label('Event'),
-                    TextColumn::make('waiver.title')
-                        ->label('Waiver'),
+                TextColumn::make('waiver.title')
+                    ->label('Waiver'),
             ])
             ->actions([
                 Action::make('view')
