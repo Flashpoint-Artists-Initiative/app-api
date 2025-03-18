@@ -25,6 +25,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
+use App\Models\User;
 
 /**
  * @property Form $form
@@ -117,8 +118,9 @@ class PurchaseTickets extends Page implements HasForms
 
     protected function buildWaiverStep(): Step
     {
-        /** @var string $username */
-        $username = Auth::user()?->legal_name;
+        /** @var User */
+        $user = Auth::user();
+        $username = $user->legal_name;
 
         return Wizard\Step::make('Waivers')
             ->schema([
@@ -134,7 +136,9 @@ class PurchaseTickets extends Page implements HasForms
                         'in' => 'The entered value must match your legal name, as listed in your profile.',
                     ])
                     ->hidden($this->waiver === null),
-            ]);
+            ])  
+            ->hidden(fn() => $this->waiver && $user->waivers()->where('waiver_id', $this->waiver->id)->count() > 0)
+            ->afterValidation($this->createCompletedWaiver(...));
     }
 
     protected function getWaiverContent(): HtmlString
@@ -173,6 +177,18 @@ class PurchaseTickets extends Page implements HasForms
         $reserved = (new Collection($this->data['reserved'] ?? []))->filter(fn ($value) => $value === true)->keys()->toArray();
 
         $cartService->createCartAndItems($tickets, $reserved);
+    }
+
+    protected function createCompletedWaiver(): void
+    {
+        if ($this->waiver) {
+            $this->waiver->completedWaivers()->create([
+                'user_id' => Auth::id(),
+                'form_data' => [
+                    'signature' => $this->data['signature'],
+                ],
+            ]);
+        }
     }
 
     public function mount(): void
