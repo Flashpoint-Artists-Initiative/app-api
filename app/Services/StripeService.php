@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\CartItem;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
@@ -46,7 +47,7 @@ class StripeService
     public function createCheckoutFromCart(Cart $cart): Session
     {
         $client_reference_id = sprintf('Event: %s - User: %d - Cart: %d', $cart->event->name, $cart->user_id, $cart->id);
-        $user = auth()->user();
+        $user = Auth::user();
         abort_unless($user instanceof User, 400, 'User not found');
 
         $checkout_session = $this->stripeClient->checkout->sessions->create([

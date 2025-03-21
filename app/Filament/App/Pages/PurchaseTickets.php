@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\App\Pages;
 
+use App\Forms\Components\StripeCheckout;
 use App\Models\Event;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
@@ -26,6 +27,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
 use App\Models\User;
+use App\Services\StripeService;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Filament\Support\Assets\Js;
 
 /**
  * @property Form $form
@@ -59,10 +65,7 @@ class PurchaseTickets extends Page implements HasForms
                 Wizard::make([
                     $this->buildTicketsStep(),
                     $this->buildWaiverStep(),
-                    Wizard\Step::make('Purchase')
-                        ->schema([
-                            TextInput::make('slug'),
-                        ]),
+                    $this->buildPurchaseStep(),
                 ])
                     ->submitAction(new HtmlString(Blade::render(<<<'BLADE'
                     <x-filament::button
@@ -116,6 +119,9 @@ class PurchaseTickets extends Page implements HasForms
             ->afterValidation($this->createCart(...));
     }
 
+    /**
+     * Create the waiver step of the form wizard.  Hidden if no waiver is found or the user has already signed it.
+     */
     protected function buildWaiverStep(): Step
     {
         /** @var User */
@@ -125,7 +131,7 @@ class PurchaseTickets extends Page implements HasForms
         return Wizard\Step::make('Waivers')
             ->schema([
                 Placeholder::make('waiver')
-                    ->content($this->getWaiverContent())
+                    ->content(new HtmlString($this->waiver->content ?? ''))
                     ->label(''),
                 TextInput::make('signature')
                     ->label('I agree to the terms of the waiver and understand that I am signing this waiver electronically.')
@@ -137,20 +143,22 @@ class PurchaseTickets extends Page implements HasForms
                     ])
                     ->hidden($this->waiver === null),
             ])  
-            ->hidden(fn() => $this->waiver && $user->waivers()->where('waiver_id', $this->waiver->id)->count() > 0)
+            ->hidden(fn() => ! $this->waiver || $user->waivers()->where('waiver_id', $this->waiver->id)->count() > 0)
             ->afterValidation($this->createCompletedWaiver(...));
     }
 
-    protected function getWaiverContent(): HtmlString
+    protected function buildPurchaseStep(): Step
     {
-        if (! $this->waiver) {
-            return new HtmlString('No waiver is required for this event.');
-        }
-
-        return new HtmlString($this->waiver->content);
+        return Wizard\Step::make('Purchase')
+            ->schema([
+                Hidden::make('checkout_session_secret'),
+                StripeCheckout::make('stripe_checkout')
+                    ->checkoutSecret(fn(Get $get) => $get('checkout_session_secret'))
+                    ->label(''),
+            ]);
     }
 
-    protected function createCart(CartService $cartService): void
+    protected function createCart(Set $set, CartService $cartService, StripeService $stripeService): void
     {
         /**
          * We receive data in this format:
@@ -168,7 +176,7 @@ class PurchaseTickets extends Page implements HasForms
          *
          * $reserved = [$id, $id, $id]
          */
-        $tickets = (new Collection($this->data['tickets'] ?? []))->map(function ($id, $quantity) {
+        $tickets = (new Collection($this->data['tickets'] ?? []))->map(function ($quantity, $id) {
             return [
                 'id' => $id,
                 'quantity' => $quantity,
@@ -176,7 +184,33 @@ class PurchaseTickets extends Page implements HasForms
         })->toArray();
         $reserved = (new Collection($this->data['reserved'] ?? []))->filter(fn ($value) => $value === true)->keys()->toArray();
 
-        $cartService->createCartAndItems($tickets, $reserved);
+        $cartService->expireAllUnexpiredCarts();
+        $cart = $cartService->createCartAndItems($tickets, $reserved);
+        $session = $stripeService->createCheckoutFromCart($cart);
+        $cart->setStripeCheckoutIdAndSave($session->id);
+
+        $set('checkout_session_secret', $session->client_secret);
+        $api_key = config('services.stripe.api_key');
+        $this->js(<<<JS
+            stripe = Stripe('{$api_key}');
+
+
+            initialize();
+
+            // Create a Checkout Session
+            async function initialize() {
+                const fetchClientSecret = async () => {
+                    return '{$session->client_secret}';
+                };
+
+                const checkout = await stripe.initEmbeddedCheckout({
+                    fetchClientSecret,
+                });
+
+                // Mount Checkout
+                checkout.mount('#stripe-checkout');
+            }
+        JS);
     }
 
     protected function createCompletedWaiver(): void

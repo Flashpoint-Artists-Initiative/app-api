@@ -87,11 +87,13 @@ class CartService
         $cart = Cart::create(['user_id' => $user->id]);
 
         foreach ($tickets as $row) {
-            CartItem::create([
-                'cart_id' => $cart->id,
-                'ticket_type_id' => $row['id'],
-                'quantity' => $row['quantity'],
-            ]);
+            if ($row['quantity'] > 0) {
+                CartItem::create([
+                    'cart_id' => $cart->id,
+                    'ticket_type_id' => $row['id'],
+                    'quantity' => $row['quantity'],
+                ]);
+            }
         }
 
         $reservedTickets = $user->reservedTickets;

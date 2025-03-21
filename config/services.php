@@ -35,6 +35,7 @@ return [
 
     'stripe' => [
         'secret' => env('STRIPE_SECRET'),
+        'api_key' => env('STRIPE_API_KEY'),
         'payment_method_configuration' => env('STRIPE_PAYMENT_METHOD_CONFIG'),
         'tax_rates' => env('STRIPE_TAX_RATES', ''),
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),

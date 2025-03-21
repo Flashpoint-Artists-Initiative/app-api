@@ -11,7 +11,9 @@ use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
+use Filament\Support\Assets\Js;
 use Filament\Support\Colors\Color;
+use Filament\Support\Facades\FilamentAsset;
 use Filament\Widgets;
 
 class AppPanelProvider extends CommonPanelProvider
@@ -61,4 +63,12 @@ class AppPanelProvider extends CommonPanelProvider
     {
         parent::register();
     }
+
+    // public function boot(): void
+    // {
+    //     FilamentAsset::register([
+    //         Js::make('stripe-js', 'https://js.stripe.com/v3/')->loadedOnRequest(),
+    //         Js::make('stripe-checkout', base_path('resources/js/stripe-checkout.js'))->loadedOnRequest(),
+    //     ]);
+    // }
 }
