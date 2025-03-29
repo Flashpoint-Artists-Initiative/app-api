@@ -57,7 +57,6 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
     /**
      * Query scope that matches all of the following:
      * - ticketType.event.active is true
-     * - ticketType.active is true
      * - no purchased ticket
      * - Either: There's no expiration_date set on the reservedTicket AND the ticketType is still on sale
      * - Or: There is an expiration_date set on the reservedTicket AND it's not expired
@@ -67,7 +66,6 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
     public function scopeCanBePurchased(Builder $query): void
     {
         $query->whereRelation('ticketType.event', 'active', true);
-        $query->whereRelation('ticketType', 'active', true);
         $query->whereDoesntHave('purchasedTicket');
         $query->where(function (Builder $query) {
             $query->where(function (Builder $query) {
@@ -115,8 +113,7 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
     {
         return Attribute::make(
             get: function (mixed $value, array $attributes) {
-                return $this->ticketType->active &&
-                $this->ticketType->event->active &&
+                return $this->ticketType->event->active &&
                 ! $this->is_purchased &&
                 (
                     (! is_null($attributes['expiration_date']) && $attributes['expiration_date'] > now()) ||
