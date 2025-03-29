@@ -52,22 +52,20 @@ class PurchasedTicketsTable extends Component implements HasForms, HasTable
             ->columns([
                 TextColumn::make('ticketType.name')
                     ->label('Ticket Type')
-                    ->description(fn (ReservedTicket $ticket) => str($ticket->note)->limit(50)),
-                TextColumn::make('final_expiration_date')
-                    ->label('Expiration Date')
+                    ->description(fn(PurchasedTicket $ticket) => $ticket->reservedTicket?->note),
+                TextColumn::make('order.created_at')
+                    ->label('Purchase Date')
                     ->dateTime('F jS, Y g:i A T', 'America/New_York'),
                 TextColumn::make('ticketType.price')
                     ->label('Price')
                     ->money('USD'),
             ])
             ->actions([
-                TableAction::make('purchase')
-                    ->label('Purchase')
-                    ->url(fn (ReservedTicket $ticket) => route('filament.app.pages.purchase', ['ticket' => $ticket->id])),
                 TableAction::make('transfer')
                     ->label('Transfer')
                     ->color(Color::Blue)
-                    ->url(fn (ReservedTicket $ticket) => route('filament.app.pages.purchase', ['ticket' => $ticket->id])),
+                    ->url(fn (PurchasedTicket $ticket) => route('filament.app.pages.purchase', ['ticket' => $ticket->id]))
+                    ->visible(fn(PurchasedTicket $ticket) => $ticket->ticketType->transferable),
             ])
             ->paginated(false)
             ->emptyStateHeading('No tickets purchased')

@@ -52,7 +52,7 @@ class ReservedTicketsTable extends Component implements HasForms, HasTable
             ->actions([
                 TableAction::make('purchase')
                     ->label('Purchase')
-                    ->url(fn (ReservedTicket $ticket) => route('filament.app.pages.purchase', ['ticket' => $ticket->id])),
+                    ->url(fn (ReservedTicket $ticket) => route('filament.app.pages.purchase', ['reserved' => $ticket->id])),
                 TableAction::make('transfer')
                     ->label('Transfer')
                     ->color(Color::Blue)

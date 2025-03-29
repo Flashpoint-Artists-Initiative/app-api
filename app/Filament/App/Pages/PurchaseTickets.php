@@ -41,6 +41,7 @@ use Filament\Forms\Set;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\App;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 
 /**
  * @property Form $form
@@ -62,6 +63,10 @@ class PurchaseTickets extends Page implements HasForms, HasActions
 
     public ?Cart $cart;
     public bool $hasPurchasedTickets;
+
+    // Autofill reserved ticket checkbox from query string
+    #[Url]
+    public ?int $reserved = null;
 
     public function __construct()
     {
@@ -115,7 +120,7 @@ class PurchaseTickets extends Page implements HasForms, HasActions
         $reservedSchema = $reserved->map(function (ReservedTicket $ticket) {
             return ViewField::make('reserved.' . $ticket->id)
                 ->model($ticket)
-                ->default(0)
+                ->default($this->reserved == $ticket->id)
                 ->rules([new TicketSaleRule])
                 ->hiddenLabel()
                 ->view('forms.components.reserved-ticket-field')
