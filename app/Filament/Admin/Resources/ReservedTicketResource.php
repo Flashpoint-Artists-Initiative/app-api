@@ -67,7 +67,7 @@ class ReservedTicketResource extends Resource
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->maxLength(255)
-                    ->required()
+                    ->required(fn ($operation) => $operation == 'create')
                     ->disabled(fn (?ReservedTicket $record) => $record?->user_id !== null)
                     ->hintAction(
                         Actions\Action::make('findEmailByUser')
@@ -92,9 +92,9 @@ class ReservedTicketResource extends Resource
                             return '';
                         }
 
-                        return sprintf('%s sale end date: %s', $ticketType->name, $ticketType->sale_end_date?->format('M jS, Y @ g:i A') ?? '');
+                        return sprintf('Defaults to ticket sale end date: %s', $ticketType->sale_end_date?->format('M jS, Y @ g:i A') ?? '');
                     })
-                    // ->helperText(fn(?ReservedTicket $record) => sprintf("Ticket type sale end date: %s", $record?->ticketType?->sale_end_date?->format('M jS, Y @ g:i A') ?? ''))
+                    ->format('Y-m-d H:i:s')
                     ->disabled(fn (?ReservedTicket $record) => $record?->is_purchased),
                 Forms\Components\TextInput::make('note')
                     ->helperText('Use this for the name of the art project, theme camp, or other special note. User will see this.')

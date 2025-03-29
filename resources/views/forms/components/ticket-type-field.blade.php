@@ -15,27 +15,31 @@
             }
         }
     }">
-        <x-filament::section>
-            <x-slot name="heading">
-                {{ $getRecord()->name }}
-            </x-slot>
-            <x-slot name="headerEnd">
-                <p class="text-xl bold">${{ $getRecord()->price }}</p>
-            </x-slot>
-            <x-slot name="description">
-                {{ $getRecord()->description }}
-            </x-slot>
-
-            <div class="flex flex-row justify-end">
-                <x-filament::button x-on:click="decrement()">
-                    -
-                </x-filament::button>
-                <x-filament::badge>
-                    <span class="text-lg" x-text="state"></span>
-                </x-filament::badge>
-                <x-filament::button x-on:click="increment()">
-                    +
-                </x-filament::button>
+        <x-filament::section class="ticket-purchase-item">
+            <div class="flex flex-col gap-3 px-6 py-4">
+                <div class="flex items-center gap-3">
+                    <div class="grid flex-1 gap-y-1">
+                    <h3 class="text-base font-semibold leading-6 text-gray-950 dark:text-white">
+                        {{ $getRecord()->name }}
+                    </h3>
+                    <p class="overflow-hidden break-words text-sm text-gray-500 dark:text-gray-400">
+                        {{ $getRecord()->description }}
+                    </p>
+                </div>
+                <div>
+                    <p class="text-xl bold text-center pb-4">${{ $getRecord()->price }}</p>
+                    <div class="flex flex-row justify-end">
+                        <x-filament::button x-on:click="decrement()" grouped>
+                            -
+                        </x-filament::button>
+                        <x-filament::badge>
+                            <span class="text-lg" x-text="state"></span>
+                        </x-filament::badge>
+                        <x-filament::button x-on:click="increment()" grouped>
+                            +
+                        </x-filament::button>
+                    </div>
+                </div>
             </div>
         </x-filament::section>
     </div>

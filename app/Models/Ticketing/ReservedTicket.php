@@ -41,11 +41,6 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
         'expiration_date' => 'datetime',
     ];
 
-    protected function serializeDate(DateTimeInterface $date): string
-    {
-        return $date->format('M jS, Y @ g:i A');
-    }
-
     /**
      * @return HasOne<PurchasedTicket, $this>
      */

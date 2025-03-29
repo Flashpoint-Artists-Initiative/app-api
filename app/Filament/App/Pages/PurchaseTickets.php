@@ -6,6 +6,7 @@ namespace App\Filament\App\Pages;
 
 use App\Forms\Components\StripeCheckout;
 use App\Models\Event;
+use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Models\Ticketing\Waiver;
@@ -28,17 +29,24 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
 use App\Models\User;
 use App\Services\StripeService;
+use Filament\Actions\Action as ActionsAction;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Actions\StaticAction;
+use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
-use Filament\Support\Assets\Js;
+use Illuminate\Support\Facades\App;
+use Livewire\Attributes\On;
 
 /**
  * @property Form $form
  */
-class PurchaseTickets extends Page implements HasForms
+class PurchaseTickets extends Page implements HasForms, HasActions
 {
-    use InteractsWithForms;
+    use InteractsWithForms, InteractsWithActions;
 
     protected static ?string $navigationIcon = 'heroicon-o-ticket';
 
@@ -46,15 +54,26 @@ class PurchaseTickets extends Page implements HasForms
 
     protected static ?string $slug = 'purchase';
 
-    // @phpstan-ignore-next-line Required by parent class
-    protected $listeners = [
-        'active-event-updated' => '$refresh',
-    ];
-
     /** @var array<string, mixed> */
     public array $data = [];
 
     protected ?Waiver $waiver;
+
+    public ?Cart $cart;
+    public bool $hasPurchasedTickets;
+
+    public function __construct()
+    {
+        $this->refreshProperties();
+    }
+
+    protected function refreshProperties(): void
+    {
+        /** @var User */
+        $user = Auth::user();
+        $this->cart = app(CartService::class)->getActiveCart();
+        $this->hasPurchasedTickets = $user->purchasedTickets()->currentEvent()->exists();
+    }
 
     public function form(Form $form): Form
     {
@@ -63,18 +82,19 @@ class PurchaseTickets extends Page implements HasForms
         return $form
             ->schema([
                 Wizard::make([
-                    $this->buildTicketsStep(),
                     $this->buildWaiverStep(),
-                    $this->buildPurchaseStep(),
+                    $this->buildTicketsStep(),
                 ])
                     ->submitAction(new HtmlString(Blade::render(<<<'BLADE'
-                    <x-filament::button
-                        type="submit"
-                        size="sm"
-                    >
-                        Submit
-                    </x-filament::button>
-                BLADE))),
+                        <x-filament::button
+                            type="submit"
+                            size="sm"
+                        >
+                            Checkout
+                        </x-filament::button>
+                    BLADE)))
+                    // ->previousAction(fn(Action $action) => $action->action(fn() => $form->fill()))
+                    ,
             ])
             ->statePath('data');
     }
@@ -88,7 +108,8 @@ class PurchaseTickets extends Page implements HasForms
                 ->default(0)
                 ->rules([new TicketSaleRule])
                 ->hiddenLabel()
-                ->view('forms.components.ticket-type-field');
+                ->view('forms.components.ticket-type-field')
+                ->afterStateUpdated(fn(Set $set) => $set('tickets.' . $ticket->id, 0));
         });
 
         $reserved = ReservedTicket::query()->currentUser()->currentEvent()->canBePurchased()->get();
@@ -139,6 +160,7 @@ class PurchaseTickets extends Page implements HasForms
                     ->required()
                     ->in([$username])
                     ->validationMessages([
+                        'required' => 'You must agree to the terms of the waiver and sign it.',
                         'in' => 'The entered value must match your legal name, as listed in your profile.',
                     ])
                     ->hidden($this->waiver === null),
@@ -147,18 +169,7 @@ class PurchaseTickets extends Page implements HasForms
             ->afterValidation($this->createCompletedWaiver(...));
     }
 
-    protected function buildPurchaseStep(): Step
-    {
-        return Wizard\Step::make('Purchase')
-            ->schema([
-                Hidden::make('checkout_session_secret'),
-                StripeCheckout::make('stripe_checkout')
-                    ->checkoutSecret(fn(Get $get) => $get('checkout_session_secret'))
-                    ->label(''),
-            ]);
-    }
-
-    protected function createCart(Set $set, CartService $cartService, StripeService $stripeService): void
+    public function createCart(CartService $cartService, StripeService $stripeService): void
     {
         /**
          * We receive data in this format:
@@ -176,41 +187,19 @@ class PurchaseTickets extends Page implements HasForms
          *
          * $reserved = [$id, $id, $id]
          */
-        $tickets = (new Collection($this->data['tickets'] ?? []))->map(function ($quantity, $id) {
+        $data = $this->form->getState();
+        $tickets = (new Collection($data['tickets'] ?? []))->map(function ($quantity, $id) {
             return [
                 'id' => $id,
                 'quantity' => $quantity,
             ];
         })->toArray();
-        $reserved = (new Collection($this->data['reserved'] ?? []))->filter(fn ($value) => $value === true)->keys()->toArray();
+        $reserved = (new Collection($data['reserved'] ?? []))->filter(fn ($value) => $value === true)->keys()->toArray();
 
         $cartService->expireAllUnexpiredCarts();
         $cart = $cartService->createCartAndItems($tickets, $reserved);
         $session = $stripeService->createCheckoutFromCart($cart);
         $cart->setStripeCheckoutIdAndSave($session->id);
-
-        $set('checkout_session_secret', $session->client_secret);
-        $api_key = config('services.stripe.api_key');
-        $this->js(<<<JS
-            stripe = Stripe('{$api_key}');
-
-
-            initialize();
-
-            // Create a Checkout Session
-            async function initialize() {
-                const fetchClientSecret = async () => {
-                    return '{$session->client_secret}';
-                };
-
-                const checkout = await stripe.initEmbeddedCheckout({
-                    fetchClientSecret,
-                });
-
-                // Mount Checkout
-                checkout.mount('#stripe-checkout');
-            }
-        JS);
     }
 
     protected function createCompletedWaiver(): void
@@ -225,8 +214,32 @@ class PurchaseTickets extends Page implements HasForms
         }
     }
 
+    public function checkoutAction(): ActionsAction
+    {
+        return ActionsAction::make('checkout')
+            ->action(fn() => $this->form->getState());
+    }
+
+    public function ticketInfoAction(): ActionsAction
+    {
+        return ActionsAction::make('ticketInfo')
+            ->link()
+            ->label('How does ticketing work?')
+            ->modalContent(view('filament.app.modals.ticket-info'))
+            ->modalSubmitAction(false)
+            ->modalCancelAction(fn(StaticAction $action) => $action->label('Close'));
+    }
+
+    public function checkout(): void
+    {
+        App::call([$this, 'createCart']);
+        redirect(Checkout::getUrl());
+    }
+
+    #[On('active-event-updated')]
     public function mount(): void
     {
         $this->form->fill();
+        $this->refreshProperties();
     }
 }

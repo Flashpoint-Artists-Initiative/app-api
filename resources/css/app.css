@@ -1,6 +1,38 @@
+/* Set the top bar image size */
 .fi-simple-header img.fi-logo {
     height: 10em;
 }
 .fi-sidebar-header img.fi-logo {
     height: 3em;
+}
+
+/* Hide the wizard header for the purchase tickets flow */
+.purchase-tickets-form .fi-fo-wizard-header {
+    display: none;
+}
+
+.rounded-l-lg {
+    border-top-left-radius: .5rem;
+    border-bottom-left-radius: .5rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.rounded-r-lg {
+    border-top-right-radius: .5rem;
+    border-bottom-right-radius: .5rem;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.ticket-purchase-item button {
+    flex-grow: 0;
+}
+
+.ticket-purchase-item .fi-badge {
+    border-radius: 0;
+}
+
+.ticket-purchase-item div.fi-section-content.p-6 {
+    padding: 0.25rem
 }

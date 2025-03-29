@@ -11,6 +11,9 @@
         </x-slot>
         <x-slot name="description">
             {{ $getRecord()->ticketType->description }}
+            @if (!empty($getRecord()->note))
+            <p>{{ $getRecord()->note }}</p>
+            @endif
         </x-slot>
 
         <div class="flex flex-row justify-between">
