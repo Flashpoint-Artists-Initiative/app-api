@@ -38,6 +38,7 @@ use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\App;
 use Livewire\Attributes\On;
 
@@ -89,12 +90,11 @@ class PurchaseTickets extends Page implements HasForms, HasActions
                         <x-filament::button
                             type="submit"
                             size="sm"
+                            wire:target="checkout"
                         >
                             Checkout
                         </x-filament::button>
-                    BLADE)))
-                    // ->previousAction(fn(Action $action) => $action->action(fn() => $form->fill()))
-                    ,
+                    BLADE))),
             ])
             ->statePath('data');
     }
@@ -108,8 +108,7 @@ class PurchaseTickets extends Page implements HasForms, HasActions
                 ->default(0)
                 ->rules([new TicketSaleRule])
                 ->hiddenLabel()
-                ->view('forms.components.ticket-type-field')
-                ->afterStateUpdated(fn(Set $set) => $set('tickets.' . $ticket->id, 0));
+                ->view('forms.components.ticket-type-field');
         });
 
         $reserved = ReservedTicket::query()->currentUser()->currentEvent()->canBePurchased()->get();
@@ -217,7 +216,7 @@ class PurchaseTickets extends Page implements HasForms, HasActions
     public function checkoutAction(): ActionsAction
     {
         return ActionsAction::make('checkout')
-            ->action(fn() => $this->form->getState());
+            ->url(Checkout::getUrl());
     }
 
     public function ticketInfoAction(): ActionsAction

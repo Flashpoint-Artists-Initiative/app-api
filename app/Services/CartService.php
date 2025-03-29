@@ -144,6 +144,8 @@ class CartService
         $cart = $this->getCartFromSessionId($sessionId);
 
         $cart->items->each(fn ($item) => PurchasedTicket::createFromCartItem($item, $cart->user_id, $orderId));
+
+        $cart->expire();
     }
 
     public function getCartFromSessionId(string $sessionId): Cart

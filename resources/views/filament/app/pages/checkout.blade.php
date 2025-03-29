@@ -10,6 +10,7 @@
 @script
 <script>
     const stripe = Stripe('{{ $stripeKey }}');
+    const checkoutId = '{{ $this->checkoutId }}';
 
     initialize();
 
@@ -21,8 +22,9 @@
 
         const onComplete = () => {
             checkout.destroy();
-            {{-- window.location.replace('{{ route('filament.app.events.show', $this->event) }}'); --}}
+
             $wire.checkoutComplete = true;
+            $wire.completeCheckout(checkoutId);
         };
 
         const checkout = await stripe.initEmbeddedCheckout({
@@ -36,10 +38,9 @@
 </script>
 @endscript
 
-
 <div wire:show="!checkoutComplete" wire:cloak>
     <x-notification-banner color="info" class="mb-2">
-        Your cart will expire in {{ $this->cart->expiration_date->diffForHumans() }}.
+        Your cart will expire {{ $this->cart->expiration_date->diffForHumans() }}.
     </x-notification-banner>
     <div id="stripe-checkout">
     </div>

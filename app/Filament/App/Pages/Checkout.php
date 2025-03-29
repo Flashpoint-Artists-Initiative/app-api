@@ -6,6 +6,7 @@ namespace App\Filament\App\Pages;
 
 use App\Models\Ticketing\Cart;
 use App\Services\CartService;
+use App\Services\CheckoutService;
 use App\Services\StripeService;
 use Filament\Pages\Page;
 
@@ -16,6 +17,7 @@ class Checkout extends Page
     protected static string $view = 'filament.app.pages.checkout';
 
     public ?string $checkoutSecret;
+    public ?string $checkoutId;
     public ?Cart $cart;
     public bool $checkoutComplete = false;
     
@@ -29,6 +31,19 @@ class Checkout extends Page
         }
 
         $session = $stripeService->getCheckoutSession($this->cart->stripe_checkout_id);
+
+        if ($session->status !== "open") {
+            $this->redirect(PurchaseTickets::getUrl());
+        }
+
+        $this->checkoutId = $this->cart->stripe_checkout_id;
         $this->checkoutSecret = $session->client_secret;
+    }
+
+    public function completeCheckout(string $sessionId, StripeService $stripeService, CheckoutService $checkoutService): void
+    {
+        $this->checkoutComplete = true;
+        $session = $stripeService->getCheckoutSession($sessionId);
+        $checkoutService->resolveCompletedCheckoutSession($session);
     }
 }
