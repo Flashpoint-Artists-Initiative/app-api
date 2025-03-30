@@ -50,4 +50,9 @@ class EventSelector extends Component
         $this->dispatch('active-event-updated', $eventId);
         $this->eventId = $eventId;
     }
+
+    public function mount(): void
+    {
+        $this->eventId = Event::getCurrentEventId();
+    }
 }

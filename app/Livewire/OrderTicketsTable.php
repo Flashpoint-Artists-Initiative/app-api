@@ -40,7 +40,7 @@ class OrderTicketsTable extends Component implements HasForms, HasTable
                     ->description(fn (PurchasedTicket $record) => $record->reservedTicket?->note),
                 TextColumn::make('ticketType.price')
                     ->label('Cost')
-                    ->money('USD', 100),
+                    ->money('USD'),
             ])
             ->paginated(false);
     }

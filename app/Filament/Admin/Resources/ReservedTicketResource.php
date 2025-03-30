@@ -109,8 +109,8 @@ class ReservedTicketResource extends Resource
     {
         return Section::make([
             Forms\Components\Placeholder::make('Associated User')
-                ->content(function (?ReservedTicket $record) {
-                    if ($record?->user_id) {
+                ->content(function (ReservedTicket $record) {
+                    if ($record->user_id) {
                         return Action::make()
                             ->label($record->user->display_name)
                             ->icon('heroicon-m-user')
@@ -118,19 +118,16 @@ class ReservedTicketResource extends Resource
                             ->link();
                     }
                 })
-                ->hidden(fn (?ReservedTicket $record) => ! $record?->user_id),
+                ->hidden(fn (ReservedTicket $record) => ! $record->user_id),
             Forms\Components\Placeholder::make('Purchased Ticket')
-                ->content(function (?ReservedTicket $record) {
-                    if ($record?->is_purchased) {
+                ->content(function (ReservedTicket $record) {
+                    if ($record->is_purchased) {
                         return Action::make('get-purchased-ticket')
-                            // ->label($record->user->display_name)
-                            ->label('TODO')
+                            ->label($record->purchasedTicket?->created_at?->format('M jS, Y @ g:i A'))
                             ->icon('heroicon-s-ticket')
-                            // ->url(UserResource::getUrl('view', ['record' => $record->purchasedTicket?->id]))
+                            ->url(PurchasedTicketResource::getUrl('view', ['record' => $record->purchasedTicket?->id]))
                             ->link();
                     }
-
-                    return 'No user associated';
                 })
                 ->hidden(fn (?ReservedTicket $record) => ! $record?->is_purchased),
             Forms\Components\Placeholder::make('Created At')

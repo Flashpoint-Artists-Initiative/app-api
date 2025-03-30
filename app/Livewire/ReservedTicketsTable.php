@@ -29,7 +29,7 @@ class ReservedTicketsTable extends Component implements HasForms, HasTable
     public function render(): string
     {
         return <<<'HTML'
-        <div class="grid flex-1 auto-cols-fr gap-y-8">
+        <div class="grid flex-1 gap-y-8">
             <span class="text-3xl font-semibold">Your Reserved Tickets</span>
             {{  $this->table }}
         </div>
