@@ -25,6 +25,8 @@ class Waivers extends Page implements HasForms, HasTable
 
     protected static string $view = 'filament.app.clusters.user-pages.pages.waivers';
 
+    protected static ?int $navigationSort = 4;
+
     protected static ?string $cluster = UserPages::class;
 
     public function table(Table $table): Table

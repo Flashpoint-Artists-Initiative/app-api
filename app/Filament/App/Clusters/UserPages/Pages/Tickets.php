@@ -15,9 +15,11 @@ use App\Models\User;
 
 class Tickets extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-ticket';
 
     protected static ?string $navigationLabel = 'My Tickets';
+
+    protected static ?int $navigationSort = 1;
 
     protected static string $view = 'filament.app.clusters.user-pages.pages.tickets';
 

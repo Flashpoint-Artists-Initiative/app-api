@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use App\Filament\App\Clusters\UserPages\Pages\TicketTransfers;
+use App\Filament\App\Pages\PurchaseTickets;
 use App\Models\Ticketing\ReservedTicket;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -37,7 +39,7 @@ class ReservedTicketsTable extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(ReservedTicket::query()->currentUser()->currentEvent()->canBePurchased())
+            ->query(ReservedTicket::query()->currentUser()->currentEvent()->canBePurchased()->noActiveTransfer())
             ->columns([
                 TextColumn::make('ticketType.name')
                     ->label('Ticket Type')
@@ -52,11 +54,11 @@ class ReservedTicketsTable extends Component implements HasForms, HasTable
             ->actions([
                 TableAction::make('purchase')
                     ->label('Purchase')
-                    ->url(fn (ReservedTicket $ticket) => route('filament.app.pages.purchase', ['reserved' => $ticket->id])),
+                    ->url(fn (ReservedTicket $ticket) => PurchaseTickets::getUrl(['reserved' => $ticket->id])),
                 TableAction::make('transfer')
                     ->label('Transfer')
                     ->color(Color::Blue)
-                    ->url(fn (ReservedTicket $ticket) => route('filament.app.pages.purchase', ['ticket' => $ticket->id])),
+                    ->url(fn (ReservedTicket $ticket) => TicketTransfers::getUrl(['reserved' => $ticket->id, 'action' => 'newTransfer'])),
             ])
             ->paginated(false);
     }

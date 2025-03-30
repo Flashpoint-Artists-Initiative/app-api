@@ -9,11 +9,13 @@ use App\Models\User;
 use App\Notifications\TicketTransferNotification;
 use App\Observers\TicketTransferObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Facades\Auth;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
@@ -30,6 +32,7 @@ class TicketTransfer extends Model implements ContractsAuditable
     protected $fillable = [
         'user_id',
         'recipient_email',
+        'recipient_user_id',
         'completed',
     ];
 
@@ -68,6 +71,18 @@ class TicketTransfer extends Model implements ContractsAuditable
     public function recipient(): BelongsTo
     {
         return $this->belongsTo(User::class, 'recipient_email', 'email');
+    }
+
+    public function scopeInvolvesUser(Builder $query, ?int $userId = null): void
+    {
+        /** @var User $user */
+        $user = $userId ? User::findOrFail($userId) : Auth::user();
+
+        $query->where(function (Builder $query) use ($user) {
+            $query->where('user_id', $user->id)
+                ->orWhere('recipient_email', $user->email)
+                ->orWhere('recipient_user_id', $user->id);
+            });
     }
 
     /**

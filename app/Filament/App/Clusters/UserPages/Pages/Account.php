@@ -19,13 +19,15 @@ class Account extends Page
 {
     use HasAuthComponents;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-user';
 
     protected static ?string $navigationLabel = 'Account Details';
 
     protected static ?string $title = 'Account Details';
 
     protected static string $view = 'filament.app.clusters.user-pages.pages.account';
+
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $cluster = UserPages::class;
 

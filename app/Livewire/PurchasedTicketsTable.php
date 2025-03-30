@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use App\Filament\App\Clusters\UserPages\Pages\TicketTransfers;
 use App\Models\Event;
 use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
@@ -48,7 +49,7 @@ class PurchasedTicketsTable extends Component implements HasForms, HasTable
         }
 
         return $table
-            ->query(PurchasedTicket::query()->currentUser()->currentEvent())
+            ->query(PurchasedTicket::query()->currentUser()->currentEvent()->noActiveTransfer())
             ->columns([
                 TextColumn::make('ticketType.name')
                     ->label('Ticket Type')
@@ -64,7 +65,7 @@ class PurchasedTicketsTable extends Component implements HasForms, HasTable
                 TableAction::make('transfer')
                     ->label('Transfer')
                     ->color(Color::Blue)
-                    ->url(fn (PurchasedTicket $ticket) => route('filament.app.pages.purchase', ['ticket' => $ticket->id]))
+                    ->url(fn (PurchasedTicket $ticket) => TicketTransfers::getUrl(['purchased' => $ticket->id, 'action' => 'newTransfer']))
                     ->visible(fn(PurchasedTicket $ticket) => $ticket->ticketType->transferable),
             ])
             ->paginated(false)

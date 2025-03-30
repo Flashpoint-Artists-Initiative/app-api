@@ -8,6 +8,7 @@ use App\Filament\Admin\Resources\TicketTypeResource\Pages;
 use App\Models\Event;
 use App\Models\Ticketing\TicketType;
 use Filament\Forms;
+use Filament\Forms\Components\Component;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -44,7 +45,9 @@ class TicketTypeResource extends Resource
                 Forms\Components\TextInput::make('price')
                     ->required()
                     ->numeric()
-                    ->prefix('$'),
+                    ->prefix('$')
+                    ->disabled(fn(TicketType $record) => $record->purchasedTickets()->exists())
+                    ->helperText(fn (string $operation, Component $component) => $operation == 'edit' && $component->isDisabled() ? 'Price cannot be changed once tickets have been sold' : null),
                 Forms\Components\Textarea::make('description')
                     ->required()
                     ->columnSpanFull(),

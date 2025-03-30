@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Ticketing\TicketTransfer;
 use App\Models\Ticketing\TicketType;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -67,6 +68,23 @@ trait HasTicketType
             'ticket_type_id', // Local key for purchasedTicket
             'event_id' // Local key for ticketType
         );
+    }
+
+    public function scopeCanBeTransferred(Builder $query): void
+    {
+        $query->whereHas('ticketType', function (Builder $query) {
+            $query->where('transferable', true);
+        })
+        ->whereDoesntHave('transfers', function (Builder $query) {
+            $query->where('completed', false);
+        });
+    }
+
+    public function scopeNoActiveTransfer(Builder $query): void
+    {
+        $query->whereDoesntHave('transfers', function (Builder $query) {
+            $query->where('completed', false);
+        });
     }
 
     /**

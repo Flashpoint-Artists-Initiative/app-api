@@ -116,7 +116,7 @@ class User extends Authenticatable implements ContractsAuditable, FilamentUser, 
     public function availableReservedTickets(): HasMany
     {
         return $this->hasMany(ReservedTicket::class)
-            ->where(fn ($query) => $query->canBePurchased());
+            ->where(fn ($query) => $query->canBePurchased()->noActiveTransfer());
     }
 
     /**
