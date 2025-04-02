@@ -7,6 +7,7 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\OrderResource\Pages;
 use App\Livewire\OrderTicketsTable;
 use App\Models\Ticketing\Order;
+use App\Services\StripeService;
 use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
 use Filament\Infolists\Components\Fieldset;
@@ -25,6 +26,7 @@ use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 
 class OrderResource extends Resource
 {
@@ -34,10 +36,33 @@ class OrderResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'id';
 
+    protected static int $numTaxItems = 0;
+
     public static function getRecordTitle(?Model $record): string|Htmlable|null
     {
         /** @var Order $record */
         return $record ? "Order #{$record->id}" : static::getModelLabel();
+    }
+
+    /**
+     * @return TextEntry[] A dynamic number of infolist entries based on the number of tax items
+     */
+    protected static function buildTaxItemSchema(): array
+    {
+        $output = App::call(function(StripeService $stripeService) {
+            $output = [];
+            foreach ($stripeService->getTaxRatePercentages() as $label => $item) {
+                $output[] = TextEntry::make('amount_tax')
+                    ->label($label)
+                    ->formatStateUsing(fn(int $state) => '$' . $stripeService->splitTaxAmount($state)[$label] / 100);
+            }
+
+            return $output;
+        });
+
+        self::$numTaxItems = count($output);
+
+        return $output;
     }
 
     public static function infolist(Infolist $infolist): Infolist
@@ -52,13 +77,14 @@ class OrderResource extends Resource
                                 TextEntry::make('amount_subtotal')
                                     ->label('Subtotal')
                                     ->money('USD', 100),
-                                TextEntry::make('amount_tax')
-                                    ->label('Tax')
-                                    ->money('USD', 100),
+                                ...self::buildTaxItemSchema(),
+                                // TextEntry::make('amount_tax')
+                                //     ->label('Tax')
+                                //     ->money('USD', 100),
                                 TextEntry::make('amount_total')
                                     ->label('Total')
                                     ->money('USD', 100),
-                            ])->columns(3),
+                            ])->columns(2 + self::$numTaxItems),
                     ]),
                     Section::make([
                         TextEntry::make('created_at'),

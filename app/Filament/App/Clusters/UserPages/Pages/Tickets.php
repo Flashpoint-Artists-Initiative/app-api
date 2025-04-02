@@ -34,7 +34,7 @@ class Tickets extends Page
             ->schema([
                 Livewire::make(PurchasedTicketsTable::class)->key('purchased-tickets-table'),
                 Livewire::make(ReservedTicketsTable::class)->key('reserved-tickets-table')
-                    ->visible(fn() => $user->availableReservedTickets()->exists()),
+                    ->visible(fn() => $user->availableReservedTickets()->currentEvent()->exists()),
             ])
             ->state([
                 'name' => 'John Doe',

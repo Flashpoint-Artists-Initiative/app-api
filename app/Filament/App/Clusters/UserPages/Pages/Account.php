@@ -14,6 +14,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Pages\Page;
 use Filament\Support\Colors\Color;
+use Illuminate\Support\Facades\Auth;
 
 class Account extends Page
 {
@@ -36,7 +37,7 @@ class Account extends Page
         return $infolist
             ->record(filament()->auth()->user())
             ->schema([
-                Section::make('Legal Name')
+                Section::make('Click to view legal name')
                     ->schema([
                         TextEntry::make('legal_name'),
                     ])
@@ -60,7 +61,7 @@ class Account extends Page
             Action::make('edit')
                 ->fillForm(function () {
                     /** @var User */
-                    $user = filament()->auth()->user();
+                    $user = Auth::user();
 
                     return [
                         'legal_name' => $user->legal_name,
@@ -90,7 +91,7 @@ class Account extends Page
                 }),
             Action::make('delete')
                 ->requiresConfirmation()
-                ->modalDescription('Are you sure you want to delete your account? This action cannot be undone.')
+                ->modalDescription('Are you sure you want to delete your account? This action cannot be undone.  Any tickets you have purchased will no longer be available.')
                 ->modalHeading('Delete Account')
                 ->color(Color::Red),
             // ->action(fn () => $this->post->delete()),

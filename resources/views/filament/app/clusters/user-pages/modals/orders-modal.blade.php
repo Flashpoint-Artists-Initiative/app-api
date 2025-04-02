@@ -1,0 +1,1 @@
+<livewire:order-infolist :orderId="$order->id">

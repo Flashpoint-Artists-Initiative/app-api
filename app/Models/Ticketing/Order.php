@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
@@ -93,5 +94,15 @@ class Order extends Model implements ContractsAuditable
     public function scopeStripeCheckoutId(Builder $query, string $sessionId): void
     {
         $query->where('stripe_checkout_id', $sessionId);
+    }
+
+    public function scopeUser(Builder $query, int $userId): void
+    {
+        $query->where('user_id', $userId);
+    }
+
+    public function scopeCurrentUser(Builder $query): void
+    {
+        $query->where('user_id', Auth::id());
     }
 }

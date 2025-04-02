@@ -157,4 +157,25 @@ class StripeService
 
         return $output;
     }
+
+    /**
+     * @return array<string,int> The tax rate description => The amount of that tax, in cents
+     */
+    public function splitTaxAmount(int $amount): array
+    {
+        $percentages = $this->getTaxRatePercentages();
+        $sum = array_sum($percentages);
+
+        $output = [];
+
+        foreach ($percentages as $desc => $taxPercentage) {
+            $output[$desc] = (int) round($taxPercentage / $sum * $amount);
+        }
+
+        // Make sure we end up with the same total
+        $diff = array_sum($output) - $amount;
+        $output[array_key_first($output)] += $diff;
+
+        return $output;
+    }
 }

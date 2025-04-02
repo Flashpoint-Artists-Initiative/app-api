@@ -7,9 +7,13 @@ namespace App\Filament\Traits;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
+use Livewire\Attributes\Url;
 
 trait HasAuthComponents
 {
+    #[Url]
+    public string $email = '';
+
     protected function getLegalNameFormComponent(): Component
     {
         return TextInput::make('legal_name')
@@ -38,5 +42,17 @@ trait HasAuthComponents
             ])
             ->displayFormat('d/m/Y')
             ->helperText('Used to verify your age while entering the event.');
+    }
+
+    protected function getEmailFormComponent(): Component
+    {
+        return TextInput::make('email')
+            ->label('Email address')
+            ->email()
+            ->required()
+            ->default($this->email)
+            ->maxLength(255)
+            ->helperText('If you are creating an account to accept a ticket transfer, please use the email address the transfer was sent to.')
+            ->unique(ignoreRecord: true);
     }
 }

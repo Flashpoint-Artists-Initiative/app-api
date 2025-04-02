@@ -35,11 +35,13 @@ class OrderTicketsTable extends Component implements HasForms, HasTable
         return $table
             ->query(PurchasedTicket::query()->where('order_id', $this->record->id))
             ->columns([
-                TextColumn::make('id'),
+                TextColumn::make('id')
+                    ->label('Ticket Number')
+                    ->prefix('#'),
                 TextColumn::make('ticketType.name')
                     ->description(fn (PurchasedTicket $record) => $record->reservedTicket?->note),
                 TextColumn::make('ticketType.price')
-                    ->label('Cost')
+                    ->label('Price')
                     ->money('USD'),
             ])
             ->paginated(false);
