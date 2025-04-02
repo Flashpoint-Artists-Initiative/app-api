@@ -17,7 +17,6 @@ class AccurateOrderSeeder extends Seeder
     public function run(): void
     {
         $stripeService = app()->make(StripeService::class);
-        $taxRates = $stripeService->getTaxRatePercentages();
 
         $event = Event::has('ticketTypes')->withCount('ticketTypes')->orderByDesc('ticket_types_count')->first();
         $ticketTypes = $event->ticketTypes;
@@ -59,9 +58,8 @@ class AccurateOrderSeeder extends Seeder
                 $ticketData[] = $data;
             }
 
-            foreach ($taxRates as $percentage) {
-                $amountTax += ($amountSubtotal * ($percentage / 100));
-            }
+            $amountTax = $stripeService->calculateTax($amountSubtotal);
+            $amountFees = $stripeService->calculateFees($amountSubtotal);
 
             Order::factory()->createQuietly([
                 'user_id' => $cart->user_id,
@@ -71,7 +69,8 @@ class AccurateOrderSeeder extends Seeder
                 'ticket_data' => $ticketData,
                 'amount_subtotal' => $amountSubtotal,
                 'amount_tax' => $amountTax,
-                'amount_total' => $amountSubtotal + $amountTax,
+                'amount_fees' => $amountFees,
+                'amount_total' => $amountSubtotal + $amountTax + $amountFees,
                 'created_at' => fake()->dateTimeBetween(now()->subMonth()),
             ]);
         }

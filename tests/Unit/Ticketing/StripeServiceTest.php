@@ -57,12 +57,4 @@ class StripeServiceTest extends TestCase
 
         // If we got here, the test passed
     }
-
-    #[Test]
-    public function get_tax_rate_percentages(): void
-    {
-        $percentages = $this->stripeService->getTaxRatePercentages();
-
-        $this->assertNotEmpty($percentages);
-    }
 }

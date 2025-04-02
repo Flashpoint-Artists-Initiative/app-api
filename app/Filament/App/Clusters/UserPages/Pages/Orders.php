@@ -39,7 +39,7 @@ class Orders extends Page implements HasTable
             ->query(Order::query()->currentUser())
             ->columns([
                 TextColumn::make('id')
-                    ->label('Order ID')
+                    ->label('Order Number')
                     ->sortable(),
                 TextColumn::make('event.name')
                     ->label('Event')
@@ -57,7 +57,6 @@ class Orders extends Page implements HasTable
             ->actions([
                 Action::make('view')
                     ->label('Details')
-                    // ->url(fn(Order $record): string => route('filament.app.pages.orders.show', $record->id))
                     ->icon('heroicon-o-eye')
                     ->modalContent(fn(Order $record) => view('filament.app.clusters.user-pages.modals.orders-modal', [
                         'order' => $record,

@@ -38,6 +38,7 @@ class Order extends Model implements ContractsAuditable
         'amount_subtotal',
         'amount_total',
         'amount_tax',
+        'amount_fees',
         'quantity',
         'stripe_checkout_id',
         'ticket_data',

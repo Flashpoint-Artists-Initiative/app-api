@@ -7,6 +7,7 @@ namespace App\Filament\Admin\Resources\OrderResource\Pages;
 use App\Filament\Admin\Resources\OrderResource;
 use App\Models\Ticketing\Order;
 use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
 
@@ -37,7 +38,18 @@ class ViewOrder extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\EditAction::make(),
+            $this->refundAction(),
         ];
+    }
+
+    protected function refundAction(): Action
+    {
+        return Actions\Action::make('refund')
+            ->label('Begin Refund')
+            // ->action(fn (Order $record): void => $record->refund())
+            ->requiresConfirmation()
+            ->color('danger');
+            // ->icon('heroicon-o-cash');
+            // ->visible(fn (Order $record): bool => $record->canRefund());
     }
 }

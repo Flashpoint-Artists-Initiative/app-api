@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedInteger('amount_subtotal');
             $table->unsignedInteger('amount_total');
             $table->unsignedInteger('amount_tax');
+            $table->unsignedInteger('amount_fees');
             $table->unsignedInteger('quantity');
             $table->string('stripe_checkout_id')->index()->collation('utf8mb4_bin');
             $table->json('ticket_data');

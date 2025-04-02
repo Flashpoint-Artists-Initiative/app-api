@@ -39,10 +39,7 @@ class OrderService
     {
         return [
             'user_email' => $session->customer_email,
-            'amount_subtotal' => $session->amount_subtotal,
             'amount_total' => $session->amount_total,
-            // @phpstan-ignore-next-line
-            'amount_tax' => $session->total_details->amount_tax,
             'stripe_checkout_id' => $session->id,
         ];
     }
@@ -58,6 +55,9 @@ class OrderService
             'cart_id' => $cart->id,
             'quantity' => $cart->quantity,
             'ticket_data' => $this->jsonFromCartItems($cart->items),
+            'amount_subtotal' => $cart->subtotal,
+            'amount_tax' => $cart->taxesOwed,
+            'amount_fees' => $cart->feesOwed,
         ];
     }
 
@@ -84,40 +84,19 @@ class OrderService
     {
         $orders = Order::where('event_id', $eventId)->get();
 
-        $taxesOwed = $orders->sum('amount_tax') / 100;
 
         return [
             'totals' => [
                 'gross_profit' => $orders->sum('amount_total') / 100,
                 'net_profit' => $orders->sum('amount_subtotal') / 100,
-                'taxes_collected' => $taxesOwed,
+                'taxes_collected' => $orders->sum('amount_tax') / 100,
+                'fees_collected' => $orders->sum('amount_fees') / 100,
                 'tickets_sold' => $orders->sum('quantity'),
                 'orders_count' => $orders->count(),
             ],
-            'tax_breakdown' => $this->splitTaxAmount($taxesOwed),
             'ticket_breakdown' => $this->getTicketTypeSaleDataFromOrders($orders),
             'sales_histogram' => $this->getHistoryDataFromOrders($orders),
         ];
-    }
-
-    /**
-     * Separates the given amount in dollars into it's separate tax amounts
-     *
-     * @return array<string, float> The rate description => The subdivided amount
-     */
-    public function splitTaxAmount(float $amount): array
-    {
-        $taxRates = $this->stripeService->getTaxRatePercentages();
-        $percentageTotal = array_sum($taxRates);
-        $dividedAmount = $amount / $percentageTotal;
-
-        $output = [];
-
-        foreach ($taxRates as $description => $percentage) {
-            $output[$description] = round($dividedAmount * $percentage, 2);
-        }
-
-        return $output;
     }
 
     /**

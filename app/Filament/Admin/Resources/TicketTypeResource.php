@@ -31,7 +31,7 @@ class TicketTypeResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('event_id')
-                    ->relationship('event', 'name')
+                    ->relationship('event', 'name', fn (Builder $query) => $query->orderBy('start_date'))
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
@@ -46,7 +46,7 @@ class TicketTypeResource extends Resource
                     ->required()
                     ->numeric()
                     ->prefix('$')
-                    ->disabled(fn(TicketType $record) => $record->purchasedTickets()->exists())
+                    ->disabled(fn(?TicketType $record) => $record?->purchasedTickets()->exists() ?? false)
                     ->helperText(fn (string $operation, Component $component) => $operation == 'edit' && $component->isDisabled() ? 'Price cannot be changed once tickets have been sold' : null),
                 Forms\Components\Textarea::make('description')
                     ->required()

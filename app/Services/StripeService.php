@@ -92,7 +92,12 @@ class StripeService
      */
     protected function buildLineItems(Cart $cart): array
     {
-        return $cart->items->map(function (CartItem $item) {
+        $subtotal = 0;
+
+        // Add ticket line items
+        $output = $cart->items->map(function (CartItem $item) use (&$subtotal) {
+            $subtotal += $item->ticketType->price * $item->quantity * 100; // Stripe price is in cents
+
             return [
                 'price_data' => [
                     'currency' => 'usd',
@@ -100,14 +105,84 @@ class StripeService
                         'name' => $item->ticketType->name,
                         'metadata' => [
                             'ticket_type_id' => $item->ticketType->id,
+                            'is_tax' => false,
+                            'is_fee' => false,
                         ],
                     ],
                     'unit_amount' => $item->ticketType->price * 100, // Stripe price is in cents
                 ],
                 'quantity' => $item->quantity,
-                'tax_rates' => $this->getTaxRatesArray(),
+                // 'tax_rates' => $this->getTaxRatesArray(),
             ];
         })->toArray();
+
+        //Add Tax
+        $output[] = [
+            'price_data' => [
+                'currency' => 'usd',
+                'product_data' => [
+                    'name' => 'GA Sales Tax',
+                    'metadata' => [
+                        'is_tax' => true,
+                        'is_fee' => false,
+                    ],
+                ],
+                'unit_amount' => $this->calculateSalesTax($subtotal), 
+            ],
+            'quantity' => 1,
+        ];
+
+        // Add stripe fee
+        $output[] = [
+            'price_data' => [
+                'currency' => 'usd',
+                'product_data' => [
+                    'name' => 'Stripe Fee',
+                    'metadata' => [
+                        'is_tax' => false,
+                        'is_fee' => true,
+                    ],
+                ],
+                'unit_amount' => $this->calculateStripeFee($subtotal),
+            ],
+            'quantity' => 1,
+        ];
+
+        return $output;
+    }
+
+    /**
+     * Calculate the sales tax for a given amount
+     *
+     * @param int $amount The amount in cents
+     *
+     * @return int The sales tax in cents
+     */
+    public function calculateSalesTax(int $amount): int
+    {
+        $taxRate = config('services.stripe.sales_tax_rate'); // Config value is a percentage (0-100)
+        return (int) round($amount * ($taxRate / 100));
+    }
+
+    /**
+     * Calculate the Stripe fee for a given amount
+     * 
+     * @param int $amount The amount in cents
+     * 
+     * @return int The Stripe fee in cents
+     */
+    public function calculateStripeFee(int $amount): int
+    {
+        // Stripe fees are calculated on the total amount, including sales tax
+        $amount += $this->calculateSalesTax($amount);
+
+        $feePercentage = config('services.stripe.stripe_fee_percentage'); // Config value is a percentage (0-100)
+        $feeFlat = config('services.stripe.stripe_fee_flat'); // Config value is a flat fee in cents
+
+        // We calculate what the final amount would be after Stripe fees, then remove the original amount
+        // Trying to doing it the other way around (calculating the fee) results in rounding errors
+        $totalWithStripe = (int) round(($amount + $feeFlat) / (1 - ($feePercentage / 100)));
+        return $totalWithStripe - $amount;
     }
 
     /**
@@ -154,27 +229,6 @@ class StripeService
             $stripeObj = $this->getTaxRate($rate);
             $output[$stripeObj->description] = $stripeObj->percentage;
         }
-
-        return $output;
-    }
-
-    /**
-     * @return array<string,int> The tax rate description => The amount of that tax, in cents
-     */
-    public function splitTaxAmount(int $amount): array
-    {
-        $percentages = $this->getTaxRatePercentages();
-        $sum = array_sum($percentages);
-
-        $output = [];
-
-        foreach ($percentages as $desc => $taxPercentage) {
-            $output[$desc] = (int) round($taxPercentage / $sum * $amount);
-        }
-
-        // Make sure we end up with the same total
-        $diff = array_sum($output) - $amount;
-        $output[array_key_first($output)] += $diff;
 
         return $output;
     }

@@ -7,6 +7,7 @@ namespace App\Models\Ticketing;
 use App\Models\Event;
 use App\Models\User;
 use App\Observers\CartObserver;
+use App\Services\StripeService;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\App;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
@@ -23,6 +25,10 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
  * @property int $quantity
  * @property-read User $user
  * @property string $stripe_checkout_id
+ * @property-read int $subtotal
+ * @property-read int $taxesOwed
+ * @property-read int $feesOwed
+ * @property-read int $total
  *
  * @method Builder<static> notExpired()
  */
@@ -79,6 +85,42 @@ class Cart extends Model implements ContractsAuditable
             get: function (mixed $value, array $attributes) {
                 return $this->items->sum('quantity');
             });
+    }
+
+    public function subtotal(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                return $this->items->sum(fn (CartItem $item) => $item->ticketType->price * $item->quantity * 100); // in cents
+            }
+        );
+    }
+
+    public function taxesOwed(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                return App::make(StripeService::class)->calculateSalesTax($this->subtotal);
+            }
+        );
+    }
+
+    public function feesOwed(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                return App::make(StripeService::class)->calculateStripeFee($this->subtotal);
+            }
+        );
+    }
+
+    public function total(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                return $this->subtotal + $this->taxesOwed + $this->feesOwed;
+            }
+        );
     }
 
     /**

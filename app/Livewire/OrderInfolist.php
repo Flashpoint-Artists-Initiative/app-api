@@ -26,26 +26,6 @@ class OrderInfolist extends Component implements HasInfolists, HasForms
     use InteractsWithInfolists, InteractsWithForms;
 
     public int $orderId;
-    protected static int $numTaxItems = 0;
-
-    /**
-     * @return TextEntry[] A dynamic number of infolist entries based on the number of tax items
-     */
-    protected static function buildTaxItemSchema(): array
-    {
-        $stripeService = App::make(StripeService::class);
-        $output = [];
-        
-        foreach (array_keys($stripeService->getTaxRatePercentages()) as $label) {
-            $output[] = TextEntry::make('amount_tax')
-                ->label($label)
-                ->formatStateUsing(fn(int $state) => '$' . $stripeService->splitTaxAmount($state)[$label] / 100);
-        }
-
-        self::$numTaxItems = count($output);
-
-        return $output;
-    }
 
     public function orderInfolist(Infolist $infolist): Infolist
     {
@@ -55,7 +35,7 @@ class OrderInfolist extends Component implements HasInfolists, HasForms
                     Grid::make(3)
                         ->schema([
                             TextEntry::make('id')
-                                ->label('Order ID')
+                                ->label('Order Number')
                                 ->prefix('#'),
                             TextEntry::make('created_at')
                                 ->label('Purchase Date')
@@ -69,11 +49,16 @@ class OrderInfolist extends Component implements HasInfolists, HasForms
                             TextEntry::make('amount_subtotal')
                                 ->label('Subtotal')
                                 ->money('USD', 100),
-                            ...self::buildTaxItemSchema(),
+                            TextEntry::make('amount_tax')
+                                ->label('Sales Tax')
+                                ->money('USD', 100),
+                            TextEntry::make('amount_fees')
+                                ->label('Fees')
+                                ->money('USD', 100),
                             TextEntry::make('amount_total')
                                 ->label('Total')
                                 ->money('USD', 100),
-                        ])->columns(2 + self::$numTaxItems),
+                        ])->columns(4),
             ])
             ->columns(1);
     }

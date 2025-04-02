@@ -40,6 +40,10 @@ return [
         'tax_rates' => env('STRIPE_TAX_RATES', ''),
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
         'webhook_ips' => $stripeIps,
+        'sales_tax_rate' => env('SALES_TAX_RATE', 0),
+        'stripe_fee_percentage' => env('STRIPE_FEE_PERCENTAGE', 0),
+        'stripe_fee_flat' => env('STRIPE_FEE_FLAT', 0),
+
     ],
 
 ];
