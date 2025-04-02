@@ -28,21 +28,22 @@ class SvgWithLogoOptions extends QROptions
         $this->version = 4;
         $this->outputInterface = QRSvgWithLogo::class;
         $this->outputType = 'custom';
-        $this->outputBase64 = false;
+        $this->outputBase64 = true;
         $this->eccLevel = EccLevel::H; // ECC level H is necessary when using logos
         $this->connectPaths = true;
+        $this->scale = 50;
     }
 
     // check logo
-    protected function set_svgLogo(string $svgLogo): void
-    {
+    // protected function set_svgLogo(string $svgLogo): void
+    // {
 
-        if (! file_exists($svgLogo) || ! is_readable($svgLogo)) {
-            throw new QRCodeException('invalid svg logo');
-        }
+    //     if (! file_exists($svgLogo) || ! is_readable($svgLogo)) {
+    //         throw new QRCodeException('invalid svg logo');
+    //     }
 
-        $this->svgLogo = $svgLogo;
-    }
+    //     $this->svgLogo = $svgLogo;
+    // }
 
     // clamp logo scale
     // protected function set_svgLogoScale(float $svgLogoScale): void

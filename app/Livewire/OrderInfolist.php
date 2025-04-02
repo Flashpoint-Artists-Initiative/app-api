@@ -21,7 +21,7 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\App;
 use Livewire\Component;
 
-class OrderInfolist extends Component implements HasInfolists, HasForms, Htmlable
+class OrderInfolist extends Component implements HasInfolists, HasForms
 {
     use InteractsWithInfolists, InteractsWithForms;
 
@@ -33,16 +33,14 @@ class OrderInfolist extends Component implements HasInfolists, HasForms, Htmlabl
      */
     protected static function buildTaxItemSchema(): array
     {
-        $output = App::call(function(StripeService $stripeService) {
-            $output = [];
-            foreach ($stripeService->getTaxRatePercentages() as $label => $item) {
-                $output[] = TextEntry::make('amount_tax')
-                    ->label($label)
-                    ->formatStateUsing(fn(int $state) => '$' . $stripeService->splitTaxAmount($state)[$label] / 100);
-            }
-
-            return $output;
-        });
+        $stripeService = App::make(StripeService::class);
+        $output = [];
+        
+        foreach (array_keys($stripeService->getTaxRatePercentages()) as $label) {
+            $output[] = TextEntry::make('amount_tax')
+                ->label($label)
+                ->formatStateUsing(fn(int $state) => '$' . $stripeService->splitTaxAmount($state)[$label] / 100);
+        }
 
         self::$numTaxItems = count($output);
 
@@ -92,10 +90,5 @@ class OrderInfolist extends Component implements HasInfolists, HasForms, Htmlabl
             {{ $this->orderInfolist }}
         </div>
         HTML;
-    }
-
-    public function toHtml(): string
-    {
-        return "<livewire:order-infolist :orderId=\"{$this->orderId}\">";
     }
 }

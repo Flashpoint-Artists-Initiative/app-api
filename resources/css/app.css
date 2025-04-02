@@ -36,3 +36,17 @@
 .ticket-purchase-item div.fi-section-content.p-6 {
     padding: 0.25rem
 }
+
+/* Show or hide certain elements based on printing */
+.print-only {
+    visibility: hidden;
+}
+
+@media print {
+    .print-only {
+        visibility: visible;
+    }
+    .no-print {
+        visibility: hidden;
+    }
+}

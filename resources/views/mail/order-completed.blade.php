@@ -1,3 +1,8 @@
+@php
+    $buttonUrl = App\Filament\App\Clusters\UserPages\Pages\Tickets::getUrl();
+    $headerColorString = Filament\Facades\Filament::getPanel('app')->getColors()['primary'][500];
+@endphp
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
@@ -53,14 +58,14 @@
                                 <![endif]-->
                                 <table cellpadding="0" cellspacing="0" width="100%" border="0" style="max-width: 900px; min-width: 640px; width: 640px;" class="em-narrow-table">
                                     <tr em="block" class="em-structure">
-                                        <td align="center" style="padding: 25px 40px 30px; background-color: #82d196;" class="em-mob-padding_left-20 em-mob-padding_right-20" bgcolor="#82d196">
+                                        <td align="center" style="padding: 25px 40px 30px; background-color:rgb({{ $headerColorString }});" class="em-mob-padding_left-20 em-mob-padding_right-20" bgcolor="#82d196">
                                             <table border="0" cellspacing="0" cellpadding="0" class="em-mob-width-100perc">
                                                 <tr>
                                                     <td width="560" valign="top" class="em-mob-wrap em-mob-width-100perc">
                                                         <table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom" class="null">
                                                             <tr>
                                                                 <td>
-                                                                    <img src="https://cdn.useblocks.io/26640/240404_1822_ygDfWpU.png" width="80" border="0" alt="" style="display: inline-block; width: 100%; max-width: 80px;">
+                                                                    <img src="{{ asset('logo-text.svg') }}" width="80" border="0" alt="" style="display: inline-block; width: 100%; max-width: 80px;">
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -88,7 +93,7 @@
                                                         <table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom">
                                                             <tr>
                                                                 <td style="padding-bottom: 0px;">
-                                                                    <div style="font-family: Helvetica, Arial, sans-serif; font-size: 21px; line-height: 24px; color: #818181;" align="left"> Log in to your Transmute profile to view your tickets. </div>
+                                                                    <div style="font-family: Helvetica, Arial, sans-serif; font-size: 21px; line-height: 24px; color: #818181;" align="left"> Log in to your POTION profile to view your tickets. </div>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -98,7 +103,7 @@
                                                                     <table cellpadding="0" cellspacing="0" border="0" width="185" style="width: 185px;">
                                                                         <tr>
                                                                             <td align="center" valign="middle" height="50" style="background-color: #1f1f1f; height: 50px; border-radius: 4px;" bgcolor="#1F1F1F">
-                                                                                <a href="" target="_blank" style="display: block; height: 50px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 16px; line-height: 50px; text-decoration: none; white-space: nowrap;">
+                                                                                <a href="{{ $buttonUrl }}" target="_blank" style="display: block; height: 50px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 16px; line-height: 50px; text-decoration: none; white-space: nowrap;">
                                                                                 <strong> View my Tickets </strong>
                                                                                 </a>
                                                                             </td>

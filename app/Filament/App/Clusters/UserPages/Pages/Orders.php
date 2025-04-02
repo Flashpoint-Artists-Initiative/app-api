@@ -62,6 +62,8 @@ class Orders extends Page implements HasTable
                     ->modalContent(fn(Order $record) => view('filament.app.clusters.user-pages.modals.orders-modal', [
                         'order' => $record,
                     ]))
+                    ->modalCancelAction(false)
+                    ->modalSubmitActionLabel('Close')
             ]);
     }
 }

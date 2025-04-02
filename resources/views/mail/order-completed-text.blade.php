@@ -1,6 +1,6 @@
 You're all set for {{$order->event->name}}!
 
-Log in to your Transmute profile to view your tickets.
+Log in to your POTION profile to view your tickets.
 
 $url
 

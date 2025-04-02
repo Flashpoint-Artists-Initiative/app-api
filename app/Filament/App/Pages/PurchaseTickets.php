@@ -231,7 +231,7 @@ class PurchaseTickets extends Page implements HasForms, HasActions
             ->label('How does ticketing work?')
             ->modalContent(view('filament.app.modals.ticket-info'))
             ->modalSubmitAction(false)
-            ->modalCancelAction(fn(StaticAction $action) => $action->label('Close'));
+            ->modalCancelActionLabel('Close');
     }
 
     public function checkout(): void
