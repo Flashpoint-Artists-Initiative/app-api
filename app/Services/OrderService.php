@@ -29,7 +29,11 @@ class OrderService
             $this->mapDataFromCart($cart),
         );
 
-        return Order::create($data);
+        $order = Order::create($data);
+
+        $this->stripeService->updateMetadata($session, ['order_id' => $order->id]);
+
+        return $order;
     }
 
     /**

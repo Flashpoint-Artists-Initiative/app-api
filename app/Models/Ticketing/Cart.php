@@ -100,7 +100,7 @@ class Cart extends Model implements ContractsAuditable
     {
         return Attribute::make(
             get: function (mixed $value, array $attributes) {
-                return App::make(StripeService::class)->calculateSalesTax($this->subtotal);
+                return App::make(StripeService::class)->calculateTaxesAndFees($this->subtotal)['tax'];
             }
         );
     }
@@ -109,7 +109,7 @@ class Cart extends Model implements ContractsAuditable
     {
         return Attribute::make(
             get: function (mixed $value, array $attributes) {
-                return App::make(StripeService::class)->calculateStripeFee($this->subtotal);
+                return App::make(StripeService::class)->calculateTaxesAndFees($this->subtotal)['fees'];
             }
         );
     }

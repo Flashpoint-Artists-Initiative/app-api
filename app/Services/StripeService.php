@@ -6,12 +6,14 @@ namespace App\Services;
 
 use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\CartItem;
+use App\Models\Ticketing\Order;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\InvalidRequestException;
+use Stripe\Refund;
 use Stripe\StripeClient;
 use Stripe\TaxRate;
 
@@ -44,6 +46,31 @@ class StripeService
         }
     }
 
+    public function refundOrder(Order $order): Refund
+    {
+        if ($order->refunded) {
+            abort(422, 'Order has already been refunded');
+        }
+
+        $session = $this->getCheckoutSession($order->stripe_checkout_id);
+
+        try {
+            $refund = $this->stripeClient->refunds->create([
+                'payment_intent' => $session->payment_intent,
+                'amount' => $order->amount_total,
+                'reason' => 'requested_by_customer',
+                'metadata' => [
+                    'order_id' => $order->id,
+                    'user_id' => $order->user_id,
+                ],
+            ]);
+        } catch (ApiErrorException $e) {
+            abort(422, 'Refund failed: ' . $e->getMessage());
+        }
+
+        return $refund;
+    }
+
     public function createCheckoutFromCart(Cart $cart): Session
     {
         $client_reference_id = sprintf('Event: %s - User: %d - Cart: %d', $cart->event->name, $cart->user_id, $cart->id);
@@ -65,6 +92,13 @@ class StripeService
                 'user_id' => $cart->user_id,
                 'ticket_quantity' => $cart->quantity,
             ],
+            'payment_intent_data' => [
+                'metadata' => [
+                    'event_id' => $cart->event->id,
+                    'user_id' => $cart->user_id,
+                    'ticket_quantity' => $cart->quantity,
+                ]
+            ],
             'custom_text' => [
                 'submit' => [
                     'message' => "You'll receive an email confirmation with your ticket information.",
@@ -73,6 +107,24 @@ class StripeService
         ]);
 
         return $checkout_session;
+    }
+
+    /**
+     * Update the metadata for a checkout session and its payment intent
+     * 
+     * @param array<string,string|int>  $metadata
+     */
+    public function updateMetadata(Session $session, array $metadata): Session
+    {
+        $session = $this->stripeClient->checkout->sessions->update($session->id, [
+            'metadata' => $metadata,
+        ]);
+
+        $this->stripeClient->paymentIntents->update((string) $session->payment_intent, [
+            'metadata' => $metadata,
+        ]);
+
+        return $session;
     }
 
     public function expireCheckoutFromCart(Cart $cart): void
@@ -105,16 +157,16 @@ class StripeService
                         'name' => $item->ticketType->name,
                         'metadata' => [
                             'ticket_type_id' => $item->ticketType->id,
-                            'is_tax' => false,
-                            'is_fee' => false,
+                            'type' => 'ticket',
                         ],
                     ],
                     'unit_amount' => $item->ticketType->price * 100, // Stripe price is in cents
                 ],
                 'quantity' => $item->quantity,
-                // 'tax_rates' => $this->getTaxRatesArray(),
             ];
         })->toArray();
+
+        $taxAndFees = $this->calculateTaxesAndFees($subtotal);
 
         //Add Tax
         $output[] = [
@@ -123,11 +175,10 @@ class StripeService
                 'product_data' => [
                     'name' => 'GA Sales Tax',
                     'metadata' => [
-                        'is_tax' => true,
-                        'is_fee' => false,
+                        'type' => 'tax',
                     ],
                 ],
-                'unit_amount' => $this->calculateSalesTax($subtotal), 
+                'unit_amount' => $taxAndFees['tax'], 
             ],
             'quantity' => 1,
         ];
@@ -139,11 +190,10 @@ class StripeService
                 'product_data' => [
                     'name' => 'Stripe Fee',
                     'metadata' => [
-                        'is_tax' => false,
-                        'is_fee' => true,
+                        'type' => 'fee',
                     ],
                 ],
-                'unit_amount' => $this->calculateStripeFee($subtotal),
+                'unit_amount' => $taxAndFees['fees'],
             ],
             'quantity' => 1,
         ];
@@ -152,84 +202,59 @@ class StripeService
     }
 
     /**
-     * Calculate the sales tax for a given amount
-     *
-     * @param int $amount The amount in cents
-     *
-     * @return int The sales tax in cents
-     */
-    public function calculateSalesTax(int $amount): int
-    {
-        $taxRate = config('services.stripe.sales_tax_rate'); // Config value is a percentage (0-100)
-        return (int) round($amount * ($taxRate / 100));
-    }
-
-    /**
-     * Calculate the Stripe fee for a given amount
+     * Calculate fees and taxes for a given amount
+     * 
+     * We need to do both at the same time because fees and taxes are both calculated based on each other.
+     * Fortunately, iterating over both until they stabilize only takes a few iterations.
      * 
      * @param int $amount The amount in cents
      * 
-     * @return int The Stripe fee in cents
+     * @return array{'tax':int,'fees':int} The calculated tax and fees
      */
-    public function calculateStripeFee(int $amount): int
+    public function calculateTaxesAndFees(int $amount): array
     {
-        // Stripe fees are calculated on the total amount, including sales tax
-        $amount += $this->calculateSalesTax($amount);
+        // These functions live inside so they don't accidentally get called from outside
+        $calculateSalesTax = function (int $amount): int
+        {
+            $taxRate = config('services.stripe.sales_tax_rate'); // Config value is a percentage (0-100)
+            return (int) round($amount * ($taxRate / 100));
+        };
 
-        $feePercentage = config('services.stripe.stripe_fee_percentage'); // Config value is a percentage (0-100)
-        $feeFlat = config('services.stripe.stripe_fee_flat'); // Config value is a flat fee in cents
+        $calculateStripeFee = function (int $amount): int
+        {
+            $feePercentage = config('services.stripe.stripe_fee_percentage'); // percentage (0-100)
+            $feeFlat = config('services.stripe.stripe_fee_flat'); // flat fee in cents
 
-        // We calculate what the final amount would be after Stripe fees, then remove the original amount
-        // Trying to doing it the other way around (calculating the fee) results in rounding errors
-        $totalWithStripe = (int) round(($amount + $feeFlat) / (1 - ($feePercentage / 100)));
-        return $totalWithStripe - $amount;
-    }
+            // We calculate what the final amount would be after Stripe fees, then remove the original amount
+            // Trying to doing it the other way around (calculating the fee) results in rounding errors
+            $totalWithStripe = (int) round(($amount + $feeFlat) / (1 - ($feePercentage / 100)));
+            return $totalWithStripe - $amount;
+        };
 
-    /**
-     * @return string[]
-     */
-    public function getTaxRatesArray(): array
-    {
-        $tax_rates = explode(',', config('services.stripe.tax_rates'));
-        $tax_rates = array_map('trim', $tax_rates);
-        $tax_rates = array_filter($tax_rates);
+        $tax = 0;
+        $fees = 0;
 
-        return $tax_rates;
+        for ($i = 1; $i <= 10; $i++) {
+            $prevTax = $tax;
+            $prevFees = $fees;
+
+            $tax = $calculateSalesTax($amount + $fees);
+            $fees = $calculateStripeFee($amount + $tax);
+
+            if ($tax === $prevTax && $fees === $prevFees) {
+                break; // Stop if the values don't change anymore
+            }
+        }
+
+        return [
+            'tax' => $tax,
+            'fees' => $fees,
+        ];
     }
 
     public function assertSessionIsPaid(Session $session): void
     {
         abort_if($session->status !== 'complete', 422, 'Session has not been completed');
         abort_if($session->payment_status !== 'paid', 422, 'Session payment is not complete');
-    }
-
-    /**
-     * Pull and cache tax rate data from the Stripe API
-     */
-    public function getTaxRate(string $taxRateId): TaxRate
-    {
-        return Cache::remember(
-            self::TAX_RATE_CACHE_PREFIX . $taxRateId,
-            now()->addDay(),
-            function () use ($taxRateId) {
-                return $this->stripeClient->taxRates->retrieve($taxRateId);
-            });
-    }
-
-    /**
-     * @return array<string,float> The tax rate description => it's percentage value (0-100)
-     */
-    public function getTaxRatePercentages(): array
-    {
-        $rates = $this->getTaxRatesArray();
-
-        $output = [];
-
-        foreach ($rates as $rate) {
-            $stripeObj = $this->getTaxRate($rate);
-            $output[$stripeObj->description] = $stripeObj->percentage;
-        }
-
-        return $output;
     }
 }

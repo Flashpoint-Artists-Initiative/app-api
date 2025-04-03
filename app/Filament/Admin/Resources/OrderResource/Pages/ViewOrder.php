@@ -6,10 +6,20 @@ namespace App\Filament\Admin\Resources\OrderResource\Pages;
 
 use App\Filament\Admin\Resources\OrderResource;
 use App\Models\Ticketing\Order;
+use App\Models\Ticketing\PurchasedTicket;
 use Filament\Actions;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Actions\Action as ActionsAction;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class ViewOrder extends ViewRecord
 {
@@ -46,10 +56,29 @@ class ViewOrder extends ViewRecord
     {
         return Actions\Action::make('refund')
             ->label('Begin Refund')
-            // ->action(fn (Order $record): void => $record->refund())
+            // ->url(fn (Order $record): string => RefundOrder::getUrl(['record' => $record->id]))
+            // ->modalContent(fn (Order $record): string => view('filament.admin.modals.refund-order-modal', [
+            //     'order' => $record,
+            // ]))
+            // ->form($this->getRefundFormSchema())
             ->requiresConfirmation()
-            ->color('danger');
-            // ->icon('heroicon-o-cash');
+            ->modalHeading(fn(Order $record): string => "Refund Order #{$record->id}")
+            ->modalDescription(function (Order $record) {
+                if ($record->refundable) {
+                    return 'This will refund the order and add the tickets back to the pool.';
+                } else if ($record->refunded) {
+                    return 'This order has already been refunded.';
+                } else {
+                    $ids = $record->purchasedTickets()
+                        ->where('user_id', '!=', $record->user_id)
+                        ->pluck('id');
+                    return 'All tickets in this order must belong to the original user in order to be refunded. ' . 
+                        Str::plural('Ticket', $ids) . ' #' . $ids->implode(', ') . ' ' . Str::plural('belong', $ids->count() > 1 ? 1 : 2) . ' to a different user.';
+                }
+            })
+            ->modalSubmitAction(fn (Order $record): ?bool => $record->refundable ? null : false)
+            ->color('danger')
+            ->action(fn (Order $record) => $record->refund());
             // ->visible(fn (Order $record): bool => $record->canRefund());
     }
 }

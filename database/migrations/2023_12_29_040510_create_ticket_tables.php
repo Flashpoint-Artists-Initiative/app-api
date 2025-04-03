@@ -36,6 +36,8 @@ return new class extends Migration
             $table->unsignedInteger('order_id')->nullable();
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('reserved_ticket_id')->nullable();
+            $table->boolean('voided')->default(false);
+            $table->softDeletes();
         });
 
         // ReservedTicket

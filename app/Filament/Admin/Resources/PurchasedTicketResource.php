@@ -32,6 +32,9 @@ class PurchasedTicketResource extends Resource
             ->schema([
                 Section::make([
                     TextEntry::make('ticketType.name'),
+                    TextEntry::make('ticketType.created_at')
+                        ->label('Purchased Date')
+                        ->dateTime('F jS, Y g:i A T', 'America/New_York'),
                     TextEntry::make('order_id'),
                     TextEntry::make('user.display_name'),
                     TextEntry::make('reserved_ticket_id'),

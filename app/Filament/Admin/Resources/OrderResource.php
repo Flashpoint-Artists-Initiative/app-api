@@ -48,7 +48,7 @@ class OrderResource extends Resource
             ->schema([
                 Split::make([
                     Section::make([
-                        Livewire::make(OrderTicketsTable::class),
+                        Livewire::make(OrderTicketsTable::class, ['linkTickets' => true]),
                         Fieldset::make('Order Summary')
                             ->schema([
                                 TextEntry::make('amount_subtotal')
@@ -66,7 +66,9 @@ class OrderResource extends Resource
                             ])->columns(4),
                     ]),
                     Section::make([
-                        TextEntry::make('created_at'),
+                        TextEntry::make('created_at')
+                            ->label('Purchase Date')
+                            ->dateTime('F jS, Y g:i A T', 'America/New_York'),
                         TextEntry::make('user.display_name')
                             ->url(fn ($record) => UserResource::getUrl('view', ['record' => $record->user_id]))
                             ->color('primary')

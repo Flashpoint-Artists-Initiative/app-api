@@ -10,6 +10,7 @@ use App\Observers\OrderObserver;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +25,7 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
  * @property-read Event $event
  * @property-read Cart $cart
  * @property Carbon $created_at
+ * @property-read bool $refundable
  */
 #[ObservedBy(OrderObserver::class)]
 class Order extends Model implements ContractsAuditable
@@ -41,11 +43,13 @@ class Order extends Model implements ContractsAuditable
         'amount_fees',
         'quantity',
         'stripe_checkout_id',
+        'refunded',
         'ticket_data',
     ];
 
     protected $casts = [
         'ticket_data' => 'array',
+        'refunded' => 'boolean',
     ];
 
     /**
@@ -105,5 +109,38 @@ class Order extends Model implements ContractsAuditable
     public function scopeCurrentUser(Builder $query): void
     {
         $query->where('user_id', Auth::id());
+    }
+
+    public function refundable(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if (!$this->refunded) {
+                    return $this->purchasedTickets->every(function ($ticket, int $key) {
+                        /** @var PurchasedTicket $ticket */
+                        return $ticket->user_id === $this->user_id;
+                    });
+                }
+                return false;
+            },
+        );
+    }
+
+    public function refund(): void
+    {
+        if (!$this->refundable) {
+            return;
+        }
+
+        $stripeService = app(\App\Services\StripeService::class);
+        $stripeService->refundOrder($this);
+
+        $this->purchasedTickets->each(function ($ticket) {
+            /** @var PurchasedTicket $ticket */
+            $ticket->delete();
+        });
+
+        $this->refunded = true;
+        $this->saveQuietly();
     }
 }
