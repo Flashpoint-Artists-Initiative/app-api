@@ -45,7 +45,7 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
      */
     public function purchasedTicket(): HasOne
     {
-        return $this->hasOne(PurchasedTicket::class);
+        return $this->hasOne(PurchasedTicket::class)->withTrashed();
     }
 
     public function ticketType(): BelongsTo

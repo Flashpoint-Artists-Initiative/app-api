@@ -21,7 +21,9 @@ class ViewOrder extends ViewRecord
         /** @var Order $order */
         $order = $this->getRecord();
 
-        return "Order #{$order->id}";
+        $refunded = $order->refunded ? ' - (Refunded)' : '';
+
+        return "Order #{$order->id}{$refunded}";
     }
 
     public function getBreadcrumbs(): array

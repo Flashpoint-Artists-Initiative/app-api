@@ -46,7 +46,7 @@ class OrderResource extends Resource
             ->schema([
                 Split::make([
                     Section::make([
-                        Livewire::make(OrderTicketsTable::class, ['linkTickets' => true]),
+                        Livewire::make(OrderTicketsTable::class, ['admin' => true]),
                         Fieldset::make('Order Summary')
                             ->schema([
                                 TextEntry::make('amount_subtotal')
@@ -110,17 +110,25 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('quantity')
                     ->numeric(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime('F jS, Y g:i A T', 'America/New_York')
                     ->sortable()
                     ->label('Created At'),
-                Tables\Columns\TextColumn::make('amount_tax')
-                    ->numeric()
-                    ->sortable()
-                    ->money('USD', 100),
                 Tables\Columns\TextColumn::make('amount_total')
+                    ->label('Total')
                     ->numeric()
                     ->sortable()
                     ->money('USD', 100),
+                Tables\Columns\TextColumn::make('refunded')
+                    ->label('Status')
+                    ->badge()
+                    ->formatStateUsing(fn (bool $state) => match ($state) {
+                        true => 'Refunded',
+                        default => 'Paid',
+                    })
+                    ->color(fn (bool $state) => match ($state) {
+                        true => 'danger',
+                        default => 'success',
+                    }),
             ])
             ->filters([
                 SelectFilter::make('event')

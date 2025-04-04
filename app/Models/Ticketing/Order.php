@@ -142,6 +142,6 @@ class Order extends Model implements ContractsAuditable
         });
 
         $this->refunded = true;
-        $this->saveQuietly();
+        $this->save();
     }
 }

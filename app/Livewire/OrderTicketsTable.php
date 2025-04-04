@@ -21,7 +21,7 @@ class OrderTicketsTable extends Component implements HasForms, HasTable
 
     public Order $record;
 
-    public bool $linkTickets = false;
+    public bool $admin = false;
 
     public function render(): string
     {
@@ -41,14 +41,17 @@ class OrderTicketsTable extends Component implements HasForms, HasTable
                 TextColumn::make('id')
                     ->label('Ticket Number')
                     ->prefix('#')
-                    ->url(fn (PurchasedTicket $record) => $this->linkTickets ? ViewPurchasedTicket::getUrl(['record' => $record->id]) : null)
-                    ->color(fn () => $this->linkTickets ? 'primary' : null)
-                    ->weight(fn () => $this->linkTickets ? 'bold' : null),
+                    ->url(fn (PurchasedTicket $record) => $this->admin ? ViewPurchasedTicket::getUrl(['record' => $record->id]) : null)
+                    ->color(fn () => $this->admin ? 'primary' : null)
+                    ->weight(fn () => $this->admin ? 'bold' : null),
                 TextColumn::make('ticketType.name')
                     ->description(fn (PurchasedTicket $record) => $record->reservedTicket?->note),
                 TextColumn::make('ticketType.price')
                     ->label('Price')
                     ->money('USD'),
+                TextColumn::make('user.display_name')
+                    ->label('Current Owner')
+                    ->visible($this->admin),
             ])
             ->paginated(false);
     }
