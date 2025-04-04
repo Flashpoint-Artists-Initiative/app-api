@@ -8,14 +8,14 @@ use App\Filament\App\Clusters\UserPages;
 use App\Livewire\PurchasedTicketsTable;
 use App\Livewire\ReservedTicketsTable;
 use App\Models\Event;
-use Filament\Infolists\Components\Livewire;
-use Filament\Infolists\Infolist;
-use Filament\Pages\Page;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Services\QRCodeService;
 use Filament\Actions\Action;
+use Filament\Infolists\Components\Livewire;
+use Filament\Infolists\Infolist;
+use Filament\Pages\Page;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class Tickets extends Page
 {
@@ -38,7 +38,7 @@ class Tickets extends Page
             ->schema([
                 Livewire::make(PurchasedTicketsTable::class)->key('purchased-tickets-table'),
                 Livewire::make(ReservedTicketsTable::class)->key('reserved-tickets-table')
-                    ->visible(fn() => $user->availableReservedTickets()->currentEvent()->exists()),
+                    ->visible(fn () => $user->availableReservedTickets()->currentEvent()->exists()),
             ])
             ->state([
                 'name' => 'John Doe',
@@ -57,7 +57,7 @@ class Tickets extends Page
                 ]))
                 ->modalCancelAction(false)
                 ->modalSubmitActionLabel('Close')
-                ->visible(fn() => Auth::user()?->purchasedTickets()->exists() ?? false),
+                ->visible(fn () => Auth::user()?->purchasedTickets()->exists() ?? false),
         ];
     }
 

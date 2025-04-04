@@ -115,12 +115,13 @@ class Order extends Model implements ContractsAuditable
     {
         return Attribute::make(
             get: function () {
-                if (!$this->refunded) {
+                if (! $this->refunded) {
                     return $this->purchasedTickets->every(function ($ticket, int $key) {
                         /** @var PurchasedTicket $ticket */
                         return $ticket->user_id === $this->user_id;
                     });
                 }
+
                 return false;
             },
         );
@@ -128,7 +129,7 @@ class Order extends Model implements ContractsAuditable
 
     public function refund(): void
     {
-        if (!$this->refundable) {
+        if (! $this->refundable) {
             return;
         }
 

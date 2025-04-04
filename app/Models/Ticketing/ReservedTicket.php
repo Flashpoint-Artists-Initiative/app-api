@@ -8,7 +8,6 @@ use App\Models\Concerns\HasTicketType;
 use App\Models\Concerns\TicketInterface;
 use App\Models\Event;
 use App\Observers\ReservedTicketObserver;
-use DateTimeInterface;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;

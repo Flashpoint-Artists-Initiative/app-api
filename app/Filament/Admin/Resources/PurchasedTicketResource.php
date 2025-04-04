@@ -5,25 +5,21 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\PurchasedTicketResource\Pages;
-use App\Filament\Admin\Resources\PurchasedTicketResource\RelationManagers;
 use App\Models\Ticketing\PurchasedTicket;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PurchasedTicketResource extends Resource
 {
     protected static ?string $model = PurchasedTicket::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    
+
     protected static ?string $navigationGroup = 'Event Specific';
 
     public static function infolist(Infolist $infolist): Infolist

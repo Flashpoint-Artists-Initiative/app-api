@@ -82,7 +82,7 @@ class TicketTransfer extends Model implements ContractsAuditable
             $query->where('user_id', $user->id)
                 ->orWhere('recipient_email', $user->email)
                 ->orWhere('recipient_user_id', $user->id);
-            });
+        });
     }
 
     /**

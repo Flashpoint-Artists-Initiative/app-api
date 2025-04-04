@@ -75,9 +75,9 @@ trait HasTicketType
         $query->whereHas('ticketType', function (Builder $query) {
             $query->where('transferable', true);
         })
-        ->whereDoesntHave('transfers', function (Builder $query) {
-            $query->where('completed', false);
-        });
+            ->whereDoesntHave('transfers', function (Builder $query) {
+                $query->where('completed', false);
+            });
     }
 
     public function scopeNoActiveTransfer(Builder $query): void

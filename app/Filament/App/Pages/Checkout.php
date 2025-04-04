@@ -17,22 +17,26 @@ class Checkout extends Page
     protected static string $view = 'filament.app.pages.checkout';
 
     public ?string $checkoutSecret;
+
     public ?string $checkoutId;
+
     public ?Cart $cart;
+
     public bool $checkoutComplete = false;
-    
+
     public function mount(CartService $cartService, StripeService $stripeService): void
     {
         $this->cart = $cartService->getActiveCart();
 
-        if (!$this->cart) {
+        if (! $this->cart) {
             $this->redirect(PurchaseTickets::getUrl());
+
             return;
         }
 
         $session = $stripeService->getCheckoutSession($this->cart->stripe_checkout_id);
 
-        if ($session->status !== "open") {
+        if ($session->status !== 'open') {
             $this->redirect(PurchaseTickets::getUrl());
         }
 

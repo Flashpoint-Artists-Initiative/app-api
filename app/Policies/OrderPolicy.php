@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use App\Models\User;
 use App\Models\Ticketing\Order;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderPolicy extends AbstractModelPolicy

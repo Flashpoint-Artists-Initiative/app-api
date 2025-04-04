@@ -20,6 +20,7 @@ class OrderTicketsTable extends Component implements HasForms, HasTable
     use InteractsWithForms, InteractsWithTable;
 
     public Order $record;
+
     public bool $linkTickets = false;
 
     public function render(): string

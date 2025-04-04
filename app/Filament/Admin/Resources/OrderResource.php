@@ -7,7 +7,6 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\OrderResource\Pages;
 use App\Livewire\OrderTicketsTable;
 use App\Models\Ticketing\Order;
-use App\Services\StripeService;
 use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
 use Filament\Infolists\Components\Fieldset;
@@ -26,7 +25,6 @@ use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\App;
 
 class OrderResource extends Resource
 {
@@ -55,8 +53,8 @@ class OrderResource extends Resource
                                     ->label('Subtotal')
                                     ->money('USD', 100),
                                 TextEntry::make('amount_tax')
-                                ->label('Sales Tax')
-                                ->money('USD', 100),
+                                    ->label('Sales Tax')
+                                    ->money('USD', 100),
                                 TextEntry::make('amount_fees')
                                     ->label('Stripe Fees')
                                     ->money('USD', 100),

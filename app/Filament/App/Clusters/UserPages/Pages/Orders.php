@@ -5,14 +5,8 @@ declare(strict_types=1);
 namespace App\Filament\App\Clusters\UserPages\Pages;
 
 use App\Filament\App\Clusters\UserPages;
-use App\Livewire\PurchasedTicketsTable;
-use App\Livewire\ReservedTicketsTable;
 use App\Models\Ticketing\Order;
-use Filament\Infolists\Components\Livewire;
-use Filament\Infolists\Infolist;
 use Filament\Pages\Page;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -58,11 +52,11 @@ class Orders extends Page implements HasTable
                 Action::make('view')
                     ->label('Details')
                     ->icon('heroicon-o-eye')
-                    ->modalContent(fn(Order $record) => view('filament.app.clusters.user-pages.modals.orders-modal', [
+                    ->modalContent(fn (Order $record) => view('filament.app.clusters.user-pages.modals.orders-modal', [
                         'order' => $record,
                     ]))
                     ->modalCancelAction(false)
-                    ->modalSubmitActionLabel('Close')
+                    ->modalSubmitActionLabel('Close'),
             ]);
     }
 }

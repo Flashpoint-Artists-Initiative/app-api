@@ -9,13 +9,11 @@ use App\Models\Ticketing\CartItem;
 use App\Models\Ticketing\Order;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\InvalidRequestException;
 use Stripe\Refund;
 use Stripe\StripeClient;
-use Stripe\TaxRate;
 
 /**
  * @mixin StripeClient
@@ -97,7 +95,7 @@ class StripeService
                     'event_id' => $cart->event->id,
                     'user_id' => $cart->user_id,
                     'ticket_quantity' => $cart->quantity,
-                ]
+                ],
             ],
             'custom_text' => [
                 'submit' => [
@@ -111,8 +109,8 @@ class StripeService
 
     /**
      * Update the metadata for a checkout session and its payment intent
-     * 
-     * @param array<string,string|int>  $metadata
+     *
+     * @param  array<string,string|int>  $metadata
      */
     public function updateMetadata(Session $session, array $metadata): Session
     {
@@ -168,7 +166,7 @@ class StripeService
 
         $taxAndFees = $this->calculateTaxesAndFees($subtotal);
 
-        //Add Tax
+        // Add Tax
         $output[] = [
             'price_data' => [
                 'currency' => 'usd',
@@ -178,7 +176,7 @@ class StripeService
                         'type' => 'tax',
                     ],
                 ],
-                'unit_amount' => $taxAndFees['tax'], 
+                'unit_amount' => $taxAndFees['tax'],
             ],
             'quantity' => 1,
         ];
@@ -203,31 +201,30 @@ class StripeService
 
     /**
      * Calculate fees and taxes for a given amount
-     * 
+     *
      * We need to do both at the same time because fees and taxes are both calculated based on each other.
      * Fortunately, iterating over both until they stabilize only takes a few iterations.
-     * 
-     * @param int $amount The amount in cents
-     * 
+     *
+     * @param  int  $amount  The amount in cents
      * @return array{'tax':int,'fees':int} The calculated tax and fees
      */
     public function calculateTaxesAndFees(int $amount): array
     {
         // These functions live inside so they don't accidentally get called from outside
-        $calculateSalesTax = function (int $amount): int
-        {
+        $calculateSalesTax = function (int $amount): int {
             $taxRate = config('services.stripe.sales_tax_rate'); // Config value is a percentage (0-100)
+
             return (int) round($amount * ($taxRate / 100));
         };
 
-        $calculateStripeFee = function (int $amount): int
-        {
+        $calculateStripeFee = function (int $amount): int {
             $feePercentage = config('services.stripe.stripe_fee_percentage'); // percentage (0-100)
             $feeFlat = config('services.stripe.stripe_fee_flat'); // flat fee in cents
 
             // We calculate what the final amount would be after Stripe fees, then remove the original amount
             // Trying to doing it the other way around (calculating the fee) results in rounding errors
             $totalWithStripe = (int) round(($amount + $feeFlat) / (1 - ($feePercentage / 100)));
+
             return $totalWithStripe - $amount;
         };
 

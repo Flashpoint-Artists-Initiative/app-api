@@ -7,7 +7,6 @@ namespace App\Livewire;
 use App\Filament\App\Clusters\UserPages\Pages\TicketTransfers;
 use App\Models\Event;
 use App\Models\Ticketing\PurchasedTicket;
-use App\Models\Ticketing\ReservedTicket;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Support\Colors\Color;
@@ -53,7 +52,7 @@ class PurchasedTicketsTable extends Component implements HasForms, HasTable
             ->columns([
                 TextColumn::make('ticketType.name')
                     ->label('Ticket Type')
-                    ->description(fn(PurchasedTicket $ticket) => $ticket->reservedTicket?->note),
+                    ->description(fn (PurchasedTicket $ticket) => $ticket->reservedTicket?->note),
                 TextColumn::make('order.created_at')
                     ->label('Purchase Date')
                     ->dateTime('F jS, Y g:i A T', 'America/New_York'),
@@ -66,7 +65,7 @@ class PurchasedTicketsTable extends Component implements HasForms, HasTable
                     ->label('Transfer')
                     ->color(Color::Blue)
                     ->url(fn (PurchasedTicket $ticket) => TicketTransfers::getUrl(['purchased' => $ticket->id, 'action' => 'newTransfer']))
-                    ->visible(fn(PurchasedTicket $ticket) => $ticket->ticketType->transferable),
+                    ->visible(fn (PurchasedTicket $ticket) => $ticket->ticketType->transferable),
             ])
             ->paginated(false)
             ->emptyStateHeading('No tickets purchased')

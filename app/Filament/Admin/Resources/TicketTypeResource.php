@@ -46,7 +46,7 @@ class TicketTypeResource extends Resource
                     ->required()
                     ->numeric()
                     ->prefix('$')
-                    ->disabled(fn(?TicketType $record) => $record?->purchasedTickets()->exists() ?? false)
+                    ->disabled(fn (?TicketType $record) => $record?->purchasedTickets()->exists() ?? false)
                     ->helperText(fn (string $operation, Component $component) => $operation == 'edit' && $component->isDisabled() ? 'Price cannot be changed once tickets have been sold' : null),
                 Forms\Components\Textarea::make('description')
                     ->required()

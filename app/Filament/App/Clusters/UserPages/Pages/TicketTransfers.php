@@ -5,15 +5,12 @@ declare(strict_types=1);
 namespace App\Filament\App\Clusters\UserPages\Pages;
 
 use App\Filament\App\Clusters\UserPages;
-use App\Filament\App\Pages\PurchaseTickets;
 use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketTransfer;
+use App\Models\User;
 use Closure;
 use Filament\Actions\Action;
-use Filament\Actions\Concerns\InteractsWithActions;
-use Filament\Actions\Contracts\HasActions;
-use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -30,10 +27,8 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Url;
-use Livewire\Component;
-use App\Models\User;
 use Illuminate\Support\HtmlString;
+use Livewire\Attributes\Url;
 
 /**
  * @property Form $form
@@ -74,11 +69,13 @@ class TicketTransfers extends Page implements HasForms, HasTable
 
         $purchasedItems = $purchasedTickets->mapWithKeys(function (PurchasedTicket $ticket, int $key) {
             $label = sprintf('%s (#%d)', $ticket->ticketType->name, $ticket->id);
+
             return [$ticket->id => $label];
         });
 
         $reservedItems = $reservedTickets->mapWithKeys(function (ReservedTicket $ticket, int $key) {
             $label = sprintf('%s (#%d)', $ticket->ticketType->name, $ticket->id);
+
             return [$ticket->id => $label];
         });
 
@@ -87,46 +84,46 @@ class TicketTransfers extends Page implements HasForms, HasTable
             ->modal()
             ->form([
                 Section::make([
-                TextInput::make('recipient_email')
-                    ->email()
-                    ->required()
-                    ->columnSpan('full'),
-                Select::make('purchased_tickets')
-                    ->requiredWithout('reserved_tickets')
-                    ->rule(fn(): Closure => function(string $attribute, $value, Closure $fail) {
-                        $tickets = PurchasedTicket::findMany($value)->each(function(PurchasedTicket $ticket) use ($fail) {
-                            if ($ticket->user_id != Auth::id()) {
-                                $fail('All tickets must belong to you to transfer');
-                            }
-                        });
-                    })
-                    ->validationMessages(['required_without' => 'You must select at least one ticket to transfer'])
-                    ->multiple()
-                    ->searchable(false)
-                    ->placeholder("Select which purchased ticket(s) you'd like to transfer")
-                    ->default($this->purchased && $purchasedItems->has($this->purchased) ? [$this->purchased]: null)
-                    ->options($purchasedItems)
-                    ->columnSpan(1),
-                Select::make('reserved_tickets')
-                    ->requiredWithout('purchased_tickets')
-                    ->rule(fn(): Closure => function(string $attribute, $value, Closure $fail) {
-                        $tickets = ReservedTicket::findMany($value)->each(function(ReservedTicket $ticket) use ($fail) {
-                            if ($ticket->user_id != Auth::id()) {
-                                $fail('All tickets must belong to you to transfer');
-                            }
-                        });
-                    })
-                    ->validationMessages(['required_without' => 'You must select at least one ticket to transfer'])
-                    ->multiple()
-                    ->searchable(false)
-                    ->placeholder("Select which reserved ticket(s) you'd like to transfer")
-                    ->default($this->reserved && $reservedItems->has($this->reserved) ? [$this->reserved]: null)
-                    ->options($reservedItems)
-                    ->columnSpan(1),
+                    TextInput::make('recipient_email')
+                        ->email()
+                        ->required()
+                        ->columnSpan('full'),
+                    Select::make('purchased_tickets')
+                        ->requiredWithout('reserved_tickets')
+                        ->rule(fn (): Closure => function (string $attribute, $value, Closure $fail) {
+                            $tickets = PurchasedTicket::findMany($value)->each(function (PurchasedTicket $ticket) use ($fail) {
+                                if ($ticket->user_id != Auth::id()) {
+                                    $fail('All tickets must belong to you to transfer');
+                                }
+                            });
+                        })
+                        ->validationMessages(['required_without' => 'You must select at least one ticket to transfer'])
+                        ->multiple()
+                        ->searchable(false)
+                        ->placeholder("Select which purchased ticket(s) you'd like to transfer")
+                        ->default($this->purchased && $purchasedItems->has($this->purchased) ? [$this->purchased] : null)
+                        ->options($purchasedItems)
+                        ->columnSpan(1),
+                    Select::make('reserved_tickets')
+                        ->requiredWithout('purchased_tickets')
+                        ->rule(fn (): Closure => function (string $attribute, $value, Closure $fail) {
+                            $tickets = ReservedTicket::findMany($value)->each(function (ReservedTicket $ticket) use ($fail) {
+                                if ($ticket->user_id != Auth::id()) {
+                                    $fail('All tickets must belong to you to transfer');
+                                }
+                            });
+                        })
+                        ->validationMessages(['required_without' => 'You must select at least one ticket to transfer'])
+                        ->multiple()
+                        ->searchable(false)
+                        ->placeholder("Select which reserved ticket(s) you'd like to transfer")
+                        ->default($this->reserved && $reservedItems->has($this->reserved) ? [$this->reserved] : null)
+                        ->options($reservedItems)
+                        ->columnSpan(1),
                 ])
-                ->columns(2),
+                    ->columns(2),
                 ViewField::make('warning')
-                    ->view('filament.app.modals.ticket-transfer-confirmation')
+                    ->view('filament.app.modals.ticket-transfer-confirmation'),
             ])
             ->slideOver()
             ->modalAutofocus(false)
@@ -134,7 +131,7 @@ class TicketTransfers extends Page implements HasForms, HasTable
     }
 
     /**
-     * @param array<mixed> $data
+     * @param  array<mixed>  $data
      */
     public function createTransfer(array $data): void
     {
@@ -169,10 +166,11 @@ class TicketTransfers extends Page implements HasForms, HasTable
                     ->label('Date')
                     ->dateTime(),
                 TextColumn::make('ticketCount')
-                    ->formatStateUsing(function(TicketTransfer $record) {
+                    ->formatStateUsing(function (TicketTransfer $record) {
                         $purchased = $record->purchasedTickets->count();
                         $reserved = $record->reservedTickets->count();
                         $linebreak = ($purchased && $reserved) ? '<br>' : '';
+
                         return new HtmlString(sprintf('%s%s%s',
                             $purchased ? $purchased . ' Ticket' : '',
                             $linebreak,
@@ -185,11 +183,12 @@ class TicketTransfers extends Page implements HasForms, HasTable
             ->actions([
                 TableAction::make('accept')
                     ->action(fn (TicketTransfer $record) => $record->complete())
-                    ->visible( function(TicketTransfer $record) {
+                    ->visible(function (TicketTransfer $record) {
                         /** @var User $user */
                         $user = Auth::user();
+
                         return $user->can('complete', $record);
-                    })
+                    }),
             ]);
     }
 }

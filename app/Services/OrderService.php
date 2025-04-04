@@ -88,7 +88,6 @@ class OrderService
     {
         $orders = Order::where('event_id', $eventId)->get();
 
-
         return [
             'totals' => [
                 'gross_profit' => $orders->sum('amount_total') / 100,

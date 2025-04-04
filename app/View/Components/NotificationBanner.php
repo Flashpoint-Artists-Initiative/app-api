@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\View\Components;
 
-use Closure;
-use Filament\Support\Colors\Color;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 

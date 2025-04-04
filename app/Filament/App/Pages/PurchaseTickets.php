@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace App\Filament\App\Pages;
 
-use App\Forms\Components\StripeCheckout;
 use App\Models\Event;
 use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
 use App\Models\Ticketing\Waiver;
+use App\Models\User;
 use App\Rules\TicketSaleRule;
 use App\Services\CartService;
+use App\Services\StripeService;
 use Carbon\Carbon;
+use Filament\Actions\Action as ActionsAction;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -22,33 +27,22 @@ use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Pages\Page;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
-use App\Models\User;
-use App\Services\StripeService;
-use Filament\Actions\Action as ActionsAction;
-use Filament\Actions\Concerns\InteractsWithActions;
-use Filament\Actions\Contracts\HasActions;
-use Filament\Actions\StaticAction;
-use Filament\Forms\Components\Actions;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Hidden;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\App;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 
 /**
  * @property Form $form
  */
-class PurchaseTickets extends Page implements HasForms, HasActions
+class PurchaseTickets extends Page implements HasActions, HasForms
 {
-    use InteractsWithForms, InteractsWithActions;
+    use InteractsWithActions, InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-ticket';
 
@@ -62,6 +56,7 @@ class PurchaseTickets extends Page implements HasForms, HasActions
     protected ?Waiver $waiver;
 
     public ?Cart $cart;
+
     public bool $hasPurchasedTickets;
 
     // Autofill reserved ticket checkbox from query string
@@ -168,8 +163,8 @@ class PurchaseTickets extends Page implements HasForms, HasActions
                         'in' => 'The entered value must match your legal name, as listed in your profile.',
                     ])
                     ->hidden($this->waiver === null),
-            ])  
-            ->hidden(fn() => ! $this->waiver || $user->waivers()->where('waiver_id', $this->waiver->id)->count() > 0)
+            ])
+            ->hidden(fn () => ! $this->waiver || $user->waivers()->where('waiver_id', $this->waiver->id)->count() > 0)
             ->afterValidation($this->createCompletedWaiver(...));
     }
 
