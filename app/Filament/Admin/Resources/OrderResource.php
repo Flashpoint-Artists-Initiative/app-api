@@ -34,12 +34,6 @@ class OrderResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'id';
 
-    public static function getRecordTitle(?Model $record): string|Htmlable|null
-    {
-        /** @var Order $record */
-        return $record ? "Order #{$record->id}" : static::getModelLabel();
-    }
-
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist

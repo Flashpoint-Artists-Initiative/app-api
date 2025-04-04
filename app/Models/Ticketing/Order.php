@@ -111,6 +111,11 @@ class Order extends Model implements ContractsAuditable
         $query->where('user_id', Auth::id());
     }
 
+    public function scopeCurrentEvent(Builder $query): void
+    {
+        $query->where('event_id', Event::getCurrentEventId());
+    }
+
     public function refundable(): Attribute
     {
         return Attribute::make(

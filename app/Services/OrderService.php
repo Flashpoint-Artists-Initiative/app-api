@@ -131,7 +131,7 @@ class OrderService
                 'id' => $type->id,
                 'name' => $type->name,
                 'quantity' => $quantites[$type->id],
-                'profit' => $type->price * $quantites[$type->id] / 100,
+                'profit' => $type->price * $quantites[$type->id],
             ];
         }
 
