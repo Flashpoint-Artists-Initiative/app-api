@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "384be2aefd23048dd6ac3e9e7da6212f",
+    "content-hash": "b84e7599ab64b6ae123f453bf42ab669",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -1631,21 +1631,21 @@
         },
         {
             "name": "eightcedars/filament-inactivity-guard",
-            "version": "0.2.0",
+            "version": "0.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/eightcedars/filament-inactivity-guard.git",
-                "reference": "324a3e0a6d5174bb35e06f33d21bc98d0c4078c6"
+                "reference": "05a7841aaa5f9dd1ad018bc97c622cd41156842f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/eightcedars/filament-inactivity-guard/zipball/324a3e0a6d5174bb35e06f33d21bc98d0c4078c6",
-                "reference": "324a3e0a6d5174bb35e06f33d21bc98d0c4078c6",
+                "url": "https://api.github.com/repos/eightcedars/filament-inactivity-guard/zipball/05a7841aaa5f9dd1ad018bc97c622cd41156842f",
+                "reference": "05a7841aaa5f9dd1ad018bc97c622cd41156842f",
                 "shasum": ""
             },
             "require": {
                 "filament/filament": "^3.0",
-                "livewire/livewire": "^3.5",
+                "livewire/livewire": "^3.0",
                 "php": "^8.1",
                 "spatie/laravel-package-tools": "^1.15.0"
             },
@@ -1681,13 +1681,14 @@
                     "role": "Developer"
                 }
             ],
-            "description": "Filament idle/inactive session guard",
+            "description": "Gracefully auto-logout users from idle/inactive Filament sessions",
             "homepage": "https://github.com/eightcedars/filament-inactivity-guard",
             "keywords": [
                 "eightcedars",
                 "filament auto logout",
                 "filament idle session",
                 "filament inactivity guard",
+                "filamentphp",
                 "laravel"
             ],
             "support": {
@@ -1700,7 +1701,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-30T12:23:04+00:00"
+            "time": "2025-03-22T22:09:44+00:00"
         },
         {
             "name": "fakerphp/faker",
@@ -5206,33 +5207,29 @@
         },
         {
             "name": "owen-it/laravel-auditing",
-            "version": "v13.7.2",
+            "version": "v14.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/owen-it/laravel-auditing.git",
-                "reference": "4f72181622683bc667bbdd2e5fa09cd376329af4"
+                "reference": "f92602d1b3f53df29ddd577290e9d735ea707c53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/owen-it/laravel-auditing/zipball/4f72181622683bc667bbdd2e5fa09cd376329af4",
-                "reference": "4f72181622683bc667bbdd2e5fa09cd376329af4",
+                "url": "https://api.github.com/repos/owen-it/laravel-auditing/zipball/f92602d1b3f53df29ddd577290e9d735ea707c53",
+                "reference": "f92602d1b3f53df29ddd577290e9d735ea707c53",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "illuminate/console": "^7.0|^8.0|^9.0|^10.0|^11.0",
-                "illuminate/database": "^7.0|^8.0|^9.0|^10.0|^11.0",
-                "illuminate/filesystem": "^7.0|^8.0|^9.0|^10.0|^11.0",
-                "php": "^7.3|^8.0"
+                "illuminate/console": "^11.0|^12.0",
+                "illuminate/database": "^11.0|^12.0",
+                "illuminate/filesystem": "^11.0|^12.0",
+                "php": "^8.2"
             },
             "require-dev": {
-                "laravel/legacy-factories": "*",
-                "mockery/mockery": "^1.0",
-                "orchestra/testbench": "^5.0|^6.0|^7.0|^8.0|^9.0",
-                "phpunit/phpunit": "^9.6|^10.5|^11.0"
-            },
-            "suggest": {
-                "irazasyed/larasupport": "Needed to publish the package configuration in Lumen"
+                "mockery/mockery": "^1.5.1",
+                "orchestra/testbench": "^9.0|^10.0",
+                "phpunit/phpunit": "^11.0"
             },
             "type": "package",
             "extra": {
@@ -5242,7 +5239,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-master": "v13-dev"
+                    "dev-master": "v14-dev"
                 }
             },
             "autoload": {
@@ -5268,7 +5265,7 @@
                     "email": "morten@visia.dk"
                 }
             ],
-            "description": "Audit changes of your Eloquent models in Laravel/Lumen",
+            "description": "Audit changes of your Eloquent models in Laravel",
             "homepage": "https://laravel-auditing.com",
             "keywords": [
                 "Accountability",
@@ -5290,7 +5287,7 @@
                 "issues": "https://github.com/owen-it/laravel-auditing/issues",
                 "source": "https://github.com/owen-it/laravel-auditing"
             },
-            "time": "2025-02-21T14:58:02+00:00"
+            "time": "2025-02-26T16:40:54+00:00"
         },
         {
             "name": "php-open-source-saver/jwt-auth",
@@ -6972,16 +6969,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v16.6.0",
+            "version": "v17.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "d6de0a536f00b5c5c74f36b8f4d0d93b035499ff"
+                "reference": "01ca9b5fdd899b8e4b69f83b85e09d96f6240220"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/d6de0a536f00b5c5c74f36b8f4d0d93b035499ff",
-                "reference": "d6de0a536f00b5c5c74f36b8f4d0d93b035499ff",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/01ca9b5fdd899b8e4b69f83b85e09d96f6240220",
+                "reference": "01ca9b5fdd899b8e4b69f83b85e09d96f6240220",
                 "shasum": ""
             },
             "require": {
@@ -6991,7 +6988,7 @@
                 "php": ">=5.6.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "3.5.0",
+                "friendsofphp/php-cs-fixer": "3.72.0",
                 "phpstan/phpstan": "^1.2",
                 "phpunit/phpunit": "^5.7 || ^9.0"
             },
@@ -7025,9 +7022,9 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v16.6.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v17.1.1"
             },
-            "time": "2025-02-24T22:35:29+00:00"
+            "time": "2025-04-05T00:09:14+00:00"
         },
         {
             "name": "symfony/clock",
@@ -10202,16 +10199,16 @@
         },
         {
             "name": "brianium/paratest",
-            "version": "v7.8.3",
+            "version": "v7.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paratestphp/paratest.git",
-                "reference": "a585c346ddf1bec22e51e20b5387607905604a71"
+                "reference": "de51af1d6410bfdb5b41d2dd2c42a0b19b3656c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paratestphp/paratest/zipball/a585c346ddf1bec22e51e20b5387607905604a71",
-                "reference": "a585c346ddf1bec22e51e20b5387607905604a71",
+                "url": "https://api.github.com/repos/paratestphp/paratest/zipball/de51af1d6410bfdb5b41d2dd2c42a0b19b3656c9",
+                "reference": "de51af1d6410bfdb5b41d2dd2c42a0b19b3656c9",
                 "shasum": ""
             },
             "require": {
@@ -10220,25 +10217,25 @@
                 "ext-reflection": "*",
                 "ext-simplexml": "*",
                 "fidry/cpu-core-counter": "^1.2.0",
-                "jean85/pretty-package-versions": "^2.1.0",
-                "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
-                "phpunit/php-code-coverage": "^11.0.9 || ^12.0.4",
-                "phpunit/php-file-iterator": "^5.1.0 || ^6",
-                "phpunit/php-timer": "^7.0.1 || ^8",
-                "phpunit/phpunit": "^11.5.11 || ^12.0.6",
-                "sebastian/environment": "^7.2.0 || ^8",
-                "symfony/console": "^6.4.17 || ^7.2.1",
-                "symfony/process": "^6.4.19 || ^7.2.4"
+                "jean85/pretty-package-versions": "^2.1.1",
+                "php": "~8.3.0 || ~8.4.0",
+                "phpunit/php-code-coverage": "^12.1.2",
+                "phpunit/php-file-iterator": "^6",
+                "phpunit/php-timer": "^8",
+                "phpunit/phpunit": "^12.1.0",
+                "sebastian/environment": "^8",
+                "symfony/console": "^6.4.20 || ^7.2.5",
+                "symfony/process": "^6.4.20 || ^7.2.5"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^12.0.0",
+                "doctrine/coding-standard": "^13.0.0",
                 "ext-pcov": "*",
                 "ext-posix": "*",
-                "phpstan/phpstan": "^2.1.6",
+                "phpstan/phpstan": "^2.1.11",
                 "phpstan/phpstan-deprecation-rules": "^2.0.1",
-                "phpstan/phpstan-phpunit": "^2.0.4",
-                "phpstan/phpstan-strict-rules": "^2.0.3",
-                "squizlabs/php_codesniffer": "^3.11.3",
+                "phpstan/phpstan-phpunit": "^2.0.6",
+                "phpstan/phpstan-strict-rules": "^2.0.4",
+                "squizlabs/php_codesniffer": "^3.12.0",
                 "symfony/filesystem": "^6.4.13 || ^7.2.0"
             },
             "bin": [
@@ -10279,7 +10276,7 @@
             ],
             "support": {
                 "issues": "https://github.com/paratestphp/paratest/issues",
-                "source": "https://github.com/paratestphp/paratest/tree/v7.8.3"
+                "source": "https://github.com/paratestphp/paratest/tree/v7.9.1"
             },
             "funding": [
                 {
@@ -10291,7 +10288,7 @@
                     "type": "paypal"
                 }
             ],
-            "time": "2025-03-05T08:29:11+00:00"
+            "time": "2025-04-04T10:47:46+00:00"
         },
         {
             "name": "codewithdennis/filament-theme-inspector",
