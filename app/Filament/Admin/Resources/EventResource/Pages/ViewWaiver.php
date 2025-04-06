@@ -5,18 +5,19 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\EventResource\Pages;
 
 use App\Filament\Admin\Resources\EventResource;
+use App\Models\Event;
 use Filament\Actions;
-use Filament\Resources\Pages\ViewRecord;
+use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
-use Filament\Forms;
-use App\Models\Event;
+use Filament\Resources\Pages\ViewRecord;
 
 class ViewWaiver extends ViewRecord
 {
     protected static string $resource = EventResource::class;
 
     protected static ?string $navigationLabel = 'Waiver';
+
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
     protected static string $view = 'filament.admin.resources.event-resource.pages.view-waiver';
@@ -28,15 +29,16 @@ class ViewWaiver extends ViewRecord
         return [
             Actions\Action::make('edit')
                 ->url(EditWaiver::getUrl(['record' => $this->record]))
-                ->label(fn() => $this->hasWaiver ? 'Edit Waiver' : 'Create Waiver')
+                ->label(fn () => $this->hasWaiver ? 'Edit Waiver' : 'Create Waiver')
                 ->hidden(function () {
                     /** @var Event $event */
                     $event = $this->record;
+
                     return $event->completedWaivers()->exists();
                 }),
         ];
     }
-    
+
     public function getBreadcrumb(): string
     {
         return 'Waiver';
@@ -54,9 +56,9 @@ class ViewWaiver extends ViewRecord
                         ->required()
                         ->columnSpanFull(),
                 ])
-                ->relationship('waiver'),
+                    ->relationship('waiver'),
             ]);
-    } 
+    }
 
     public function mount(int|string $record): void
     {

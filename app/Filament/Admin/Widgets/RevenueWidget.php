@@ -30,7 +30,8 @@ class RevenueWidget extends BaseWidget
     {
         $total = Order::currentEvent()->sum($field) / 100;
 
-        $formatter = new  NumberFormatter('en_US', NumberFormatter::CURRENCY);
+        $formatter = new NumberFormatter('en_US', NumberFormatter::CURRENCY);
+
         return $formatter->formatCurrency($total, 'USD') ?: '$0.00';
     }
 }

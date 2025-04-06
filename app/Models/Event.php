@@ -82,7 +82,7 @@ class Event extends Model implements ContractsAuditable
     {
         return $this->hasMany(Waiver::class);
     }
-    
+
     /**
      * @return HasOne<Waiver, $this>
      */

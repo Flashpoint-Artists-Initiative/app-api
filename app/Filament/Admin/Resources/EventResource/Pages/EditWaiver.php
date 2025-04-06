@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\EventResource\Pages;
 
 use App\Filament\Admin\Resources\EventResource;
+use App\Models\Event;
 use Filament\Actions;
+use Filament\Actions\Action;
+use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
-use Filament\Forms;
 use Filament\Resources\Pages\EditRecord;
-use App\Models\Event;
-use Filament\Actions\Action;
 
 class EditWaiver extends EditRecord
 {
@@ -22,10 +22,11 @@ class EditWaiver extends EditRecord
         return [
             Actions\DeleteAction::make('delete')
                 // ->label('Delete Waiver')
-                ->hidden(function () { 
+                ->hidden(function () {
                     /** @var Event $event */
                     $event = $this->record;
-                    return !$event->waiver || $event->completedWaivers()->count() > 0;
+
+                    return ! $event->waiver || $event->completedWaivers()->count() > 0;
                 })
                 ->action(function (Action $action) {
                     /** @var Event $event */
@@ -35,7 +36,7 @@ class EditWaiver extends EditRecord
                     } else {
                         $action->failure();
                     }
-                    
+
                 })
                 ->modalHeading('Delete Waiver')
                 // ->successNotificationTitle('Deleted')
@@ -57,7 +58,7 @@ class EditWaiver extends EditRecord
                         ->required()
                         ->columnSpanFull(),
                 ])
-                ->relationship('waiver'),
+                    ->relationship('waiver'),
             ]);
     }
 }
