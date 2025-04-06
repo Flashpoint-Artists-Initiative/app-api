@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Admin\Resources\WaiverResource\RelationManagers;
+namespace App\Filament\Admin\Resources\EventResource\RelationManagers;
 
 use App\Filament\Admin\Resources\UserResource;
 use Filament\Forms\Form;

@@ -78,7 +78,7 @@ class PurchaseTickets extends Page implements HasActions, HasForms
 
     public function form(Form $form): Form
     {
-        $this->waiver = Event::getCurrentEvent()?->waivers()->first();
+        $this->waiver = Event::getCurrentEvent()?->waiver;
 
         return $form
             ->schema([
@@ -150,12 +150,15 @@ class PurchaseTickets extends Page implements HasActions, HasForms
 
         return Wizard\Step::make('Waivers')
             ->schema([
+                Placeholder::make('title')
+                    ->content(new HtmlString('<h1 class="text-2xl">'.($this->waiver->title ?? '').'</h1>'))
+                    ->label(''),
                 Placeholder::make('waiver')
                     ->content(new HtmlString($this->waiver->content ?? ''))
                     ->label(''),
                 TextInput::make('signature')
                     ->label('I agree to the terms of the waiver and understand that I am signing this waiver electronically.')
-                    ->helperText("You must enter your full legal name as it's your ID.")
+                    ->helperText("You must enter your full legal name as it is shown on your ID and listed in your profile.")
                     ->required()
                     ->in([$username])
                     ->validationMessages([

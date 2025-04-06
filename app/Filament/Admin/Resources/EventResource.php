@@ -123,6 +123,8 @@ class EventResource extends Resource
             'create' => Pages\CreateEvent::route('/create'),
             'view' => Pages\ViewEvent::route('/{record}'),
             'edit' => Pages\EditEvent::route('/{record}/edit'),
+            'waiver' => Pages\ViewWaiver::route('/{record}/waiver'),
+            'edit-waiver' => Pages\EditWaiver::route('/{record}/waiver/edit'),
         ];
     }
 
@@ -139,6 +141,7 @@ class EventResource extends Resource
         return $page->generateNavigationItems([
             Pages\ViewEvent::class,
             Pages\EditEvent::class,
+            Pages\ViewWaiver::class,
         ]);
     }
 }

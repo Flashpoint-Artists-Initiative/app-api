@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Ticketing\CompletedWaiver;
 use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketType;
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
@@ -79,6 +81,22 @@ class Event extends Model implements ContractsAuditable
     public function waivers(): HasMany
     {
         return $this->hasMany(Waiver::class);
+    }
+    
+    /**
+     * @return HasOne<Waiver, $this>
+     */
+    public function waiver(): HasOne
+    {
+        return $this->hasOne(Waiver::class);
+    }
+
+    /**
+     * @return HasMany<CompletedWaiver, Waiver, $this>
+     */
+    public function completedWaivers(): HasManyThrough
+    {
+        return $this->hasManyThrough(CompletedWaiver::class, Waiver::class);
     }
 
     /**
