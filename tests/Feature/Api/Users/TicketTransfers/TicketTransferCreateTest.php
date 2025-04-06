@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Users\TicketTransfers;
+namespace Tests\Feature\Api\Users\TicketTransfers;
 
 use App\Enums\RolesEnum;
 use App\Models\Ticketing\PurchasedTicket;
