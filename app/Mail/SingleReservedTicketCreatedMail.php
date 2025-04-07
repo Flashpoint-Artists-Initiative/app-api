@@ -7,7 +7,6 @@ namespace App\Mail;
 use App\Filament\App\Clusters\UserPages\Pages\Tickets;
 use App\Models\Ticketing\ReservedTicket;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
@@ -50,7 +49,7 @@ class SingleReservedTicketCreatedMail extends Mailable
         if ($this->reservedTicket->ticketType->price === 0) {
             return $this->freeContent();
         }
-        
+
         return $this->reservedContent();
     }
 

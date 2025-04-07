@@ -92,7 +92,7 @@ class Event extends Model implements ContractsAuditable
     }
 
     /**
-     * @return HasMany<CompletedWaiver, Waiver, $this>
+     * @return HasManyThrough<CompletedWaiver, Waiver, $this>
      */
     public function completedWaivers(): HasManyThrough
     {

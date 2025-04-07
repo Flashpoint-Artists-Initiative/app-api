@@ -151,7 +151,7 @@ class ReservedTicketResource extends Resource
                 Tables\Columns\TextColumn::make('user.display_name')
                     ->searchable()
                     ->sortable()
-                    ->url(fn ($record) => $record?->user_id ? UserResource::getUrl('view', ['record' => $record->user_id]): null)
+                    ->url(fn ($record) => $record?->user_id ? UserResource::getUrl('view', ['record' => $record->user_id]) : null)
                     ->color('primary')
                     ->icon('heroicon-m-user'),
                 Tables\Columns\TextColumn::make('expiration_date')

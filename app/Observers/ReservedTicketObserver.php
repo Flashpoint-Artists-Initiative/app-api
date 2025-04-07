@@ -8,7 +8,6 @@ use App\Mail\SingleReservedTicketCreatedMail;
 use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\User;
-use App\Notifications\ReservedTicketCreatedNotification;
 use Illuminate\Support\Facades\Mail;
 
 class ReservedTicketObserver

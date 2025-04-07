@@ -38,7 +38,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         Verified::class => [
             EmailVerifiedListener::class,
-        ]
+        ],
     ];
 
     protected $observers = [

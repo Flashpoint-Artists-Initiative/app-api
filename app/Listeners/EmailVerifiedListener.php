@@ -6,10 +6,8 @@ namespace App\Listeners;
 
 use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
-use Illuminate\Auth\Events\Verified;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use App\Models\User;
+use Illuminate\Auth\Events\Verified;
 
 class EmailVerifiedListener
 {
@@ -28,7 +26,7 @@ class EmailVerifiedListener
     {
         /** @var User $user */
         $user = $event->user;
-        
+
         ReservedTicket::where('email', $user->email)->where('user_id', null)->each(
             function (ReservedTicket $reservedTicket) use ($user) {
                 $reservedTicket->user_id = $user->id;
