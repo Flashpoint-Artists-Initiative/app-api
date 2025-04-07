@@ -8,6 +8,7 @@ use App\Models\Concerns\HasTicketType;
 use App\Models\Concerns\TicketInterface;
 use App\Models\Event;
 use App\Observers\ReservedTicketObserver;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -22,6 +23,7 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 /**
  * @property bool $is_purchased
  * @property bool $can_be_purchased
+ * @property-read Carbon $final_expiration_date
  */
 #[ObservedBy(ReservedTicketObserver::class)]
 class ReservedTicket extends Model implements ContractsAuditable, TicketInterface
@@ -126,7 +128,7 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
     {
         return Attribute::make(
             get: function (mixed $value, array $attributes) {
-                return $attributes['expiration_date'] ?? $this->ticketType->sale_end_date;
+                return new Carbon($attributes['expiration_date'] ?? $this->ticketType->sale_end_date);
             }
         );
     }

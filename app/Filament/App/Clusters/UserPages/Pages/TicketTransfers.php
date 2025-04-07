@@ -154,7 +154,7 @@ class TicketTransfers extends Page implements HasForms, HasTable
             ->columns([
                 TextColumn::make('user.display_name')
                     ->label('Sender')
-                    ->formatStateUsing(fn (string $state, TicketTransfer $record) => $record->user_id == Auth::id() ? $state : 'Anonymous'),
+                    ->formatStateUsing(fn (string $state, TicketTransfer $record) => $record->user_id == Auth::id() ? $state : '-'),
                 TextColumn::make('recipient_email')
                     ->label('Sent To'),
                 TextColumn::make('completed')

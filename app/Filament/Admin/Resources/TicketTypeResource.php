@@ -30,12 +30,10 @@ class TicketTypeResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('event_id')
-                    ->relationship('event', 'name', fn (Builder $query) => $query->orderBy('start_date'))
-                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->columnSpanFull(),
                 Forms\Components\DateTimePicker::make('sale_start_date'),
                 Forms\Components\DateTimePicker::make('sale_end_date'),
                 Forms\Components\TextInput::make('quantity')
