@@ -59,7 +59,6 @@ class AccurateOrderSeeder extends Seeder
             }
 
             $taxAndFees = $stripeService->calculateTaxesAndFees($amountSubtotal);
-            
 
             Order::factory()->createQuietly([
                 'user_id' => $cart->user_id,

@@ -59,6 +59,8 @@ class PurchaseTickets extends Page implements HasActions, HasForms
 
     public bool $hasPurchasedTickets;
 
+    protected int $ticketCount;
+
     // Autofill reserved ticket checkbox from query string
     #[Url]
     public ?int $reserved = null;
@@ -79,22 +81,29 @@ class PurchaseTickets extends Page implements HasActions, HasForms
     public function form(Form $form): Form
     {
         $this->waiver = Event::getCurrentEvent()?->waiver;
+        // Call here so we get an accurate ticket count
+        $ticketStep = $this->buildTicketsStep();
+        $submitString = <<<'BLADE'
+            <x-filament::button
+                type="submit"
+                size="sm"
+                wire:target="checkout"
+            >
+                Checkout
+            </x-filament::button>
+        BLADE;
+
+        if ($this->ticketCount === 0) {
+            $submitString = '';
+        }
 
         return $form
             ->schema([
                 Wizard::make([
                     $this->buildWaiverStep(),
-                    $this->buildTicketsStep(),
+                    $ticketStep,
                 ])
-                    ->submitAction(new HtmlString(Blade::render(<<<'BLADE'
-                        <x-filament::button
-                            type="submit"
-                            size="sm"
-                            wire:target="checkout"
-                        >
-                            Checkout
-                        </x-filament::button>
-                    BLADE))),
+                    ->submitAction(new HtmlString(Blade::render($submitString))),
             ])
             ->statePath('data');
     }
@@ -109,7 +118,20 @@ class PurchaseTickets extends Page implements HasActions, HasForms
                 ->rules([new TicketSaleRule])
                 ->hiddenLabel()
                 ->view('forms.components.ticket-type-field');
-        });
+        })->toArray();
+
+        if (count($ticketSchema) === 0) {
+            $nextTicketSaleDate = Event::getCurrentEvent()?->nextTicketSaleDate?->timezone('America/New_York')->format('F jS, Y g:i A T');
+            if ($nextTicketSaleDate) {
+                $ticketSchema[] = Placeholder::make('noTickets')
+                    ->label('')
+                    ->content(new HtmlString('<h1 class="text-2xl text-center">Tickets will be available for purchase on ' . $nextTicketSaleDate . '</h1>'));
+            } else {
+                $ticketSchema[] = Placeholder::make('noTickets')
+                    ->label('')
+                    ->content(new HtmlString('<h1 class="text-2xl text-center">There are no tickets available for this event.</h1>'));
+            }
+        }
 
         $reserved = ReservedTicket::query()->currentUser()->currentEvent()->canBePurchased()->get();
         $reservedSchema = $reserved->map(function (ReservedTicket $ticket) {
@@ -125,14 +147,16 @@ class PurchaseTickets extends Page implements HasActions, HasForms
         if ($reservedSchema->count() > 0) {
             $schema = [
                 Section::make('General Sale Tickets')
-                    ->schema($ticketSchema->toArray()),
+                    ->schema($ticketSchema),
                 Section::make('Your Reserved Tickets')
                     ->description('These Tickets are reserved for you specifically.')
                     ->schema($reservedSchema->toArray()),
             ];
         } else {
-            $schema = $ticketSchema->toArray();
+            $schema = $ticketSchema;
         }
+
+        $this->ticketCount = $tickets->count() + $reserved->count();
 
         return Wizard\Step::make('Select Tickets')
             ->schema($schema)

@@ -26,6 +26,7 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 /**
  * @property float $dollarsPerVote
  * @property bool $votingEnabled
+ * @property-read Carbon $nextTicketSaleDate
  */
 class Event extends Model implements ContractsAuditable
 {
@@ -148,6 +149,19 @@ class Event extends Model implements ContractsAuditable
     {
         return Attribute::make(
             get: fn (mixed $value, array $attributes) => $this->settings['voting_enabled'] ?? false,
+        );
+    }
+
+    public function nextTicketSaleDate(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => $this->ticketTypes()
+                ->active()
+                ->hasQuantity()
+                ->where('sale_start_date', '>=', now())
+                ->orderBy('sale_start_date')
+                ->first()
+                ?->sale_start_date,
         );
     }
 

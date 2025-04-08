@@ -14,8 +14,6 @@ use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\InvalidRequestException;
 use Stripe\Refund;
 use Stripe\StripeClient;
-use Stripe\StripeObject;
-use Stripe\Util\Util;
 
 /**
  * @mixin StripeClient

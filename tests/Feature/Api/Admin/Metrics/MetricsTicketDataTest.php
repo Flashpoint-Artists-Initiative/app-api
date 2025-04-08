@@ -7,11 +7,8 @@ namespace Tests\Feature\Api\Admin\Metrics;
 use App\Enums\RolesEnum;
 use App\Models\Ticketing\Order;
 use App\Models\User;
-use App\Services\StripeService;
 use Database\Seeders\AccurateOrderSeeder;
-use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Test;
-use Stripe\TaxRate;
 use Tests\ApiRouteTestCase;
 
 class MetricsTicketDataTest extends ApiRouteTestCase

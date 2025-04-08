@@ -21,7 +21,7 @@ return new class extends Migration
             $table->dateTime('sale_end_date')->nullable();
             $table->unsignedInteger('quantity')->default(0);
             $table->unsignedInteger('price');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->boolean('active')->default(false);
             $table->boolean('transferable')->default(true);
             $table->boolean('addon')->default(false);

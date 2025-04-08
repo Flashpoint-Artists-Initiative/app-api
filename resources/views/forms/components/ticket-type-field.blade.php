@@ -21,6 +21,11 @@
                     <div class="grid flex-1 gap-y-1">
                     <h3 class="text-base font-semibold leading-6 text-gray-950 dark:text-white">
                         {{ $getRecord()->name }}
+                        @if ($getRecord()->addon)
+                            <x-filament::badge style="display: inline-flex;">
+                                Add-on
+                            </x-filament::badge>
+                        @endif
                     </h3>
                     <p class="overflow-hidden break-words text-sm text-gray-500 dark:text-gray-400">
                         {{ $getRecord()->description }}
@@ -32,7 +37,7 @@
                         <x-filament::button x-on:click="decrement()" grouped>
                             -
                         </x-filament::button>
-                        <x-filament::badge>
+                        <x-filament::badge class="no-radius">
                             <span class="text-lg" x-text="state"></span>
                         </x-filament::badge>
                         <x-filament::button x-on:click="increment()" grouped>
