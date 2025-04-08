@@ -53,7 +53,7 @@ class PurchasedTicketsTable extends Component implements HasForms, HasTable
                 TextColumn::make('ticketType.name')
                     ->label('Ticket Type')
                     ->description(fn (PurchasedTicket $ticket) => $ticket->reservedTicket?->note),
-                TextColumn::make('order.created_at')
+                TextColumn::make('created_at')
                     ->label('Purchase Date')
                     ->dateTime('F jS, Y g:i A T', 'America/New_York'),
                 TextColumn::make('ticketType.price')

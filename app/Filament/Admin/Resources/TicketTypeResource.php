@@ -57,12 +57,15 @@ class TicketTypeResource extends Resource
                     ->default('')
                     ->columnSpanFull(),
                 Forms\Components\Toggle::make('active')
+                    ->required()
                     ->label('Public')
                     ->helperText('Public tickets will be available for purchase on the main page. Private tickets are for direct sale only.'),
                 Forms\Components\Toggle::make('transferable')
+                    ->required()
                     ->default(true)
                     ->helperText('Transferable tickets can be transferred to another user.'),
                 Forms\Components\Toggle::make('addon')
+                    ->required()
                     ->helperText('Add-on tickets do not count as a ticket for attending the event. They are only for add-on items, such as child tickets, ice sales, etc.'),
             ]);
     }

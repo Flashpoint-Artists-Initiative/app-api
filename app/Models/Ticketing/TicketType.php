@@ -36,7 +36,7 @@ class TicketType extends Model implements ContractsAuditable
         'quantity',
         'price',
         'active',
-        'transferrable',
+        'transferable',
         'addon',
         'voided',
     ];

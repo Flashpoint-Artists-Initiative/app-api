@@ -41,13 +41,8 @@ class EventServiceProvider extends ServiceProvider
         ],
     ];
 
-    protected $observers = [
-        Cart::class => CartObserver::class,
-        CartItem::class => CartItemObserver::class,
-        TicketTransfer::class => TicketTransferObserver::class,
-        Order::class => OrderObserver::class,
-        ReservedTicket::class => ReservedTicketObserver::class,
-    ];
+    // Observers are registered via attributes in the model classes
+    protected $observers = [];
 
     /**
      * Register any events for your application.

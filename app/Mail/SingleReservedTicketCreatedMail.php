@@ -33,11 +33,14 @@ class SingleReservedTicketCreatedMail extends Mailable
     public function envelope(): Envelope
     {
         $eventName = $this->reservedTicket->ticketType->event->name;
+        $subject = $this->reservedTicket->ticketType->price === 0
+            ? ': You have been granted a ticket'
+            : ': You have been granted a reserved ticket';
 
         return new Envelope(
             from: new Address(config('mail.from.address'), config('mail.from.name')),
             replyTo: [new Address(config('mail.reply_to.address'), config('mail.reply_to.name'))],
-            subject: $eventName . ': You have been given a reserved ticket',
+            subject: $eventName . $subject,
         );
     }
 
@@ -59,7 +62,6 @@ class SingleReservedTicketCreatedMail extends Mailable
         $url = Tickets::getUrl(panel: 'app');
 
         $message = (new MailMessage)
-            ->subject($eventName . ': You have been given a ticket')
             ->line('You have been granted a ticket for ' . $eventName . '.')
             ->action('View your ticket', $url)
             ->line('If you already have an account, click the link and login to view your ticket.')
