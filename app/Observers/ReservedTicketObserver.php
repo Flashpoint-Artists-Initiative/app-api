@@ -24,7 +24,7 @@ class ReservedTicketObserver
         }
     }
 
-    public function created(ReservedTicket $reservedTicket): void
+    public function saved(ReservedTicket $reservedTicket): void
     {
         // If the reserved ticket type has a price of 0, automatically create a purchased ticket when possible
         if ($reservedTicket->user_id &&
@@ -38,7 +38,9 @@ class ReservedTicketObserver
             $purchasedTicket->save();
         }
 
-        Mail::to($reservedTicket->email)
+        $email = $reservedTicket?->user->email ?? $reservedTicket->email;
+
+        Mail::to($email)
             ->send(new SingleReservedTicketCreatedMail($reservedTicket));
     }
 

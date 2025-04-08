@@ -65,9 +65,13 @@ class CheckoutCompleteTest extends ApiRouteTestCase
         $cart->setStripeCheckoutIdAndSave($this->session->id);
 
         $this->partialMock(StripeService::class, function (MockInterface $mock) {
-            /** @var \Mockery\Expectation $receive */
-            $receive = $mock->shouldReceive('getCheckoutSession');
-            $receive->andReturn($this->session);
+            /** @var \Mockery\Expectation $getSession */
+            $getSession = $mock->shouldReceive('getCheckoutSession');
+            $getSession->andReturn($this->session);
+
+            /** @var \Mockery\Expectation $updateMetadata */
+            $updateMetadata = $mock->shouldReceive('updateMetadata');
+            $updateMetadata->andReturn($this->session);
         });
 
     }
@@ -175,6 +179,7 @@ class CheckoutCompleteTest extends ApiRouteTestCase
             'amount_subtotal' => 1,
             'amount_total' => 1,
             'amount_tax' => 1,
+            'amount_fees' => 1,
             'quantity' => 1,
             'stripe_checkout_id' => $this->session->id,
             'ticket_data' => [],

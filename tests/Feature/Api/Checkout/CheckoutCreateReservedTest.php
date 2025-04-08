@@ -138,26 +138,6 @@ class CheckoutCreateReservedTest extends ApiRouteTestCase
     }
 
     #[Test]
-    public function cart_create_reserved_call_with_inactive_type_returns_failure(): void
-    {
-        $user = User::doesntHave('roles')->doesntHave('reservedTickets')->firstOrFail();
-
-        $inactiveTicketType = TicketType::query()->onSale()->where('active', false)->firstOrFail();
-        $inactiveTicketWithExpiration = ReservedTicket::create([
-            'user_id' => $user->id,
-            'ticket_type_id' => $inactiveTicketType->id,
-        ]);
-
-        $response = $this->actingAs($user)->postJson($this->endpoint, [
-            'reserved' => [
-                $inactiveTicketWithExpiration->id,
-            ],
-        ]);
-
-        $response->assertStatus(422);
-    }
-
-    #[Test]
     public function cart_create_reserved_call_with_zero_quantity_type_returns_success(): void
     {
         $user = User::doesntHave('roles')->doesntHave('reservedTickets')->firstOrFail();

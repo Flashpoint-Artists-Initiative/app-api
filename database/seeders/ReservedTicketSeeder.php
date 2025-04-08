@@ -18,9 +18,9 @@ class ReservedTicketSeeder extends Seeder
         $ticketTypes->push($zeroPriceTicketType);
 
         foreach ($ticketTypes as $ticketType) {
-            ReservedTicket::factory()->for($ticketType)->withEmail()->count(15)->create();
-            ReservedTicket::factory()->for($ticketType)->forUser()->count(15)->create();
-            ReservedTicket::factory()->for($ticketType)->withEmail()->expirationDateInPast()->count(5)->create();
+            ReservedTicket::factory()->for($ticketType)->withEmail()->count(2)->create();
+            ReservedTicket::factory()->for($ticketType)->forUser()->count(2)->create();
+            ReservedTicket::factory()->for($ticketType)->withEmail()->expirationDateInPast()->count(2)->create();
         }
 
     }

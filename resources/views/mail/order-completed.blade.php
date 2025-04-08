@@ -227,7 +227,30 @@
                                                             <tr em="atom">
                                                                 <td valign="top">
                                                                     <div style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 17px; line-height: 21px; color: #a3adbb;">
-                                                                        <span style="color: #1f1f1f;">Tax and Fees</span>
+                                                                        <span style="color: #1f1f1f;">Stripe Fee</span>
+                                                                        <br>
+                                                                    </div>
+                                                                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                                        <tr>
+                                                                            <td height="10"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                                <td valign="top" align="right">
+                                                                    <div style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 17px; line-height: 21px; color: #1f1f1f;">
+                                                                        <strong>${{number_format($order->amount_fees / 100, 2)}}</strong>
+                                                                    </div>
+                                                                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                                        <tr>
+                                                                            <td height="10"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr em="atom">
+                                                                <td valign="top">
+                                                                    <div style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 17px; line-height: 21px; color: #a3adbb;">
+                                                                        <span style="color: #1f1f1f;">Sales Tax</span>
                                                                         <br>
                                                                     </div>
                                                                     <table cellpadding="0" cellspacing="0" border="0" width="100%">

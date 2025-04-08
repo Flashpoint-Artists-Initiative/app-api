@@ -64,6 +64,10 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
             /** @var \Mockery\Expectation $receive */
             $receive = $mock->shouldReceive('getCheckoutSession');
             $receive->andReturn($this->session);
+
+            /** @var \Mockery\Expectation $updateMetadata */
+            $updateMetadata = $mock->shouldReceive('updateMetadata');
+            $updateMetadata->andReturn($this->session);
         });
 
         // Override middleware with test version to add event to request without all the checks
@@ -153,6 +157,7 @@ class CheckoutSessionCompletedTest extends ApiRouteTestCase
             'amount_subtotal' => 1,
             'amount_total' => 1,
             'amount_tax' => 1,
+            'amount_fees' => 1,
             'quantity' => 1,
             'stripe_checkout_id' => $this->session->id,
             'ticket_data' => [],

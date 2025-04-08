@@ -58,8 +58,8 @@ class AccurateOrderSeeder extends Seeder
                 $ticketData[] = $data;
             }
 
-            $amountTax = $stripeService->calculateTax($amountSubtotal);
-            $amountFees = $stripeService->calculateFees($amountSubtotal);
+            $taxAndFees = $stripeService->calculateTaxesAndFees($amountSubtotal);
+            
 
             Order::factory()->createQuietly([
                 'user_id' => $cart->user_id,
@@ -68,9 +68,9 @@ class AccurateOrderSeeder extends Seeder
                 'quantity' => $totalQuantity,
                 'ticket_data' => $ticketData,
                 'amount_subtotal' => $amountSubtotal,
-                'amount_tax' => $amountTax,
-                'amount_fees' => $amountFees,
-                'amount_total' => $amountSubtotal + $amountTax + $amountFees,
+                'amount_tax' => $taxAndFees['tax'],
+                'amount_fees' => $taxAndFees['fees'],
+                'amount_total' => $amountSubtotal + array_sum($taxAndFees),
                 'created_at' => fake()->dateTimeBetween(now()->subMonth()),
             ]);
         }

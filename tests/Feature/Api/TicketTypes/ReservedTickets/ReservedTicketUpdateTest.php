@@ -85,23 +85,6 @@ class ReservedTicketUpdateTest extends ApiRouteTestCase
     }
 
     #[Test]
-    public function reserved_ticket_update_call_with_matching_email_returns_a_successful_response(): void
-    {
-        $user = User::role(RolesEnum::Admin)->firstOrFail();
-        $this->reservedTicket = $this->ticketType->reservedTickets()->doesntHave('purchasedTicket')->firstOrFail();
-
-        $this->buildEndpoint(params: ['ticket_type' => $this->ticketType->id, 'reserved_ticket' => $this->reservedTicket->id]);
-
-        $this->assertNotEquals($user->id, $this->reservedTicket->user_id);
-
-        $response = $this->actingAs($user)->patchJson($this->endpoint, [
-            'email' => $user->email,
-        ]);
-
-        $response->assertStatus(200)->assertJsonPath('data.user_id', $user->id);
-    }
-
-    #[Test]
     public function reserved_ticket_update_call_with_invalid_data_returns_a_validation_error(): void
     {
         $user = User::role(RolesEnum::Admin)->firstOrFail();

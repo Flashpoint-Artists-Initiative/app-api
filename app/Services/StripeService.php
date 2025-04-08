@@ -15,6 +15,7 @@ use Stripe\Exception\InvalidRequestException;
 use Stripe\Refund;
 use Stripe\StripeClient;
 use Stripe\StripeObject;
+use Stripe\Util\Util;
 
 /**
  * @mixin StripeClient
@@ -54,14 +55,15 @@ class StripeService
         $session = $this->getCheckoutSession($order->stripe_checkout_id);
 
         try {
+            // @phpstan-ignore argument.type
             $refund = $this->stripeClient->refunds->create([
                 'payment_intent' => (string) $session->payment_intent,
                 'amount' => $order->amount_total,
                 'reason' => 'requested_by_customer',
-                'metadata' => StripeObject::constructFrom([
+                'metadata' => [
                     'order_id' => $order->id,
                     'user_id' => $order->user_id,
-                ]),
+                ],
             ]);
         } catch (ApiErrorException $e) {
             abort(422, 'Refund failed: ' . $e->getMessage());
@@ -76,6 +78,7 @@ class StripeService
         $user = Auth::user();
         abort_unless($user instanceof User, 400, 'User not found');
 
+        // @phpstan-ignore argument.type
         $checkout_session = $this->stripeClient->checkout->sessions->create([
             'redirect_on_completion' => 'never',
             'payment_method_configuration' => config('services.stripe.payment_method_configuration'),
@@ -86,17 +89,17 @@ class StripeService
             'customer_creation' => 'if_required',
             'line_items' => $this->buildLineItems($cart),
             'expires_at' => (int) now()->addMinutes(31)->format('U'),
-            'metadata' => StripeObject::constructFrom([
+            'metadata' => [
                 'event_id' => $cart->event->id,
                 'user_id' => $cart->user_id,
                 'ticket_quantity' => $cart->quantity,
-            ]),
+            ],
             'payment_intent_data' => [
-                'metadata' => StripeObject::constructFrom([
+                'metadata' => [
                     'event_id' => $cart->event->id,
                     'user_id' => $cart->user_id,
                     'ticket_quantity' => $cart->quantity,
-                ]),
+                ],
             ],
             'custom_text' => [
                 'submit' => [
@@ -115,12 +118,14 @@ class StripeService
      */
     public function updateMetadata(Session $session, array $metadata): Session
     {
+        // @phpstan-ignore argument.type
         $session = $this->stripeClient->checkout->sessions->update($session->id, [
-            'metadata' => StripeObject::constructFrom($metadata),
+            'metadata' => $metadata,
         ]);
 
+        // @phpstan-ignore argument.type
         $this->stripeClient->paymentIntents->update((string) $session->payment_intent, [
-            'metadata' => StripeObject::constructFrom($metadata),
+            'metadata' => $metadata,
         ]);
 
         return $session;

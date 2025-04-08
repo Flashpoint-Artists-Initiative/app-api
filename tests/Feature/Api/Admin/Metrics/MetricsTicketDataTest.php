@@ -22,25 +22,6 @@ class MetricsTicketDataTest extends ApiRouteTestCase
 
     public array $routeParams = ['event_id' => 1];
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->partialMock(StripeService::class, function (MockInterface $mock) {
-            $taxRate = new TaxRate;
-            $taxRate->description = 'Sales Tax';
-            $taxRate->percentage = 7;
-
-            $taxRateTwo = new TaxRate;
-            $taxRateTwo->description = 'Stripe Fee';
-            $taxRateTwo->percentage = 2.9;
-
-            /** @var \Mockery\Expectation $receive */
-            $receive = $mock->shouldReceive('getTaxRate');
-            $receive->andReturn($taxRate, $taxRateTwo);
-        });
-    }
-
     #[Test]
     public function metrics_ticket_data_call_not_logged_in_returns_error(): void
     {
