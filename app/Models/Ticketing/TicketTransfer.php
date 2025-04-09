@@ -85,6 +85,11 @@ class TicketTransfer extends Model implements ContractsAuditable
         });
     }
 
+    public function scopePending(Builder $query): void
+    {
+        $query->where('completed', false);
+    }
+
     /**
      * @return Attribute<int, void>
      */

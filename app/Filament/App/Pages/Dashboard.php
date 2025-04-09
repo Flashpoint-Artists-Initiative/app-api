@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\App\Pages;
 
 use App\Models\Event;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 
 class Dashboard extends \Filament\Pages\Dashboard
@@ -13,9 +14,15 @@ class Dashboard extends \Filament\Pages\Dashboard
 
     public ?Event $event = null;
 
+    public bool $hasReservedTickets;
+
+    public bool $hasPendingTransfers;
+
     #[On('active-event-updated')]
     public function mount(): void
     {
         $this->event = Event::getCurrentEvent();
+        $this->hasReservedTickets = Auth::authenticate()->reservedTickets()->canBePurchased()->exists();
+        $this->hasPendingTransfers = Auth::authenticate()->receivedTicketTransfers()->pending()->exists();
     }
 }

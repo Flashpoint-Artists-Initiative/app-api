@@ -1,7 +1,24 @@
 @php
     use \App\Filament\Admin\Resources\EventResource\Pages\EditAppDashboardContent;
+    use \App\Filament\App\Pages\PurchaseTickets;
+    use App\Filament\App\Clusters\UserPages\Pages\TicketTransfers;
 @endphp
 <x-filament-panels::page>
+    {{-- Pending Reserve Tickets --}}
+    @if ($hasReservedTickets)
+        <x-notification-banner color="info">
+            You have reserved tickets for this event! You can <x-filament::link size="large" href="{{ PurchaseTickets::getUrl() }}">purchase them</x-filament::link>
+            or <x-filament::link size="large" href="{{ TicketTransfers::getUrl() }}">transfer them</x-filament::link> to someone else.
+        </x-notification-banner>
+    @endif
+    {{-- Pending Transfers --}}
+    @if ($hasPendingTransfers)
+        <x-notification-banner color="info">
+            You have pending ticket transfers for this event! You can accept them by going to <x-filament::link size="large" href="{{ TicketTransfers::getUrl() }}">your profile</x-filament::link>.
+        </x-notification-banner>
+        
+    @endif
+    {{-- Custom content from PageContent --}}
     @if ($event?->dashboardContent)
     <div class="rich-text-content">
         {!! str($event?->dashboardContent?->formattedContent)->sanitizeHtml() !!}

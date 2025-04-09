@@ -162,6 +162,15 @@ class User extends Authenticatable implements ContractsAuditable, FilamentUser, 
     }
 
     /**
+     * @return HasMany<TicketTransfer, $this>
+     */
+    public function receivedTicketTransfers(): HasMany
+    {
+        return $this->hasMany(TicketTransfer::class, 'recipient_email', 'email')
+            ->orWhere('recipient_user_id', $this->id);
+    }
+
+    /**
      * @return BelongsToMany<Shift, $this, Pivot, 'signup'>
      */
     public function shifts(): BelongsToMany

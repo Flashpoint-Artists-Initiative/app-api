@@ -44,12 +44,9 @@ class PageContent extends Model
             get: function () {
                 $document = \DOM\HTMLDocument::createFromString($this->content, LIBXML_NOERROR | LIBXML_HTML_NOIMPLIED);
                 foreach ($document->getElementsByTagName('a') as $link) {
-                    // $link->setAttribute('class', 'font-semibold text-sm text-custom-600 dark:text-custom-400 group-hover/link:underline group-focus-visible/link:underline');
-                    // $link->setAttribute('style', '--c-400:var(--primary-400);--c-600:var(--primary-600);');
                     $link->innerHTML = '<span class="font-semibold text-sm text-custom-600 dark:text-custom-400 group-hover/link:underline group-focus-visible/link:underline" style="--c-400:var(--primary-400);--c-600:var(--primary-600);">' . $link->innerHTML . '</span>';
                 }
 
-                // dd($document->saveHtml());
                 return $document->saveHtml();
             }
         );

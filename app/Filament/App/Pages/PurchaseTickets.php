@@ -250,6 +250,7 @@ class PurchaseTickets extends Page implements HasActions, HasForms
     {
         return ActionsAction::make('ticketInfo')
             ->link()
+            ->size('large')
             ->label('How does ticketing work?')
             ->modalContent(view('filament.app.modals.ticket-info'))
             ->modalSubmitAction(false)
