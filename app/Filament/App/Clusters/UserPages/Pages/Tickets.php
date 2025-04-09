@@ -14,6 +14,7 @@ use Filament\Actions\Action;
 use Filament\Infolists\Components\Livewire;
 use Filament\Infolists\Infolist;
 use Filament\Pages\Page;
+use Filament\Support\Enums\ActionSize;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,6 +29,8 @@ class Tickets extends Page
     protected static string $view = 'filament.app.clusters.user-pages.pages.tickets';
 
     protected static ?string $cluster = UserPages::class;
+
+    public bool $hasMultipleTickets;
 
     public function ticketsInfolist(Infolist $infolist): Infolist
     {
@@ -79,9 +82,15 @@ class Tickets extends Page
     {
         return Action::make('ticketInfo')
             ->link()
+            ->size('large')
             ->label('Find out more about how ticketing works.')
             ->modalContent(view('filament.app.modals.ticket-info'))
             ->modalSubmitAction(false)
             ->modalCancelActionLabel('Close');
+    }
+
+    public function mount(): void
+    {
+        $this->hasMultipleTickets = Auth::authenticate()->purchasedTickets()->count() > 1;
     }
 }

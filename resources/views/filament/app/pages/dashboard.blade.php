@@ -20,7 +20,7 @@
     @endif
     {{-- Custom content from PageContent --}}
     @if ($event?->dashboardContent)
-    <div class="rich-text-content">
+    <div class="prose dark:prose-invert max-w-none">
         {!! str($event?->dashboardContent?->formattedContent)->sanitizeHtml() !!}
     </div>
     @elseif (Auth::user()->can('events.edit') && $event)
