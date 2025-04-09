@@ -8,6 +8,7 @@ use App\Models\Ticketing\Cart;
 use App\Services\CartService;
 use App\Services\CheckoutService;
 use App\Services\StripeService;
+use Filament\Actions\Action;
 use Filament\Pages\Page;
 
 class Checkout extends Page
@@ -49,5 +50,18 @@ class Checkout extends Page
         $this->checkoutComplete = true;
         $session = $stripeService->getCheckoutSession($sessionId);
         $checkoutService->resolveCompletedCheckoutSession($session);
+    }
+
+    public function cancelAction(): Action
+    {
+        return Action::make('cancel')
+            ->extraAttributes(['class' => 'mb-2 ms-6'])
+            ->label('Cancel Order')
+            ->action(function (CartService $cartService) {
+                $cartService->getActiveCart()?->delete();
+                $this->redirect(PurchaseTickets::getUrl());
+            })
+            ->color('danger')
+            ->icon('heroicon-o-x-mark');
     }
 }

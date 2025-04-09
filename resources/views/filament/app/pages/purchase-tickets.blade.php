@@ -1,7 +1,7 @@
 <x-filament-panels::page>
-    <div wire:loading wire:target.except="checkout">
+    {{-- <div wire:loading wire:target.except="checkout">
         <x-filament::loading-indicator class="h-5 w-5" />
-    </div>
+    </div> --}}
     @if ($cart)
     <x-notification-banner color="info" wire:loading.remove wire:target.except="checkout">
             You already have an existing cart with {{  $cart->quantity }} {{ Str::of('ticket')->plural($cart->quantity) }}!  It will expire {{ $cart->expiration_date->diffForHumans() }}. {{ $this->checkoutAction }}

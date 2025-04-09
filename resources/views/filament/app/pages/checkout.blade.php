@@ -39,12 +39,14 @@
 @endscript
 
 <div wire:show="!checkoutComplete" wire:cloak>
-    <x-notification-banner color="info" class="mb-2">
-        Your cart will expire {{ $this->cart->expiration_date->diffForHumans() }}.
-    </x-notification-banner>
+    <div class="flex">
+        <x-notification-banner color="info" class="mb-2 grow">
+            Your cart will expire {{ $this->cart->expiration_date->diffForHumans() }}.
+        </x-notification-banner>
+        {{ $this->cancelAction }}
+    </div>
     <div id="stripe-checkout">
     </div>
-    
 </div>
 <div wire:show="checkoutComplete" wire:cloak>
     Checkout Complete!

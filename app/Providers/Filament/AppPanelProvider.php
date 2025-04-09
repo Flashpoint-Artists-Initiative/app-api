@@ -10,11 +10,17 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages;
+use Filament\Pages\Auth\Login;
+use Filament\Pages\Auth\PasswordReset\RequestPasswordReset;
 use Filament\Panel;
 use Filament\Support\Assets\Js;
 use Filament\Support\Colors\Color;
 use Filament\Support\Facades\FilamentAsset;
+use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Blade;
 
 class AppPanelProvider extends CommonPanelProvider
 {
@@ -62,13 +68,11 @@ class AppPanelProvider extends CommonPanelProvider
     public function register(): void
     {
         parent::register();
-    }
+        
+        FilamentView::registerRenderHook(PanelsRenderHook::FOOTER, 
+            fn (): View => view('panel-footer'), 
+            // [Login::class, Register::class, RequestPasswordReset::class] // For now, show on every page
+        );
 
-    // public function boot(): void
-    // {
-    //     FilamentAsset::register([
-    //         Js::make('stripe-js', 'https://js.stripe.com/v3/')->loadedOnRequest(),
-    //         Js::make('stripe-checkout', base_path('resources/js/stripe-checkout.js'))->loadedOnRequest(),
-    //     ]);
-    // }
+    }
 }
