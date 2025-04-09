@@ -6,16 +6,6 @@ namespace App\Providers;
 
 use App\Events\EmailUpdated;
 use App\Listeners\EmailVerifiedListener;
-use App\Models\Ticketing\Cart;
-use App\Models\Ticketing\CartItem;
-use App\Models\Ticketing\Order;
-use App\Models\Ticketing\ReservedTicket;
-use App\Models\Ticketing\TicketTransfer;
-use App\Observers\CartItemObserver;
-use App\Observers\CartObserver;
-use App\Observers\OrderObserver;
-use App\Observers\ReservedTicketObserver;
-use App\Observers\TicketTransferObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;

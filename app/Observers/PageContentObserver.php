@@ -14,7 +14,7 @@ class PageContentObserver
         if ($pageContent->isDirty('page')) {
             if (PageContent::where('event_id', $pageContent->event_id)
                 ->where('page', $pageContent->page)
-                ->where('id', '!=', $pageContent->id)
+                ->where('id', '!=', $pageContent->id ?? 0)
                 ->exists()
             ) {
                 return false;

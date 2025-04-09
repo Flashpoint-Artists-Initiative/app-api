@@ -32,7 +32,11 @@ class CommonPanelProvider extends PanelProvider
     {
         $panel = $panel
             ->id($this->id)
-            ->spa()
+            // ->spa()
+            // ->spaUrlExceptions([
+            //     '*/admin',
+            //     '*/admin/*',
+            // ])
             ->brandLogo(asset('logo-text.svg'))
             ->favicon(asset('logo.svg'))
             ->brandLogoHeight('revert-layer')

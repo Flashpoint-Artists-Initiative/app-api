@@ -125,6 +125,7 @@ class EventResource extends Resource
             'edit' => Pages\EditEvent::route('/{record}/edit'),
             'waiver' => Pages\ViewWaiver::route('/{record}/waiver'),
             'edit-waiver' => Pages\EditWaiver::route('/{record}/waiver/edit'),
+            'content' => Pages\EditAppDashboardContent::route('/{record}/content'),
         ];
     }
 
@@ -142,6 +143,7 @@ class EventResource extends Resource
             Pages\ViewEvent::class,
             Pages\EditEvent::class,
             Pages\ViewWaiver::class,
+            Pages\EditAppDashboardContent::class,
         ]);
     }
 }

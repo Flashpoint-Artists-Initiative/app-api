@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\PageContentEnum;
 use App\Models\Ticketing\CompletedWaiver;
 use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
@@ -121,7 +122,7 @@ class Event extends Model implements ContractsAuditable
      */
     public function dashboardContent(): HasOne
     {
-        return $this->hasOne(PageContent::class)->where('page', 'dashboard');
+        return $this->hasOne(PageContent::class)->where('page', PageContentEnum::AppDashboard);
     }
 
     /**

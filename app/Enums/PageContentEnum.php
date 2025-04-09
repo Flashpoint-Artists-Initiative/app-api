@@ -14,4 +14,12 @@ enum PageContentEnum: string
             self::AppDashboard => 'App Dashboard',
         };
     }
+
+    /**
+     * @return array<string, string>
+     */
+    public static function toArray(): array
+    {
+        return array_combine(array_column(self::cases(), 'value'), array_map(fn ($case) => $case->label(), self::cases()));
+    }
 }

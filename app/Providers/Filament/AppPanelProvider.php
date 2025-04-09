@@ -13,14 +13,11 @@ use Filament\Pages;
 use Filament\Pages\Auth\Login;
 use Filament\Pages\Auth\PasswordReset\RequestPasswordReset;
 use Filament\Panel;
-use Filament\Support\Assets\Js;
 use Filament\Support\Colors\Color;
-use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
 use Filament\Widgets;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Blade;
 
 class AppPanelProvider extends CommonPanelProvider
 {
@@ -30,6 +27,11 @@ class AppPanelProvider extends CommonPanelProvider
     {
         return parent::panel($panel)
             ->default()
+            ->spa()
+            ->spaUrlExceptions([
+                '*/admin',
+                '*/admin/*',
+            ])
             ->path('')
             ->login()
             ->registration(Register::class)
@@ -40,7 +42,7 @@ class AppPanelProvider extends CommonPanelProvider
                 'primary' => Color::Violet,
             ])
             ->pages([
-                Pages\Dashboard::class,
+                // Pages\Dashboard::class,
             ])
             ->widgets([
                 Widgets\AccountWidget::class,
@@ -68,9 +70,9 @@ class AppPanelProvider extends CommonPanelProvider
     public function register(): void
     {
         parent::register();
-        
-        FilamentView::registerRenderHook(PanelsRenderHook::FOOTER, 
-            fn (): View => view('panel-footer'), 
+
+        FilamentView::registerRenderHook(PanelsRenderHook::FOOTER,
+            fn (): View => view('panel-footer'),
             // [Login::class, Register::class, RequestPasswordReset::class] // For now, show on every page
         );
 
