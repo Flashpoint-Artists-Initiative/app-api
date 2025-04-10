@@ -1,5 +1,6 @@
 @php
     $buttonUrl = App\Filament\App\Clusters\UserPages\Pages\Tickets::getUrl();
+    $transferUrl = App\Filament\App\Clusters\UserPages\Pages\TicketTransfers::getUrl();
     $headerColorString = Filament\Facades\Filament::getPanel('app')->getColors()['primary'][500];
 @endphp
 
@@ -117,7 +118,7 @@
                                                                 <td style="padding-bottom: 0px;">
                                                                     <div style="font-family: Helvetica, Arial, sans-serif; font-size: 21px; line-height: 24px; color: #818181;" align="left">
 																		Please note: Tickets this year are attached to your account. If you've bought multiple tickets, every person in your group needs their own account to attend the event. <br>
-                                                                        <br>Instructions on how to transfer tickets to another user can be found here.
+                                                                        <br>Tickets can be transferred by going to the <a href="{{ $transferUrl }}">Ticket Transfers</a> section of your user profile.
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -333,7 +334,7 @@
                                                                 <td style="padding-bottom: 16px;" align="left">
                                                                     <div style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 15px; line-height: 20px; color: #818181;" align="left">
 																		If you have any questions, please reply to this email or contact us at 
-																		<a href="mailto:ticketing@alchemyburn.com" style="color: #0d6cf6;">ticketing@alchemyburn.com</a>
+																		<a href="mailto:{{ config('mail.reply_to.address') }}" style="color: #0d6cf6;">{{ config('mail.reply_to.address') }}</a>
                                                                     </div>
                                                                 </td>
                                                             </tr>
