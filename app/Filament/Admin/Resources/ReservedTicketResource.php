@@ -29,6 +29,8 @@ class ReservedTicketResource extends Resource
 
     protected static ?string $navigationGroup = 'Event Specific';
 
+    protected static ?string $navigationParentItem = 'Ticketing';
+
     public static function form(Form $form): Form
     {
         if ($form->getOperation() === 'create') {

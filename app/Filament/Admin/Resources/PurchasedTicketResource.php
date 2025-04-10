@@ -22,6 +22,8 @@ class PurchasedTicketResource extends Resource
 
     protected static ?string $navigationGroup = 'Event Specific';
 
+    protected static ?string $navigationParentItem = 'Ticketing';
+
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist
