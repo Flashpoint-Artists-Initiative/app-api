@@ -125,7 +125,6 @@ class TicketTransfers extends Page implements HasForms, HasTable
                 ViewField::make('warning')
                     ->view('filament.app.modals.ticket-transfer-confirmation'),
             ])
-            ->slideOver()
             ->modalAutofocus(false)
             ->action(fn (array $data) => $this->createTransfer($data));
     }
@@ -164,7 +163,7 @@ class TicketTransfers extends Page implements HasForms, HasTable
                     ->color(fn (bool $state) => $state ? 'success' : 'warning'),
                 TextColumn::make('created_at')
                     ->label('Date')
-                    ->dateTime(),
+                    ->dateTime('F jS, Y g:i A T', 'America/New_York'),
                 TextColumn::make('ticketCount')
                     ->formatStateUsing(function (TicketTransfer $record) {
                         $purchased = $record->purchasedTickets->count();

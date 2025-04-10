@@ -92,7 +92,7 @@ class ReservedTicketResource extends Resource
                             return '';
                         }
 
-                        return sprintf('Defaults to ticket sale end date: %s', $ticketType->sale_end_date?->format('M jS, Y @ g:i A') ?? '');
+                        return sprintf('Defaults to ticket sale end date: %s', $ticketType->sale_end_date?->timezone('America/New_York')->format('F jS, Y g:i A T') ?? '');
                     })
                     ->format('Y-m-d H:i:s')
                     ->disabled(fn (?ReservedTicket $record) => $record?->is_purchased),
@@ -123,7 +123,7 @@ class ReservedTicketResource extends Resource
                 ->content(function (ReservedTicket $record) {
                     if ($record->is_purchased) {
                         return Action::make('get-purchased-ticket')
-                            ->label($record->purchasedTicket?->created_at?->format('M jS, Y @ g:i A'))
+                            ->label($record->purchasedTicket?->created_at?->timezone('America/New_York')->format('F jS, Y g:i A T'))
                             ->icon('heroicon-s-ticket')
                             ->url(PurchasedTicketResource::getUrl('view', ['record' => $record->purchasedTicket?->id]))
                             ->link();
@@ -131,9 +131,9 @@ class ReservedTicketResource extends Resource
                 })
                 ->hidden(fn (?ReservedTicket $record) => ! $record?->is_purchased),
             Forms\Components\Placeholder::make('Created At')
-                ->content(fn (?ReservedTicket $record) => $record?->created_at?->format('M jS, Y @ g:i A') ?? ''),
+                ->content(fn (?ReservedTicket $record) => $record?->created_at?->timezone('America/New_York')->format('F jS, Y g:i A T') ?? ''),
             Forms\Components\Placeholder::make('Updated At')
-                ->content(fn (?ReservedTicket $record) => $record?->updated_at?->format('M jS, Y @ g:i A') ?? ''),
+                ->content(fn (?ReservedTicket $record) => $record?->updated_at?->timezone('America/New_York')->format('F jS, Y g:i A T') ?? ''),
         ])
             ->grow(false);
     }
@@ -161,11 +161,11 @@ class ReservedTicketResource extends Resource
                     ->searchable()
                     ->limit(50),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime('F jS, Y g:i A T', 'America/New_York')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->dateTime('F jS, Y g:i A T', 'America/New_York')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
