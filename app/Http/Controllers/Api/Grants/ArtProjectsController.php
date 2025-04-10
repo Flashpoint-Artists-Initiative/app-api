@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\Grants;
 
-use App\Enums\ArtProjectStatus;
+use App\Enums\ArtProjectStatusEnum;
 use App\Http\Controllers\OrionController;
 use App\Http\Requests\Grants\ArtProjectRequest;
 use App\Models\Grants\ArtProject;
 use App\Models\User;
-use App\Policies\Grants\ArtProjectPolicy;
+use App\Policies\ArtProjectPolicy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Orion\Http\Requests\Request;
@@ -57,7 +57,7 @@ class ArtProjectsController extends OrionController
 
         // Hide non-active artProjects for users without specific permission to view them
         if (! $user || ! $user->can('artProjects.viewPending')) {
-            $query->where('project_status', ArtProjectStatus::Approved->value);
+            $query->where('project_status', ArtProjectStatusEnum::Approved->value);
         }
 
         // Hide soft-deleted artProjects for users without specific permission to view them

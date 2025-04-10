@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api\Grants\ArtProjects;
 
-use App\Enums\ArtProjectStatus;
+use App\Enums\ArtProjectStatusEnum;
 use App\Enums\RolesEnum;
 use App\Models\Grants\ArtProject;
 use App\Models\User;
@@ -24,7 +24,7 @@ class ArtProjectShowTest extends ApiRouteTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->artProject = ArtProject::where('project_status', ArtProjectStatus::Approved)->firstOrFail();
+        $this->artProject = ArtProject::where('project_status', ArtProjectStatusEnum::Approved)->firstOrFail();
 
         $this->buildEndpoint(params: ['art_project' => $this->artProject->id]);
     }
@@ -82,7 +82,7 @@ class ArtProjectShowTest extends ApiRouteTestCase
         $user = User::doesntHave('roles')->firstOrFail();
         /** @var ArtProject $artProject */
         $artProject = ArtProject::factory()->create([
-            'project_status' => ArtProjectStatus::PendingReview,
+            'project_status' => ArtProjectStatusEnum::PendingReview,
             'user_id' => $user->id,
         ]);
         $this->buildEndpoint(params: ['art_project' => $artProject->id]);
@@ -98,7 +98,7 @@ class ArtProjectShowTest extends ApiRouteTestCase
         $user = User::role(RolesEnum::Admin)->firstOrFail();
         /** @var ArtProject $artProject */
         $artProject = ArtProject::factory()->create([
-            'project_status' => ArtProjectStatus::PendingReview,
+            'project_status' => ArtProjectStatusEnum::PendingReview,
         ]);
         $this->buildEndpoint(params: ['art_project' => $artProject->id]);
 
@@ -113,7 +113,7 @@ class ArtProjectShowTest extends ApiRouteTestCase
         $user = User::doesntHave('roles')->firstOrFail();
         /** @var ArtProject $artProject */
         $artProject = ArtProject::factory()->create([
-            'project_status' => ArtProjectStatus::PendingReview,
+            'project_status' => ArtProjectStatusEnum::PendingReview,
         ]);
         $this->buildEndpoint(params: ['art_project' => $artProject->id]);
 

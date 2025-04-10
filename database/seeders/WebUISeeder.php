@@ -24,6 +24,7 @@ class WebUISeeder extends Seeder
         $user = User::role(RolesEnum::Admin)->firstOrFail();
 
         $this->call(AddTicketsToEventSeeder::class, parameters: ['event' => $event]);
+        $this->call(AddArtProjectsToEventSeeder::class, parameters: ['event' => $event]);
 
         $waiver = Waiver::factory()->for($event)->create();
         Waiver::factory()->for($event)->minorWaiver()->create();

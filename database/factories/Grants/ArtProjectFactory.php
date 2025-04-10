@@ -2,6 +2,7 @@
 
 namespace Database\Factories\Grants;
 
+use App\Enums\ArtProjectStatusEnum;
 use App\Models\Event;
 use App\Models\Grants\ArtProject;
 use App\Models\User;
@@ -17,11 +18,12 @@ class ArtProjectFactory extends Factory
             'name' => $this->faker->sentence,
             'user_id' => User::factory(),
             'event_id' => Event::factory(),
+            'artist_name' => $this->faker->name(),
             'description' => $this->faker->paragraph,
             'budget_link' => $this->faker->url,
             'min_funding' => $this->faker->numberBetween(1000, 5000),
             'max_funding' => $this->faker->numberBetween(6000, 10000),
-            'project_status' => 'pending-review',
+            'project_status' => ArtProjectStatusEnum::PendingReview,
         ];
     }
 }

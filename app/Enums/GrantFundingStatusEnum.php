@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-enum GrantFundingStatus
+enum GrantFundingStatusEnum
 {
+    use Concerns\EnumToArray;
+    
     case Unfunded;
     case MinReached;
     case MaxReached;

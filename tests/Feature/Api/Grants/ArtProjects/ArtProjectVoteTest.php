@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api\Grants\ArtProjects;
 
-use App\Enums\ArtProjectStatus;
+use App\Enums\ArtProjectStatusEnum;
 use App\Enums\RolesEnum;
 use App\Models\Event;
 use App\Models\Grants\ArtProject;
@@ -32,7 +32,7 @@ class ArtProjectVoteTest extends ApiRouteTestCase
 
         /** @var ArtProject $artProject */
         $artProject = ArtProject::factory()->create([
-            'project_status' => ArtProjectStatus::Approved->value,
+            'project_status' => ArtProjectStatusEnum::Approved->value,
             'event_id' => $event->id]
         );
         $this->artProject = $artProject;

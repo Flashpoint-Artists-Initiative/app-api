@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             ShiftSeeder::class,
             ShiftRequirementSeeder::class,
             AuditSeeder::class,
-            ArtProjectSeeder::class,
+            AddArtProjectsToEventSeeder::class,
         ]);
     }
 }

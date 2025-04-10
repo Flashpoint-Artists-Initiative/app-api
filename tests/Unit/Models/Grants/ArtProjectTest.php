@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Models\Grants;
 
-use App\Enums\ArtProjectStatus;
-use App\Enums\GrantFundingStatus;
+use App\Enums\ArtProjectStatusEnum;
+use App\Enums\GrantFundingStatusEnum;
 use App\Models\Event;
 use App\Models\Grants\ArtProject;
 use App\Models\Grants\ProjectImage;
@@ -115,7 +115,7 @@ class ArtProjectTest extends TestCase
 
         /** @var ArtProject $artProject */
         $artProject = ArtProject::factory()->create([
-            'project_status' => ArtProjectStatus::Approved,
+            'project_status' => ArtProjectStatusEnum::Approved,
             'event_id' => $event->id]
         );
         $user = User::factory()->create();
@@ -137,7 +137,7 @@ class ArtProjectTest extends TestCase
 
         /** @var ArtProject $artProject */
         $artProject = ArtProject::factory()->create([
-            'project_status' => ArtProjectStatus::Approved,
+            'project_status' => ArtProjectStatusEnum::Approved,
             'event_id' => $event->id,
             'min_funding' => 10,
             'max_funding' => 20,
@@ -145,7 +145,7 @@ class ArtProjectTest extends TestCase
         $user = User::factory()->create();
         $artProject->votes()->attach($user->id);
 
-        $this->assertEquals(GrantFundingStatus::MinReached, $artProject->fundingStatus);
+        $this->assertEquals(GrantFundingStatusEnum::MinReached, $artProject->fundingStatus);
     }
 
     /**
@@ -161,7 +161,7 @@ class ArtProjectTest extends TestCase
 
         /** @var ArtProject $artProject */
         $artProject = ArtProject::factory()->create([
-            'project_status' => ArtProjectStatus::Approved->value,
+            'project_status' => ArtProjectStatusEnum::Approved->value,
             'event_id' => $event->id]
         );
         $user = User::factory()->create();
@@ -187,7 +187,7 @@ class ArtProjectTest extends TestCase
 
         /** @var ArtProject $artProject */
         $artProject = ArtProject::factory()->create([
-            'project_status' => ArtProjectStatus::Approved->value,
+            'project_status' => ArtProjectStatusEnum::Approved->value,
             'event_id' => $event->id]
         );
         $user = User::factory()->create();
@@ -211,7 +211,7 @@ class ArtProjectTest extends TestCase
 
         /** @var ArtProject $artProject */
         $artProject = ArtProject::factory()->create([
-            'project_status' => ArtProjectStatus::PendingReview->value,
+            'project_status' => ArtProjectStatusEnum::PendingReview->value,
             'event_id' => $event->id]
         );
         $user = User::factory()->create();
@@ -236,7 +236,7 @@ class ArtProjectTest extends TestCase
 
         /** @var ArtProject $artProject */
         $artProject = ArtProject::factory()->create([
-            'project_status' => ArtProjectStatus::Approved->value,
+            'project_status' => ArtProjectStatusEnum::Approved->value,
             'event_id' => $event->id]
         );
         $user = User::factory()->create();
@@ -261,7 +261,7 @@ class ArtProjectTest extends TestCase
 
         /** @var ArtProject $artProject */
         $artProject = ArtProject::factory()->create([
-            'project_status' => ArtProjectStatus::Approved->value,
+            'project_status' => ArtProjectStatusEnum::Approved->value,
             'event_id' => $event->id,
             'max_funding' => 10,
         ]);

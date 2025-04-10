@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api\Grants\ArtProjects;
 
-use App\Enums\ArtProjectStatus;
+use App\Enums\ArtProjectStatusEnum;
 use App\Enums\RolesEnum;
 use App\Models\Grants\ArtProject;
 use App\Models\User;
@@ -43,21 +43,21 @@ class ArtProjectIndexTest extends ApiRouteTestCase
         $response = $this->actingAs($user)->getJson($this->endpoint);
 
         $response->assertStatus(200);
-        $response->assertJsonMissing(['project_status' => ArtProjectStatus::PendingReview->value]);
-        $response->assertJsonMissing(['project_status' => ArtProjectStatus::Denied->value]);
-        $response->assertJsonFragment(['project_status' => ArtProjectStatus::Approved->value]);
+        $response->assertJsonMissing(['project_status' => ArtProjectStatusEnum::PendingReview->value]);
+        $response->assertJsonMissing(['project_status' => ArtProjectStatusEnum::Denied->value]);
+        $response->assertJsonFragment(['project_status' => ArtProjectStatusEnum::Approved->value]);
     }
 
     #[Test]
     public function art_project_index_hides_soft_deleted_projects_for_users_without_permission(): void
     {
         $user = User::doesntHave('roles')->firstOrFail();
-        ArtProject::factory()->create(['project_status' => ArtProjectStatus::Approved, 'deleted_at' => now()]);
+        ArtProject::factory()->create(['project_status' => ArtProjectStatusEnum::Approved, 'deleted_at' => now()]);
 
         $this->buildEndpoint(params: ['with_trashed' => true]);
 
-        $projectCount = ArtProject::where('project_status', ArtProjectStatus::Approved)->withTrashed()->count();
-        $existingProjectCount = ArtProject::where('project_status', ArtProjectStatus::Approved)->count();
+        $projectCount = ArtProject::where('project_status', ArtProjectStatusEnum::Approved)->withTrashed()->count();
+        $existingProjectCount = ArtProject::where('project_status', ArtProjectStatusEnum::Approved)->count();
 
         $this->assertGreaterThan($existingProjectCount, $projectCount);
 

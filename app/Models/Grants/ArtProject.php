@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models\Grants;
 
-use App\Enums\ArtProjectStatus;
-use App\Enums\GrantFundingStatus;
+use App\Enums\ArtProjectStatusEnum;
+use App\Enums\GrantFundingStatusEnum;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -16,16 +16,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
 /**
  * @property-read Event $event
  * @property-read User $user
- * @property-read GrantFundingStatus $fundingStatus
+ * @property-read GrantFundingStatusEnum $fundingStatus
  * @property-read float $fundedTotal
  */
-class ArtProject extends Model
+class ArtProject extends Model implements ContractsAuditable
 {
-    use Auditable, HasFactory, SoftDeletes;
+    use Auditable, HasFactory, SoftDeletes, Auditable;
 
     protected $fillable = [
         'name',
@@ -63,6 +64,15 @@ class ArtProject extends Model
         return $this->belongsToMany(User::class, 'project_user_votes')->withTimestamps();
     }
 
+    public function artistName(): Attribute
+    {
+        return Attribute::make(
+            get: function (?string $value) {
+                return $value ?: $this->user->display_name;
+            },
+        );
+    }
+
     public function fundedTotal(): Attribute
     {
         return Attribute::make(
@@ -79,9 +89,9 @@ class ArtProject extends Model
                 $funding = $this->fundedTotal;
 
                 return match (true) {
-                    $funding >= $this->max_funding => GrantFundingStatus::MaxReached,
-                    $funding >= $this->min_funding => GrantFundingStatus::MinReached,
-                    default => GrantFundingStatus::Unfunded,
+                    $funding >= $this->max_funding => GrantFundingStatusEnum::MaxReached,
+                    $funding >= $this->min_funding => GrantFundingStatusEnum::MinReached,
+                    default => GrantFundingStatusEnum::Unfunded,
                 };
             },
         );
@@ -89,11 +99,11 @@ class ArtProject extends Model
 
     public function vote(User $user): void
     {
-        if (! $this->event->votingEnabled) {
+        if (! $this->event->voting_enabled) {
             throw new \Exception('Grant voting is closed for this event');
         }
 
-        if ($this->project_status !== ArtProjectStatus::Approved->value) {
+        if ($this->project_status !== ArtProjectStatusEnum::Approved->value) {
             throw new \Exception('Only approved projects can be voted on');
         }
 
@@ -101,7 +111,7 @@ class ArtProject extends Model
             throw new \Exception('User has already voted for this project');
         }
 
-        if ($this->fundingStatus === GrantFundingStatus::MaxReached) {
+        if ($this->fundingStatus === GrantFundingStatusEnum::MaxReached) {
             throw new \Exception('Project has already reached maximum funding');
         }
 

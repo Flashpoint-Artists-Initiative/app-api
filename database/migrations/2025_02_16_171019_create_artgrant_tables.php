@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\ArtProjectStatus;
+use App\Enums\ArtProjectStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,14 +15,14 @@ return new class extends Migration
         Schema::create('art_projects', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedInteger('user_id');
             $table->unsignedInteger('event_id');
+            $table->unsignedInteger('user_id')->nullable();
             $table->text('description');
             $table->string('artist_name')->nullable();
             $table->string('budget_link')->nullable();
             $table->unsignedInteger('min_funding');
             $table->unsignedInteger('max_funding');
-            $table->enum('project_status', array_column(ArtProjectStatus::cases(), 'value'))->default(ArtProjectStatus::PendingReview->value);
+            $table->enum('project_status', array_column(ArtProjectStatusEnum::cases(), 'value'))->default(ArtProjectStatusEnum::PendingReview->value);
             $table->timestamps();
             $table->softDeletes();
         });

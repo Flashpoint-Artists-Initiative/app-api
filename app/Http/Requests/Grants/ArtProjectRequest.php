@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Grants;
 
-use App\Enums\ArtProjectStatus;
+use App\Enums\ArtProjectStatusEnum;
 use Illuminate\Validation\Rule;
 use Orion\Http\Requests\Request;
 
@@ -24,7 +24,7 @@ class ArtProjectRequest extends Request
             'budget_link' => ['nullable', 'string', 'url'],
             'min_funding' => ['integer', 'required'],
             'max_funding' => ['integer', 'required'],
-            'project_status' => ['string', 'required', Rule::enum(ArtProjectStatus::class)],
+            'project_status' => ['string', 'required', Rule::enum(ArtProjectStatusEnum::class)],
         ];
     }
 
@@ -42,7 +42,7 @@ class ArtProjectRequest extends Request
             'budget_link' => ['nullable', 'string', 'url'],
             'min_funding' => ['integer'],
             'max_funding' => ['integer'],
-            'project_status' => ['string', Rule::enum(ArtProjectStatus::class)],
+            'project_status' => ['string', Rule::enum(ArtProjectStatusEnum::class)],
         ];
     }
 }

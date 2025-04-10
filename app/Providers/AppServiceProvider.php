@@ -9,6 +9,9 @@ use Dedoc\Scramble\Support\Generator\OpenApi;
 use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Stripe\StripeClient;
 
@@ -66,7 +69,10 @@ class AppServiceProvider extends ServiceProvider
             'requirement' => \App\Models\Volunteering\Requirement::class,
             'shift' => \App\Models\Volunteering\Shift::class,
             'shiftType' => \App\Models\Volunteering\ShiftType::class,
-            'Team' => \App\Models\Volunteering\Team::class,
+            'team' => \App\Models\Volunteering\Team::class,
+
+            'artProject' => \App\Models\Grants\ArtProject::class,
+            'projectImage' => \App\Models\Grants\ProjectImage::class,
 
             'event' => \App\Models\Event::class,
             'user' => \App\Models\User::class,
