@@ -6,7 +6,6 @@ namespace App\Filament\Admin\Resources\ArtProjectResource\Pages;
 
 use App\Filament\Admin\Resources\ArtProjectResource;
 use App\Models\Event;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateArtProject extends CreateRecord

@@ -8,6 +8,8 @@ use Filament\Clusters\Cluster;
 
 class UserPages extends Cluster
 {
+    protected static ?int $navigationSort = 1;
+
     protected static ?string $navigationIcon = 'heroicon-o-user-circle';
 
     protected static ?string $navigationLabel = 'My Profile';

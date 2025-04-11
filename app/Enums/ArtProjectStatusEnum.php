@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-enum ArtProjectStatusEnum: string
+use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasLabel;
+
+enum ArtProjectStatusEnum: string implements HasLabel, HasColor
 {
     use Concerns\EnumToArray;
-    
+
     case PendingReview = 'pending-review';
     case PendingArtist = 'pending-artist';
     case Approved = 'approved';
@@ -16,7 +19,7 @@ enum ArtProjectStatusEnum: string
     /**
      * @codeCoverageIgnore
      */
-    public function label(): string
+    public function getLabel(): string
     {
         return match ($this) {
             self::PendingReview => 'Pending Review',
@@ -26,7 +29,7 @@ enum ArtProjectStatusEnum: string
         };
     }
 
-    public function color(): string
+    public function getColor(): string
     {
         return match ($this) {
             self::PendingReview => 'info',

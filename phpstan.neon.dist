@@ -25,6 +25,8 @@ parameters:
             enabled: false
         finalInAbstractClass:
             enabled: false
+        noConstructorParameterWithDefaultValue:
+            enabled: false
     ignoreErrors:
         -
             identifier: missingType.generics

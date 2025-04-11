@@ -7,7 +7,6 @@ use App\Models\Event;
 use App\Models\Grants\ArtProject;
 use App\Models\Grants\ProjectImage;
 use Illuminate\Database\Seeder;
-use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 
 class AddArtProjectsToEventSeeder extends Seeder
 {

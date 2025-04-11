@@ -6,15 +6,12 @@ namespace App\Filament\Admin\Resources;
 
 use App\Enums\ArtProjectStatusEnum;
 use App\Filament\Admin\Resources\ArtProjectResource\Pages;
-use App\Filament\Admin\Resources\ArtProjectResource\RelationManagers;
 use App\Models\Grants\ArtProject;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ArtProjectResource extends Resource
 {
@@ -93,14 +90,12 @@ class ArtProjectResource extends Resource
                     ->prefix('$')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('budget_link')
-                    ->formatStateUsing(fn() => 'View Budget')
+                    ->formatStateUsing(fn () => 'View Budget')
                     ->url(fn ($record) => $record->budget_link, true)
                     ->color('primary')
                     ->icon('heroicon-m-link'),
                 Tables\Columns\TextColumn::make('project_status')
-                    ->badge()
-                    ->formatStateUsing(fn ($state) => ArtProjectStatusEnum::from($state)->label())
-                    ->color(fn ($state) => ArtProjectStatusEnum::from($state)->color()),
+                    ->badge(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

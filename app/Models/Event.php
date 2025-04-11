@@ -16,7 +16,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\ArrayObject;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -154,8 +153,9 @@ class Event extends Model implements ContractsAuditable
     {
         return Attribute::make(
             get: fn (mixed $value, array $attributes) => $this->settings['dollars_per_vote'] ?? 1.0,
-            set: function (float $value) { 
+            set: function (float $value) {
                 $this->settings['dollars_per_vote'] = $value;
+
                 return [];
             },
         );
@@ -165,8 +165,9 @@ class Event extends Model implements ContractsAuditable
     {
         return Attribute::make(
             get: fn (mixed $value, array $attributes) => $this->settings['voting_enabled'] ?? false,
-            set: function (bool $value) { 
+            set: function (bool $value) {
                 $this->settings['voting_enabled'] = $value;
+
                 return [];
             },
         );

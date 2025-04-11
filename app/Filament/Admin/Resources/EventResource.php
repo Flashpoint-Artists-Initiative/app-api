@@ -7,6 +7,7 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\EventResource\Pages;
 use App\Models\Event;
 use Filament\Forms;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Split;
 use Filament\Forms\Form;
@@ -49,6 +50,19 @@ class EventResource extends Resource
                             ->required(),
                         Forms\Components\DatePicker::make('end_date')
                             ->required(),
+                        Fieldset::make('Art Grants')
+                            ->schema([
+                                Forms\Components\Toggle::make('voting_enabled')
+                                    ->inline(false)
+                                    ->label('Voting Enabled'),
+                                Forms\Components\TextInput::make('dollars_per_vote')
+                                    ->label('Dollars per Vote')
+                                    ->required()
+                                    ->numeric()
+                                    ->default(1.0)
+                                    ->helperText('The amount of money each vote is worth.'),
+                            ])
+                            ->statePath('settings'),
                     ])
                         ->columns(2),
                     Section::make([

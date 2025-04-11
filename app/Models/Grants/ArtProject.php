@@ -8,6 +8,7 @@ use App\Enums\ArtProjectStatusEnum;
 use App\Enums\GrantFundingStatusEnum;
 use App\Models\Event;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,7 +27,7 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
  */
 class ArtProject extends Model implements ContractsAuditable
 {
-    use Auditable, HasFactory, SoftDeletes, Auditable;
+    use Auditable, Auditable, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -39,6 +40,15 @@ class ArtProject extends Model implements ContractsAuditable
         'max_funding',
         'project_status',
     ];
+
+    protected function casts()
+    {
+        return [
+            'project_status' => ArtProjectStatusEnum::class,
+            'min_funding' => 'float',
+            'max_funding' => 'float',
+        ];
+    }
 
     protected $withCount = [
         'votes',
@@ -62,6 +72,16 @@ class ArtProject extends Model implements ContractsAuditable
     public function votes(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'project_user_votes')->withTimestamps();
+    }
+
+    public function scopeCurrentEvent(Builder $query): Builder
+    {
+        return $query->where('event_id', Event::getCurrentEventId());
+    }
+
+    public function scopeApproved(Builder $query): Builder
+    {
+        return $query->where('project_status', ArtProjectStatusEnum::Approved);
     }
 
     public function artistName(): Attribute

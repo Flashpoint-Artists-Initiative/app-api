@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-enum GrantFundingStatusEnum
+use Filament\Support\Contracts\HasLabel;
+
+enum GrantFundingStatusEnum implements HasLabel
 {
     use Concerns\EnumToArray;
-    
+
     case Unfunded;
     case MinReached;
     case MaxReached;
@@ -15,7 +17,7 @@ enum GrantFundingStatusEnum
     /**
      * @codeCoverageIgnore
      */
-    public function label(): string
+    public function getLabel(): string
     {
         return match ($this) {
             self::Unfunded => 'Unfunded',

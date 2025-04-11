@@ -12,7 +12,7 @@ class NotificationBanner extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public string $color)
+    public function __construct(public string $color = 'primary')
     {
         //
     }

@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use App\Enums\ArtProjectStatusEnum;
 use App\Models\Grants\ArtProject;
 use App\Models\User;
-use App\Policies\AbstractModelPolicy;
 
 class ArtProjectPolicy extends AbstractModelPolicy
 {

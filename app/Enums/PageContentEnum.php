@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-enum PageContentEnum: string
+use Filament\Support\Contracts\HasLabel;
+
+enum PageContentEnum: string implements HasLabel
 {
     use Concerns\EnumToArray;
 
     case AppDashboard = 'app-dashboard';
 
-    public function label(): string
+    public function getLabel(): string
     {
         return match ($this) {
             self::AppDashboard => 'App Dashboard',

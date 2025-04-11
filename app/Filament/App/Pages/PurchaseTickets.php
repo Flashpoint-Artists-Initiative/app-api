@@ -44,6 +44,8 @@ class PurchaseTickets extends Page implements HasActions, HasForms
 {
     use InteractsWithActions, InteractsWithForms;
 
+    protected static ?int $navigationSort = 2;
+
     protected static ?string $navigationIcon = 'heroicon-o-ticket';
 
     protected static string $view = 'filament.app.pages.purchase-tickets';
