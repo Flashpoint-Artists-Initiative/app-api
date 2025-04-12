@@ -31,6 +31,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('art_project_id');
             $table->unsignedInteger('user_id');
+            $table->unsignedInteger('votes');
             $table->timestamps();
         });
 

@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Rules;
 
 use App\Models\Event;
+use App\Models\Grants\ArtProject;
 use Closure;
 use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Support\Facades\Auth;
 
 class ArtProjectVotingRule implements DataAwareRule, ValidationRule
 {
@@ -21,20 +23,39 @@ class ArtProjectVotingRule implements DataAwareRule, ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $totalVotes = array_sum($this->data['data']['votes'] ?? []);
-        $maxVotes = Event::getCurrentEvent()->votesPerUser ?? 0;
+        // $attribute format is `votes.{id}`
+        $id = collect(explode('.', $attribute))->last();
+        $lastId = collect(array_keys($this->data['votes'] ?? []))->last();
 
-        if ($totalVotes > $maxVotes) {
-            $fail('You cannot submit more than ' . $maxVotes . ' votes.');
+        // Only check these on the last item so we don't show multiple errors
+        if ($id == $lastId) {
+            $totalVotes = array_sum($this->data['votes'] ?? []);
+            $maxVotes = Event::getCurrentEvent()->votesPerUser ?? 0;
 
+            if ($totalVotes > $maxVotes) {
+                $fail('You cannot submit more than ' . $maxVotes . ' votes.');
+                return;
+            }
+
+            if ($totalVotes < $maxVotes) {
+                $fail('Use all your votes before submitting to support your favorite projects!');
+                return;
+            }
+        }
+
+        $project = ArtProject::find($id);
+        if (! $project) {
+            $fail('Invalid project ID');
             return;
         }
 
-        if ($totalVotes < $maxVotes) {
-            $fail('Use all your votes before submitting to support your favorite projects!');
-
+        try {
+            $project->checkVotingStatus(Auth::user());
+        } catch (\Exception $e) {
+            $fail($e->getMessage());
             return;
         }
+        
     }
 
     /** @param array<string, mixed> $data */

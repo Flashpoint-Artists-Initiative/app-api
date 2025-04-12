@@ -52,6 +52,13 @@ class Event extends Model implements ContractsAuditable
         'settings' => AsArrayObject::class,
     ];
 
+    // This is the easiest way to set a default value for a JSON column
+    // Don't add default key => values here, instead always check if they exist
+    // That way there's never an issue of backwards incompatibility when adding new settings
+    protected $attributes = [
+        'settings' => '{}',
+    ];
+
     /**
      * @return HasMany<TicketType, $this>
      */

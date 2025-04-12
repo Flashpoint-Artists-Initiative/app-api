@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 
@@ -71,7 +72,7 @@ class ArtProject extends Model implements ContractsAuditable
 
     public function votes(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'project_user_votes')->withTimestamps();
+        return $this->belongsToMany(User::class, 'project_user_votes')->withTimestamps()->withPivot('votes');
     }
 
     public function scopeCurrentEvent(Builder $query): Builder
@@ -97,7 +98,7 @@ class ArtProject extends Model implements ContractsAuditable
     {
         return Attribute::make(
             get: function () {
-                return $this->votes()->count() * $this->event->dollarsPerVote;
+                return $this->votes()->sum('votes') * $this->event->dollarsPerVote;
             },
         );
     }
@@ -117,24 +118,38 @@ class ArtProject extends Model implements ContractsAuditable
         );
     }
 
-    public function vote(User $user): void
+    public function checkVotingStatus(?User $user, bool $throwException = true): bool
     {
-        if (! $this->event->voting_enabled) {
-            throw new \Exception('Grant voting is closed for this event');
+        try {
+            if (! $this->event->voting_enabled) {
+                throw new \Exception('Grant voting is closed for this event');
+            }
+
+            if ($this->project_status !== ArtProjectStatusEnum::Approved) {
+                throw new \Exception('Only approved projects can be voted on');
+            }
+
+            if ($user && $this->votes()->where('user_id', $user->id)->exists()) {
+                throw new \Exception('User has already voted for this project');
+            }
+
+            if ($this->fundingStatus === GrantFundingStatusEnum::MaxReached) {
+                throw new \Exception('Project has already reached maximum funding');
+            }
+        } catch (\Exception $e) {
+            if ($throwException) {
+                throw $e;
+            }
+
+            return false;
         }
 
-        if ($this->project_status !== ArtProjectStatusEnum::Approved->value) {
-            throw new \Exception('Only approved projects can be voted on');
-        }
+        return true;
+    }
 
-        if ($this->votes()->where('user_id', $user->id)->exists()) {
-            throw new \Exception('User has already voted for this project');
-        }
-
-        if ($this->fundingStatus === GrantFundingStatusEnum::MaxReached) {
-            throw new \Exception('Project has already reached maximum funding');
-        }
-
-        $this->votes()->attach($user->id);
+    public function vote(User $user, int $numVotes): void
+    {
+        $this->checkVotingStatus($user);
+        $this->votes()->attach($user->id, ['votes' => $numVotes]);
     }
 }

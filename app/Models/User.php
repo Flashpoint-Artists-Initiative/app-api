@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Events\EmailUpdated;
 use App\Models\Concerns\HasVirtualColumns;
+use App\Models\Grants\ArtProject;
 use App\Models\Ticketing\Cart;
 use App\Models\Ticketing\CompletedWaiver;
 use App\Models\Ticketing\Order;
@@ -176,6 +177,11 @@ class User extends Authenticatable implements ContractsAuditable, FilamentUser, 
     public function shifts(): BelongsToMany
     {
         return $this->belongsToMany(Shift::class, 'shift_signups')->as('signup')->withTimestamps();
+    }
+
+    public function votes(): BelongsToMany
+    {
+        return $this->belongsToMany(ArtProject::class, 'project_user_votes')->withTimestamps()->withPivot('votes');
     }
 
     /**

@@ -10,10 +10,12 @@ use App\Rules\ArtProjectVotingRule;
 use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
+use Illuminate\Validation\ValidationException;
 
 /**
  * @property Form $form
@@ -29,7 +31,7 @@ class ArtGrants extends Page
     protected static ?string $navigationLabel = 'Art Grant Voting';
 
     /** @var array<mixed> */
-    public array $data;
+    public array $votes;
 
     public int $maxVotes;
 
@@ -59,8 +61,7 @@ class ArtGrants extends Page
         });
 
         return $form
-            ->schema($projectsSchema->toArray())
-            ->statePath('data');
+            ->schema($projectsSchema->toArray());
     }
 
     public function mount(): void
@@ -79,6 +80,14 @@ class ArtGrants extends Page
     {
         return Action::make('projectDetailsModal')
             ->modalContent(fn ($arguments) => $this->generateModalContent($arguments));
+    }
+
+    protected function onValidationError(ValidationException $exception): void
+    {
+        Notification::make()
+            ->title($exception->getMessage())
+            ->danger()
+            ->send();
     }
 
     /**
