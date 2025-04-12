@@ -8,12 +8,14 @@ use App\Models\Event;
 use App\Models\Grants\ArtProject;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
+use Illuminate\Validation\Validator;
 use Livewire\Attributes\Validate;
 
 // use Illuminate\Support\Collection;
@@ -30,7 +32,8 @@ class ArtGrants extends Page
 
     public EloquentCollection $projects;
     
-    public Collection $selectedProjects;
+    /** @var array<int,int> */
+    public array $selectedProjects;
 
     public int $maxVotes = 2;
     public int $remainingVotes;
@@ -47,10 +50,26 @@ class ArtGrants extends Page
         return $eventName . ' Art Grant Voting';
     }
 
+    public function boot(): void
+    {
+        $this->withValidator(function (Validator $validator) {
+            $validator->after(function (Validator $validator) {
+                if ($validator->errors()->isNotEmpty()) {
+                    Notification::make()
+                        ->title('Error')
+                        ->body($validator->errors()->first())
+                        ->status('danger')
+                        ->color('danger')
+                        ->send();
+                }
+            });
+        });
+    }
+
     public function mount(): void
     {
         $this->projects = ArtProject::query()->currentEvent()->approved()->get();
-        $this->selectedProjects = collect();
+        $this->selectedProjects = [];//collect();
         $this->remainingVotes = $this->maxVotes - count($this->selectedProjects);
     }
 
@@ -62,8 +81,19 @@ class ArtGrants extends Page
     public function save(): void
     {
         $this->validate([
-            'selectedProjects' => ['array', 'max:' . $this->maxVotes],
-            'selectedProjects.*' => ['exists:art_projects,id'],
+            'selectedProjects' => [
+                'required',
+                'array',
+                fn($attribute, $value, $fail) => array_sum($value) > $this->maxVotes
+                    ? $fail('You cannot submit more than  ' . $this->maxVotes . ' votes.'): null,
+                function ($attribute, $value, $fail) {
+                    foreach(array_keys($value) as $key) {
+                        if (! ArtProject::find($key)) {
+                            $fail('Invalid project ID: ' . $key);
+                        }
+                    }
+                },
+            ],
         ]);
         dd($this->selectedProjects);
     }

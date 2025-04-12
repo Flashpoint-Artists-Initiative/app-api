@@ -1,19 +1,13 @@
 <x-filament-panels::page>
     <div x-data="{
-        count: 0,
-        max: {{ $maxVotes }},
-        remaining: 999,
+        totalCount: 0,
+        max: {{ $maxVotes + 5 }},
+        remaining: {{ $maxVotes }},
         init() {
             this.remaining = this.max;
-        },
-        update(e) {
-            if (e.target.checked) {
-                this.count++;
-            } else {
-                this.count--;
-            }
-
-            this.remaining = this.max - this.count;
+            $watch('totalCount', (value) => {
+                this.remaining = this.max - value;
+            });
         }
     }"
     x-init="init()"
@@ -25,8 +19,8 @@
                 <x-art-project-item :$project :key="$project->id" :$remainingVotes />
             @endforeach
 
-            <x-filament::button type="submit">
-                Save
+            <x-filament::button type="submit" x-bind:disabled="remaining > 0" x-bind:class="remaining > 0 && 'opacity-50'">
+                Submit Votes
             </x-filament::button>
         </form>
     </div>

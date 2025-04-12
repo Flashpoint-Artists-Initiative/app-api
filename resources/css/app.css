@@ -25,14 +25,36 @@
     border-bottom-left-radius: 0;
 }
 
-.ticket-purchase-item button {
+/* fix the rounded borders of the counter input fields */
+.ticket-purchase-item button,
+.counter-input-field button {
     flex-grow: 0;
+    margin-inline-end: 0;
 }
 
-.ticket-purchase-item .fi-badge.no-radius {
+.counter-input-field button:nth-of-type(1),
+.ticket-purchase-item button:nth-of-type(1) {
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.counter-input-field button:nth-last-of-type(1),
+.ticket-purchase-item button:nth-last-of-type(1) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+.ticket-purchase-item .fi-badge.no-radius,
+.counter-input-field .fi-badge.no-radius
+ {
     border-radius: 0;
 }
 
+/* Ticket purchase item formatting */
 .ticket-purchase-item div.fi-section-content.p-6 {
     padding: 0.25rem
 }
