@@ -7,7 +7,7 @@ namespace App\Enums;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 
-enum ArtProjectStatusEnum: string implements HasLabel, HasColor
+enum ArtProjectStatusEnum: string implements HasColor, HasLabel
 {
     use Concerns\EnumToArray;
 

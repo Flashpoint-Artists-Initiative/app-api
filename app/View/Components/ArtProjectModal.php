@@ -14,9 +14,7 @@ class ArtProjectModal extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public ArtProject $project)
-    {
-    }
+    public function __construct(public ArtProject $project) {}
 
     /**
      * Get the view / contents that represent the component.

@@ -15,8 +15,6 @@ use App\Services\CartService;
 use App\Services\StripeService;
 use Carbon\Carbon;
 use Filament\Actions\Action as ActionsAction;
-use Filament\Actions\Concerns\InteractsWithActions;
-use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
@@ -24,8 +22,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ViewField;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Pages\Page;
@@ -40,10 +36,8 @@ use Livewire\Attributes\Url;
 /**
  * @property Form $form
  */
-class PurchaseTickets extends Page implements HasActions, HasForms
+class PurchaseTickets extends Page
 {
-    use InteractsWithActions, InteractsWithForms;
-
     protected static ?int $navigationSort = 2;
 
     protected static ?string $navigationIcon = 'heroicon-o-ticket';

@@ -59,9 +59,21 @@ class EventResource extends Resource
                                     ->label('Dollars per Vote')
                                     ->required()
                                     ->numeric()
-                                    ->default(1.0)
+                                    ->afterStateHydrated(function (Forms\Components\TextInput $component, Event $record) {
+                                        // default() doesn't work. This sets the default value when the array is empty
+                                        $component->state($record->settings['dollars_per_vote'] ?? '1.0');
+                                    })
                                     ->helperText('The amount of money each vote is worth.'),
+                                Forms\Components\TextInput::make('votes_per_user')
+                                    ->label('Votes per User')
+                                    ->required()
+                                    ->numeric()
+                                    ->afterStateHydrated(function (Forms\Components\TextInput $component, Event $record) {
+                                        $component->state($record->settings['votes_per_user'] ?? 10);
+                                    })
+                                    ->helperText('The maximum number of votes each user can cast.'),
                             ])
+                            ->columns(3)
                             ->statePath('settings'),
                     ])
                         ->columns(2),
