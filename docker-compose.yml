@@ -1,12 +1,28 @@
 services:
-  app:
-    image: 'bref/${APP_IMAGE_PREFIX}php-84-fpm-dev:2'
-    ports: [ '8000:8000' ]
-    user: nobody
+  nginx:
+    build:
+      context: ./dockerfiles
+      dockerfile: nginx.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    ports:
+      - "8000:80"
     volumes:
-      - .:/var/task:ro
-      - ./storage:/var/task/storage
-      - ./bootstrap/cache:/var/task/bootstrap/cache
+      - ./:/opt/potion
+    depends_on:
+      - php
+      - mysql
+      - mailpit
+  php:
+    build:
+      context: ./dockerfiles
+      dockerfile: php.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    volumes:
+      - ./:/opt/potion
     environment:
       HANDLER: public/index.php
       DOCUMENT_ROOT: public
