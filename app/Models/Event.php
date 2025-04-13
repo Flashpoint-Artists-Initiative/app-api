@@ -28,7 +28,7 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 /**
  * @property float $dollarsPerVote
  * @property int $votesPerUser
- * @property bool $voting_enabled
+ * @property bool $votingEnabled
  * @property-read Carbon $nextTicketSaleDate
  * @property ArrayObject $settings
  */

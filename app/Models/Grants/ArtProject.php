@@ -46,6 +46,7 @@ class ArtProject extends Model implements ContractsAuditable
     {
         return [
             'project_status' => ArtProjectStatusEnum::class,
+            'funding_status' => GrantFundingStatusEnum::class,
             'min_funding' => 'float',
             'max_funding' => 'float',
         ];
@@ -121,7 +122,7 @@ class ArtProject extends Model implements ContractsAuditable
     public function checkVotingStatus(?User $user, bool $throwException = true): bool
     {
         try {
-            if (! $this->event->voting_enabled) {
+            if (! $this->event->votingEnabled) {
                 throw new \Exception('Grant voting is closed for this event');
             }
 

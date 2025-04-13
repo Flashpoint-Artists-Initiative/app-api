@@ -166,7 +166,7 @@ class ArtProjectTest extends TestCase
         );
         $user = User::factory()->create();
 
-        $artProject->vote($user);
+        $artProject->vote($user, 1);
 
         $this->assertTrue($artProject->votes->contains($user));
     }
@@ -192,7 +192,7 @@ class ArtProjectTest extends TestCase
         );
         $user = User::factory()->create();
 
-        $artProject->vote($user);
+        $artProject->vote($user, 1);
     }
 
     /**
@@ -217,7 +217,7 @@ class ArtProjectTest extends TestCase
         $user = User::factory()->create();
         $artProject->votes()->attach($user->id);
 
-        $artProject->vote($user);
+        $artProject->vote($user, 1);
     }
 
     /**
@@ -242,7 +242,7 @@ class ArtProjectTest extends TestCase
         $user = User::factory()->create();
         $artProject->votes()->attach($user->id);
 
-        $artProject->vote($user);
+        $artProject->vote($user, 1);
     }
 
     /**
@@ -266,9 +266,9 @@ class ArtProjectTest extends TestCase
             'max_funding' => 10,
         ]);
         $user = User::factory()->create();
-        $artProject->votes()->attach($user->id);
+        $artProject->vote($user, 10);
 
         $secondUser = User::factory()->create();
-        $artProject->vote($secondUser);
+        $artProject->vote($secondUser, 1);
     }
 }

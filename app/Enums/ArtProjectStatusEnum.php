@@ -16,9 +16,6 @@ enum ArtProjectStatusEnum: string implements HasColor, HasLabel
     case Approved = 'approved';
     case Denied = 'denied';
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function getLabel(): string
     {
         return match ($this) {

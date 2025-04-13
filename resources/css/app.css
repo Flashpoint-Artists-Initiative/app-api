@@ -72,9 +72,3 @@
         visibility: hidden;
     }
 }
-
-/* Make checkboxes bigger */
-input[type=checkbox].checkbox-lg {
-    width: 2em;
-    height: 2em;
-}

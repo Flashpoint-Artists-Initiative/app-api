@@ -11,9 +11,18 @@
         }
     }"
     x-init="init()"
+    class="art-grants-page"
     >
-        <p> VOTES REMAINING: <span x-text="remaining"></span></p>
+        <p>[Insert Fluff Here].  Click a project to view more details.  Use the buttons to the right of each project to allocate your votes, then hit the submit button at the bottom of the page.</p>
         <x-filament-panels::form wire:submit="submitVotes">
+            <span class="dark:bg-gray-950 sticky grid" style="top: 4rem" >
+                <x-filament::badge class="my-2" x-show="remaining > 0">
+                    <p class="text-2xl"> VOTES REMAINING: <span x-text="remaining"></span></p>
+                </x-filament::badge>
+                <x-filament::button class="flex my-2" type="submit" x-show="remaining == 0" style="height: 2.9em">
+                    Submit Votes
+                </x-filament::button>
+            </span>
             {{ $this->form }}
             <x-filament::button type="submit">
                 Submit Votes

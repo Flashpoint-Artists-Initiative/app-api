@@ -49,14 +49,15 @@ class ArtGrants extends Page
 
     public function form(Form $form): Form
     {
-        $projects = ArtProject::query()->currentEvent()->approved()->get();
-        $finalId = $projects->last()?->id;
-        $projectsSchema = $projects->map(function (ArtProject $project) use ($finalId) {
+        $projects = ArtProject::query()->currentEvent()->approved()->orderBy('id', 'desc')->get();
+
+        $projectsSchema = $projects->map(function (ArtProject $project) {
             return Forms\Components\ViewField::make('votes.' . $project->id)
                 ->model($project)
-                ->rule(new ArtProjectVotingRule, fn () => $project->id == $finalId) // The condition is there to prevent multiple errors from appearing
+                ->rule(new ArtProjectVotingRule) // Whole form validation is handled in the rule for only the last item
                 ->hiddenLabel()
                 ->default(0)
+                ->dehydrateStateUsing(fn ($state) => $state === 0 ? null : $state)
                 ->view('forms.components.art-project-item');
         });
 
@@ -66,6 +67,9 @@ class ArtGrants extends Page
 
     public function mount(): void
     {
+        if (Event::getCurrentEvent()?->votingEnabled == false) {
+            abort(404);
+        }
         $this->form->fill();
         $this->maxVotes = Event::getCurrentEvent()->votesPerUser ?? 0;
     }
@@ -79,7 +83,9 @@ class ArtGrants extends Page
     public function openModal(): Action
     {
         return Action::make('projectDetailsModal')
-            ->modalContent(fn ($arguments) => $this->generateModalContent($arguments));
+            ->label('Project Details')
+            ->modalHeading(fn (array $arguments) => ArtProject::findOrFail((int) $arguments['id'])->name)
+            ->modalContent(fn (array $arguments) => $this->generateModalContent($arguments));
     }
 
     protected function onValidationError(ValidationException $exception): void

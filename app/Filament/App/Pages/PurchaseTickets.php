@@ -250,7 +250,8 @@ class PurchaseTickets extends Page
             ->label('How does ticketing work?')
             ->modalContent(view('filament.app.modals.ticket-info'))
             ->modalSubmitAction(false)
-            ->modalCancelActionLabel('Close');
+            ->modalCancelActionLabel('Close')
+            ->stickyModalHeader();
     }
 
     public function checkout(): void

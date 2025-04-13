@@ -43,6 +43,11 @@ class ArtProjectVotingRule implements DataAwareRule, ValidationRule
             }
         }
 
+        // Ignore 0 votes for this project
+        if ($value === 0) {
+            return;
+        }
+
         $project = ArtProject::find($id);
         if (! $project) {
             $fail('Invalid project ID');
