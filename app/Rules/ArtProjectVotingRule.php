@@ -34,11 +34,13 @@ class ArtProjectVotingRule implements DataAwareRule, ValidationRule
 
             if ($totalVotes > $maxVotes) {
                 $fail('You cannot submit more than ' . $maxVotes . ' votes.');
+
                 return;
             }
 
             if ($totalVotes < $maxVotes) {
                 $fail('Use all your votes before submitting to support your favorite projects!');
+
                 return;
             }
         }
@@ -51,6 +53,7 @@ class ArtProjectVotingRule implements DataAwareRule, ValidationRule
         $project = ArtProject::find($id);
         if (! $project) {
             $fail('Invalid project ID');
+
             return;
         }
 
@@ -58,9 +61,10 @@ class ArtProjectVotingRule implements DataAwareRule, ValidationRule
             $project->checkVotingStatus(Auth::user());
         } catch (\Exception $e) {
             $fail($e->getMessage());
+
             return;
         }
-        
+
     }
 
     /** @param array<string, mixed> $data */

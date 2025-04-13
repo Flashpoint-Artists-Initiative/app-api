@@ -29,19 +29,19 @@ class ArtProjectsController extends OrionController
         parent::__construct();
     }
 
-    public function voteAction(ArtProject $artProject): JsonResponse
-    {
-        /** @var User */
-        $user = auth()->user();
+    // public function voteAction(ArtProject $artProject): JsonResponse
+    // {
+    //     /** @var User */
+    //     $user = auth()->user();
 
-        try {
-            $artProject->vote($user);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
-        }
+    //     try {
+    //         $artProject->vote($user);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['error' => $e->getMessage()], 400);
+    //     }
 
-        return response()->json(['message' => 'Vote cast successfully']);
-    }
+    //     return response()->json(['message' => 'Vote cast successfully']);
+    // }
 
     /**
      * Modifies index query to hide non-approved artProjects for users without specific permission to view them

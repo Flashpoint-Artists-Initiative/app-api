@@ -15,7 +15,6 @@ enum GrantFundingStatusEnum implements HasColor, HasLabel
     case MinReached;
     case MaxReached;
 
-
     public function getLabel(): string
     {
         return match ($this) {

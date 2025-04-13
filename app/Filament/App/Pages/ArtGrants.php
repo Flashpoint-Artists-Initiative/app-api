@@ -7,9 +7,9 @@ namespace App\Filament\App\Pages;
 use App\Forms\Components\ArtProjectItemField;
 use App\Models\Event;
 use App\Models\Grants\ArtProject;
+use App\Models\User;
 use App\Rules\ArtProjectVotingRule;
 use Filament\Actions\Action;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
 use Illuminate\Validation\ValidationException;
-use App\Models\User;
 
 /**
  * @property Form $form
@@ -89,7 +88,7 @@ class ArtGrants extends Page
             return $vote > 0;
         });
         $ids = array_keys($filteredData);
-        
+
         ArtProject::findMany($ids)->each(function (ArtProject $project) use ($filteredData) {
             /** @var User $user */
             $user = Auth::user();

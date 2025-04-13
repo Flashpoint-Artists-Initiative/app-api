@@ -11,9 +11,9 @@ class ArtProjectItemField extends Field
 {
     protected string $view = 'forms.components.art-project-item';
 
-    protected bool | Closure | null $disableVoting = null;
+    protected bool|Closure|null $disableVoting = null;
 
-    public function disableVoting(bool | Closure | null $condition): static
+    public function disableVoting(bool|Closure|null $condition): static
     {
         $this->disableVoting = $condition;
 
