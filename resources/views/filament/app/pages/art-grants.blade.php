@@ -22,7 +22,7 @@
             then hit the submit button at the bottom of the page.
         </p>
         @else
-        <p class="pb-4">Thank you for voting!  Your votes have been submitted, but you can still check out all the projects!</p>
+        <p class="pb-4">You've already voted, but you can still check out all the projects!</p>
         @endif
         <x-filament-panels::form wire:submit="submitVotes">
             @if (!$hasVoted)

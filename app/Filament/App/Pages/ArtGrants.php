@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\App\Pages;
 
+use App\Forms\Components\ArtProjectItemField;
 use App\Models\Event;
 use App\Models\Grants\ArtProject;
 use App\Rules\ArtProjectVotingRule;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 /**
  * @property Form $form
@@ -55,13 +57,14 @@ class ArtGrants extends Page
         $projects = ArtProject::query()->currentEvent()->approved()->orderBy('id', 'desc')->get();
 
         $projectsSchema = $projects->map(function (ArtProject $project) {
-            return Forms\Components\ViewField::make('votes.' . $project->id)
+            return ArtProjectItemField::make('votes.' . $project->id)
                 ->model($project)
                 ->rule(new ArtProjectVotingRule) // Whole form validation is handled in the rule for only the last item
                 ->hiddenLabel()
                 ->default(0)
                 ->dehydrateStateUsing(fn ($state) => $state === 0 ? null : $state)
-                ->view('forms.components.art-project-item');
+                ->view('forms.components.art-project-item')
+                ->disableVoting(fn () => $this->hasVoted);
         });
 
         return $form
@@ -81,7 +84,23 @@ class ArtGrants extends Page
     public function submitVotes(): void
     {
         $data = $this->form->getState();
-        dd($data);
+
+        $filteredData = array_filter($data['votes'], function ($vote) {
+            return $vote > 0;
+        });
+        $ids = array_keys($filteredData);
+        
+        ArtProject::findMany($ids)->each(function (ArtProject $project) use ($filteredData) {
+            /** @var User $user */
+            $user = Auth::user();
+            $project->vote($user, $filteredData[$project->id]);
+        });
+
+        $this->hasVoted = true;
+        Notification::make()
+            ->title('Your votes have been submitted!')
+            ->success()
+            ->send();
     }
 
     public function openModal(): Action

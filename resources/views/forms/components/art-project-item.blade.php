@@ -32,8 +32,8 @@
                 </div>
                 {{ $this->openModal }}
             </div>
-            @if ($getRecord()->fundingStatus != GrantFundingStatusEnum::MaxReached)
-            <div x-show="!hasVoted">
+            @if (!$getDisableVoting() && $getRecord()->fundingStatus != GrantFundingStatusEnum::MaxReached)
+            <div>
                 <x-counter-input />
             </div>  
             @endif
