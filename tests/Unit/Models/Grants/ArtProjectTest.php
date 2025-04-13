@@ -97,7 +97,7 @@ class ArtProjectTest extends TestCase
         /** @var ArtProject $artProject */
         $artProject = ArtProject::factory()->create();
         $user = User::factory()->create();
-        $artProject->votes()->attach($user->id);
+        $artProject->votes()->attach($user->id, ['votes' => 1]);
 
         $this->assertTrue($artProject->votes->contains($user));
     }
@@ -119,9 +119,9 @@ class ArtProjectTest extends TestCase
             'event_id' => $event->id]
         );
         $user = User::factory()->create();
-        $artProject->votes()->attach($user->id);
+        $artProject->votes()->attach($user->id, ['votes' => 2]);
 
-        $this->assertEquals(10, $artProject->fundedTotal);
+        $this->assertEquals(20, $artProject->fundedTotal);
     }
 
     /**
@@ -143,7 +143,7 @@ class ArtProjectTest extends TestCase
             'max_funding' => 20,
         ]);
         $user = User::factory()->create();
-        $artProject->votes()->attach($user->id);
+        $artProject->votes()->attach($user->id, ['votes' => 1]);
 
         $this->assertEquals(GrantFundingStatusEnum::MinReached, $artProject->fundingStatus);
     }
@@ -166,9 +166,10 @@ class ArtProjectTest extends TestCase
         );
         $user = User::factory()->create();
 
-        $artProject->vote($user, 1);
+        $artProject->vote($user, 10);
 
         $this->assertTrue($artProject->votes->contains($user));
+        $this->assertEquals(100, $artProject->fundedTotal);
     }
 
     /**
@@ -215,7 +216,7 @@ class ArtProjectTest extends TestCase
             'event_id' => $event->id]
         );
         $user = User::factory()->create();
-        $artProject->votes()->attach($user->id);
+        $artProject->votes()->attach($user->id, ['votes' => 1]);
 
         $artProject->vote($user, 1);
     }
@@ -240,7 +241,7 @@ class ArtProjectTest extends TestCase
             'event_id' => $event->id]
         );
         $user = User::factory()->create();
-        $artProject->votes()->attach($user->id);
+        $artProject->votes()->attach($user->id, ['votes' => 1]);
 
         $artProject->vote($user, 1);
     }
@@ -263,10 +264,14 @@ class ArtProjectTest extends TestCase
         $artProject = ArtProject::factory()->create([
             'project_status' => ArtProjectStatusEnum::Approved->value,
             'event_id' => $event->id,
-            'max_funding' => 10,
+            'min_funding' => 50,
+            'max_funding' => 100,
         ]);
         $user = User::factory()->create();
         $artProject->vote($user, 10);
+        $artProject->refresh();
+
+        $this->assertEquals(GrantFundingStatusEnum::MaxReached, $artProject->fundingStatus);
 
         $secondUser = User::factory()->create();
         $artProject->vote($secondUser, 1);

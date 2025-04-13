@@ -6,6 +6,7 @@ namespace Tests\Unit;
 
 use App\Mail\OrderCompletedMail;
 use App\Models\Ticketing\Order;
+use Database\Seeders\OrderSeeder;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use PHPUnit\Framework\Attributes\Test;
@@ -13,14 +14,11 @@ use Tests\TestCase;
 
 class MailTest extends TestCase
 {
-    use LazilyRefreshDatabase;
-
-    public bool $seed = true;
-
     #[Test]
     public function order_completed_mail_content(): void
     {
-        $order = Order::firstOrFail();
+        /** @var Order $order */
+        $order = Order::factory()->create();
         $mail = new OrderCompletedMail($order);
 
         $mail->assertSeeInOrderInHtml([

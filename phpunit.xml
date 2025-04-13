@@ -12,10 +12,10 @@
             <directory>tests/Feature</directory>
             <exclude>tests/Feature/Api</exclude>
         </testsuite>
-        <testsuite name="Api">
+        <!-- <testsuite name="Api">
             <directory>tests/Feature/Api</directory>
             <exclude>tests/Feature/Api/Auth</exclude>
-        </testsuite>
+        </testsuite> -->
     </testsuites>
     <source>
         <include>

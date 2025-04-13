@@ -9,21 +9,20 @@ use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketTransfer;
 use App\Models\User;
+use Database\Seeders\TicketTransferSeeder;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class TicketTransferTest extends TestCase
 {
-    use LazilyRefreshDatabase;
-
-    public bool $seed = true;
-
     #[Test]
     public function second_completion(): void
     {
-        $transfer = TicketTransfer::firstOrFail();
-        $ticket = $transfer->purchasedTickets->firstOrFail();
+        $transfer = TicketTransfer::factory()->create();
+        $ticket = PurchasedTicket::factory()->create();
+        $transfer->purchasedTickets()->attach($ticket);
+        
         $firstUser = $ticket->user;
         $secondUser = User::factory()->create(['email' => $transfer->recipient_email]);
 
@@ -53,7 +52,7 @@ class TicketTransferTest extends TestCase
     #[Test]
     public function recipient_relation(): void
     {
-        $transfer = TicketTransfer::firstOrFail();
+        $transfer = TicketTransfer::factory()->create();
         $recipient = User::factory()->create(['email' => $transfer->recipient_email]);
 
         $this->assertEquals($transfer->recipient?->id, $recipient->id);
@@ -62,7 +61,7 @@ class TicketTransferTest extends TestCase
     #[Test]
     public function update_fails(): void
     {
-        $transfer = TicketTransfer::firstOrFail();
+        $transfer = TicketTransfer::factory()->create();
         $email = $transfer->recipient_email;
         $newEmail = 'newEmail@test.com';
 
