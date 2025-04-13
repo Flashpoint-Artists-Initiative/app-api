@@ -3,6 +3,8 @@
         totalCount: 0,
         max: {{ $maxVotes }},
         remaining: {{ $maxVotes }},
+        hasVoted: {{ $hasVoted ? 'true' : 'false' }},
+
         init() {
             this.remaining = this.max;
             $watch('totalCount', (value) => {
@@ -13,8 +15,17 @@
     x-init="init()"
     class="art-grants-page"
     >
-        <p>[Insert Fluff Here].  Click a project to view more details.  Use the buttons to the right of each project to allocate your votes, then hit the submit button at the bottom of the page.</p>
+        @if (!$hasVoted)
+            
+        <p>[Insert Fluff Here].  Click a project to view more details.  
+            Use the buttons to the right of each project to allocate your votes, 
+            then hit the submit button at the bottom of the page.
+        </p>
+        @else
+        <p class="pb-4">Thank you for voting!  Your votes have been submitted, but you can still check out all the projects!</p>
+        @endif
         <x-filament-panels::form wire:submit="submitVotes">
+            @if (!$hasVoted)
             <span class="dark:bg-gray-950 sticky grid" style="top: 4rem" >
                 <x-filament::badge class="my-2" x-show="remaining > 0">
                     <p class="text-2xl"> VOTES REMAINING: <span x-text="remaining"></span></p>
@@ -23,10 +34,13 @@
                     Submit Votes
                 </x-filament::button>
             </span>
+            @endif
             {{ $this->form }}
-            <x-filament::button type="submit">
-                Submit Votes
-            </x-filament::button>
+            @if (!$hasVoted)
+                <x-filament::button type="submit">
+                    Submit Votes
+                </x-filament::button>
+            @endif
         </x-filament-panels::form>
     </div>
 <x-filament-actions::modals />

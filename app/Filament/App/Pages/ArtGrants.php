@@ -13,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
 use Illuminate\Validation\ValidationException;
@@ -34,6 +35,8 @@ class ArtGrants extends Page
     public array $votes;
 
     public int $maxVotes;
+
+    public bool $hasVoted;
 
     public static function shouldRegisterNavigation(): bool
     {
@@ -72,6 +75,7 @@ class ArtGrants extends Page
         }
         $this->form->fill();
         $this->maxVotes = Event::getCurrentEvent()->votesPerUser ?? 0;
+        $this->hasVoted = Auth::user()?->hasVotedArtProjectsForEvent(Event::getCurrentEventId()) ?? true;
     }
 
     public function submitVotes(): void

@@ -238,6 +238,11 @@ class User extends Authenticatable implements ContractsAuditable, FilamentUser, 
         })->count() > 0;
     }
 
+    public function hasVotedArtProjectsForEvent(int $eventId): bool
+    {
+        return $this->votes()->where('event_id', $eventId)->exists();
+    }
+
     public function getValidTicketForEventOrFail(?int $eventId = null): PurchasedTicket
     {
         $ticket = $this->purchasedTickets()->whereRelation('ticketType', fn ($query) => $query->admittance($eventId))->with('ticketType')->firstOrFail();
