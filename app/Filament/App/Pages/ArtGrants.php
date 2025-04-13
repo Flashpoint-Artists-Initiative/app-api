@@ -103,20 +103,22 @@ class ArtGrants extends Page
             ->send();
     }
 
-    public function openModal(): Action
-    {
-        return Action::make('projectDetailsModal')
-            ->label('Project Details')
-            ->modalHeading(fn (array $arguments) => ArtProject::findOrFail((int) $arguments['id'])->name)
-            ->modalContent(fn (array $arguments) => $this->generateModalContent($arguments));
-    }
-
     protected function onValidationError(ValidationException $exception): void
     {
         Notification::make()
             ->title($exception->getMessage())
             ->danger()
             ->send();
+    }
+
+    public function openModal(): Action
+    {
+        return Action::make('projectDetailsModal')
+            ->label('Project Details')
+            ->modalHeading(fn (array $arguments) => ArtProject::findOrFail((int) $arguments['id'])->name)
+            ->modalContent(fn (array $arguments) => $this->generateModalContent($arguments))
+            ->modalSubmitAction(false)
+            ->modalCancelActionLabel('Close');
     }
 
     /**
