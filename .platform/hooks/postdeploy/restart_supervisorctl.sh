@@ -8,4 +8,4 @@
 # At this point in time, the whole app
 # has already been deployed.
 
-sudo supervisorctl restart all
+# sudo supervisorctl restart all
