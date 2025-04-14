@@ -2,4 +2,4 @@
 sudo su
 
 npm install
-npm run prod
+npm run build
