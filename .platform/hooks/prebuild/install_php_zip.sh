@@ -6,5 +6,5 @@
 # So we need to install it using pecl.
 
 
-yum install libzip libzip-devel -y
-pecl install zip
+sudo yum install libzip libzip-devel -y
+sudo pecl install zip
