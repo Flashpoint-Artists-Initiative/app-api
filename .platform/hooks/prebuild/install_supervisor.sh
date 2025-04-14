@@ -12,20 +12,20 @@
 # any errors (the app is not set yet and
 # it might trigger spawn errors, which will exit with non-zero code)
 
-sudo amazon-linux-extras enable epel
+# sudo amazon-linux-extras enable epel
 
-sudo yum install -y epel-release
+# sudo yum install -y epel-release
 
-sudo yum -y update
+# sudo yum -y update
 
-sudo yum -y install supervisor
+# sudo yum -y install supervisor
 
-sudo systemctl start supervisord
+# sudo systemctl start supervisord
 
-sudo systemctl enable supervisord
+# sudo systemctl enable supervisord
 
-sudo cp .platform/files/supervisor.ini /etc/supervisord.d/laravel.ini
+# sudo cp .platform/files/supervisor.ini /etc/supervisord.d/laravel.ini
 
-sudo supervisorctl reread
+# sudo supervisorctl reread
 
-sudo supervisorctl update
+# sudo supervisorctl update
