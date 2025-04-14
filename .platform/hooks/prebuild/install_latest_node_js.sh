@@ -6,16 +6,20 @@
 # This script installs the latest Node 12.x alongside
 # with the paired NPM release.
 
-sudo yum remove -y nodejs npm
+node_version=$(node -v)
+major_version=$(echo $node_version | cut -d'.' -f1 | tr -d 'v')
 
-sudo rm -fr /var/cache/yum/*
+if [[ "$major_version" -lt 18 ]]; then
+    sudo yum remove -y nodejs npm
 
-sudo yum clean all
+    sudo rm -fr /var/cache/yum/*
 
-curl --silent --location https://rpm.nodesource.com/setup_12.x | sudo bash -
+    sudo yum clean all
 
-sudo yum install nodejs -y
+    curl --silent --location https://rpm.nodesource.com/setup_12.x | sudo bash -
 
+    sudo yum install nodejs -y
+fi
 # Uncomment this line and edit the Version of NPM
 # you want to install instead of the default one.
 # npm i -g npm@6.14.4
