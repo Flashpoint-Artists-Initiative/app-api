@@ -86,20 +86,27 @@ class CommonPanelProvider extends PanelProvider
 
     public function addDevPlugins(Panel $panel): Panel
     {
-        return $panel->plugins([ // @phpstan-ignore-line
-            class_exists("Agencetwogether\HooksHelper\HooksHelperPlugin") ? HooksHelperPlugin::make() : null,
-            // class_exists("CodeWithDennis\FilamentThemeInspector\FilamentThemeInspectorPlugin") ? FilamentThemeInspectorPlugin::make() : null,
-            class_exists("DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin") ? FilamentDeveloperLoginsPlugin::make()
-                ->enabled(app()->environment('local'))
-                ->users([
-                    'Admin' => 'admin@example.com',
-                    'Regular User' => 'regular@example.com',
-                    'Unverified User' => 'unverified@example.com',
-                    'Event Manager' => 'eventmanager@example.com',
-                    'Box Office' => 'boxoffice@example.com',
-                    'Art Grant Reviewer' => 'artgrants@example.com',
-                ])
-             : null,
-        ]);
+        $plugins = [];
+        if (class_exists("Agencetwogether\HooksHelper\HooksHelperPlugin")) {
+            $plugins[] = HooksHelperPlugin::make();
+        }
+
+        if (class_exists("CodeWithDennis\FilamentThemeInspector\FilamentThemeInspectorPlugin")) {
+            // $plugins[] = FilamentThemeInspectorPlugin::make();
+        }
+
+        if (class_exists("DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin")) {
+            $plugins[] = FilamentDeveloperLoginsPlugin::make()
+            ->enabled(app()->environment('local'))
+            ->users([
+                'Admin' => 'admin@example.com',
+                'Regular User' => 'regular@example.com',
+                'Unverified User' => 'unverified@example.com',
+                'Event Manager' => 'eventmanager@example.com',
+                'Box Office' => 'boxoffice@example.com',
+                'Art Grant Reviewer' => 'artgrants@example.com',
+            ]);
+        }
+        return $panel->plugins($plugins);
     }
 }
