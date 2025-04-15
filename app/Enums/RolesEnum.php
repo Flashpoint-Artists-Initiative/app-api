@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use Filament\Support\Contracts\HasLabel;
 use Spatie\Permission\Models\Role;
 
-enum RolesEnum: string
+enum RolesEnum: string implements HasLabel
 {
     case Admin = 'admin';
     case SuperAdmin = 'super-admin';
@@ -14,7 +15,7 @@ enum RolesEnum: string
     case BoxOffice = 'box-office';
     case ArtGrantReviewer = 'art-grant-reviewer';
 
-    public function label(): string
+    public function getLabel(): string
     {
         return match ($this) {
             self::Admin => 'Admin',
