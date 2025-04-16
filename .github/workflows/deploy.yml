@@ -53,6 +53,12 @@ jobs:
         with:
           composer-options: "--prefer-dist --optimize-autoloader --no-dev"
 
+      - name: Install NPM dependencies
+        run: npm install
+
+      - name: Compile assets
+        run: npm run build
+
       # Deploy your application to AWS Lambda using the Serverless Framework.
       - name: Deploy to AWS Lambda
         uses: serverless/github-action@v4
