@@ -37,8 +37,8 @@ class CommonPanelProvider extends PanelProvider
             //     '*/admin',
             //     '*/admin/*',
             // ])
-            ->brandLogo(asset('logo-text.svg'))
-            ->favicon(asset('logo.svg'))
+            ->brandLogo(asset('images/logo-text.svg'))
+            ->favicon(asset('images/logo.svg'))
             ->brandLogoHeight('revert-layer')
             ->defaultAvatarProvider(DiceBearProvider::class)
             ->authGuard('web')
