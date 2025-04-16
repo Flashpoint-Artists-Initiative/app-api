@@ -28,7 +28,7 @@ provider:
         STRIPE_TAX_RATES: ${env:STRIPE_TAX_RATES, ''}
         STRIPE_WEBHOOK_SECRET: ${env:STRIPE_WEBHOOK_SECRET, ''}
         LOG_CHANNEL: ${env:LOG_CHANNEL, 'stderr'}
-        ASSETS_BUCKET: ${construct:assets-bucket.bucketName}
+        ASSETS_BUCKET: ${construct:uploaded-assets.bucketName}
 
 package:
     # Files and directories to exclude from deployment
@@ -54,7 +54,7 @@ constructs:
             '/favicon.ico': public/favicon.ico
             '/robots.txt': public/robots.txt
             '/images/*': public/images
-    assets-bucket:
+    uploaded-assets:
         type: storage
 
 functions:
