@@ -29,7 +29,7 @@ jobs:
       # Get the base domain from the APP_URL environment variable.
       - name: Get base domain from APP_URL
         run: |
-          echo "BASE_DOMAIN=$(echo ${{ vars.APP_URL }} | sed 's/http[s]*:\/\///'" >>${GITHUB_ENV}
+          echo "BASE_DOMAIN=$(echo '${{ vars.APP_URL }}' | sed 's/http[s]*:\/\///'" >>${GITHUB_ENV}
 
       # - name: Create JWT Tokens
       #   run: |
