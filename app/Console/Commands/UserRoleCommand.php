@@ -53,10 +53,10 @@ class UserRoleCommand extends Command
 
         if ($this->option('delete')) {
             $user->removeRole($role);
-            $this->info(sprintf('Role %s removed from UID %d', $role->label(), $user->id));
+            $this->info(sprintf('Role %s removed from UID %d', $role->getLabel(), $user->id));
         } else {
             $user->assignRole($role);
-            $this->info(sprintf('Role %s added to UID %d', $role->label(), $user->id));
+            $this->info(sprintf('Role %s added to UID %d', $role->getLabel(), $user->id));
         }
 
         return 0;

@@ -71,7 +71,7 @@ class CreateUserCommand extends Command implements PromptsForMissingInput
 
         if ($role !== 'none' && $role !== null) {
             $user->assignRole($role);
-            $roleText = 'and role <options=bold>' . RolesEnum::from($role)->label() . '</>';
+            $roleText = 'and role <options=bold>' . RolesEnum::from($role)->getLabel() . '</>';
         }
 
         $this->info(sprintf('User <options=bold>%s</> was created with ID: <options=bold>%d</> %s', $user->email, $user->id, $roleText));
@@ -106,7 +106,7 @@ class CreateUserCommand extends Command implements PromptsForMissingInput
         $output = ['none' => 'None'];
 
         foreach (RolesEnum::cases() as $role) {
-            $output[$role->value] = $role->label();
+            $output[$role->value] = $role->getLabel();
         }
 
         return $output;

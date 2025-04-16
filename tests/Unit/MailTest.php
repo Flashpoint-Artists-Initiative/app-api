@@ -6,8 +6,6 @@ namespace Tests\Unit;
 
 use App\Mail\OrderCompletedMail;
 use App\Models\Ticketing\Order;
-use Database\Seeders\OrderSeeder;
-use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;

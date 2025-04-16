@@ -97,16 +97,17 @@ class CommonPanelProvider extends PanelProvider
 
         if (class_exists("DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin")) {
             $plugins[] = FilamentDeveloperLoginsPlugin::make()
-            ->enabled(app()->environment('local'))
-            ->users([
-                'Admin' => 'admin@example.com',
-                'Regular User' => 'regular@example.com',
-                'Unverified User' => 'unverified@example.com',
-                'Event Manager' => 'eventmanager@example.com',
-                'Box Office' => 'boxoffice@example.com',
-                'Art Grant Reviewer' => 'artgrants@example.com',
-            ]);
+                ->enabled(app()->environment('local'))
+                ->users([
+                    'Admin' => 'admin@example.com',
+                    'Regular User' => 'regular@example.com',
+                    'Unverified User' => 'unverified@example.com',
+                    'Event Manager' => 'eventmanager@example.com',
+                    'Box Office' => 'boxoffice@example.com',
+                    'Art Grant Reviewer' => 'artgrants@example.com',
+                ]);
         }
+
         return $panel->plugins($plugins);
     }
 }

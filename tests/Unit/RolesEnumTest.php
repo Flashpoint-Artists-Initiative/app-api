@@ -44,7 +44,7 @@ class RolesEnumTest extends TestCase
         $cases = RolesEnum::cases();
 
         foreach ($cases as $case) {
-            $this->assertNotEmpty($case->label());
+            $this->assertNotEmpty($case->getLabel());
         }
     }
 

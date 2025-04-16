@@ -9,8 +9,6 @@ use App\Models\Ticketing\PurchasedTicket;
 use App\Models\Ticketing\ReservedTicket;
 use App\Models\Ticketing\TicketTransfer;
 use App\Models\User;
-use Database\Seeders\TicketTransferSeeder;
-use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -22,7 +20,7 @@ class TicketTransferTest extends TestCase
         $transfer = TicketTransfer::factory()->create();
         $ticket = PurchasedTicket::factory()->create();
         $transfer->purchasedTickets()->attach($ticket);
-        
+
         $firstUser = $ticket->user;
         $secondUser = User::factory()->create(['email' => $transfer->recipient_email]);
 

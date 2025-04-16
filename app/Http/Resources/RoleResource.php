@@ -24,7 +24,7 @@ class RoleResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'label' => RolesEnum::fromModel($this->resource)->label(),
+            'label' => RolesEnum::fromModel($this->resource)->getLabel(),
         ];
     }
 }
