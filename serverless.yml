@@ -50,7 +50,7 @@ constructs:
         type: server-side-website
         assets:
             '/build/*': public/build
-            '/vendor/*': public/vendor
+            # '/vendor/*': public/vendor
             '/favicon.ico': public/favicon.ico
             '/robots.txt': public/robots.txt
             '/images/*': public/images
