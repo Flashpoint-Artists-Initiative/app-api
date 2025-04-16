@@ -85,6 +85,7 @@ jobs:
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
           BASE_DOMAIN: ${{ env.BASE_DOMAIN }}
           AWS_CERTIFICATE_ARN: ${{ vars.AWS_CERTIFICATE_ARN }}
+          TEMP: 'whatever'
 
       - name: Populate Roles and Permissions
         uses: serverless/github-action@v4
