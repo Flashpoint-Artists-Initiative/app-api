@@ -94,3 +94,5 @@ jobs:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          BASE_DOMAIN: ${{ env.BASE_DOMAIN }}
+          AWS_CERTIFICATE_ARN: ${{ vars.AWS_CERTIFICATE_ARN }}
