@@ -63,7 +63,7 @@ jobs:
       - name: Deploy to AWS Lambda
         uses: serverless/github-action@v4
         with:
-          args: -c "serverless plugin install -n serverless-lift && serverless deploy --stage=${{ env.ENVIRONMENT_LC }} --debug"
+          args: -c "serverless plugin install -n serverless-lift && serverless deploy --stage=${{ env.ENVIRONMENT_LC }}"
           entrypoint: /bin/sh
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
@@ -85,7 +85,6 @@ jobs:
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
           BASE_DOMAIN: ${{ env.BASE_DOMAIN }}
           AWS_CERTIFICATE_ARN: ${{ vars.AWS_CERTIFICATE_ARN }}
-          TEMP: 'whatever'
 
       - name: Populate Roles and Permissions
         uses: serverless/github-action@v4
@@ -97,7 +96,3 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           BASE_DOMAIN: ${{ env.BASE_DOMAIN }}
           AWS_CERTIFICATE_ARN: ${{ vars.AWS_CERTIFICATE_ARN }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_DATABASE: ${{ vars.DB_DATABASE }}
