@@ -89,6 +89,7 @@ jobs:
           STRIPE_FEE_PERCENTAGE: ${{ vars.STRIPE_FEE_PERCENTAGE }}
           MAIL_FROM_ADDRESS: ${{ vars.MAIL_FROM_ADDRESS }}
           MAIL_FROM_NAME: ${{ vars.MAIL_FROM_NAME }}
+          MAIL_HELP_ADDRESS: ${{ vars.MAIL_HELP_ADDRESS }}
           APP_NAME: ${{ vars.APP_NAME }}
           ORG_NAME: ${{ vars.ORG_NAME }}
 

@@ -29,7 +29,7 @@ provider:
         STRIPE_FEE_FLAT: ${env:STRIPE_FEE_FLAT, '0'}
         STRIPE_FEE_PERCENTAGE: ${env:STRIPE_FEE_PERCENTAGE, '0'}
         MAIL_FROM_ADDRESS: ${env:MAIL_FROM_ADDRESS, ''}
-        MAIL_FROM_NAME: ${env:MAIL_FROM_NAME, ''}
+        MAIL_HELP_ADDRESS: ${env:MAIL_HELP_ADDRESS, ''}
         APP_NAME: ${env:APP_NAME, ''}
         ORG_NAME: ${env:ORG_NAME, ''}
         ASSETS_BUCKET: ${construct:uploaded-assets.bucketName}
