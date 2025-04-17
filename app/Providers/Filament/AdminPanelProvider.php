@@ -14,6 +14,7 @@ use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
 use Filament\Widgets;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Log;
 
 class AdminPanelProvider extends CommonPanelProvider
 {
@@ -21,6 +22,7 @@ class AdminPanelProvider extends CommonPanelProvider
 
     public function panel(Panel $panel): Panel
     {
+        Log::info('asset: ' . asset('images/admin-logo-text.svg'));
         return parent::panel($panel)
             ->path('admin')
             ->colors([
