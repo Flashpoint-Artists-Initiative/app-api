@@ -40,7 +40,7 @@ class PopulatePermissionsAndRoles extends Command
 
         foreach ($data['roles'] as $role => $permissions) {
             /** @var Role $model */
-            $model = Role::findOrCreate($role)->givePermissionTo($permissions);
+            $model = Role::findOrCreate($role)->syncPermissions($permissions);
             $this->info("Role {$model->name} " . ($model->wasRecentlyCreated ? 'created' : 'already exists'));
         }
     }
