@@ -84,11 +84,11 @@ jobs:
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
           BASE_DOMAIN: ${{ env.BASE_DOMAIN }}
           AWS_CERTIFICATE_ARN: ${{ vars.AWS_CERTIFICATE_ARN }}
-          SALES_TAX_RATE: ${{ vars:SALES_TAX_RATE, '0' }}
-          STRIPE_FEE_FLAT: ${{ vars:STRIPE_FEE_FLAT, '0' }}
-          STRIPE_FEE_PERCENTAGE: ${{ vars:STRIPE_FEE_PERCENTAGE, '0' }}
-          MAIL_FROM_ADDRESS: ${{ vars:MAIL_FROM_ADDRESS, '' }}
-          MAIL_FROM_NAME: ${{ vars:MAIL_FROM_NAME, '' }}
+          SALES_TAX_RATE: ${{ vars.SALES_TAX_RATE, '0' }}
+          STRIPE_FEE_FLAT: ${{ vars.STRIPE_FEE_FLAT, '0' }}
+          STRIPE_FEE_PERCENTAGE: ${{ vars.STRIPE_FEE_PERCENTAGE, '0' }}
+          MAIL_FROM_ADDRESS: ${{ vars.MAIL_FROM_ADDRESS, '' }}
+          MAIL_FROM_NAME: ${{ vars.MAIL_FROM_NAME, '' }}
 
       - name: Run Database Migrations
         uses: serverless/github-action@v4
