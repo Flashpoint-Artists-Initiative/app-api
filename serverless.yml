@@ -65,32 +65,12 @@ functions:
         timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
         events:
             - httpApi: '*'
-        vpc:
-            securityGroupIds:
-                - sg-0f81393a5621d2ec5
-            subnetIds:
-                - subnet-07fe616dba9d7d871
-                - subnet-010996702b2291b44
-                - subnet-09f28fd01d6c02b0b
-                - subnet-0a4bb7dcf4f0efa5a
-                - subnet-0758b00e0e0458437
-                - subnet-05ef64b71a00831ed
 
     # This function lets us run artisan commands in Lambda
     artisan:
         handler: artisan
         runtime: php-84-console
         timeout: 720 # in seconds
-        vpc:
-            securityGroupIds:
-                - sg-0f81393a5621d2ec5
-            subnetIds:
-                - subnet-07fe616dba9d7d871
-                - subnet-010996702b2291b44
-                - subnet-09f28fd01d6c02b0b
-                - subnet-0a4bb7dcf4f0efa5a
-                - subnet-0758b00e0e0458437
-                - subnet-05ef64b71a00831ed
         # Uncomment to also run the scheduler every minute
         #events:
         #    - schedule:
