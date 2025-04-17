@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Alchemy'),
+    'name' => env('APP_NAME', 'Application Name'),
     'copyrightOrg' => env('ORG_NAME', 'Organization'),
 
     /*

@@ -30,6 +30,8 @@ provider:
         STRIPE_FEE_PERCENTAGE: ${env:STRIPE_FEE_PERCENTAGE, '0'}
         MAIL_FROM_ADDRESS: ${env:MAIL_FROM_ADDRESS, ''}
         MAIL_FROM_NAME: ${env:MAIL_FROM_NAME, ''}
+        APP_NAME: ${env:APP_NAME, ''}
+        ORG_NAME: ${env:ORG_NAME, ''}
         ASSETS_BUCKET: ${construct:uploaded-assets.bucketName}
 
 package:

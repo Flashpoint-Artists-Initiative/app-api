@@ -89,6 +89,8 @@ jobs:
           STRIPE_FEE_PERCENTAGE: ${{ vars.STRIPE_FEE_PERCENTAGE }}
           MAIL_FROM_ADDRESS: ${{ vars.MAIL_FROM_ADDRESS }}
           MAIL_FROM_NAME: ${{ vars.MAIL_FROM_NAME }}
+          APP_NAME: ${{ vars.APP_NAME }}
+          ORG_NAME: ${{ vars.ORG_NAME }}
 
       - name: Run Database Migrations
         uses: serverless/github-action@v4
@@ -98,6 +100,8 @@ jobs:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          BASE_DOMAIN: ${{ env.BASE_DOMAIN }}
+          AWS_CERTIFICATE_ARN: ${{ vars.AWS_CERTIFICATE_ARN }}
 
       - name: Populate Roles and Permissions
         uses: serverless/github-action@v4
@@ -107,3 +111,5 @@ jobs:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          BASE_DOMAIN: ${{ env.BASE_DOMAIN }}
+          AWS_CERTIFICATE_ARN: ${{ vars.AWS_CERTIFICATE_ARN }}
