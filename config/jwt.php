@@ -50,7 +50,7 @@ return [
         |
         */
 
-        'public' => 'file://' . base_path(substr(env('JWT_PUBLIC_KEY'), 9)),
+        'public' => 'file://' . base_path(substr(env('JWT_PUBLIC_KEY', ''), 9)),
 
         /*
         |--------------------------------------------------------------------------
@@ -65,7 +65,7 @@ return [
         |
         */
 
-        'private' => 'file://' . base_path(substr(env('JWT_PRIVATE_KEY'), 9)),
+        'private' => 'file://' . base_path(substr(env('JWT_PRIVATE_KEY', ''), 9)),
 
         /*
         |--------------------------------------------------------------------------
@@ -76,7 +76,7 @@ return [
         |
         */
 
-        'passphrase' => env('JWT_PASSPHRASE'),
+        'passphrase' => env('JWT_PASSPHRASE', null),
     ],
 
     /*

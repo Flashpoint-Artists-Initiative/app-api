@@ -73,157 +73,6 @@
             "time": "2025-04-06T06:54:34+00:00"
         },
         {
-            "name": "aws/aws-crt-php",
-            "version": "v1.2.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/awslabs/aws-crt-php.git",
-                "reference": "d71d9906c7bb63a28295447ba12e74723bd3730e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/awslabs/aws-crt-php/zipball/d71d9906c7bb63a28295447ba12e74723bd3730e",
-                "reference": "d71d9906c7bb63a28295447ba12e74723bd3730e",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8.35||^5.6.3||^9.5",
-                "yoast/phpunit-polyfills": "^1.0"
-            },
-            "suggest": {
-                "ext-awscrt": "Make sure you install awscrt native extension to use any of the functionality."
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "AWS SDK Common Runtime Team",
-                    "email": "aws-sdk-common-runtime@amazon.com"
-                }
-            ],
-            "description": "AWS Common Runtime for PHP",
-            "homepage": "https://github.com/awslabs/aws-crt-php",
-            "keywords": [
-                "amazon",
-                "aws",
-                "crt",
-                "sdk"
-            ],
-            "support": {
-                "issues": "https://github.com/awslabs/aws-crt-php/issues",
-                "source": "https://github.com/awslabs/aws-crt-php/tree/v1.2.7"
-            },
-            "time": "2024-10-18T22:15:13+00:00"
-        },
-        {
-            "name": "aws/aws-sdk-php",
-            "version": "3.342.27",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "4c18299000c34ab4903100fe68721d6f26c7cdf2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4c18299000c34ab4903100fe68721d6f26c7cdf2",
-                "reference": "4c18299000c34ab4903100fe68721d6f26c7cdf2",
-                "shasum": ""
-            },
-            "require": {
-                "aws/aws-crt-php": "^1.2.3",
-                "ext-json": "*",
-                "ext-pcre": "*",
-                "ext-simplexml": "*",
-                "guzzlehttp/guzzle": "^7.4.5",
-                "guzzlehttp/promises": "^2.0",
-                "guzzlehttp/psr7": "^2.4.5",
-                "mtdowling/jmespath.php": "^2.8.0",
-                "php": ">=8.1",
-                "psr/http-message": "^2.0"
-            },
-            "require-dev": {
-                "andrewsville/php-token-reflection": "^1.4",
-                "aws/aws-php-sns-message-validator": "~1.0",
-                "behat/behat": "~3.0",
-                "composer/composer": "^2.7.8",
-                "dms/phpunit-arraysubset-asserts": "^0.4.0",
-                "doctrine/cache": "~1.4",
-                "ext-dom": "*",
-                "ext-openssl": "*",
-                "ext-pcntl": "*",
-                "ext-sockets": "*",
-                "phpunit/phpunit": "^5.6.3 || ^8.5 || ^9.5",
-                "psr/cache": "^2.0 || ^3.0",
-                "psr/simple-cache": "^2.0 || ^3.0",
-                "sebastian/comparator": "^1.2.3 || ^4.0 || ^5.0",
-                "symfony/filesystem": "^v6.4.0 || ^v7.1.0",
-                "yoast/phpunit-polyfills": "^2.0"
-            },
-            "suggest": {
-                "aws/aws-php-sns-message-validator": "To validate incoming SNS notifications",
-                "doctrine/cache": "To use the DoctrineCacheAdapter",
-                "ext-curl": "To send requests using cURL",
-                "ext-openssl": "Allows working with CloudFront private distributions and verifying received SNS messages",
-                "ext-sockets": "To use client-side monitoring"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.0-dev"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "src/functions.php"
-                ],
-                "psr-4": {
-                    "Aws\\": "src/"
-                },
-                "exclude-from-classmap": [
-                    "src/data/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Amazon Web Services",
-                    "homepage": "http://aws.amazon.com"
-                }
-            ],
-            "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project",
-            "homepage": "http://aws.amazon.com/sdkforphp",
-            "keywords": [
-                "amazon",
-                "aws",
-                "cloud",
-                "dynamodb",
-                "ec2",
-                "glacier",
-                "s3",
-                "sdk"
-            ],
-            "support": {
-                "forum": "https://github.com/aws/aws-sdk-php/discussions",
-                "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.342.27"
-            },
-            "time": "2025-04-14T18:08:09+00:00"
-        },
-        {
             "name": "blade-ui-kit/blade-heroicons",
             "version": "2.6.0",
             "source": {
@@ -2808,96 +2657,6 @@
                 "source": "https://github.com/laravel/framework"
             },
             "time": "2025-03-12T14:34:30+00:00"
-        },
-        {
-            "name": "laravel/octane",
-            "version": "v2.9.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laravel/octane.git",
-                "reference": "445002b2551c837d60cda4324259063c356dfb56"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laravel/octane/zipball/445002b2551c837d60cda4324259063c356dfb56",
-                "reference": "445002b2551c837d60cda4324259063c356dfb56",
-                "shasum": ""
-            },
-            "require": {
-                "laminas/laminas-diactoros": "^3.0",
-                "laravel/framework": "^10.10.1|^11.0|^12.0",
-                "laravel/prompts": "^0.1.24|^0.2.0|^0.3.0",
-                "laravel/serializable-closure": "^1.3|^2.0",
-                "nesbot/carbon": "^2.66.0|^3.0",
-                "php": "^8.1.0",
-                "symfony/console": "^6.0|^7.0",
-                "symfony/psr-http-message-bridge": "^2.2.0|^6.4|^7.0"
-            },
-            "conflict": {
-                "spiral/roadrunner": "<2023.1.0",
-                "spiral/roadrunner-cli": "<2.6.0",
-                "spiral/roadrunner-http": "<3.3.0"
-            },
-            "require-dev": {
-                "guzzlehttp/guzzle": "^7.6.1",
-                "inertiajs/inertia-laravel": "^1.3.2|^2.0",
-                "laravel/scout": "^10.2.1",
-                "laravel/socialite": "^5.6.1",
-                "livewire/livewire": "^2.12.3|^3.0",
-                "mockery/mockery": "^1.5.1",
-                "nunomaduro/collision": "^6.4.0|^7.5.2|^8.0",
-                "orchestra/testbench": "^8.21|^9.0|^10.0",
-                "phpstan/phpstan": "^2.1.7",
-                "phpunit/phpunit": "^10.4|^11.5",
-                "spiral/roadrunner-cli": "^2.6.0",
-                "spiral/roadrunner-http": "^3.3.0"
-            },
-            "bin": [
-                "bin/roadrunner-worker",
-                "bin/swoole-server"
-            ],
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "Octane": "Laravel\\Octane\\Facades\\Octane"
-                    },
-                    "providers": [
-                        "Laravel\\Octane\\OctaneServiceProvider"
-                    ]
-                },
-                "branch-alias": {
-                    "dev-master": "2.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Laravel\\Octane\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Taylor Otwell",
-                    "email": "taylor@laravel.com"
-                }
-            ],
-            "description": "Supercharge your Laravel application's performance.",
-            "keywords": [
-                "frankenphp",
-                "laravel",
-                "octane",
-                "roadrunner",
-                "swoole"
-            ],
-            "support": {
-                "issues": "https://github.com/laravel/octane/issues",
-                "source": "https://github.com/laravel/octane"
-            },
-            "time": "2025-04-13T21:10:35+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -9231,16 +8990,16 @@
         },
         {
             "name": "barryvdh/laravel-debugbar",
-            "version": "v3.15.3",
+            "version": "v3.15.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/barryvdh/laravel-debugbar.git",
-                "reference": "4ccab20844d18c5af08b68d310e7151a791c3037"
+                "reference": "c0667ea91f7185f1e074402c5788195e96bf8106"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/barryvdh/laravel-debugbar/zipball/4ccab20844d18c5af08b68d310e7151a791c3037",
-                "reference": "4ccab20844d18c5af08b68d310e7151a791c3037",
+                "url": "https://api.github.com/repos/barryvdh/laravel-debugbar/zipball/c0667ea91f7185f1e074402c5788195e96bf8106",
+                "reference": "c0667ea91f7185f1e074402c5788195e96bf8106",
                 "shasum": ""
             },
             "require": {
@@ -9300,7 +9059,7 @@
             ],
             "support": {
                 "issues": "https://github.com/barryvdh/laravel-debugbar/issues",
-                "source": "https://github.com/barryvdh/laravel-debugbar/tree/v3.15.3"
+                "source": "https://github.com/barryvdh/laravel-debugbar/tree/v3.15.4"
             },
             "funding": [
                 {
@@ -9312,7 +9071,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-04-08T15:11:06+00:00"
+            "time": "2025-04-16T06:32:06+00:00"
         },
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -11050,16 +10809,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.11",
+            "version": "2.1.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "8ca5f79a8f63c49b2359065832a654e1ec70ac30"
+                "reference": "96dde49e967c0c22812bcfa7bda4ff82c09f3b0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8ca5f79a8f63c49b2359065832a654e1ec70ac30",
-                "reference": "8ca5f79a8f63c49b2359065832a654e1ec70ac30",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/96dde49e967c0c22812bcfa7bda4ff82c09f3b0c",
+                "reference": "96dde49e967c0c22812bcfa7bda4ff82c09f3b0c",
                 "shasum": ""
             },
             "require": {
@@ -11104,7 +10863,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-24T13:45:00+00:00"
+            "time": "2025-04-16T13:19:18+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
