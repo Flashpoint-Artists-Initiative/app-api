@@ -19,15 +19,17 @@ provider:
         DB_HOST: ${env:DB_HOST, ''}
         DB_DATABASE: ${env:DB_DATABASE, ''}
         APP_KEY: ${env:APP_KEY, ''}
-        # MYSQL_ATTR_SSL_CA: /opt/bref/ssl/cert.pem
-        # MYSQL_ATTR_SSL_CA: /var/task/storage/certs/us-east-1-bundle.pem
         MAIL_MAILER: ${env:MAIL_MAILER, 'log'}
         APP_URL: ${env:APP_URL, 'localhost'}
         STRIPE_SECRET: ${env:STRIPE_SECRET, ''}
         STRIPE_PAYMENT_METHOD_CONFIG: ${env:STRIPE_PAYMENT_METHOD_CONFIG, ''}
-        STRIPE_TAX_RATES: ${env:STRIPE_TAX_RATES, ''}
         STRIPE_WEBHOOK_SECRET: ${env:STRIPE_WEBHOOK_SECRET, ''}
         LOG_CHANNEL: ${env:LOG_CHANNEL, 'stderr'}
+        SALES_TAX_RATE: ${env:SALES_TAX_RATE, '0'}
+        STRIPE_FEE_FLAT: ${env:STRIPE_FEE_FLAT, '0'}
+        STRIPE_FEE_PERCENTAGE: ${env:STRIPE_FEE_PERCENTAGE, '0'}
+        MAIL_FROM_ADDRESS: ${env:MAIL_FROM_ADDRESS, ''}
+        MAIL_FROM_NAME: ${env:MAIL_FROM_NAME, ''}
         ASSETS_BUCKET: ${construct:uploaded-assets.bucketName}
 
 package:
@@ -45,8 +47,8 @@ package:
 
 constructs:
     website:
-        domain: ${env:BASE_DOMAIN}
-        certificate: ${env:AWS_CERTIFICATE_ARN}
+        domain: ${env:BASE_DOMAIN, ''}
+        certificate: ${env:AWS_CERTIFICATE_ARN, ''}
         type: server-side-website
         assets:
             '/build/*': public/build

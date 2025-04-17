@@ -129,5 +129,5 @@ return [
     ],
 
     'helpAddress' => env('MAIL_HELP_ADDRESS', 'help@example.com'),
-    'verifyEmailPath' => env('VERIFY_EMAIL_PATH', '/verify-email/{id}/{hash}'),
+    'verifyEmailPath' => env('VERIFY_EMAIL_PATH', '/email-verification/verify/{id}/{hash}'),
 ];
