@@ -15,6 +15,7 @@ use Filament\View\PanelsRenderHook;
 use Filament\Widgets;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Request;
 
 class AdminPanelProvider extends CommonPanelProvider
 {
@@ -23,6 +24,9 @@ class AdminPanelProvider extends CommonPanelProvider
     public function panel(Panel $panel): Panel
     {
         Log::info('asset: ' . asset('images/admin-logo-text.svg'));
+        Log::info('host: ' . request()->host());
+        Log::info('isFromTrusted: ' . (request()->isFromTrustedProxy() ? 'true' : 'false'));
+        Log::info('headers: ' . print_r(request()->header(), true));
         return parent::panel($panel)
             ->path('admin')
             ->colors([
