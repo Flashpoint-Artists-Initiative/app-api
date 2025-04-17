@@ -42,4 +42,5 @@ jobs:
         application_name: POTION
         environment_name: potion-prod
         region: us-east-1
+        version_label: ${{ github.sha }}
         deployment_package: deploy.zip

@@ -1,0 +1,98 @@
+name: Deploy to AWS Lambda
+
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+env:
+  ENVIRONMENT: ${{ inputs.environment || 'Production' }}
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment || 'Production' }}
+    steps:
+      # Check out a copy of your repository.
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Use parameter expansion to make environment lowercase.
+      - name: Downcase environment
+        run: |
+          echo "ENVIRONMENT_LC=${ENVIRONMENT,,}" >>${GITHUB_ENV}
+
+      # Get the base domain from the APP_URL environment variable.
+      - name: Get base domain from APP_URL
+        run: |
+          echo "BASE_DOMAIN=$(echo ${{ vars.APP_URL }} | sed 's/http[s]*:\/\///')" >>${GITHUB_ENV}
+
+      # - name: Create JWT Tokens
+      #   run: |
+      #     mkdir storage/certs
+      #     cat << EOF > storage/certs/jwt-rsa-4096-public.pem
+      #     ${{ secrets.JWT_PUBLIC_KEY_CONTENTS }}
+      #     EOF
+      #     cat << EOF > storage/certs/jwt-rsa-4096-private.pem
+      #     ${{ secrets.JWT_PRIVATE_KEY_CONTENTS }}
+      #     EOF
+
+      # Set up PHP environment.
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+
+      # Install Composer dependencies with the specified options.
+      - name: Install Composer dependencies
+        uses: "ramsey/composer-install@v2"
+        with:
+          composer-options: "--prefer-dist --optimize-autoloader --no-dev"
+
+      - name: Install NPM dependencies
+        run: npm install
+
+      - name: Compile assets
+        run: npm run build
+
+      # Deploy your application to AWS Lambda using the Serverless Framework.
+      - name: Deploy to AWS Lambda
+        uses: serverless/github-action@v4
+        with:
+          args: -c "serverless plugin install -n serverless-lift && serverless deploy --stage=${{ env.ENVIRONMENT_LC }}"
+          entrypoint: /bin/sh
+        env:
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          JWT_PRIVATE_KEY: ${{ vars.JWT_PRIVATE_KEY }}
+          JWT_PUBLIC_KEY: ${{ vars.JWT_PUBLIC_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_DATABASE: ${{ vars.DB_DATABASE }}
+          APP_KEY: ${{ secrets.APP_KEY }}
+          APP_URL: ${{ vars.APP_URL }}
+          MAIL_MAILER: ${{ vars.MAIL_MAILER }}
+          STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
+          STRIPE_PAYMENT_METHOD_CONFIG: ${{ vars.STRIPE_PAYMENT_METHOD_CONFIG }}
+          STRIPE_TAX_RATES: ${{ vars.STRIPE_TAX_RATES }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          BASE_DOMAIN: ${{ env.BASE_DOMAIN }}
+          AWS_CERTIFICATE_ARN: ${{ vars.AWS_CERTIFICATE_ARN }}
+
+      - name: Populate Roles and Permissions
+        uses: serverless/github-action@v4
+        with:
+          args: bref:cli --args="permission:populate" --stage=${{ env.ENVIRONMENT_LC }}
+        env:
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          BASE_DOMAIN: ${{ env.BASE_DOMAIN }}
+          AWS_CERTIFICATE_ARN: ${{ vars.AWS_CERTIFICATE_ARN }}
