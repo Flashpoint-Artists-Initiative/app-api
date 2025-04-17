@@ -26,7 +26,7 @@ class AdminPanelProvider extends CommonPanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->brandLogo(asset('images/admin-logo-text.svg'))
+            ->brandLogo(fn() => asset('images/admin-logo-text.svg'))
             ->pages([
                 Pages\Dashboard::class,
             ])

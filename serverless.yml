@@ -54,6 +54,8 @@ constructs:
             '/favicon.ico': public/favicon.ico
             '/robots.txt': public/robots.txt
             '/images/*': public/images
+            '/css/*': public/css
+            '/js/*': public/js
     uploaded-assets:
         type: storage
 
