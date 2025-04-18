@@ -22,7 +22,7 @@ class PopulatePermissionsAndRoles extends Command
      *
      * @var string
      */
-    protected $description = 'Populate the database with the roles and permissions defined in config/permission.php';
+    protected $description = 'Sync the database with the roles and permissions defined in config/permission.php';
 
     /**
      * Execute the console command.
@@ -35,13 +35,16 @@ class PopulatePermissionsAndRoles extends Command
         foreach ($data['permissions'] as $permission) {
             /** @var Permission $model */
             $model = Permission::findOrCreate($permission);
-            $this->info("Permission {$model->name} " . ($model->wasRecentlyCreated ? 'created' : 'already exists'));
+            
+            if ($model->wasRecentlyCreated) {
+                $this->info("Permission {$model->name} created");
+            }
         }
 
         foreach ($data['roles'] as $role => $permissions) {
             /** @var Role $model */
             $model = Role::findOrCreate($role)->syncPermissions($permissions);
-            $this->info("Role {$model->name} " . ($model->wasRecentlyCreated ? 'created' : 'already exists'));
+            $this->info("Role {$model->name} permissions synced");
         }
     }
 }

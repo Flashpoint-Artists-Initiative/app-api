@@ -92,6 +92,7 @@ jobs:
           MAIL_HELP_ADDRESS: ${{ vars.MAIL_HELP_ADDRESS }}
           APP_NAME: ${{ vars.APP_NAME }}
           ORG_NAME: ${{ vars.ORG_NAME }}
+          DEFAULT_EVENT_ID: ${{ vars.DEFAULT_EVENT_ID }}
 
       - name: Run Database Migrations
         uses: serverless/github-action@v4

@@ -81,7 +81,8 @@ class EventResource extends Resource
                         Forms\Components\Toggle::make('active')
                             ->required(),
                     ])->grow(false),
-                ]),
+                ])
+                ->from('md'),
             ])
             ->columns(1);
     }

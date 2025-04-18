@@ -32,6 +32,7 @@ provider:
         MAIL_HELP_ADDRESS: ${env:MAIL_HELP_ADDRESS, ''}
         APP_NAME: ${env:APP_NAME, ''}
         ORG_NAME: ${env:ORG_NAME, ''}
+        DEFAULT_EVENT_ID: ${env:DEFAULT_EVENT_ID, ''}
         ASSETS_BUCKET: ${construct:uploaded-assets.bucketName}
 
 package:
