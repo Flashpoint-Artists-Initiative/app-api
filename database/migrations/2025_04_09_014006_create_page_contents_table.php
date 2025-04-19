@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('event_id');
             $table->string('page');
+            $table->string('title')->nullable();
             $table->text('content');
             $table->timestamps();
         });

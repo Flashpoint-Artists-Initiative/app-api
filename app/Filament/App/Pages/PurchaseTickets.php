@@ -57,6 +57,8 @@ class PurchaseTickets extends Page
 
     protected int $ticketCount;
 
+    public ?string $pageContent;
+
     // Autofill reserved ticket checkbox from query string
     #[Url]
     public ?int $reserved = null;
@@ -72,6 +74,7 @@ class PurchaseTickets extends Page
         $user = Auth::user();
         $this->cart = app(CartService::class)->getActiveCart();
         $this->hasPurchasedTickets = $user->purchasedTickets()->currentEvent()->exists();
+        $this->pageContent = Event::getCurrentEvent()?->ticketPurchaseContent?->formattedContent;
     }
 
     public function form(Form $form): Form

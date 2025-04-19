@@ -126,9 +126,33 @@ class Event extends Model implements ContractsAuditable
     /**
      * @return HasOne<PageContent, $this>
      */
-    public function dashboardContent(): HasOne
+    public function appDashboardContent(): HasOne
     {
         return $this->hasOne(PageContent::class)->where('page', PageContentEnum::AppDashboard);
+    }
+
+    /**
+     * @return HasOne<PageContent, $this>
+     */
+    public function ticketPurchaseContent(): HasOne
+    {
+        return $this->hasOne(PageContent::class)->where('page', PageContentEnum::TicketPurchase);
+    }
+
+    /**
+     * @return HasOne<PageContent, $this>
+     */
+    public function checkoutContent(): HasOne
+    {
+        return $this->hasOne(PageContent::class)->where('page', PageContentEnum::Checkout);
+    }
+
+    /**
+     * @return HasOne<PageContent, $this>
+     */
+    public function checkoutCompleteContent(): HasOne
+    {
+        return $this->hasOne(PageContent::class)->where('page', PageContentEnum::CheckoutComplete);
     }
 
     /**

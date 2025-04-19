@@ -35,7 +35,7 @@ class PopulatePermissionsAndRoles extends Command
         foreach ($data['permissions'] as $permission) {
             /** @var Permission $model */
             $model = Permission::findOrCreate($permission);
-            
+
             if ($model->wasRecentlyCreated) {
                 $this->info("Permission {$model->name} created");
             }

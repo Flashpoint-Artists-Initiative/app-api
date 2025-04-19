@@ -25,6 +25,10 @@ class Checkout extends Page
 
     public bool $checkoutComplete = false;
 
+    public ?string $checkoutContent;
+
+    public ?string $checkoutCompleteContent;
+
     public function mount(CartService $cartService, StripeService $stripeService): void
     {
         $this->cart = $cartService->getActiveCart();
@@ -43,6 +47,9 @@ class Checkout extends Page
 
         $this->checkoutId = $this->cart->stripe_checkout_id;
         $this->checkoutSecret = $session->client_secret;
+
+        $this->checkoutContent = $this->cart->event->checkoutContent->formattedContent ?? null;
+        $this->checkoutCompleteContent = $this->cart->event->checkoutCompleteContent->formattedContent ?? null;
     }
 
     public function completeCheckout(string $sessionId, StripeService $stripeService, CheckoutService $checkoutService): void

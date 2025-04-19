@@ -47,9 +47,11 @@ class EventResource extends Resource
                         Forms\Components\TextInput::make('location')
                             ->maxLength(255),
                         Forms\Components\DatePicker::make('start_date')
-                            ->required(),
+                            ->required()
+                            ->beforeOrEqual('end_date'),
                         Forms\Components\DatePicker::make('end_date')
-                            ->required(),
+                            ->required()
+                            ->afterOrEqual('start_date'),
                         Fieldset::make('Art Grants')
                             ->schema([
                                 Forms\Components\Toggle::make('voting_enabled')
@@ -82,7 +84,7 @@ class EventResource extends Resource
                             ->required(),
                     ])->grow(false),
                 ])
-                ->from('md'),
+                    ->from('md'),
             ])
             ->columns(1);
     }
@@ -152,7 +154,7 @@ class EventResource extends Resource
             'edit' => Pages\EditEvent::route('/{record}/edit'),
             'waiver' => Pages\ViewWaiver::route('/{record}/waiver'),
             'edit-waiver' => Pages\EditWaiver::route('/{record}/waiver/edit'),
-            'content' => Pages\EditAppDashboardContent::route('/{record}/content'),
+            'content' => Pages\EditPageContent::route('/{record}/content'),
         ];
     }
 
@@ -170,7 +172,7 @@ class EventResource extends Resource
             Pages\ViewEvent::class,
             Pages\EditEvent::class,
             Pages\ViewWaiver::class,
-            Pages\EditAppDashboardContent::class,
+            Pages\EditPageContent::class,
         ]);
     }
 }

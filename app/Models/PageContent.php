@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property-read string $formattedContent
+ */
 #[ObservedBy(PageContentObserver::class)]
 class PageContent extends Model
 {
@@ -20,6 +23,7 @@ class PageContent extends Model
     protected $fillable = [
         'event_id',
         'page',
+        'title',
         'content',
     ];
 

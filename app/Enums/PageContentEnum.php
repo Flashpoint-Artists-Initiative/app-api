@@ -11,11 +11,25 @@ enum PageContentEnum: string implements HasLabel
     use Concerns\EnumToArray;
 
     case AppDashboard = 'app-dashboard';
+    case TicketPurchase = 'ticket-purchase';
+    case Checkout = 'checkout';
+    case CheckoutComplete = 'checkout-complete';
 
     public function getLabel(): string
     {
         return match ($this) {
-            self::AppDashboard => 'App Dashboard',
+            self::AppDashboard => 'Home Page',
+            self::TicketPurchase => 'Ticket Purchase Page',
+            self::Checkout => 'Checkout',
+            self::CheckoutComplete => 'Checkout Complete',
+        };
+    }
+
+    public function hasTitle(): bool
+    {
+        return match ($this) {
+            self::AppDashboard => true,
+            default => false,
         };
     }
 }

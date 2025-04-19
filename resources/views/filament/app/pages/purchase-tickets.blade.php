@@ -13,6 +13,12 @@
     </x-notification-banner>
     @endif
 
+    @if ($pageContent)
+        <div class="prose dark:prose-invert max-w-none">
+            {!! str($pageContent)->sanitizeHtml() !!}
+        </div>
+    @endif
+
     <div>
         <x-filament-panels::form wire:submit="checkout" onkeydown="return event.key != 'Enter';" class="purchase-tickets-form">
             {{ $this->form }}

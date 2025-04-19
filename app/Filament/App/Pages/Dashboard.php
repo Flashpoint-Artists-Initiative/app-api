@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\App\Pages;
 
 use App\Models\Event;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 
@@ -17,6 +18,11 @@ class Dashboard extends \Filament\Pages\Dashboard
     public bool $hasReservedTickets;
 
     public bool $hasPendingTransfers;
+
+    public function getTitle(): string|Htmlable
+    {
+        return $this->event->appDashboardContent->title ?? 'Dashboard';
+    }
 
     #[On('active-event-updated')]
     public function mount(): void

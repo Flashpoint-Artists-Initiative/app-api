@@ -39,6 +39,11 @@
 @endscript
 
 <div wire:show="!checkoutComplete" wire:cloak>
+    @if ($checkoutContent)
+        <div class="prose dark:prose-invert max-w-none">
+            {!! str($checkoutContent)->sanitizeHtml() !!}
+        </div>
+    @endif
     <div class="flex">
         <x-notification-banner color="info" class="mb-2 grow">
             Your cart will expire {{ $this->cart->expiration_date->diffForHumans() }}.
@@ -49,6 +54,13 @@
     </div>
 </div>
 <div wire:show="checkoutComplete" wire:cloak>
-    Checkout Complete!
+    <x-notification-banner color="success" class="mb-2 grow">
+        Your purchase was successful! You can view your tickets in your profile.
+    </x-notification-banner>
+    @if ($checkoutCompleteContent)
+        <div class="prose dark:prose-invert max-w-none">
+            {!! str($checkoutCompleteContent)->sanitizeHtml() !!}
+        </div>
+    @endif
 </div>
 </x-filament-panels::page>

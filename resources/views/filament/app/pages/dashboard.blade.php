@@ -19,9 +19,9 @@
         
     @endif
     {{-- Custom content from PageContent --}}
-    @if ($event?->dashboardContent)
+    @if ($event?->appDashboardContent)
     <div class="prose dark:prose-invert max-w-none">
-        {!! str($event?->dashboardContent?->formattedContent)->sanitizeHtml() !!}
+        {!! str($event?->appDashboardContent?->formattedContent)->sanitizeHtml() !!}
     </div>
     @elseif (Auth::user()->can('events.edit') && $event)
     <span>Add content to the dashboard in the <x-filament::link href="{{ EditAppDashboardContent::getUrl(['record' => $event->id], panel: 'admin') }}">Admin Panel</x-filament::link></span>
