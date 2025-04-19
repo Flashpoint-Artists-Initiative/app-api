@@ -52,6 +52,17 @@ class EventResource extends Resource
                         Forms\Components\DatePicker::make('end_date')
                             ->required()
                             ->afterOrEqual('start_date'),
+                        Fieldset::make('Ticket Sales')
+                            ->schema([
+                                Forms\Components\TextInput::make('tickets_per_sale')
+                                    ->label('Max Tickets per Sale')
+                                    ->required()
+                                    ->numeric()
+                                    ->afterStateHydrated(function (Forms\Components\TextInput $component, ?Event $record) {
+                                        $component->state($record->settings['tickets_per_sale'] ?? config('app.cart_max_quantity'));
+                                    })
+                                    ->helperText('The maximum number of tickets a user can buy at once.  Does not include reserved tickets or addon tickets.'),
+                            ]),
                         Fieldset::make('Art Grants')
                             ->schema([
                                 Forms\Components\Toggle::make('voting_enabled')
@@ -81,6 +92,7 @@ class EventResource extends Resource
                         ->columns(2),
                     Section::make([
                         Forms\Components\Toggle::make('active')
+                            ->label('Visible to Users')
                             ->required(),
                     ])->grow(false),
                 ])

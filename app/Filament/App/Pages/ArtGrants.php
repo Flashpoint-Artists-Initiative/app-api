@@ -53,7 +53,7 @@ class ArtGrants extends Page
 
     public function form(Form $form): Form
     {
-        $projects = ArtProject::query()->currentEvent()->approved()->orderBy('id', 'desc')->get();
+        $projects = ArtProject::query()->currentEvent()->approved()->orderBy('name', 'desc')->get();
 
         $projectsSchema = $projects->map(function (ArtProject $project) {
             return ArtProjectItemField::make('votes.' . $project->id)

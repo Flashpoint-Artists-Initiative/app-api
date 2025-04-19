@@ -98,7 +98,7 @@ class TicketTypeResource extends Resource
                 Tables\Columns\TextColumn::make('price')
                     ->money()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('remaining_ticket_count')
+                Tables\Columns\TextColumn::make('remainingTicketCount')
                     ->numeric()
                     ->label('Remaining'),
                 Tables\Columns\IconColumn::make('active')

@@ -52,7 +52,7 @@ class Waivers extends Page implements HasForms, HasTable
                     ->modalCancelActionLabel('Close')
                     ->modalHeading(fn (CompletedWaiver $record): string => "{$record->waiver->event->name}: {$record->waiver->title}"),
             ])
-            ->emptyStateHeading('No tickets purchased')
+            ->emptyStateHeading("You haven't signed any waivers.")
             ->paginated(false);
     }
 }

@@ -25,7 +25,7 @@ class NotificationBanner extends Component
         return <<<'blade'
             <section 
                 style="--c-100:var(--{{ $color }}-100);--c-400:var(--{{ $color }}-400);--c-500:var(--{{ $color }}-500);--c-600:var(--{{ $color }}-600);" 
-                {{ $attributes->merge(['class' => 'ring-1 rounded-xl ring-custom-600 bg-custom-100 dark:ring-custom-500 dark:bg-custom-400/10']) }}
+                {{ $attributes->merge(['class' => 'mb-2 ring-1 rounded-xl ring-custom-600 bg-custom-100 dark:ring-custom-500 dark:bg-custom-400/10']) }}
             >
             <div class="p-2">
                 {{ $slot }}

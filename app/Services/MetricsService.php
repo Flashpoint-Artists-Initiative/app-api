@@ -22,9 +22,9 @@ class MetricsService
                 'id' => $type->id,
                 'name' => $type->name,
                 'quantity' => $type->quantity,
-                'remaining' => $type->remaining_ticket_count,
+                'remaining' => $type->remainingTicketCount,
                 'purchased' => $type->purchased_tickets_count,
-                'in_carts' => (int) $type->cart_items_quantity,
+                'in_carts' => (int) $type->cartItemsQuantity,
                 'unsold_reserved' => $type->unsold_reserved_tickets_count,
             ];
         });

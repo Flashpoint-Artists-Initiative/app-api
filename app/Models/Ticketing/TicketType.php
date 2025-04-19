@@ -17,10 +17,10 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
- * @property int $remaining_ticket_count
- * @property ?string $cart_items_quantity
+ * @property int $remainingTicketCount
+ * @property ?string $cartItemsQuantity
  * @property bool $available
- * @property bool $on_sale
+ * @property bool $onSale
  * @property-read Event $event
  */
 class TicketType extends Model implements ContractsAuditable
@@ -197,7 +197,7 @@ class TicketType extends Model implements ContractsAuditable
         /** @var Builder<Model> $query */
         $query = parent::newQueryWithoutScopes();
 
-        return $query->withSum('activeCartItems as cart_items_quantity', 'quantity');
+        return $query->withSum('activeCartItems as cartItemsQuantity', 'quantity');
     }
 
     /**
@@ -213,7 +213,7 @@ class TicketType extends Model implements ContractsAuditable
 
                 return $attributes['quantity']
                      - $attributes['purchased_tickets_count']
-                     - $attributes['cart_items_quantity'];
+                     - $attributes['cartItemsQuantity'];
             }
         );
     }
@@ -225,7 +225,7 @@ class TicketType extends Model implements ContractsAuditable
     {
         return Attribute::make(
             get: function (mixed $value, array $attributes) {
-                return $this->remaining_ticket_count > 0
+                return $this->remainingTicketCount > 0
                 && $attributes['active'] == true
                 && now() < $attributes['sale_end_date']
                 && now() > $attributes['sale_start_date'];
@@ -248,6 +248,6 @@ class TicketType extends Model implements ContractsAuditable
 
     public function hasAvailable(int $quantity): bool
     {
-        return $this->available && $this->remaining_ticket_count > $quantity;
+        return $this->available && $this->remainingTicketCount >= $quantity;
     }
 }

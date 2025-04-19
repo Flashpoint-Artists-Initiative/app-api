@@ -118,7 +118,7 @@ class ReservedTicket extends Model implements ContractsAuditable, TicketInterfac
                 ! $this->is_purchased &&
                 (
                     (! is_null($attributes['expiration_date']) && $attributes['expiration_date'] > now()) ||
-                    (is_null($attributes['expiration_date']) && $this->ticketType->on_sale)
+                    (is_null($attributes['expiration_date']) && $this->ticketType->onSale)
                 );
             }
         );

@@ -3,8 +3,8 @@
     :field="$field"
 >
     <div x-data="{
-        state: $wire.$entangle('{{ $getStatePath() }}'),
-        increment() {
+        count: $wire.$entangle('{{ $getStatePath() }}'),
+        {{-- increment() {
             if (this.state < Math.min(4,{{ $getRecord()->remainingTicketCount }})) {
                 this.state++;
             }
@@ -13,7 +13,7 @@
             if (this.state > 0) {
                 this.state--;
             }
-        }
+        } --}}
     }">
         <x-filament::section class="ticket-purchase-item">
             <div class="flex flex-col gap-3 px-6 py-4">
@@ -32,7 +32,7 @@
                     </p>
                 </div>
                 <div>
-                    <p class="text-xl bold text-center pb-4">${{ $getRecord()->price }}</p>
+                    {{-- <p class="text-xl bold text-center pb-4">${{ $getRecord()->price }}</p>
                     <div class="flex flex-row justify-end">
                         <x-filament::button x-on:click="decrement()" grouped>
                             -
@@ -43,7 +43,8 @@
                         <x-filament::button x-on:click="increment()" grouped>
                             +
                         </x-filament::button>
-                    </div>
+                    </div> --}}
+                    <x-counter-input />
                 </div>
             </div>
         </x-filament::section>

@@ -29,6 +29,7 @@ use OwenIt\Auditing\Contracts\Auditable as ContractsAuditable;
  * @property float $dollarsPerVote
  * @property int $votesPerUser
  * @property bool $votingEnabled
+ * @property int $ticketsPerSale
  * @property-read Carbon $nextTicketSaleDate
  * @property ArrayObject $settings
  */
@@ -207,6 +208,18 @@ class Event extends Model implements ContractsAuditable
             get: fn (mixed $value, array $attributes) => (int) ($this->settings['votes_per_user'] ?? 10),
             set: function (int $value) {
                 $this->settings['votes_per_user'] = $value;
+
+                return [];
+            },
+        );
+    }
+
+    public function ticketsPerSale(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => (int) ($this->settings['tickets_per_sale'] ?? config('app.cart_max_quantity')),
+            set: function (int $value) {
+                $this->settings['tickets_per_sale'] = $value;
 
                 return [];
             },

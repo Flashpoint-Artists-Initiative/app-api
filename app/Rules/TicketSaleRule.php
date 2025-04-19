@@ -25,16 +25,23 @@ class TicketSaleRule implements DataAwareRule, ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $totalTickets = array_sum($this->data['data']['tickets'] ?? []);
-        $totalReserved = count(array_filter(
-            $this->data['data']['reserved'] ?? [],
-            fn ($reserved) => $reserved === true
-        ));
+        // $attribute format is `data.tickets.{id}` or `data.reserved.{id}`
+        $id = collect(explode('.', $attribute))->last();
+        $lastId = collect(array_keys($this->data['data']['tickets'] ?? []))->last();
 
-        if ($totalTickets + $totalReserved === 0) {
-            $fail('Must purchase at least one ticket');
+        // Only check these on the last item so we don't show multiple errors
+        if ($id == $lastId) {
+            $totalTickets = array_sum($this->data['data']['tickets'] ?? []);
+            $totalReserved = count(array_filter(
+                $this->data['data']['reserved'] ?? [],
+                fn ($reserved) => $reserved === true
+            ));
 
-            return;
+            if ($totalTickets + $totalReserved === 0) {
+                $fail('Must purchase at least one ticket');
+
+                return;
+            }
         }
 
         if (str_contains($attribute, 'tickets')) {
@@ -48,13 +55,13 @@ class TicketSaleRule implements DataAwareRule, ValidationRule
 
     protected function generalSaleValidation(string $attribute, mixed $value, Closure $fail): void
     {
-        $parts = explode('.', $attribute);
-        $id = $parts[2];
+        $id = collect(explode('.', $attribute))->last();
 
         // Make sure the total quantity < the configured max
         $sum = array_sum($this->data['data']['tickets']);
-        if ($sum > (int) config('app.cart_max_quantity')) {
-            $fail('The total number of tickets in the cart cannot be more than ' . config('app.cart_max_quantity'));
+        $maxQuantity = Event::getCurrentEvent()->ticketsPerSale ?? config('app.cart_max_quantity');
+        if ($sum > $maxQuantity) {
+            $fail('The total number of tickets in the cart cannot be more than ' . $maxQuantity);
 
             return;
         }
@@ -65,6 +72,18 @@ class TicketSaleRule implements DataAwareRule, ValidationRule
 
         if ($ticketType->event_id != Event::getCurrentEventId()) {
             $fail('Ticket does not belong to the current event');
+
+            return;
+        }
+
+        // Check if the remaining quantity is high enough
+        $remaining = $ticketType->remainingTicketCount;
+        if ($remaining < $value) {
+            if ($remaining == 1) {
+                $fail('There is only one remaining ticket of this type');
+            } else {
+                $fail('There are only ' . $remaining . ' remaining tickets of this type');
+            }
 
             return;
         }

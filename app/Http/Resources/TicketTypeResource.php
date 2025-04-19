@@ -24,8 +24,8 @@ class TicketTypeResource extends JsonResource
         $result = parent::toArray($request);
 
         return array_merge($result, [
-            'remaining_ticket_count' => $this->remaining_ticket_count,
-            'cart_items_quantity' => (int) $this->cart_items_quantity,
+            'remaining_ticket_count' => $this->remainingTicketCount,
+            'cart_items_quantity' => (int) $this->cartItemsQuantity,
         ]);
     }
 }

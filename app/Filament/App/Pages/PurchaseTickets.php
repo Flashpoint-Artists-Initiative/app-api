@@ -25,6 +25,7 @@ use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Pages\Page;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -59,9 +60,11 @@ class PurchaseTickets extends Page
 
     public ?string $pageContent;
 
+    public int $maxTickets;
+
     // Autofill reserved ticket checkbox from query string
-    #[Url]
-    public ?int $reserved = null;
+    #[Url('reserved')]
+    public ?int $reservedFilled = null;
 
     public function __construct()
     {
@@ -75,6 +78,7 @@ class PurchaseTickets extends Page
         $this->cart = app(CartService::class)->getActiveCart();
         $this->hasPurchasedTickets = $user->purchasedTickets()->currentEvent()->exists();
         $this->pageContent = Event::getCurrentEvent()?->ticketPurchaseContent?->formattedContent;
+        $this->maxTickets = Event::getCurrentEvent()->ticketsPerSale ?? 4;
     }
 
     public function form(Form $form): Form
@@ -109,15 +113,36 @@ class PurchaseTickets extends Page
 
     protected function buildTicketsStep(): Step
     {
+        /** @var EloquentCollection<int,TicketType> $tickets */
         $tickets = TicketType::query()->currentEvent()->available()->get();
-        $ticketSchema = $tickets->map(function (TicketType $ticket) {
-            return ViewField::make('tickets.' . $ticket->id)
-                ->model($ticket)
-                ->default(0)
-                ->rules([new TicketSaleRule])
-                ->hiddenLabel()
-                ->view('forms.components.ticket-type-field');
-        })->toArray();
+        $ticketSchema = $tickets
+            ->sort(function (TicketType $a, TicketType $b) {
+                // Put addon tickets at the bottom, otherwise sort by id
+                if ($a->addon && ! $b->addon) {
+                    return 1;
+                }
+
+                if ($b->addon && ! $a->addon) {
+                    return -1;
+                }
+
+                return $a->id <=> $b->id;
+            })
+            ->map(function (TicketType $ticket, int $index) {
+                // Hide anything without remaining tickets.
+                // We do this here because it requires checking an attribute that's inaccessible in the query
+                if ($ticket->remainingTicketCount <= 0) {
+                    return null;
+                }
+
+                return ViewField::make('tickets.' . $ticket->id)
+                    ->model($ticket)
+                    ->default(0)
+                    ->rules([new TicketSaleRule])
+                    ->hiddenLabel()
+                    ->view('forms.components.ticket-type-field');
+            })->filter(fn ($item) => $item !== null)
+            ->toArray();
 
         if (count($ticketSchema) === 0) {
             $nextTicketSaleDate = Event::getCurrentEvent()?->nextTicketSaleDate?->timezone('America/New_York')->format('F jS, Y g:i A T');
@@ -136,7 +161,7 @@ class PurchaseTickets extends Page
         $reservedSchema = $reserved->map(function (ReservedTicket $ticket) {
             return ViewField::make('reserved.' . $ticket->id)
                 ->model($ticket)
-                ->default($this->reserved == $ticket->id)
+                ->default($this->reservedFilled == $ticket->id)
                 ->rules([new TicketSaleRule])
                 ->hiddenLabel()
                 ->view('forms.components.reserved-ticket-field')
@@ -175,10 +200,12 @@ class PurchaseTickets extends Page
             ->schema([
                 Placeholder::make('title')
                     ->content(new HtmlString('<h1 class="text-2xl">' . ($this->waiver->title ?? '') . '</h1>'))
-                    ->label(''),
+                    ->label('')
+                    ->dehydrated(false),
                 Placeholder::make('waiver')
                     ->content(new HtmlString($this->waiver->content ?? ''))
-                    ->label(''),
+                    ->label('')
+                    ->dehydrated(false),
                 TextInput::make('signature')
                     ->label('I agree to the terms of the waiver and understand that I am signing this waiver electronically.')
                     ->helperText('You must enter your full legal name as it is shown on your ID and listed in your profile.')
