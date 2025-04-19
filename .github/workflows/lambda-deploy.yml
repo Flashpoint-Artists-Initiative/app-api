@@ -80,6 +80,7 @@ jobs:
           APP_URL: ${{ vars.APP_URL }}
           MAIL_MAILER: ${{ vars.MAIL_MAILER }}
           STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
+          STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
           STRIPE_PAYMENT_METHOD_CONFIG: ${{ vars.STRIPE_PAYMENT_METHOD_CONFIG }}
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
           BASE_DOMAIN: ${{ env.BASE_DOMAIN }}

@@ -42,7 +42,8 @@ class TicketTypeResource extends Resource
                     ->before('sale_end_date'),
                 Forms\Components\DateTimePicker::make('sale_end_date')
                     ->required()
-                    ->afterOrEqual('sale_start_date'),
+                    ->afterOrEqual('sale_start_date')
+                    ->helperText('Reserved tickets will expire after this date, by default.'),
                 Forms\Components\TextInput::make('quantity')
                     ->required()
                     ->numeric()
@@ -94,12 +95,14 @@ class TicketTypeResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('quantity')
                     ->numeric()
+                    ->formatStateUsing(fn ($state) => $state === 0 ? '∞' : $state)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('price')
                     ->money()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('remainingTicketCount')
                     ->numeric()
+                    ->formatStateUsing(fn ($state, TicketType $record) => ($record->quantity === 0 && $state === 0) ? '∞' : $state)
                     ->label('Remaining'),
                 Tables\Columns\IconColumn::make('active')
                     ->boolean(),

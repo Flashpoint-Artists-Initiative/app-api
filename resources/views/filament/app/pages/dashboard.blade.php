@@ -1,5 +1,5 @@
 @php
-    use \App\Filament\Admin\Resources\EventResource\Pages\EditAppDashboardContent;
+    use \App\Filament\Admin\Resources\EventResource\Pages\EditPageContent;
     use \App\Filament\App\Pages\PurchaseTickets;
     use App\Filament\App\Clusters\UserPages\Pages\TicketTransfers;
 @endphp
@@ -24,6 +24,6 @@
         {!! str($event?->appDashboardContent?->formattedContent)->sanitizeHtml() !!}
     </div>
     @elseif (Auth::user()->can('events.edit') && $event)
-    <span>Add content to the dashboard in the <x-filament::link href="{{ EditAppDashboardContent::getUrl(['record' => $event->id], panel: 'admin') }}">Admin Panel</x-filament::link></span>
+    <span>Add content to the dashboard in the <x-filament::link href="{{ EditPageContent::getUrl(['record' => $event->id], panel: 'admin') }}">Admin Panel</x-filament::link></span>
     @endif
 </x-filament-panels::page>

@@ -90,6 +90,6 @@ class Tickets extends Page
 
     public function mount(): void
     {
-        $this->hasMultipleTickets = Auth::authenticate()->purchasedTickets()->count() > 1;
+        $this->hasMultipleTickets = Auth::authenticate()->purchasedTickets()->currentEvent()->count() > 1;
     }
 }

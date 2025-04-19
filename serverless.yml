@@ -22,6 +22,7 @@ provider:
         MAIL_MAILER: ${env:MAIL_MAILER, 'log'}
         APP_URL: ${env:APP_URL, 'localhost'}
         STRIPE_SECRET: ${env:STRIPE_SECRET, ''}
+        STRIPE_API_KEY: ${env:STRIPE_API_KEY, ''}
         STRIPE_PAYMENT_METHOD_CONFIG: ${env:STRIPE_PAYMENT_METHOD_CONFIG, ''}
         STRIPE_WEBHOOK_SECRET: ${env:STRIPE_WEBHOOK_SECRET, ''}
         LOG_CHANNEL: ${env:LOG_CHANNEL, 'stderr'}
